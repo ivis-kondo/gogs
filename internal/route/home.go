@@ -236,11 +236,14 @@ func DmpBrowsing(c *context.Context) {
 			c.Data["HasDataCite"] = false
 			break
 		}
-
-		c.Data["OwnerName"] = ownerName
-		c.Data["RepoName"] = repoName
 		c.Data["DOIInfo"] = &dmpContents
+		if repo.Owner.Name == ownerName {
+			break
+		}
 	}
+	c.Data["OwnerName"] = ownerName
+	c.Data["RepoName"] = repoName
+	c.Data["IsValidFA"] = false
 	c.Success(DMP_BROWSING)
 }
 

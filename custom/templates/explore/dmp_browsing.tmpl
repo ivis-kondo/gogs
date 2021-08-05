@@ -1,9 +1,13 @@
-{{template "base/head" .}}
-<div class="repository file list">
-	<div class="ui container">
-        <h2>{{.OwnerName}} / {{.RepoName}}</h2>
-		{{template "base/alert" .}}
-        {{template "repo/doifile" .}}
-	</div>
-</div>
-{{template "base/footer" .}}
+{{if .IsValidFA}}
+    {{template "base/head" .}}
+        <div class="repository file list">
+            <div class="ui container">
+                <h2>{{.OwnerName}} / {{.RepoName}}</h2>
+                {{template "base/alert" .}}
+                {{template "repo/doifile" .}}
+            </div>
+        </div>
+    {{template "base/footer" .}}
+{{else}}
+    {{template "status/500" .}}
+{{end}}
