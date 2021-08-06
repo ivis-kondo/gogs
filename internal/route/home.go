@@ -103,6 +103,11 @@ func ExploreMetadata(c *context.Context) {
 		page = 1
 	}
 
+	if c.User.Name == "fa-dev" {
+		c.User.FA = db.METI
+	}
+	c.Data["FA"] = c.User.FA
+
 	repos, count, err := db.SearchRepositoryByName(&db.SearchRepoOptions{
 		Keyword:  "",
 		UserID:   c.UserID(),
@@ -117,6 +122,13 @@ func ExploreMetadata(c *context.Context) {
 
 	// Get dmp.json contents
 	for _, repo := range repos {
+		if repo.Name == "sample-1" {
+			repo.FundedBy = db.METI
+		}
+		if c.User.FA == 0 || repo.FundedBy != c.User.FA {
+			continue
+		}
+
 		repo.HasMetadata = false
 		gitRepo, repoErr := git.Open(repo.RepoPath())
 		if repoErr != nil {
@@ -159,6 +171,7 @@ func ExploreMetadata(c *context.Context) {
 		if selectedKey != "" && keyword != "" && isContained(dmpContents, selectedKey, keyword) {
 			c.Data["SelectedKey"] = selectedKey
 			c.Data["SearchResult"] = keyword
+			c.Data["IsValidFA"] = true
 			repo.HasMetadata = true
 		}
 	}
@@ -243,7 +256,7 @@ func DmpBrowsing(c *context.Context) {
 	}
 	c.Data["OwnerName"] = ownerName
 	c.Data["RepoName"] = repoName
-	c.Data["IsValidFA"] = false
+
 	c.Success(DMP_BROWSING)
 }
 

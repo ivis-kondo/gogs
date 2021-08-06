@@ -41,6 +41,16 @@ const USER_AVATAR_URL_PREFIX = "avatars"
 
 type UserType int
 
+// type FA is RCOS specific code.
+type FA int
+
+const (
+	NONE FA = iota
+	METI
+	AMED
+	JST
+)
+
 const (
 	UserIndividual UserType = iota // Historic reason to make it starts at 0.
 	UserOrganization
@@ -82,6 +92,9 @@ type User struct {
 	AllowGitHook     bool
 	AllowImportLocal bool // Allow migrate repository by local path
 	ProhibitLogin    bool
+
+	// FA
+	FA FA
 
 	// Avatar
 	Avatar          string `xorm:"VARCHAR(2048) NOT NULL" gorm:"TYPE:VARCHAR(2048);NOT NULL"`

@@ -205,6 +205,9 @@ type Repository struct {
 	CreatedUnix int64
 	Updated     time.Time `xorm:"-" gorm:"-" json:"-"`
 	UpdatedUnix int64
+
+	// FundedBy is RCOS specific code.
+	FundedBy FA
 }
 
 func (repo *Repository) BeforeInsert() {

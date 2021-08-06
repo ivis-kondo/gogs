@@ -1,7 +1,7 @@
 <!-- based on ./repo_list -->
 <div class="ui repository list">
 	{{range .Repos}}
-	{{if .HasMetadata}}
+	{{if and $.IsValidFA .HasMetadata}}
 		<div class="item">
 			<div class="ui grid">
 				<div class="ui two wide column middle aligned center">
