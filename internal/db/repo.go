@@ -971,6 +971,14 @@ func prepareRepoCommit(repo *Repository, tmpDir, repoPath string, opts CreateRep
 		"CloneURL.SSH":   cloneLink.SSH,
 		"CloneURL.HTTPS": cloneLink.HTTPS,
 	}
+
+	// create dataset skelton
+	os.Mkdir(filepath.Join(tmpDir, "Dataset-101"), 0777)
+	if err = ioutil.WriteFile(filepath.Join(tmpDir, "Dataset-101/README.md"),
+		[]byte("# Dataset-101\n\nThis is dataset skelton."), 0644); err != nil {
+		return fmt.Errorf("write dmp.txt: %v", err)
+	}
+
 	if err = ioutil.WriteFile(filepath.Join(tmpDir, "README.md"),
 		[]byte(com.Expand(string(data), match)), 0644); err != nil {
 		return fmt.Errorf("write README.md: %v", err)
