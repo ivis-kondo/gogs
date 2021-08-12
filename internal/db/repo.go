@@ -927,6 +927,17 @@ func initRepoCommit(tmpPath string, sig *git.Signature) (err error) {
 	return nil
 }
 
+// dataladRepoCreate is RCOS specific code.
+func dataladRepoCreate(tmpPath string) (err error) {
+	var stderr string
+	if _, stderr, err = process.ExecDir(-1,
+		tmpPath, fmt.Sprintf("dataladRepoCreate (datalad create): %s", tmpPath),
+		"datalad", "create", "-d", ".", "-f"); err != nil {
+		return fmt.Errorf("datalad create: %s", stderr)
+	}
+	return nil
+}
+
 type CreateRepoOptions struct {
 	Name        string
 	Description string
@@ -971,17 +982,16 @@ func prepareRepoCommit(repo *Repository, tmpDir, repoPath string, opts CreateRep
 		"CloneURL.SSH":   cloneLink.SSH,
 		"CloneURL.HTTPS": cloneLink.HTTPS,
 	}
-
-	// create dataset skelton
-	os.Mkdir(filepath.Join(tmpDir, "Dataset-101"), 0777)
-	if err = ioutil.WriteFile(filepath.Join(tmpDir, "Dataset-101/README.md"),
-		[]byte("# Dataset-101\n\nThis is dataset skelton."), 0644); err != nil {
-		return fmt.Errorf("write dmp.txt: %v", err)
-	}
-
 	if err = ioutil.WriteFile(filepath.Join(tmpDir, "README.md"),
 		[]byte(com.Expand(string(data), match)), 0644); err != nil {
 		return fmt.Errorf("write README.md: %v", err)
+	}
+
+	// RCOS specific code: create dataset skelton
+	os.Mkdir(filepath.Join(tmpDir, "Dataset-101"), 0744)
+	if err = ioutil.WriteFile(filepath.Join(tmpDir, "Dataset-101/README.md"),
+		[]byte("# Dataset-101\n\nThis is a dataset skelton."), 0744); err != nil {
+		return fmt.Errorf("write Dataset-101/README.md: %v", err)
 	}
 
 	// .gitignore
@@ -1045,6 +1055,11 @@ func initRepository(e Engine, repoPath string, doer *User, repo *Repository, opt
 
 		if err = prepareRepoCommit(repo, tmpDir, repoPath, opts); err != nil {
 			return fmt.Errorf("prepareRepoCommit: %v", err)
+		}
+
+		// RCOS specific code
+		if err = dataladRepoCreate(tmpDir); err != nil {
+			return fmt.Errorf("initSubDataset: %v", err)
 		}
 
 		// Apply changes and commit.
