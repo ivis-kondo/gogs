@@ -8,6 +8,7 @@ RUN apk --no-cache --no-progress add --virtual \
 WORKDIR /go/src/github.com/G-Node/gogs
 COPY . .
 
+RUN go get -u github.com/kevinburke/go-bindata/...
 RUN export PATH=$PATH:~/go/bin
 # RUN make build-no-gen TAGS="cert pam"
 RUN make build TAGS="cert pam"
