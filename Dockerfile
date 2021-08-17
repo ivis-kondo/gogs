@@ -9,7 +9,8 @@ WORKDIR /go/src/github.com/G-Node/gogs
 COPY . .
 
 RUN export PATH=$PATH:~/go/bin
-RUN make build-no-gen TAGS="cert pam"
+# RUN make build-no-gen TAGS="cert pam"
+RUN make build TAGS="cert pam"
 
 FROM alpine:3.11
 ADD https://github.com/tianon/gosu/releases/download/1.11/gosu-amd64 /usr/sbin/gosu
