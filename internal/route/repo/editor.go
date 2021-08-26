@@ -578,7 +578,7 @@ func RemoveUploadFileFromServer(c *context.Context, f form.RemoveUploadFile) {
 	c.Status(http.StatusNoContent)
 }
 
-// CreateDmp is GIN specific code
+// CreateDmp is RCOS specific code
 // FIXME : RCOS modified for multiple schema
 func CreateDmp(c *context.Context) {
 	schema := c.QueryEscape("schema")
