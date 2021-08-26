@@ -14,7 +14,7 @@ import (
 )
 
 type contextMock struct {
-	context.Context
+	*context.Context
 }
 
 func TestCreateDmp(t *testing.T) {
@@ -32,12 +32,21 @@ func TestCreateDmp(t *testing.T) {
 
 	tests := []struct {
 		name          string
-		ctx           *contextMock
+		ctx           *context.Context
 		expStatusCode int
 	}{
 		{
-			name:          "sample",
-			ctx:           &contextMock{},
+			name: "sample1",
+			ctx: &context.Context{
+				User: &db.User{Name: "owner"},
+				Repo: &context.Repository{
+					Repository: &db.Repository{Name: "repo"}},
+			},
+			expStatusCode: http.StatusOK,
+		},
+		{
+			name: "sample2",
+			// ctx:           &context.Context{},
 			expStatusCode: http.StatusOK,
 		},
 	}
@@ -50,9 +59,11 @@ func TestCreateDmp(t *testing.T) {
 				log.Fatal(err)
 			}
 			rr := httptest.NewRecorder()
+			context.Contexter()
 			m.ServeHTTP(rr, req)
 
 			res := rr.Result()
+			// CreateDmp(test.ctx)
 			assert.Equal(t, test.expStatusCode, res.StatusCode)
 		})
 	}
