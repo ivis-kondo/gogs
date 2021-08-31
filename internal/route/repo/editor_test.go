@@ -3,12 +3,12 @@ package repo
 import (
 	"log"
 	"net/http"
-	"net/http/httptest"
 	"testing"
 
 	"github.com/ivis-yoshida/gogs/internal/conf"
 	"github.com/ivis-yoshida/gogs/internal/context"
 	"github.com/ivis-yoshida/gogs/internal/db"
+	"github.com/ivis-yoshida/gogs/internal/httplib"
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/macaron.v1"
 )
@@ -32,12 +32,12 @@ func TestCreateDmp(t *testing.T) {
 
 	tests := []struct {
 		name          string
-		ctx           *context.Context
+		ctx           context.Context
 		expStatusCode int
 	}{
 		{
 			name: "sample1",
-			ctx: &context.Context{
+			ctx: context.Context{
 				User: &db.User{Name: "owner"},
 				Repo: &context.Repository{
 					Repository: &db.Repository{Name: "repo"}},
@@ -54,15 +54,20 @@ func TestCreateDmp(t *testing.T) {
 	// http request with "schema" parameter
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			req, err := http.NewRequest(http.MethodGet, "/", nil)
-			if err != nil {
-				log.Fatal(err)
-			}
-			rr := httptest.NewRecorder()
-			context.Contexter()
-			m.ServeHTTP(rr, req)
+			// req, err := http.NewRequestWithContext(test.ctx, http.MethodGet, "/", nil)
+			// if err != nil {
+			// 	log.Fatal(err)
+			// }
 
-			res := rr.Result()
+			// rr := httptest.NewRecorder()
+			// m.ServeHTTP(rr, req)
+			// res := rr.Result()
+			req := httplib.Get("http://gogs.example.com/?schema=METI")
+			res, err := req.Response()
+			if err != nil {
+				log.Fatal("No Response: " + test.name)
+			}
+
 			// CreateDmp(test.ctx)
 			assert.Equal(t, test.expStatusCode, res.StatusCode)
 		})
