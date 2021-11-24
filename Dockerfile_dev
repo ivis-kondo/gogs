@@ -1,55 +1,28 @@
-FROM golang:alpine3.11 AS binarybuilder
-RUN apk --no-cache --no-progress add --virtual \
-  build-deps \
-  build-base \
-  git \
-  linux-pam-dev
+FROM ubuntu:18.04
 
-WORKDIR /go/src/github.com/ivis-yoshida/gogs
+RUN apt upgrade
+RUN apt update
+
+RUN apt install -y datalad
+
+# get git-annex v8
+RUN wget -O- http://neuro.debian.net/lists/bionic.jp.libre | sudo tee /etc/apt/sources.list.d/neurodebian.sources.list
+RUN apt-key adv --recv-keys --keyserver hkps://keyserver.ubuntu.com 0xA5D32F012649A5A9
+RUN apt-get update
+RUN apt-get install git-annex-standalone
+
+WORKDIR /home/ivis/gogs
 COPY . .
-RUN make build TAGS="rdc verification"
 
-FROM alpine:3.11
-ADD https://github.com/tianon/gosu/releases/download/1.11/gosu-amd64 /usr/sbin/gosu
-RUN chmod +x /usr/sbin/gosu \
-  && echo http://dl-2.alpinelinux.org/alpine/edge/community/ >> /etc/apk/repositories \
-  && apk --no-cache --no-progress add \
-  bash \
-  ca-certificates \
-  curl \
-  git \
-  linux-pam \
-  openssh \
-  s6 \
-  shadow \
-  socat \
-  tzdata \
-  rsync \
-  python \
-  py-pip
+# install golang
+RUN wget https://golang.org/dl/go1.16.6.linux-amd64.tar.gz
+RUN rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.16.6.linux-amd64.tar.gz
+RUN export PATH=$PATH:/usr/local/go/bin
 
-RUN pip install supervisor pyyaml
-RUN mkdir /git-annex
-ENV PATH="${PATH}:/git-annex/git-annex.linux"
-RUN apk add --no-cache git openssh curl
-RUN curl -Lo /git-annex/git-annex-standalone-amd64.tar.gz https://downloads.kitenet.net/git-annex/linux/current/git-annex-standalone-amd64.tar.gz
-RUN cd /git-annex && tar -xzf git-annex-standalone-amd64.tar.gz && rm git-annex-standalone-amd64.tar.gz
-RUN apk del --no-cache curl
-RUN ln -s /git-annex/git-annex.linux/git-annex-shell /bin/git-annex-shell
+RUN go install github.com/kevinburke/go-bindata/...
+RUN export PATH=$PATH:/home/ivis/go/bin
 
-ENV GOGS_CUSTOM /data/gogs
+# build gogs binary
+RUN make build
 
-# Configure LibC Name Service
-COPY docker/nsswitch.conf /etc/nsswitch.conf
-
-WORKDIR /app/gogs
-COPY docker ./docker
-COPY --from=binarybuilder /go/src/github.com/ivis-yoshida/gogs/gogs .
-
-RUN ./docker/finalize.sh
-
-# Configure Docker Container
-VOLUME ["/data", "/backup"]
-EXPOSE 22 3000
-ENTRYPOINT ["/app/gogs/docker/start.sh"]
-CMD ["/bin/s6-svscan", "/app/gogs/docker/s6/"]
+CMD ["./gogs", "web"]
