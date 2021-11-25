@@ -2,12 +2,10 @@ FROM ubuntu:18.04
 
 ENV ARCH amd64
 ENV GOVERSION 1.16.6
-ENV PATH $PATH:/usr/local/go/bin
+ENV PATH $PATH:/usr/local/go/bin:/home/ivis/go/bin
 
 RUN apt upgrade
 RUN apt update
-
-RUN apt install -y datalad
 
 # get git-annex v8
 # RUN wget -O- http://neuro.debian.net/lists/bionic.jp.libre | tee /etc/apt/sources.list.d/neurodebian.sources.list
@@ -16,17 +14,22 @@ RUN apt install -y datalad
 # RUN apt install -y git-annex-standalone
 RUN mkdir /git-annex
 ENV PATH="${PATH}:/git-annex/git-annex.linux"
-RUN apt install git curl
-RUN curl -Lo /git-annex/git-annex-standalone-amd64.tar.gz https://downloads.kitenet.net/git-annex/linux/current/git-annex-standalone-amd64.tar.gz
-RUN cd /git-annex && tar -xzf git-annex-standalone-amd64.tar.gz && rm git-annex-standalone-amd64.tar.gz
+RUN apt install -y git curl
+RUN curl -Lo /git-annex/git-annex-standalone-$ARCH.tar.gz https://downloads.kitenet.net/git-annex/linux/current/git-annex-standalone-$ARCH.tar.gz
+RUN cd /git-annex && tar -xzf git-annex-standalone-$ARCH.tar.gz && rm git-annex-standalone-$ARCH.tar.gz
 # RUN apk del --no-cache curl
 RUN ln -s /git-annex/git-annex.linux/git-annex-shell /bin/git-annex-shell
 
-WORKDIR /home/ivis
+RUN apt install -y datalad
+RUN apt install -y make
+
+# WORKDIR /home/ivis
 # install golang
 # RUN wget https://golang.org/dl/go1.16.6.linux-amd64.tar.gz
 # RUN rm -rf /home/ivis/go && tar -C /home/ivis -xzf go1.16.6.linux-amd64.tar.gz
 RUN curl -s -o /tmp/go.tar.gz https://storage.googleapis.com/golang/go$GOVERSION.linux-$ARCH.tar.gz
+RUN tar -C /usr/local -xzf /tmp/go.tar.gz
+RUN rm /tmp/go.tar.gz
 # RUN export PATH=$PATH:/home/ivis/go/bin
 
 WORKDIR /home/ivis/gogs
@@ -36,6 +39,6 @@ RUN go install github.com/kevinburke/go-bindata/...
 # RUN export PATH=$PATH:/home/ivis/go/bin
 
 # build gogs binary
-RUN make build
+# RUN make build
 
-CMD ["./gogs", "web"]
+# CMD ["./gogs", "web"]
