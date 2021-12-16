@@ -1,11 +1,11 @@
 package db
 
 import (
+	_ "image/jpeg"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-
 	"github.com/ivis-yoshida/gogs/internal/markup"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestRepository_ComposeMetas(t *testing.T) {
@@ -51,4 +51,24 @@ func TestRepository_ComposeMetas(t *testing.T) {
 		assert.Equal(t, "testrepo", metas["repo"])
 		assert.Equal(t, "https://someurl.com/{user}/{repo}/{issue}", metas["format"])
 	})
+}
+
+func Test_initWorkflow(t *testing.T) {
+	type args struct {
+		tmpDir string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := initWorkflow(tt.args.tmpDir); (err != nil) != tt.wantErr {
+				t.Errorf("initWorkflow() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
 }

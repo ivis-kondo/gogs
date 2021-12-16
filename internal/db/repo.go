@@ -1009,17 +1009,25 @@ func prepareRepoCommit(repo *Repository, doer *User, tmpDir, repoPath string, op
 			return fmt.Errorf("write LICENSE: %v", err)
 		}
 	}
+	initWorkflow(tmpDir)
 
-	// clone workflow-template ( RCOS specific code)
-	// NOTE: 試作段階
+	return nil
+}
+
+// initWorkflow is RCOS specific code.
+// This function clones a template prepared to provide workflow functionality
+// and also provides a link button in README.md to launch the Binder container for the repository.
+func initWorkflow(tmpDir string) error {
+	// TODO : README.md生成もこちらへ...makeReadmeみたいに切り出すと良さそう
+
 	workflowUrl := "https://github.com/ivis-kuwata/workflow-template"
-	err = git.Clone(workflowUrl, filepath.Join(tmpDir, "WORKFLOW"), git.CloneOptions{Bare: false})
+	err := git.Clone(workflowUrl, filepath.Join(tmpDir, "WORKFLOW"), git.CloneOptions{Bare: false})
 	if err != nil {
 		return fmt.Errorf("fetch WORKFLOW: %v", err)
 	}
 
 	gitmodulePath := ".gitmodules"
-	data, err = getRepoInitFile("workflow", gitmodulePath)
+	data, err := getRepoInitFile("workflow", gitmodulePath)
 	if err != nil {
 		return fmt.Errorf("getRepoInitFile[%s]: %v", gitmodulePath, err)
 	}
