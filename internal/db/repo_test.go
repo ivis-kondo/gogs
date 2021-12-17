@@ -2,10 +2,14 @@ package db
 
 import (
 	_ "image/jpeg"
+	"os"
+	"path/filepath"
 	"testing"
+	"time"
 
 	"github.com/ivis-yoshida/gogs/internal/markup"
 	"github.com/stretchr/testify/assert"
+	"github.com/unknwon/com"
 )
 
 func TestRepository_ComposeMetas(t *testing.T) {
@@ -54,19 +58,42 @@ func TestRepository_ComposeMetas(t *testing.T) {
 }
 
 func Test_initWorkflow(t *testing.T) {
+	repo := &Repository{
+		Name: "testrepo",
+		Owner: &User{
+			Name: "testuser",
+		},
+		ExternalTrackerFormat: "https://someurl.com/{user}/{repo}/{issue}",
+	}
+
 	type args struct {
-		tmpDir string
+		tmpDir, workflowUrl string
 	}
 	tests := []struct {
 		name    string
 		args    args
 		wantErr bool
 	}{
-		// TODO: Add test cases.
+		{
+			name: "noError",
+			args: args{
+				tmpDir:      filepath.Join(os.TempDir(), "gogs-"+repo.Name+"-"+com.ToStr(time.Now().Nanosecond())),
+				workflowUrl: "https://github.com/ivis-kuwata/workflow-template",
+			},
+			wantErr: false,
+		},
+		{
+			name: "fail git clone",
+			args: args{
+				tmpDir:      filepath.Join(os.TempDir(), "gogs-"+repo.Name+"-"+com.ToStr(time.Now().Nanosecond())),
+				workflowUrl: "https://github.com/noexist/workflow-template",
+			},
+			wantErr: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := initWorkflow(tt.args.tmpDir); (err != nil) != tt.wantErr {
+			if err := initWorkflow(tt.args.tmpDir, tt.args.workflowUrl); (err != nil) != tt.wantErr {
 				t.Errorf("initWorkflow() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
