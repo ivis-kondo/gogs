@@ -1,6 +1,13 @@
 name: Setup Host-Server Enviroment
 
-on: [ workflow_dispatch ]
+on:
+  workflow_dispatch:
+    inputs:
+      install_sudo:
+        description: 'If "sudo" is not installed, check it.'
+        required: true
+        type: boolean
+        default: false
 
 jobs:
 
@@ -9,6 +16,7 @@ jobs:
 
     steps:
     - name: Install sudo
+      if: ${{ inputs.install_sudo }}
       run: |
         apt-get update
         apt-get upgrade -y
