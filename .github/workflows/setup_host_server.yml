@@ -33,6 +33,9 @@ jobs:
       uses: actions/setup-go@v2
       with:
         go-version: '1.16.6'
+    - run: echo "GOPATH=/usr/local/go" >> $GITHUB_ENV
+    - run: echo "GOBIN="$GOPATH"/bin" >> $GITHUB_ENV
+    - run: echo $GOBIN >> $GITHUB_PATH
     - name: Install Dependencies
       run: |
         go get -u github.com/kevinburke/go-bindata/...
