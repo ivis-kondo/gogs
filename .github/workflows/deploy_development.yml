@@ -6,7 +6,6 @@ on:
       - 'feature/**'
       - 'workflow-test'
     paths:
-      - 'deploy_development.yml'
       - '**.go'
       - '!**_gen.go'
 
@@ -26,7 +25,7 @@ jobs:
         go get -u github.com/kevinburke/go-bindata/...
     - uses: actions/checkout@v2
     - name: Build docker image
-      run: docker build -t gin.rdc:${{ secrets.VER }} .
+      run: sudo docker build -t gin.rdc:${{ secrets.VER }} .
   deploy:
     runs-on: [self-hosted. development]
     needs: build_docker
@@ -34,7 +33,7 @@ jobs:
     steps:
       - name: Run docker-compose
         run: |
-          docker-compose up -f docker-compose.development.yml -d
+          sudo docker-compose up -f docker-compose.development.yml -d
         env:
           VER: ${{ secrets.VER }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
