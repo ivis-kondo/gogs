@@ -11,7 +11,7 @@ services:
     ports:
       - ${DB_SERVER_PORT}:${DB_CONTAINER_PORT}
   gin_dev:
-    image: gin_rdc:${VER}
+    image: gin.rdc:${VER}
     container_name: gin_app_dev
     ports:
       - ${GIN_WEB_SEVER_PORT}:${GIN_WEB_CONTAINER_PORT}

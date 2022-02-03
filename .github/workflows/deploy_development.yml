@@ -25,7 +25,7 @@ jobs:
         go get -u github.com/kevinburke/go-bindata/...
     - uses: actions/checkout@v2
     - name: Build docker image
-      run: docker build -t gin_rdc:${{ secrets.VER }} ./gogs
+      run: docker build -t gin.rdc:${{ secrets.VER }} ./gogs/gogs
   deploy:
     runs-on: [self-hosted. development]
     needs: build_docker
