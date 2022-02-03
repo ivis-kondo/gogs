@@ -6,13 +6,14 @@ on:
       - 'feature/**'
       - 'workflow-test'
     paths:
+      - 'deploy_development.yml'
       - '**.go'
       - '!**_gen.go'
 
 jobs:
   build_docker:
     runs-on: [self-hosted, development]
-    environment: production
+    environment: development
     steps:
     - uses: actions/setup-go@v2
       with:
@@ -29,6 +30,7 @@ jobs:
   deploy:
     runs-on: [self-hosted. development]
     needs: build_docker
+    environment: development
     steps:
       - name: Run docker-compose
         run: |
