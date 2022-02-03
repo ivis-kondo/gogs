@@ -1,5 +1,5 @@
-LDFLAGS += -X "github.com/G-Node/gogs/internal/conf.BuildTime=$(shell date -u '+%Y-%m-%d %I:%M:%S %Z')"
-LDFLAGS += -X "github.com/G-Node/gogs/internal/conf.BuildCommit=$(shell git rev-parse HEAD)"
+LDFLAGS += -X "github.com/ivis-kondo/gogs/internal/conf.BuildTime=$(shell date -u '+%Y-%m-%d %I:%M:%S %Z')"
+LDFLAGS += -X "github.com/ivis-kondo/gogs/internal/conf.BuildCommit=$(shell git rev-parse HEAD)"
 
 CONF_FILES := $(shell find conf | sed 's/ /\\ /g')
 TEMPLATES_FILES := $(shell find templates | sed 's/ /\\ /g')

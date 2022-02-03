@@ -1,0 +1,20 @@
+# docker version
+version: '2.2'
+
+services:
+  db_dev:
+    image: postgres:latest
+    container_name: postgres_db_dev
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_DEV_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB_DEV_NAME}
+    ports:
+      - ${DB_SERVER_PORT}:${DB_CONTAINER_PORT}
+  gin_dev:
+    image: gin_rdc:${VER}
+    container_name: gin_app_dev
+    ports:
+      - ${GIN_WEB_SEVER_PORT}:${GIN_WEB_CONTAINER_PORT}
+      - ${GIN_SEVER_PORT}:${GIN_CONTAINER_PORT}
+    depends_on:
+      - db_dev
