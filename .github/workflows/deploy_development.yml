@@ -41,7 +41,7 @@ jobs:
     environment: development
     steps:
       - name: Set Env
-      - run: |
+        run: |
           echo "VER="${{ secrets.VER }} >> $GITHUB_ENV
           echo "POSTGRES_PASSWORD="${{ secrets.POSTGRES_PASSWORD }} >> $GITHUB_ENV
           echo "POSTGRES_DB_NAME="${{ secrets.POSTGRES_DB_NAME }} >> $GITHUB_ENV
