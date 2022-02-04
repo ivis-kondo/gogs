@@ -36,7 +36,7 @@ jobs:
     - name: Build docker image
       run: sudo docker build -t gin.rdc:${{ secrets.VER }} .
   deploy:
-    runs-on: [self-hosted. development]
+    runs-on: [self-hosted, development]
     needs: build_docker
     environment: development
     steps:
