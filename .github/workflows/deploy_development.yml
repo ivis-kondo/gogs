@@ -42,7 +42,7 @@ jobs:
     steps:
       - name: Run docker-compose
         run: |
-          docker-compose -f docker-compose.development.yml up -d
+          sudo docker-compose -f docker-compose.development.yml up -d
         env:
           VER: ${{ secrets.VER }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
