@@ -22,8 +22,11 @@ jobs:
         echo "GOBIN="$HOME"/go/bin" >> $GITHUB_ENV
         echo $GOBIN >> $GITHUB_PATH
         echo $PATH
+        go env -w GOBIN=$HOME"/go/bin"
     - name: Install dependencies
-      run: go get -u github.com/kevinburke/go-bindata/...
+      run: |
+        go get -u github.com/kevinburke/go-bindata/...
+        go-bindata -v
     - uses: actions/checkout@v2
     - name: Build docker image
       run: sudo docker build -t gin.rdc:${{ secrets.VER }} .
