@@ -18,11 +18,11 @@ import (
 	"github.com/gogs/git-module"
 	api "github.com/gogs/go-gogs-client"
 
-	"github.com/ivis-yoshida/gogs/internal/conf"
-	"github.com/ivis-yoshida/gogs/internal/errutil"
-	"github.com/ivis-yoshida/gogs/internal/osutil"
-	"github.com/ivis-yoshida/gogs/internal/process"
-	"github.com/ivis-yoshida/gogs/internal/sync"
+	"github.com/ivis-kondo/gogs/internal/conf"
+	"github.com/ivis-kondo/gogs/internal/errutil"
+	"github.com/ivis-kondo/gogs/internal/osutil"
+	"github.com/ivis-kondo/gogs/internal/process"
+	"github.com/ivis-kondo/gogs/internal/sync"
 )
 
 var PullRequestQueue = sync.NewUniqueQueue(1000)

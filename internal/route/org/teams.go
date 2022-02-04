@@ -11,9 +11,9 @@ import (
 	"github.com/unknwon/com"
 	log "unknwon.dev/clog/v2"
 
-	"github.com/ivis-yoshida/gogs/internal/context"
-	"github.com/ivis-yoshida/gogs/internal/db"
-	"github.com/ivis-yoshida/gogs/internal/form"
+	"github.com/ivis-kondo/gogs/internal/context"
+	"github.com/ivis-kondo/gogs/internal/db"
+	"github.com/ivis-kondo/gogs/internal/form"
 )
 
 const (

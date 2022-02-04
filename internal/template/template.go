@@ -23,12 +23,12 @@ import (
 
 	"github.com/gogs/git-module"
 
-	"github.com/ivis-yoshida/gogs/internal/conf"
-	"github.com/ivis-yoshida/gogs/internal/cryptoutil"
-	"github.com/ivis-yoshida/gogs/internal/db"
-	"github.com/ivis-yoshida/gogs/internal/gitutil"
-	"github.com/ivis-yoshida/gogs/internal/markup"
-	"github.com/ivis-yoshida/gogs/internal/tool"
+	"github.com/ivis-kondo/gogs/internal/conf"
+	"github.com/ivis-kondo/gogs/internal/cryptoutil"
+	"github.com/ivis-kondo/gogs/internal/db"
+	"github.com/ivis-kondo/gogs/internal/gitutil"
+	"github.com/ivis-kondo/gogs/internal/markup"
+	"github.com/ivis-kondo/gogs/internal/tool"
 )
 
 var (

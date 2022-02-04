@@ -21,8 +21,8 @@ import (
 	"xorm.io/core"
 	"xorm.io/xorm"
 
-	"github.com/ivis-yoshida/gogs/internal/conf"
-	"github.com/ivis-yoshida/gogs/internal/db/migrations"
+	"github.com/ivis-kondo/gogs/internal/conf"
+	"github.com/ivis-kondo/gogs/internal/db/migrations"
 )
 
 // Engine represents a XORM engine or session.

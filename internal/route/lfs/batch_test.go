@@ -15,9 +15,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/macaron.v1"
 
-	"github.com/ivis-yoshida/gogs/internal/conf"
-	"github.com/ivis-yoshida/gogs/internal/db"
-	"github.com/ivis-yoshida/gogs/internal/lfsutil"
+	"github.com/ivis-kondo/gogs/internal/conf"
+	"github.com/ivis-kondo/gogs/internal/db"
+	"github.com/ivis-kondo/gogs/internal/lfsutil"
 )
 
 func Test_serveBatch(t *testing.T) {

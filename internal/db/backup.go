@@ -16,8 +16,8 @@ import (
 	"xorm.io/core"
 	"xorm.io/xorm"
 
-	"github.com/ivis-yoshida/gogs/internal/conf"
-	"github.com/ivis-yoshida/gogs/internal/osutil"
+	"github.com/ivis-kondo/gogs/internal/conf"
+	"github.com/ivis-kondo/gogs/internal/osutil"
 )
 
 // getTableType returns the type name of a table definition without package name,

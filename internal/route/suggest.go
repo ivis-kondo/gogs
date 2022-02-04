@@ -2,7 +2,7 @@ package route
 
 import (
 	"github.com/G-Node/libgin/libgin"
-	"github.com/ivis-yoshida/gogs/internal/context"
+	"github.com/ivis-kondo/gogs/internal/context"
 	log "gopkg.in/clog.v1"
 )
 

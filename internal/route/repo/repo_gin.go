@@ -12,9 +12,9 @@ import (
 	"strings"
 
 	"github.com/gogs/git-module"
-	"github.com/ivis-yoshida/gogs/internal/conf"
-	"github.com/ivis-yoshida/gogs/internal/context"
-	"github.com/ivis-yoshida/gogs/internal/tool"
+	"github.com/ivis-kondo/gogs/internal/conf"
+	"github.com/ivis-kondo/gogs/internal/context"
+	"github.com/ivis-kondo/gogs/internal/tool"
 	log "gopkg.in/clog.v1"
 )
 

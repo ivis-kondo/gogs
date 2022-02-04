@@ -18,9 +18,9 @@ import (
 
 	"github.com/gogs/git-module"
 
-	"github.com/ivis-yoshida/gogs/internal/conf"
-	"github.com/ivis-yoshida/gogs/internal/template/highlight"
-	"github.com/ivis-yoshida/gogs/internal/tool"
+	"github.com/ivis-kondo/gogs/internal/conf"
+	"github.com/ivis-kondo/gogs/internal/template/highlight"
+	"github.com/ivis-kondo/gogs/internal/tool"
 )
 
 // DiffSection is a wrapper to git.DiffSection with helper methods.
