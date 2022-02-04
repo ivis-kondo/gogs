@@ -22,7 +22,7 @@ jobs:
     - run: echo $GOBIN >> $GITHUB_PATH
     - name: Install dependencies
       run: go get -u github.com/kevinburke/go-bindata/...
-    - run: echo $GITHUB_PATH
+    - run: echo $PATH
     - uses: actions/checkout@v2
     - name: Build docker image
       run: sudo docker build -t gin.rdc:${{ secrets.VER }} .
