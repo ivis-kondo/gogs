@@ -28,6 +28,11 @@ jobs:
         go get -u github.com/kevinburke/go-bindata/...
         go-bindata -v
     - uses: actions/checkout@v2
+    - name: Create *_gen.go files (3 files)
+      run: |
+        go generate ./internal/assets/conf/conf.go
+        go generate ./internal/assets/templates/templates.go
+        go generate ./internal/assets/public/public.go
     - name: Build docker image
       run: sudo docker build -t gin.rdc:${{ secrets.VER }} .
   deploy:
