@@ -16,6 +16,7 @@ profile/
 output*
 *.sublime-project
 *.sublime-workspace
+*_gen.go
 /release
 
 node_modules

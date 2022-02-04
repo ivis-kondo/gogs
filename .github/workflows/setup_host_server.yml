@@ -1,13 +1,6 @@
 name: Setup Host-Server Enviroment
 
-on:
-  workflow_dispatch:
-    inputs:
-      install_sudo:
-        description: 'If "sudo" is not installed, check it.'
-        required: true
-        type: boolean
-        default: false
+on: workflow_dispatch
 
 jobs:
 
@@ -15,20 +8,21 @@ jobs:
     runs-on: [self-hosted, development]
 
     steps:
-    - name: Install sudo
-      if: ${{ inputs.install_sudo }}
+    - name: Uninstall old docker
+      run: sudo apt-get remove docker docker-engine docker.io
+    - name: Install libraries
       run: |
-        apt-get update
-        apt-get upgrade -y
-        apt-get install sudo
-    - name: Install Dependency
-      run: |
-        sudo apt-get install -y docker.io
-        sudo apt-get install -y docker-compose
+        sudo apt-get update
+        sudo apt-get upgrade
         sudo apt-get install -y git
         sudo apt-get install -y wget
         sudo apt-get install -y make
         sudo apt-get install -y gcc
+        sudo apt-get install -y libpam0g-dev
+    - name: Install Docker
+      run: |
+        sudo apt-get install -y docker.io
+        sudo apt-get install -y docker-compose
     - name: Setup go
       uses: actions/setup-go@v2
       with:
