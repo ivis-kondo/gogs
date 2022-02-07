@@ -47,8 +47,8 @@ COPY docker ./docker
 COPY --from=binarybuilder /go/src/github.com/G-Node/gogs/gogs .
 COPY conf ./conf
 # copy custom data
-COPY custom/public /app/gogs/public
-COPY custom/templates /app/gogs/templates
+COPY custom/public /data/gogs/public
+COPY custom/templates /data/gogs/templates
 
 RUN ./docker/finalize.sh
 
