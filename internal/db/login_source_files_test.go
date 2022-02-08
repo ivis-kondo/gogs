@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/ivis-yoshida/gogs/internal/errutil"
+	"github.com/ivis-kondo/gogs/internal/errutil"
 )
 
 func Test_loginSourceFiles_GetByID(t *testing.T) {

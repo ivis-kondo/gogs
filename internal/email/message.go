@@ -18,7 +18,7 @@ import (
 	"gopkg.in/gomail.v2"
 	log "unknwon.dev/clog/v2"
 
-	"github.com/ivis-yoshida/gogs/internal/conf"
+	"github.com/ivis-kondo/gogs/internal/conf"
 )
 
 type Message struct {

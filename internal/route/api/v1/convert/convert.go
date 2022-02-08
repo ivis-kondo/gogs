@@ -12,7 +12,7 @@ import (
 	"github.com/gogs/git-module"
 	api "github.com/gogs/go-gogs-client"
 
-	"github.com/ivis-yoshida/gogs/internal/db"
+	"github.com/ivis-kondo/gogs/internal/db"
 )
 
 func ToEmail(email *db.EmailAddress) *api.Email {

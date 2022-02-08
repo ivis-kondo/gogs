@@ -15,9 +15,9 @@ import (
 	gormbulk "github.com/t-tiger/gorm-bulk-insert"
 	log "unknwon.dev/clog/v2"
 
-	"github.com/ivis-yoshida/gogs/internal/cryptoutil"
-	"github.com/ivis-yoshida/gogs/internal/errutil"
-	"github.com/ivis-yoshida/gogs/internal/strutil"
+	"github.com/ivis-kondo/gogs/internal/cryptoutil"
+	"github.com/ivis-kondo/gogs/internal/errutil"
+	"github.com/ivis-kondo/gogs/internal/strutil"
 )
 
 // TwoFactorsStore is the persistent interface for 2FA.

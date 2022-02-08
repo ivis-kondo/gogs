@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	. "github.com/ivis-yoshida/gogs/internal/markup"
+	. "github.com/ivis-kondo/gogs/internal/markup"
 )
 
 func Test_Sanitizer(t *testing.T) {

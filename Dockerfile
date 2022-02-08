@@ -45,6 +45,10 @@ COPY docker/nsswitch.conf /etc/nsswitch.conf
 WORKDIR /app/gogs
 COPY docker ./docker
 COPY --from=binarybuilder /go/src/github.com/G-Node/gogs/gogs .
+COPY conf ./conf
+# copy custom data
+COPY custom/public /data/gogs/public
+COPY custom/templates /data/gogs/templates
 
 RUN ./docker/finalize.sh
 
