@@ -76,7 +76,7 @@ func render(tpl string, data map[string]interface{}) (string, error) {
 }
 
 func SendTestMail(email string) error {
-	return gomail.Send(&Sender{}, NewMessage(email, "Gogs Test Email", "Hello 👋, greeting from Gogs!").Message)
+	return gomail.Send(&Sender{}, NewMessage(email, "Gogs Test Email", "Hello 👋, greeting from Gogs RDC!").Message)
 }
 
 /*
