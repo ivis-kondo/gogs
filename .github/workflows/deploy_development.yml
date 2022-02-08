@@ -28,6 +28,8 @@ jobs:
         go get -u github.com/kevinburke/go-bindata/...
         go-bindata -v
     - uses: actions/checkout@v2
+      with:
+        ref: $GITHUB_REF_NAME
     - name: Create *_gen.go files (3 files)
       run: |
         go generate ./internal/assets/conf/conf.go
