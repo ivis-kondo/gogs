@@ -55,6 +55,7 @@ func renderDirectory(c *context.Context, treeLink string) {
 		MaxConcurrency: conf.Repository.CommitsFetchConcurrency,
 		Timeout:        5 * time.Minute,
 	})
+
 	if err != nil {
 		c.Error(err, "get commits info")
 		return

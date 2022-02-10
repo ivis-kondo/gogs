@@ -950,7 +950,9 @@ func getRepoInitFile(tp, name string) ([]byte, error) {
 	return conf.Asset(relPath)
 }
 
-func prepareRepoCommit(repo *Repository, tmpDir, repoPath string, opts CreateRepoOptions) error {
+// prepareRepoCommit adds the files to the repository if the GIN user
+// has initialized the repository with the selected files and templates on browser.
+func prepareRepoCommit(repo *Repository, doer *User, tmpDir, repoPath string, opts CreateRepoOptions) error {
 	// Clone to temprory path and do the init commit.
 	_, stderr, err := process.Exec(
 		fmt.Sprintf("initRepository(git clone): %s", repoPath), "git", "clone", repoPath, tmpDir)
@@ -968,6 +970,7 @@ func prepareRepoCommit(repo *Repository, tmpDir, repoPath string, opts CreateRep
 	match := map[string]string{
 		"Name":           repo.Name,
 		"Description":    repo.Description,
+		"Doer":           doer.Name,
 		"CloneURL.SSH":   cloneLink.SSH,
 		"CloneURL.HTTPS": cloneLink.HTTPS,
 	}
@@ -1035,7 +1038,7 @@ func initRepository(e Engine, repoPath string, doer *User, repo *Repository, opt
 		}
 		defer RemoveAllWithNotice("Delete repository for auto-initialization", tmpDir)
 
-		if err = prepareRepoCommit(repo, tmpDir, repoPath, opts); err != nil {
+		if err = prepareRepoCommit(repo, doer, tmpDir, repoPath, opts); err != nil {
 			return fmt.Errorf("prepareRepoCommit: %v", err)
 		}
 
