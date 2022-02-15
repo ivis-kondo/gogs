@@ -49,8 +49,8 @@ jobs:
           go get -u github.com/kevinburke/go-bindata/...
       - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          ref: ${{ github.ref_name }}
+      - run: git checkout HEAD^2
+        if: ${{ github.event_name == 'pull_request' }}
       - name: Create *_gen.go files (3 files)
         run: |
           go generate ./internal/assets/conf/conf.go
