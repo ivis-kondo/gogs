@@ -63,6 +63,7 @@ jobs:
         run: |
           sudo docker-compose -f docker-compose.development.yml up -d
       - name: Restore Data
+        run: |
           sudo docker cp ./docker-backup.zip gin_app_dev:/backup/
           sudo docker exec -it --user=git mkdir ~/backup_temp
           sudo docker exec -it --user=git gin_app_dev /app/gogs/gogs restore --from /backup/docker-backup.zip --tempdir ~/backup_temp
