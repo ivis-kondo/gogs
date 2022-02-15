@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ivis-yoshida/gogs/internal/markup"
+	"github.com/ivis-kondo/gogs/internal/markup"
 	"github.com/stretchr/testify/assert"
 	"github.com/unknwon/com"
 )

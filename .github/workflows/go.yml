@@ -41,8 +41,21 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: ${{ matrix.go-version }}
+      - name: Install Go-bindata
+        run: |
+          echo "GOPATH="$GOROOT >> $GITHUB_ENV
+          echo "GOBIN="$GOPATH"/bin" >> $GITHUB_ENV
+          echo $GOBIN >> $GITHUB_PATH
+          go get -u github.com/kevinburke/go-bindata/...
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref_name }}
+      - name: Create *_gen.go files (3 files)
+        run: |
+          go generate ./internal/assets/conf/conf.go
+          go generate ./internal/assets/templates/templates.go
+          go generate ./internal/assets/public/public.go
       - name: Run unit tests
         run: go test -v -race -coverprofile=coverage -covermode=atomic ./...
       - name: Upload coverage report to Codecov
