@@ -44,7 +44,7 @@ jobs:
     steps:
       - name: Backup Data
         run: |
-          sudo docker exec --user=git gin_app_dev /app/gogs/gogs backup --target /backup --archive-name docker-backup.zip --tempdir ~/backup_temp
+          sudo docker exec --user=git gin_app_dev /app/gogs/gogs backup --target /backup --archive-name docker-backup.zip --tempdir /home/git/backup_temp
           sudo docker cp gin_app_dev:/backup/docker-backup.zip .
       - name: Set Env
         run: |
@@ -65,5 +65,5 @@ jobs:
       - name: Restore Data
         run: |
           sudo docker cp ./docker-backup.zip gin_app_dev:/backup/
-          sudo docker exec --user=git gin_app_dev mkdir ~/backup_temp
-          sudo docker exec --user=git gin_app_dev /app/gogs/gogs restore --from /backup/docker-backup.zip --tempdir ~/backup_temp
+          sudo docker exec --user=git gin_app_dev mkdir /home/git/backup_temp
+          sudo docker exec --user=git gin_app_dev /app/gogs/gogs restore --from /backup/docker-backup.zip --tempdir /home/git/backup_temp
