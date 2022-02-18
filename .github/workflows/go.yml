@@ -6,6 +6,7 @@ on:
       - main
       - 'release/**'
       - feature/* # verify GitHub Actions
+      - workflow_test
     paths:
       - '**.go'
       - '.golangci.yml'
