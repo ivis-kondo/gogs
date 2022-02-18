@@ -207,6 +207,10 @@ func fetchBlobOnGithub(blobPath string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
+
+    if resp.StatusCode >= 400 {
+        return nil, fmt.Errorf("Bad response status code %d", resp.StatusCode)
+    }
 	defer resp.Body.Close()
 
 	contents, err := ioutil.ReadAll(resp.Body)
