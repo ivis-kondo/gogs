@@ -2,14 +2,10 @@ package db
 
 import (
 	_ "image/jpeg"
-	"os"
-	"path/filepath"
 	"testing"
-	"time"
 
 	"github.com/ivis-kondo/gogs/internal/markup"
 	"github.com/stretchr/testify/assert"
-	"github.com/unknwon/com"
 )
 
 func TestRepository_ComposeMetas(t *testing.T) {
