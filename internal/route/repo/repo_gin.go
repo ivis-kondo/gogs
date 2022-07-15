@@ -14,20 +14,34 @@ import (
 	"path/filepath"
 	"strings"
 
+	log "unknwon.dev/clog/v2"
+
 	"github.com/NII-DG/gogs/internal/conf"
 	"github.com/NII-DG/gogs/internal/context"
 	"github.com/NII-DG/gogs/internal/db"
 	"github.com/NII-DG/gogs/internal/tool"
 	"github.com/gogs/git-module"
-	log "gopkg.in/clog.v1"
 )
 
 func serveAnnexedData(ctx *context.Context, name string, buf []byte) error {
 	keyparts := strings.Split(strings.TrimSpace(string(buf)), "/")
 	key := keyparts[len(keyparts)-1]
+	log.Info("serveAnnexedData")
+	log.Info("key: %v", key)
+	// to show contents on the Internet 2022/07/15
+	// decode key --ref git://git-annex.branchable.com/ --dir Annex/Locations.hs l.593-618
+	if strings.Contains(key, "URL") {
+		log.Info("if strings.Contains(key, 'URL')")
+		subkey := &key
+		*subkey = strings.Replace(key, "&a", "&", -1)
+		key = strings.Replace(key, "&s", "%", -1)
+		key = strings.Replace(key, "&c", ":", -1)
+		key = strings.Replace(key, "%", "/", -1)
+		log.Info("decode key: %v", key)
+	}
 	contentPath, err := git.NewCommand("annex", "contentlocation", key).RunInDir(ctx.Repo.Repository.RepoPath())
 	if err != nil {
-		log.Error(2, "Failed to find content location for file %q with key %q", name, key)
+		log.Error("Failed to find content location for file %q with key %q", name, key)
 		return err
 	}
 	// always trim space from output for git command
@@ -39,7 +53,7 @@ func serveAnnexedKey(ctx *context.Context, name string, contentPath string) erro
 	fullContentPath := filepath.Join(ctx.Repo.Repository.RepoPath(), contentPath)
 	annexfp, err := os.Open(fullContentPath)
 	if err != nil {
-		log.Error(2, "Failed to open annex file at %q: %s", fullContentPath, err.Error())
+		log.Error("Failed to open annex file at %q: %s", fullContentPath, err.Error())
 		return err
 	}
 	defer annexfp.Close()
@@ -47,7 +61,7 @@ func serveAnnexedKey(ctx *context.Context, name string, contentPath string) erro
 
 	info, err := annexfp.Stat()
 	if err != nil {
-		log.Error(2, "Failed to stat file at %q: %s", fullContentPath, err.Error())
+		log.Error("Failed to stat file at %q: %s", fullContentPath, err.Error())
 		return err
 	}
 
@@ -78,13 +92,13 @@ func readDmpJson(c context.AbstructContext) {
 	log.Trace("Reading dmp.json file")
 	entry, err := c.GetRepo().GetCommit().Blob("/dmp.json")
 	if err != nil || entry == nil {
-		log.Error(2, "dmp.json blob could not be retrieved: %v", err)
+		log.Error("dmp.json blob could not be retrieved: %v", err)
 		c.CallData()["HasDmpJson"] = false
 		return
 	}
 	buf, err := entry.Bytes()
 	if err != nil {
-		log.Error(2, "dmp.json data could not be read: %v", err)
+		log.Error("dmp.json data could not be read: %v", err)
 		c.CallData()["HasDmpJson"] = false
 		return
 	}
@@ -108,12 +122,12 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 
 	src, err := f.FetchContentsOnGithub(templateUrl)
 	if err != nil {
-		log.Error(2, "maDMP blob could not be fetched: %v", err)
+		log.Error("maDMP blob could not be fetched: %v", err)
 	}
 
 	decodedMaDmp, err := f.DecodeBlobContent(src)
 	if err != nil {
-		log.Error(2, "maDMP blob could not be decorded: %v", err)
+		log.Error("maDMP blob could not be decorded: %v", err)
 
 		failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed")
 		return
@@ -127,14 +141,14 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 	// ユーザが作成したDMP情報取得
 	entry, err := c.GetRepo().GetCommit().Blob("/dmp.json")
 	if err != nil || entry == nil {
-		log.Error(2, "dmp.json blob could not be retrieved: %v", err)
+		log.Error("dmp.json blob could not be retrieved: %v", err)
 
 		failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: DMP could not read")
 		return
 	}
 	buf, err := entry.Bytes()
 	if err != nil {
-		log.Error(2, "dmp.json data could not be read: %v", err)
+		log.Error("dmp.json data could not be read: %v", err)
 
 		failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: DMP could not read")
 		return
@@ -143,7 +157,7 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 	var dmp interface{}
 	err = json.Unmarshal(buf, &dmp)
 	if err != nil {
-		log.Error(2, "Unmarshal DMP info: %v", err)
+		log.Error("Unmarshal DMP info: %v", err)
 
 		failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: DMP could not read")
 		return
@@ -182,7 +196,7 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 		IsNewFile: true,
 	})
 	if err != nil {
-		log.Error(2, "failed generating maDMP: %v", err)
+		log.Error("failed generating maDMP: %v", err)
 
 		failedGenereteMaDmp(c, "Faild gerate maDMP: Already exist")
 		return
@@ -283,12 +297,12 @@ func fetchDockerfile(c context.AbstructContext) {
 	var f repoUtil
 	src, err := f.FetchContentsOnGithub(dockerfileUrl)
 	if err != nil {
-		log.Error(2, "Dockerfile could not be fetched: %v", err)
+		log.Error("Dockerfile could not be fetched: %v", err)
 	}
 
 	decodedDockerfile, err := f.DecodeBlobContent(src)
 	if err != nil {
-		log.Error(2, "Dockerfile could not be decorded: %v", err)
+		log.Error("Dockerfile could not be decorded: %v", err)
 
 		failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed(Dockerfile)")
 		return
@@ -321,12 +335,12 @@ func fetchEmviromentfile(c context.AbstructContext) {
 		path := Emviromentfilepath + Emviromentfile[i]
 		src, err := f.FetchContentsOnGithub(path)
 		if err != nil {
-			log.Error(2, "%s could not be fetched: %v", Emviromentfile[i], err)
+			log.Error("%s could not be fetched: %v", Emviromentfile[i], err)
 		}
 
 		decodefile, err := f.DecodeBlobContent(src)
 		if err != nil {
-			log.Error(2, "%s could not be decorded: %v", Emviromentfile[i], err)
+			log.Error("%s could not be decorded: %v", Emviromentfile[i], err)
 
 			failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed(Emviromentfile)")
 			return
@@ -365,9 +379,26 @@ func resolveAnnexedContent(c *context.Context, buf []byte) ([]byte, error) {
 
 	keyparts := strings.Split(strings.TrimSpace(string(buf)), "/")
 	key := keyparts[len(keyparts)-1]
+	// to show contents on the Internet 2022/07/15
+	// decode key --ref git://git-annex.branchable.com/ --dir Annex/Locations.hs l.593-618
+	if strings.Contains(key, "URL") {
+		subkey := &key
+		*subkey = strings.Replace(key, "&a", "&", -1)
+		key = strings.Replace(key, "&s", "%", -1)
+		key = strings.Replace(key, "&c", ":", -1)
+		key = strings.Replace(key, "%", "/", -1)
+		s, err := git.NewCommand("annex", "get", "--from", "web", "--key", key).RunInDir(c.Repo.Repository.RepoPath())
+		if err != nil {
+			log.Error("Failed to get for key %q and web(s3)", key)
+			c.Data["IsAnnexedFile"] = true
+			return buf, err
+		} else {
+			log.Info("annex get log %v", string(s))
+		}
+	}
 	contentPath, err := git.NewCommand("annex", "contentlocation", key).RunInDir(c.Repo.Repository.RepoPath())
 	if err != nil {
-		log.Error(2, "Failed to find content location for key %q", key)
+		log.Error("Failed to find content location for key %q", key)
 		c.Data["IsAnnexedFile"] = true
 		return buf, err
 	}
