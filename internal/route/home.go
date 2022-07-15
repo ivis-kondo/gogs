@@ -58,7 +58,12 @@ func ExploreRepos(c *context.Context) {
 	c.Data["PageIsExploreRepositories"] = true
 
 	// for "Metadata" link on navbar
-	c.Data["IsUserFA"] = (c.User.Type >= db.UserFA)
+	uname := c.GetCookie(conf.Security.CookieUsername)
+	if len(uname) == 0 {
+		c.Data["IsUserFA"] = 0
+	} else {
+		c.Data["IsUserFA"] = (c.User.Type >= db.UserFA)
+	}
 
 	page := c.QueryInt("page")
 	if page <= 0 {
@@ -297,7 +302,12 @@ func ExploreUsers(c *context.Context) {
 	c.Data["PageIsExploreUsers"] = true
 
 	// for "Metadata" link on navbar
-	c.Data["IsUserFA"] = (c.User.Type >= db.UserFA)
+	uname := c.GetCookie(conf.Security.CookieUsername)
+	if len(uname) == 0 {
+		c.Data["IsUserFA"] = 0
+	} else {
+		c.Data["IsUserFA"] = (c.User.Type >= db.UserFA)
+	}
 
 	RenderUserSearch(c, &UserSearchOptions{
 		Type:     db.UserIndividual,
@@ -315,7 +325,12 @@ func ExploreOrganizations(c *context.Context) {
 	c.Data["PageIsExploreOrganizations"] = true
 
 	// for "Metadata" link on navbar
-	c.Data["IsUserFA"] = (c.User.Type >= db.UserFA)
+	uname := c.GetCookie(conf.Security.CookieUsername)
+	if len(uname) == 0 {
+		c.Data["IsUserFA"] = 0
+	} else {
+		c.Data["IsUserFA"] = (c.User.Type >= db.UserFA)
+	}
 
 	RenderUserSearch(c, &UserSearchOptions{
 		Type:     db.UserOrganization,
