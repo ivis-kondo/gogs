@@ -19,7 +19,11 @@
 					{{end}}
 					<a class="ui button" href="{{.RepoLink}}/commits/{{EscapePound .BranchName}}/{{EscapePound .TreePath}}">{{.i18n.Tr "repo.file_history"}}</a>
 					{{/* Custom GIN code change from repo.file_raw to repo.file_dl */}}
-					<a class="ui button" href="{{EscapePound $.RawFileLink}}">{{.i18n.Tr "repo.file_dl"}}</a>
+					{{if .IsWebContent}}
+						<a class="ui button" href="{{EscapePound $.WebContentUrl}}">{{.i18n.Tr "repo.file_dl"}}</a>
+					{{else}}
+						<a class="ui button" href="{{EscapePound $.RawFileLink}}">{{.i18n.Tr "repo.file_dl"}}</a>
+					{{end}}
 				</div>
 				{{if .Repository.CanEnableEditor}}
 					{{if .CanEditFile}}
@@ -47,7 +51,7 @@
 			{{if .IsWebContent}}
 				<div class="view-raw ui center">
 					{{/* Custom DG code change */}}
-					<a href="{{EscapePound $.RawFileLink}}" rel="nofollow" class="btn btn-gray btn-radius">{{.i18n.Tr "repo.file_view_dl"}}</a>
+					<a href="{{EscapePound $.WebContentUrl}}" rel="nofollow" class="btn btn-gray btn-radius">{{.i18n.Tr "repo.file_view_dl"}}</a>
 				</div>
 			{{else if .IsMarkdown}}
 				{{if .FileContent}}{{.FileContent | Str2HTML}}{{end}}

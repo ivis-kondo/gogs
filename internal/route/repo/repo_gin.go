@@ -389,6 +389,22 @@ func resolveAnnexedContent(c *context.Context, buf []byte) ([]byte, error) {
 		key = strings.Replace(key, "%", "/", -1)
 		c.Data["IsWebContent"] = true
 		/*
+			index := strings.Index(key, "--")
+			url := key[index+2:]
+			c.Data["WebContentUrl"] = url
+			log.Info("WebContentUrl: %v", url)
+		*/
+		log.Info("key: %v", key)
+		s, err := git.NewCommand("annex", "whereis", "--key", key).RunInDir(c.Repo.Repository.RepoPath())
+		log.Info("s: %v", string(s))
+		index := strings.Index(string(s), "web: ")
+		url := s[index+5:]
+		log.Info("URL1: %s", url)
+		index2 := strings.Index(string(url), "\n")
+		url = url[:index2]
+		log.Info("URL2: %s", url)
+		c.Data["WebContentUrl"] = string(url)
+		/*
 			s, err := git.NewCommand("annex", "get", "--from", "web", "--key", key).RunInDir(c.Repo.Repository.RepoPath())
 			if err != nil {
 				log.Error("Failed to get for key %q and web(s3)", key)
@@ -398,8 +414,6 @@ func resolveAnnexedContent(c *context.Context, buf []byte) ([]byte, error) {
 				log.Info("annex get log %v", string(s))
 			}
 		*/
-		s, err := git.NewCommand("annex", "whereis").RunInDir(c.Repo.Repository.RepoPath())
-		log.Info("whereis %v", s)
 		return buf, err
 	}
 	contentPath, err := git.NewCommand("annex", "contentlocation", key).RunInDir(c.Repo.Repository.RepoPath())
