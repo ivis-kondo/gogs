@@ -188,6 +188,12 @@
 	</div>
 
 	{{if or .IsJSON (or .IsYAML .IsODML)}}
+		{{if .IsWebContent}}
+			<div class="view-raw ui center">
+			{{/* Custom DG code change */}}
+				<a href="{{EscapePound $.WebContentUrl}}" rel="nofollow" class="btn btn-gray btn-radius">{{.i18n.Tr "repo.file_view_dl"}}</a>
+			</div>
+		{{end}}
 		<div class="ui codetab bottom attached tab {{if not .IsODML}}active{{end}} segment" data-tab="code">
 			<div class="file-view code-view has-emoji">
 				<table>

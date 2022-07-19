@@ -38,6 +38,16 @@ func serveAnnexedData(ctx *context.Context, name string, buf []byte) error {
 		key = strings.Replace(key, "&c", ":", -1)
 		key = strings.Replace(key, "%", "/", -1)
 		log.Info("decode key: %v", key)
+		s, err := git.NewCommand("annex", "whereis", "--key", key).RunInDir(ctx.Repo.Repository.RepoPath())
+		log.Info("s: %v", string(s))
+		index := strings.Index(string(s), "web: ")
+		url := s[index+5:]
+		log.Info("URL1: %s", url)
+		index2 := strings.Index(string(url), "\n")
+		url = url[:index2]
+		log.Info("URL2: %s", url)
+		ctx.Data["WebContentUrl"] = string(url)
+		return err
 	}
 	contentPath, err := git.NewCommand("annex", "contentlocation", key).RunInDir(ctx.Repo.Repository.RepoPath())
 	if err != nil {
@@ -372,13 +382,16 @@ func fetchEmviromentfile(c context.AbstructContext) {
 // The FileSize of the annexed content is also saved in the context (c.Data["FileSize"]).
 func resolveAnnexedContent(c *context.Context, buf []byte) ([]byte, error) {
 	if !tool.IsAnnexedFile(buf) {
+		log.Info("test")
 		// not an annex pointer file; return as is
 		return buf, nil
 	}
+	log.Info("test1")
 	log.Trace("Annexed file requested: Resolving content for %q", bytes.TrimSpace(buf))
 
 	keyparts := strings.Split(strings.TrimSpace(string(buf)), "/")
 	key := keyparts[len(keyparts)-1]
+	log.Info("test1-1")
 	// to show contents on the Internet 2022/07/15
 	// ref Locations.hs l.593-618
 	if strings.Contains(key, "URL") {
@@ -404,6 +417,7 @@ func resolveAnnexedContent(c *context.Context, buf []byte) ([]byte, error) {
 		url = url[:index2]
 		log.Info("URL2: %s", url)
 		c.Data["WebContentUrl"] = string(url)
+		log.Info("test1-2")
 		/*
 			s, err := git.NewCommand("annex", "get", "--from", "web", "--key", key).RunInDir(c.Repo.Repository.RepoPath())
 			if err != nil {
@@ -416,32 +430,41 @@ func resolveAnnexedContent(c *context.Context, buf []byte) ([]byte, error) {
 		*/
 		return buf, err
 	}
+	log.Info("test1-3")
 	contentPath, err := git.NewCommand("annex", "contentlocation", key).RunInDir(c.Repo.Repository.RepoPath())
 	if err != nil {
 		log.Error("Failed to find content location for key %q", key)
 		c.Data["IsAnnexedFile"] = true
+		log.Info("test1-4")
 		return buf, err
 	}
 	// always trim space from output for git command
 	contentPath = bytes.TrimSpace(contentPath)
+	log.Info("test1-5")
 	afp, err := os.Open(filepath.Join(c.Repo.Repository.RepoPath(), string(contentPath)))
+	log.Info("test1-6")
 	if err != nil {
 		log.Trace("Could not open annex file: %v", err)
 		c.Data["IsAnnexedFile"] = true
+		log.Info("test1-7")
 		return buf, err
 	}
 	info, err := afp.Stat()
 	if err != nil {
 		log.Trace("Could not stat annex file: %v", err)
 		c.Data["IsAnnexedFile"] = true
+		log.Info("test1-8")
 		return buf, err
 	}
+	log.Info("test1-9")
 	annexDataReader := bufio.NewReader(afp)
 	annexBuf := make([]byte, 1024)
 	n, _ := annexDataReader.Read(annexBuf)
 	annexBuf = annexBuf[:n]
+	log.Info("test1-10")
 	c.Data["FileSize"] = info.Size()
 	log.Trace("Annexed file size: %d B", info.Size())
+	log.Info("test2")
 	return annexBuf, nil
 }
 
