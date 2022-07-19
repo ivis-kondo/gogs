@@ -28,11 +28,11 @@ func serveAnnexedData(ctx *context.Context, name string, buf []byte) error {
 	key := keyparts[len(keyparts)-1]
 	log.Info("serveAnnexedData")
 	log.Info("key: %v", key)
-	// to show contents on the Internet 2022/07/15
-	// decode key --ref git://git-annex.branchable.com/ --dir Annex/Locations.hs l.593-618
+	// update 0715
 	if strings.Contains(key, "URL") {
 		log.Info("if strings.Contains(key, 'URL')")
 		subkey := &key
+		// decode key --ref git://git-annex.branchable.com/ --dir Annex/Locations.hs
 		*subkey = strings.Replace(key, "&a", "&", -1)
 		key = strings.Replace(key, "&s", "%", -1)
 		key = strings.Replace(key, "&c", ":", -1)
@@ -380,21 +380,27 @@ func resolveAnnexedContent(c *context.Context, buf []byte) ([]byte, error) {
 	keyparts := strings.Split(strings.TrimSpace(string(buf)), "/")
 	key := keyparts[len(keyparts)-1]
 	// to show contents on the Internet 2022/07/15
-	// decode key --ref git://git-annex.branchable.com/ --dir Annex/Locations.hs l.593-618
+	// ref Locations.hs l.593-618
 	if strings.Contains(key, "URL") {
 		subkey := &key
 		*subkey = strings.Replace(key, "&a", "&", -1)
 		key = strings.Replace(key, "&s", "%", -1)
 		key = strings.Replace(key, "&c", ":", -1)
 		key = strings.Replace(key, "%", "/", -1)
-		s, err := git.NewCommand("annex", "get", "--from", "web", "--key", key).RunInDir(c.Repo.Repository.RepoPath())
-		if err != nil {
-			log.Error("Failed to get for key %q and web(s3)", key)
-			c.Data["IsAnnexedFile"] = true
-			return buf, err
-		} else {
-			log.Info("annex get log %v", string(s))
-		}
+		c.Data["IsWebContent"] = true
+		/*
+			s, err := git.NewCommand("annex", "get", "--from", "web", "--key", key).RunInDir(c.Repo.Repository.RepoPath())
+			if err != nil {
+				log.Error("Failed to get for key %q and web(s3)", key)
+				c.Data["IsAnnexedFile"] = true
+				return buf, err
+			} else {
+				log.Info("annex get log %v", string(s))
+			}
+		*/
+		s, err := git.NewCommand("annex", "whereis").RunInDir(c.Repo.Repository.RepoPath())
+		log.Info("whereis %v", s)
+		return buf, err
 	}
 	contentPath, err := git.NewCommand("annex", "contentlocation", key).RunInDir(c.Repo.Repository.RepoPath())
 	if err != nil {
