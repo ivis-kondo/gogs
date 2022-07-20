@@ -26,29 +26,12 @@ import (
 func serveAnnexedData(ctx *context.Context, name string, buf []byte) error {
 	keyparts := strings.Split(strings.TrimSpace(string(buf)), "/")
 	key := keyparts[len(keyparts)-1]
-	log.Info("serveAnnexedData")
-	log.Info("key: %v", key)
-	// update 0715
+
+	// get URL identify contents of the file on the Internet
 	if strings.Contains(key, "URL") {
-		log.Info("if strings.Contains(key, 'URL')")
-		subkey := &key
-		// decode key --ref git://git-annex.branchable.com/ --dir Annex/Locations.hs
-		*subkey = strings.Replace(key, "&a", "&", -1)
-		key = strings.Replace(key, "&s", "%", -1)
-		key = strings.Replace(key, "&c", ":", -1)
-		key = strings.Replace(key, "%", "/", -1)
-		log.Info("decode key: %v", key)
-		s, err := git.NewCommand("annex", "whereis", "--key", key).RunInDir(ctx.Repo.Repository.RepoPath())
-		log.Info("s: %v", string(s))
-		index := strings.Index(string(s), "web: ")
-		url := s[index+5:]
-		log.Info("URL1: %s", url)
-		index2 := strings.Index(string(url), "\n")
-		url = url[:index2]
-		log.Info("URL2: %s", url)
-		ctx.Data["WebContentUrl"] = string(url)
-		return err
+		return getWebContentURL(ctx, key)
 	}
+
 	contentPath, err := git.NewCommand("annex", "contentlocation", key).RunInDir(ctx.Repo.Repository.RepoPath())
 	if err != nil {
 		log.Error("Failed to find content location for file %q with key %q", name, key)
@@ -382,89 +365,46 @@ func fetchEmviromentfile(c context.AbstructContext) {
 // The FileSize of the annexed content is also saved in the context (c.Data["FileSize"]).
 func resolveAnnexedContent(c *context.Context, buf []byte) ([]byte, error) {
 	if !tool.IsAnnexedFile(buf) {
-		log.Info("test")
 		// not an annex pointer file; return as is
 		return buf, nil
 	}
-	log.Info("test1")
 	log.Trace("Annexed file requested: Resolving content for %q", bytes.TrimSpace(buf))
 
 	keyparts := strings.Split(strings.TrimSpace(string(buf)), "/")
 	key := keyparts[len(keyparts)-1]
-	log.Info("test1-1")
-	// to show contents on the Internet 2022/07/15
-	// ref Locations.hs l.593-618
+
+	// get URL identify contents of the file on the Internet
 	if strings.Contains(key, "URL") {
-		subkey := &key
-		*subkey = strings.Replace(key, "&a", "&", -1)
-		key = strings.Replace(key, "&s", "%", -1)
-		key = strings.Replace(key, "&c", ":", -1)
-		key = strings.Replace(key, "%", "/", -1)
-		c.Data["IsWebContent"] = true
-		/*
-			index := strings.Index(key, "--")
-			url := key[index+2:]
-			c.Data["WebContentUrl"] = url
-			log.Info("WebContentUrl: %v", url)
-		*/
-		log.Info("key: %v", key)
-		s, err := git.NewCommand("annex", "whereis", "--key", key).RunInDir(c.Repo.Repository.RepoPath())
-		log.Info("s: %v", string(s))
-		index := strings.Index(string(s), "web: ")
-		url := s[index+5:]
-		log.Info("URL1: %s", url)
-		index2 := strings.Index(string(url), "\n")
-		url = url[:index2]
-		log.Info("URL2: %s", url)
-		c.Data["WebContentUrl"] = string(url)
-		log.Info("test1-2")
-		/*
-			s, err := git.NewCommand("annex", "get", "--from", "web", "--key", key).RunInDir(c.Repo.Repository.RepoPath())
-			if err != nil {
-				log.Error("Failed to get for key %q and web(s3)", key)
-				c.Data["IsAnnexedFile"] = true
-				return buf, err
-			} else {
-				log.Info("annex get log %v", string(s))
-			}
-		*/
+		err := getWebContentURL(c, key)
 		return buf, err
 	}
-	log.Info("test1-3")
+
 	contentPath, err := git.NewCommand("annex", "contentlocation", key).RunInDir(c.Repo.Repository.RepoPath())
 	if err != nil {
 		log.Error("Failed to find content location for key %q", key)
 		c.Data["IsAnnexedFile"] = true
-		log.Info("test1-4")
 		return buf, err
 	}
 	// always trim space from output for git command
 	contentPath = bytes.TrimSpace(contentPath)
-	log.Info("test1-5")
 	afp, err := os.Open(filepath.Join(c.Repo.Repository.RepoPath(), string(contentPath)))
-	log.Info("test1-6")
 	if err != nil {
 		log.Trace("Could not open annex file: %v", err)
 		c.Data["IsAnnexedFile"] = true
-		log.Info("test1-7")
 		return buf, err
 	}
 	info, err := afp.Stat()
 	if err != nil {
 		log.Trace("Could not stat annex file: %v", err)
 		c.Data["IsAnnexedFile"] = true
-		log.Info("test1-8")
 		return buf, err
 	}
-	log.Info("test1-9")
 	annexDataReader := bufio.NewReader(afp)
 	annexBuf := make([]byte, 1024)
 	n, _ := annexDataReader.Read(annexBuf)
 	annexBuf = annexBuf[:n]
-	log.Info("test1-10")
 	c.Data["FileSize"] = info.Size()
 	log.Trace("Annexed file size: %d B", info.Size())
-	log.Info("test2")
 	return annexBuf, nil
 }
 
@@ -489,4 +429,23 @@ func AnnexGetKey(c *context.Context) {
 	if err != nil {
 		c.Error(err, "AnnexGetKey")
 	}
+}
+
+// getWebContentURL is RCOS specific code.
+func getWebContentURL(ctx *context.Context, key string) error {
+	subkey := &key
+	// decode key --ref git://git-annex.branchable.com/ --dir Annex/Locations.hs
+	*subkey = strings.Replace(key, "&a", "&", -1)
+	key = strings.Replace(key, "&s", "%", -1)
+	key = strings.Replace(key, "&c", ":", -1)
+	key = strings.Replace(key, "%", "/", -1)
+	// get URL
+	location, err := git.NewCommand("annex", "whereis", "--key", key).RunInDir(ctx.Repo.Repository.RepoPath())
+	start := strings.Index(string(location), "web: ")
+	location = location[start+len("web: "):]
+	end := strings.Index(string(location), "\n")
+	url := location[:end]
+	ctx.Data["WebContentUrl"] = string(url)
+	ctx.Data["IsWebContent"] = true
+	return err
 }
