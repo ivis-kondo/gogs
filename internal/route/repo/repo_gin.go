@@ -26,12 +26,6 @@ import (
 func serveAnnexedData(ctx *context.Context, name string, buf []byte) error {
 	keyparts := strings.Split(strings.TrimSpace(string(buf)), "/")
 	key := keyparts[len(keyparts)-1]
-
-	// get URL identify contents of the file on the Internet
-	if strings.Contains(key, "URL") {
-		return getWebContentURL(ctx, key)
-	}
-
 	contentPath, err := git.NewCommand("annex", "contentlocation", key).RunInDir(ctx.Repo.Repository.RepoPath())
 	if err != nil {
 		log.Error("Failed to find content location for file %q with key %q", name, key)
