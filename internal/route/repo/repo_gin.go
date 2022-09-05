@@ -197,6 +197,10 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 		/* binderフォルダ配下の環境構成ファイルを取得する */
 		fetchEmviromentfile(c)
 	}
+
+	/* 共通で使用する imageファイルを取得する */
+	fetchImagefile(c)
+
 	c.GetFlash().Success("maDMP generated!")
 	c.Redirect(c.GetRepo().GetRepoLink())
 }
@@ -347,6 +351,45 @@ func fetchEmviromentfile(c context.AbstructContext) {
 		})
 	}
 
+}
+
+// fetchImagefile is RCOS specific code.
+func fetchImagefile(c context.AbstructContext) {
+
+	ImageFilePath := getTemplateUrl() + "images/"
+
+	var f repoUtil
+
+	ImageFile := []string{"maDMP_to_workflow.jpg"}
+
+	for i := 0; i < len(ImageFile); i++ {
+		path := ImageFilePath + ImageFile[i]
+		src, err := f.FetchContentsOnGithub(path)
+		if err != nil {
+			log.Error("%s could not be fetched: %v", ImageFile[i], err)
+		}
+
+		decodefile, err := f.DecodeBlobContent(src)
+		if err != nil {
+			log.Error("%s could not be decorded: %v", ImageFile[i], err)
+
+			failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed(ImageFile)")
+			return
+		}
+
+		treeName := "images/" + ImageFile[i]
+		message := "[GIN] fetch " + ImageFile[i]
+		_ = c.GetRepo().GetDbRepo().UpdateRepoFile(c.GetUser(), db.UpdateRepoFileOptions{
+			LastCommitID: c.GetRepo().GetLastCommitIdStr(),
+			OldBranch:    c.GetRepo().GetBranchName(),
+			NewBranch:    c.GetRepo().GetBranchName(),
+			OldTreeName:  "",
+			NewTreeName:  treeName,
+			Message:      message,
+			Content:      decodefile,
+			IsNewFile:    true,
+		})
+	}
 }
 
 // resolveAnnexedContent takes a buffer with the contents of a git-annex
