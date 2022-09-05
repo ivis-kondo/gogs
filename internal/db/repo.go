@@ -1770,6 +1770,7 @@ func GetRepositoryCount(u *User) (int64, error) {
 }
 
 type SearchRepoOptions struct {
+	ID       int64 // GIN-fork specific
 	Keyword  string
 	OwnerID  int64
 	UserID   int64 // When set results will contain all public/private repositories user has access to
@@ -1804,6 +1805,10 @@ func SearchRepositoryByName(opts *SearchRepoOptions) (repos []*Repository, count
 	}
 	if opts.OwnerID > 0 {
 		sess.And("repo.owner_id = ?", opts.OwnerID)
+	}
+	//GIN-fork specific
+	if opts.ID > 0 {
+		sess.And("repo.id = ?", opts.ID)
 	}
 
 	// We need all fields (repo.*) in final list but only ID (repo.id) is good enough for counting.

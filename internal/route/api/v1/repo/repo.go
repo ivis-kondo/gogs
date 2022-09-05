@@ -21,6 +21,7 @@ import (
 
 func Search(c *context.APIContext) {
 	opts := &db.SearchRepoOptions{
+		ID:       c.QueryInt64("id"),
 		Keyword:  path.Base(c.Query("q")),
 		OwnerID:  c.QueryInt64("uid"),
 		PageSize: convert.ToCorrectPageSize(c.QueryInt("limit")),
