@@ -1023,23 +1023,6 @@ func prepareRepoCommit(repo *Repository, doer *User, tmpDir, repoPath string, op
 		}
 	}
 
-	// RCOS specific code
-	// Image File
-	// Get Image file which used Reame.md
-	data, err = getRepoInitFile("images", "user_custom_area.PNG")
-	if err != nil {
-		return fmt.Errorf("getRepoInitFile[%s]: %v", "user_custom_area.PNG", err)
-	}
-
-	if err = os.MkdirAll(tmpDir+"/images", os.ModePerm); err != nil {
-		return err
-	}
-	defer RemoveAllWithNotice("Delete repository for auto-initialization", tmpDir+"images")
-
-	if err = ioutil.WriteFile(filepath.Join(tmpDir + "/images", "user_custom_area.PNG"), data, 0644); err != nil {
-		return fmt.Errorf("write Imagefile: %v", err)
-	}
-
 	return nil
 }
 
