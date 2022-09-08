@@ -49,23 +49,17 @@ setids() {
     usermod -o -u "$PUID" $USER
 }
 
-echo "setids is conduct"
 setids
-echo "cleanup is conduct"
 cleanup
-echo "create_volume_subfolder is conduct"
 create_volume_subfolder
 
-echo "LINK=$(echo "$SOCAT_LINK" | tr '[:upper:]' '[:lower:]')"
 LINK=$(echo "$SOCAT_LINK" | tr '[:upper:]' '[:lower:]')
 if [ "$LINK" = "false" -o "$LINK" = "0" ]; then
     echo "init:socat  | Will not try to create socat links as requested" 1>&2
 else
-    echo "create_socat_links is conduct"
     create_socat_links
 fi
 
-echo "CROND=$(echo "$RUN_CROND" | tr '[:upper:]' '[:lower:]')"
 CROND=$(echo "$RUN_CROND" | tr '[:upper:]' '[:lower:]')
 if [ "$CROND" = "true" -o "$CROND" = "1" ]; then
     echo "init:crond  | Cron Daemon (crond) will be run as requested by s6" 1>&2
@@ -77,7 +71,6 @@ else
 fi
 
 # Exec CMD or S6 by default if nothing present
-echo "if [ $# -gt 0 ];then"
 if [ $# -gt 0 ];then
     exec "$@"
 else
