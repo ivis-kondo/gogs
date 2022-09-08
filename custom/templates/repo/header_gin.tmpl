@@ -5,12 +5,18 @@
 							<a class="ui basic button" href="/{{.Repository.Owner.Name}}/{{.Repository.Name}}/doi"><i class="octicon octicon-squirrel"></i> Request {{if $.DOI}}New{{end}} DOI</a> */}}
 						{{/* {{else if not $.DOI}} Link to registration instructions*/}}
 							<!--a class="ui basic button" data-tooltip="Your repository does not fulfill all requirements for a DOI yet. Click to get instructions." data-position="bottom center" href="/G-Node/Info/wiki/DOI"><i class="octicon octicon-squirrel"></i> How to publish</!--a -->
+						<div style="display:flex;">
 							{{if $.HasDmpJson}}
 								<a class="ui basic button" href="{{$.RepoLink}}/_edit/{{EscapePound $.BranchName}}/dmp.json" data-position="bottom center"><i class="octicon octicon-file"></i>Edit DMP JSON</a>
-
 								{{ if $.HasMaDmp }}
-									<br>
 									<a class="ui basic button" href="{{$.RepoLink}}/src/{{EscapePound $.BranchName}}/maDMP.ipynb" data-position="bottom center"><i class="octicon octicon-file"></i>View maDMP</a>
+									<div class="ui labeled button" data-tooltip="Transition to the maDMP execution environment. Please click this after 'Generate maDMP'" data-position="bottom center">
+                                	<button class="ui basic button" data-position="bottom center">
+										<a href="https://binder.cs.rcos.nii.ac.jp/v2/git/http%3A%2F%2Fdg02.dg.rcos.nii.ac.jp%2F{{.Owner.Name}}%2F{{.Repository.Name}}.git/master?filepath=maDMP.ipynb">
+											<img src="https://binder.cs.rcos.nii.ac.jp/badge_logo.svg">
+										</a> 
+									</button>
+                    				</div>
 								{{ else }}
 									<form method="post" name="generate_maDMP" action="{{$.RepoLink}}/madmp">
 										{{.CSRFTokenHTML}}
@@ -20,13 +26,12 @@
 							{{else}}
 								<select class="ui basic button" name="addDmp" onChange="location.href=value;">
 									<option value="" selected>Add DMP</option>
-
 									{{ range $v := $.SchemaList }}
 										<option value="{{$.RepoLink}}/_add/{{EscapePound $.BranchName}}/dmp.json/?schema={{$v}}">{{ $v }}</option>
 									{{ end }}
-
 								</select>
 							{{end}}
+						</div>
 						{{/* {{end}}  End registration button */}}
 					{{end}} {{/* Admin section */}}
 					{{if $.DOI}} {{/* Registered repo: Show DOI badge */}}
