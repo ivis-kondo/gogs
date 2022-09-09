@@ -1023,6 +1023,20 @@ func prepareRepoCommit(repo *Repository, doer *User, tmpDir, repoPath string, op
 		}
 	}
 
+	// .repository_id  GIN-fork specific
+	data_repoid, err := getRepoInitFile(".repo_id", "Default")
+	if err != nil {
+		return fmt.Errorf("getRepoInitFile[%s]: %v", "Default", err)
+	}
+	s_repo_id := strconv.FormatInt(repo.ID, 10)
+	match_repoid := map[string]string{
+		"RepoID": s_repo_id,
+	}
+	if err = ioutil.WriteFile(filepath.Join(tmpDir, ".repository_id"),
+		[]byte(com.Expand(string(data_repoid), match_repoid)), 0644); err != nil {
+		return fmt.Errorf("write RepoID: %v", err)
+	}
+
 	return nil
 }
 
