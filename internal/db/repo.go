@@ -1039,28 +1039,12 @@ func prepareRepoCommit(repo *Repository, doer *User, tmpDir, repoPath string, op
 	if err = ioutil.WriteFile(filepath.Join(tmpDir+"/images", "user_custom_area.png"), data, 0644); err != nil {
 		return fmt.Errorf("write Imagefile: %v", err)
 	}
-	// RCOS specific code
-	// Image File
-	// Get Image file which used Reame.md
-	data, err = getRepoInitFile("images", "user_custom_area.png")
-	if err != nil {
-		return fmt.Errorf("getRepoInitFile[%s]: %v", "user_custom_area.png", err)
-	}
-
-	if err = os.MkdirAll(tmpDir+"/images", os.ModePerm); err != nil {
-		return err
-	}
-	defer RemoveAllWithNotice("Delete repository for auto-initialization", tmpDir+"images")
-
-	if err = ioutil.WriteFile(filepath.Join(tmpDir+"/images", "user_custom_area.png"), data, 0644); err != nil {
-		return fmt.Errorf("write Imagefile: %v", err)
-	}
 
 	// RCOS specific code
 	// .repository_id
-	data_repoid, err := getRepoInitFile(".repo_id", "Default")
+	data_repoid, err := getRepoInitFile(".repository_id", ".repository_id")
 	if err != nil {
-		return fmt.Errorf("getRepoInitFile[%s]: %v", "Default", err)
+		return fmt.Errorf("getRepoInitFile[%s]: %v", ".repository_id", err)
 	}
 	s_repo_id := strconv.FormatInt(repo.ID, 10)
 	match_repoid := map[string]string{
