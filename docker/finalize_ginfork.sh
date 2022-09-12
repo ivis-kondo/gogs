@@ -13,5 +13,8 @@ echo "export GOGS_CUSTOM=${GOGS_CUSTOM}" >> /etc/profile
 rm -rf /app/gogs/build
 rm /app/gogs/docker/finalize.sh
 rm /app/gogs/docker/finalize_ginfork.sh
+rm /app/gogs/docker/start.sh
 rm /app/gogs/docker/nsswitch.conf
 rm /app/gogs/docker/README.md
+rm /app/gogs/docker/Dockefile*
+# /app/gogs/docker/　配下のファイルの削除について検証する必要がある。
