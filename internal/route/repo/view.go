@@ -49,7 +49,8 @@ func renderDirectory(c *context.Context, treeLink string) {
 	}
 	entries.Sort()
 
-	// .gitattributes", ".repository_id", ".dataladを非表示にする GIN-fork specific
+	//  GIN-fork specific
+	// .gitattributes", ".repository_id", ".dataladを非表示にする
 	entry_list, err := entries.CommitsInfo(c.Repo.Commit, git.CommitsInfoOptions{
 		Path:           c.Repo.TreePath,
 		MaxConcurrency: conf.Repository.CommitsFetchConcurrency,
@@ -58,9 +59,9 @@ func renderDirectory(c *context.Context, treeLink string) {
 
 	var not_show_files [3]string = [3]string{".gitattributes", ".repository_id", ".datalad"}
 	for _, file := range not_show_files {
-		for num, b := range entry_list {
-			if strings.Contains(b.Entry.Name(), file) {
-				entry_list = append(entry_list[:num], entry_list[num+1:]...)
+		for index, entry := range entry_list {
+			if strings.Contains(entry.Entry.Name(), file) {
+				entry_list = append(entry_list[:index], entry_list[index+1:]...)
 			}
 		}
 	}
