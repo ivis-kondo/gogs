@@ -49,11 +49,23 @@ func renderDirectory(c *context.Context, treeLink string) {
 	}
 	entries.Sort()
 
-	c.Data["Files"], err = entries.CommitsInfo(c.Repo.Commit, git.CommitsInfoOptions{
+	//  GIN-fork specific
+	// .gitattributes", ".repository_id", ".dataladを非表示にする
+	entry_list, err := entries.CommitsInfo(c.Repo.Commit, git.CommitsInfoOptions{
 		Path:           c.Repo.TreePath,
 		MaxConcurrency: conf.Repository.CommitsFetchConcurrency,
 		Timeout:        5 * time.Minute,
 	})
+
+	var not_show_files [3]string = [3]string{".gitattributes", ".repository_id", ".datalad"}
+	for _, file := range not_show_files {
+		for index, entry := range entry_list {
+			if entry.Entry.Name() == file {
+				entry_list = append(entry_list[:index], entry_list[index+1:]...)
+			}
+		}
+	}
+	c.Data["Files"] = entry_list
 
 	if err != nil {
 		c.Error(err, "get commits info")

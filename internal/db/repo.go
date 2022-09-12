@@ -1036,8 +1036,23 @@ func prepareRepoCommit(repo *Repository, doer *User, tmpDir, repoPath string, op
 	}
 	defer RemoveAllWithNotice("Delete repository for auto-initialization", tmpDir+"images")
 
-	if err = ioutil.WriteFile(filepath.Join(tmpDir + "/images", "user_custom_area.png"), data, 0644); err != nil {
+	if err = ioutil.WriteFile(filepath.Join(tmpDir+"/images", "user_custom_area.png"), data, 0644); err != nil {
 		return fmt.Errorf("write Imagefile: %v", err)
+	}
+
+	// RCOS specific code
+	// .repository_id
+	data_repoid, err := getRepoInitFile(".repository_id", ".repository_id")
+	if err != nil {
+		return fmt.Errorf("getRepoInitFile[%s]: %v", ".repository_id", err)
+	}
+	s_repo_id := strconv.FormatInt(repo.ID, 10)
+	match_repoid := map[string]string{
+		"RepoID": s_repo_id,
+	}
+	if err = ioutil.WriteFile(filepath.Join(tmpDir, ".repository_id"),
+		[]byte(com.Expand(string(data_repoid), match_repoid)), 0644); err != nil {
+		return fmt.Errorf("write RepoID: %v", err)
 	}
 
 	return nil
