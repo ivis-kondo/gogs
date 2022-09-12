@@ -60,7 +60,7 @@ func renderDirectory(c *context.Context, treeLink string) {
 	var not_show_files [3]string = [3]string{".gitattributes", ".repository_id", ".datalad"}
 	for _, file := range not_show_files {
 		for index, entry := range entry_list {
-			if strings.Contains(entry.Entry.Name(), file) {
+			if entry.Entry.Name() == file {
 				entry_list = append(entry_list[:index], entry_list[index+1:]...)
 			}
 		}
