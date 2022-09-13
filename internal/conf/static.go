@@ -382,7 +382,7 @@ var (
 
 type ServerOpts struct {
 	ExternalURL          string `ini:"EXTERNAL_URL"`
-	Domain               string
+	Domain               string `ini:"DOMAIN"`
 	Protocol             string
 	HTTPAddr             string `ini:"HTTP_ADDR"`
 	HTTPPort             string `ini:"HTTP_PORT"`
