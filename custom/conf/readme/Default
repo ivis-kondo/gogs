@@ -1,5 +1,3 @@
-# {Name}
-
 {Description}
 
 ## モニタリング
@@ -12,19 +10,7 @@
 | データ構造 | -- |
 | 再現性 | -- |
 
-# データガバナンス機能　研究支援ワークフロー利用ガイド
-
-データガバナンス機能では研究活動をサポートする、様々な機能をワークフローとして提供しています。
-
-# ワークフロー機能とは
-
-ワークフロー機能は、研究の段階で生じる各タスクの実行支援をすることにより、データ管理品質を向上させるための機能です。以下のサンプル図に示すように、研究段階ごとに「計算機実験環境の準備」「実験データ・コード格納のひな形作成」など、研究活動をサポートする手順書を用意しています。
-
-![sample_workflow](https://raw.githubusercontent.com/NII-DG/workflow-template/main/images/sample_workflow.png)
-
-以下の手順に沿って、ワークフロー機能の利用をはじめることができます。
-
-## 初期設定をする
+# 初期設定をする
 
 ワークフロー機能を提供するための実行環境を構築するための準備を行います。
 
@@ -60,12 +46,11 @@
     b. ユーザカスタムエリア外の 既存の記述コードは編集しないでください。<br>
     c. 環境構成ファイルの位置は変更しないでください。
 
-    ![ユーザカスタムエリア](https://raw.githubusercontent.com/NII-DG/maDMP-template/main/images/user_custom_area.PNG)
+    ![ユーザカスタムエリア](./images/user_custom_area.png)
 
 
 5. ワークフロー実行環境へ遷移
 
-    「Generate maDMP」ボタンをクリックしてmaDMPを生成したら、以下のボタンをクリックしてワークフロー実行環境へ移ることができます。<br>
-    ※maDMP作成前は、ボタンをクリックしても遷移できませんのでご注意ください。
+    「Generate maDMP」ボタンをクリックしてmaDMPを生成したら、画面右上に出てくる「launch binder」ボタンをクリックしてワークフロー実行環境へ移ることができます。<br>
 
-maDMP実行環境へ遷移：[![Binder](https://binder.cs.rcos.nii.ac.jp/badge_logo.svg)](https://binder.cs.rcos.nii.ac.jp/v2/git/http%3A%2F%2Fdg02.dg.rcos.nii.ac.jp%2F{Doer}%2F{Name}.git/master?filepath=maDMP.ipynb)
+
