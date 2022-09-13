@@ -12,7 +12,7 @@ RUN apt-get install -y curl
 
 # git-annexをインストールする。
 RUN mkdir /git-annex
-ENV PATH=\"\${PATH}:/git-annex/git-annex.linux\"
+ENV PATH="${PATH}:/git-annex/git-annex.linux"
 RUN curl -Lo /git-annex/git-annex-standalone-amd64.tar.gz https://downloads.kitenet.net/git-annex/linux/current/git-annex-standalone-amd64.tar.gz
 RUN cd /git-annex && tar -xzf git-annex-standalone-amd64.tar.gz && rm git-annex-standalone-amd64.tar.gz
 RUN ln -s /git-annex/git-annex.linux/git-annex-shell /bin/git-annex-shell
@@ -51,6 +51,6 @@ RUN chown -R git:git /app
 WORKDIR /data/gogs
 USER git
 # Configure Docker Container
-VOLUME [\"/data\", \"/backup\"]
+VOLUME ["/data", "/backup"]
 EXPOSE 80 3001
-ENTRYPOINT [\"/app/gogs/gogs\", \"web\"]
+ENTRYPOINT ["/app/gogs/gogs", "web"]
