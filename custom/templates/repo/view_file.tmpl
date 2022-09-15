@@ -21,6 +21,8 @@
 					{{/* Custom GIN code change from repo.file_raw to repo.file_dl */}}
 					{{if .IsWebContent}}
 						{{/* don't show download button */}}
+					{{else if .IsOtherRepositoryContent}}
+						{{/* don't show download button */}}
 					{{else}}
 						<a class="ui button" href="{{EscapePound $.RawFileLink}}">{{.i18n.Tr "repo.file_dl"}}</a>
 					{{end}}
@@ -49,6 +51,13 @@
 					<span><strong>{{.i18n.Tr "repo.web_content_warning"}}</strong></span><br>
 					<a href="{{EscapePound $.WebContentUrl}}" rel="nofollow" class="btn btn-gray btn-radius">{{.i18n.Tr "repo.view_web_content"}}</a>
 				</div>
+			{{else if .IsOtherRepositoryContent}}
+				<div class="view-raw ui center">
+					{{/* Custom DG code change */}}
+					<span>{{.i18n.Tr "repo.other_repository_content_explanation"}}</span><br>
+					<span><strong>{{.i18n.Tr "repo.other_repository_content_warning"}}</strong></span><br>
+					<a href="{{EscapePound $.WebContentUrl}}" rel="nofollow" class="btn btn-gray btn-radius">{{.i18n.Tr "repo.view_web_content"}}</a>
+				</div>
 			{{end}}
 			<a class="item {{if or .IsJSON .IsYAML}}active{{end}}" data-tab="code"><i class="octicon octicon-file-code"></i> Code</a>
 			<a class="item {{if .IsODML}}active{{end}}" data-tab="view"><i class="octicon octicon-file"></i> View</a>
@@ -61,6 +70,13 @@
 					{{/* Custom DG code change */}}
 					<span>{{.i18n.Tr "repo.web_content_explanation"}}</span><br>
 					<span><strong>{{.i18n.Tr "repo.web_content_warning"}}</strong></span><br>
+					<a href="{{EscapePound $.WebContentUrl}}" rel="nofollow" class="btn btn-gray btn-radius">{{.i18n.Tr "repo.view_web_content"}}</a>
+				</div>
+			{{else if .IsOtherRepositoryContent}}
+				<div class="view-raw ui center">
+					{{/* Custom DG code change */}}
+					<span>{{.i18n.Tr "repo.other_repository_content_explanation"}}</span><br>
+					<span><strong>{{.i18n.Tr "repo.other_repository_content_warning"}}</strong></span><br>
 					<a href="{{EscapePound $.WebContentUrl}}" rel="nofollow" class="btn btn-gray btn-radius">{{.i18n.Tr "repo.view_web_content"}}</a>
 				</div>
 			{{else if .IsMarkdown}}
@@ -200,9 +216,16 @@
 	{{if or .IsJSON (or .IsYAML .IsODML)}}
 		{{if .IsWebContent}}
 			<div class="view-raw ui center">
-			{{/* Custom DG code change */}}
+				{{/* Custom DG code change */}}
 				<span>{{.i18n.Tr "repo.web_content_explanation"}}</span><br>
 				<span><strong>{{.i18n.Tr "repo.web_content_warning"}}</strong></span><br>
+				<a href="{{EscapePound $.WebContentUrl}}" rel="nofollow" class="btn btn-gray btn-radius">{{.i18n.Tr "repo.view_web_content"}}</a>
+			</div>
+		{{else if .IsOtherRepositoryContent}}
+			<div class="view-raw ui center">
+				{{/* Custom DG code change */}}
+				<span>{{.i18n.Tr "repo.other_repository_content_explanation"}}</span><br>
+				<span><strong>{{.i18n.Tr "repo.other_repository_content_warning"}}</strong></span><br>
 				<a href="{{EscapePound $.WebContentUrl}}" rel="nofollow" class="btn btn-gray btn-radius">{{.i18n.Tr "repo.view_web_content"}}</a>
 			</div>
 		{{end}}

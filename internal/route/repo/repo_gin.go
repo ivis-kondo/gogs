@@ -9,6 +9,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"os"
 	"path"
 	"path/filepath"
@@ -481,8 +482,20 @@ func getWebContentURL(ctx *context.Context, key string) error {
 	start := strings.Index(string(location), "web: ")
 	location = location[start+len("web: "):]
 	end := strings.Index(string(location), "\n")
-	url := location[:end]
-	ctx.Data["WebContentUrl"] = string(url)
-	ctx.Data["IsWebContent"] = true
+	download_url := location[:end]
+	u, _ := url.Parse(string(download_url))
+	if u.Hostname() == conf.Server.Domain {
+		// GIN-forkの実データがaddurlされている場合は、実データファイルの閲覧画面をリンクする
+		src_download_url := &url.URL{}
+		src_download_url.Scheme = u.Scheme
+		src_download_url.Host = u.Host
+		src_download_url.Path = strings.Replace(u.Path, strings.Split(u.Path, "/")[3], "src", 1)
+		ctx.Data["WebContentUrl"] = src_download_url.String()
+		ctx.Data["IsOtherRepositoryContent"] = true
+	} else {
+		// S3などGIN-fork以外のインターネット上に実データがある場合
+		ctx.Data["WebContentUrl"] = string(download_url)
+		ctx.Data["IsWebContent"] = true
+	}
 	return err
 }
