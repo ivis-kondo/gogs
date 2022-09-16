@@ -5,7 +5,7 @@ RUN apt-get -y update
 RUN apt-get -y upgrade
 
 # 依存パッケージのインストール
-RUN apt-get install -y musl-dev
+# RUN apt-get install -y musl-dev alpineでの実行ファイル生成をしないので削除予定
 RUN apt-get install -y git
 RUN apt-get install -y gcc
 RUN apt-get install -y curl
