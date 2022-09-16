@@ -11,4 +11,3 @@ config.codekit
 .editorconfig
 .gitignore
 Dockerfile*
-gogs
