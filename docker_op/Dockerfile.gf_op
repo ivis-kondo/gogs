@@ -1,4 +1,6 @@
 # gin fork (テスト環境用：オンプレ)
+# このdockerfileは使用前に一つ上の階層に移動してから使用すること。
+# この時.dockerignoreを同時に移動すること。
 FROM ubuntu:20.04
 
 RUN apt-get -y update
