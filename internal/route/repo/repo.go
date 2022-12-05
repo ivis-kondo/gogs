@@ -271,6 +271,8 @@ func Action(c *context.Context) {
 }
 
 func Download(c *context.Context) {
+	isRequireSigninView := conf.Auth.RequireSigninView
+	log.Trace("[Debug log RCOS] isRequireSigninView : %v", isRequireSigninView)
 	var (
 		uri           = c.Params("*")
 		refName       string
