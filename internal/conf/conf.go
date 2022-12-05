@@ -245,9 +245,9 @@ func Init(customConf string) error {
 	//後で消すこと　by tsukioka
 	log.Trace("[RCOS LOG in Init(customConf string)] End File.Section(auth).MapTo(&Auth)")
 	// LEGACY [0.13]: In case there are values with old section name.
-	if err = File.Section("service").MapTo(&Auth); err != nil {
-		return errors.Wrap(err, "mapping [service] section")
-	}
+	// if err = File.Section("service").MapTo(&Auth); err != nil {
+	// 	return errors.Wrap(err, "mapping [service] section")
+	// }
 
 	// *************************
 	// ----- User settings -----

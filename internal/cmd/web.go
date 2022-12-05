@@ -166,7 +166,7 @@ func runWeb(c *cli.Context) error {
 
 	reqSignIn := context.Toggle(&context.ToggleOptions{SignInRequired: true})
 	//後で消すこと　by tsukioka
-	log.Trace("[RCOS LOG in runWeb] RequireSigninView : %x", conf.Auth.RequireSigninView)
+	log.Trace("[RCOS LOG in runWeb] RequireSigninView : %v", conf.Auth.RequireSigninView)
 	//ignSignIn := context.Toggle(&context.ToggleOptions{SignInRequired: conf.Auth.RequireSigninView})
 	ignSignIn := context.Toggle(&context.ToggleOptions{SignInRequired: true})
 	reqSignOut := context.Toggle(&context.ToggleOptions{SignOutRequired: true})
