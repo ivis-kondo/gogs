@@ -238,10 +238,6 @@ func Init(customConf string) error {
 	if err = File.Section("auth").MapTo(&Auth); err != nil {
 		return errors.Wrap(err, "mapping [auth] section")
 	}
-	// LEGACY [0.13]: In case there are values with old section name.
-	if err = File.Section("service").MapTo(&Auth); err != nil {
-		return errors.Wrap(err, "mapping [service] section")
-	}
 
 	// *************************
 	// ----- User settings -----
