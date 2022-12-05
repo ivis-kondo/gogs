@@ -271,6 +271,10 @@ func Action(c *context.Context) {
 }
 
 func Download(c *context.Context) {
+
+	//後で消すこと　by tsukioka
+	log.Trace("[RCOS LOG] RequireSigninView : %x", conf.Auth.RequireSigninView)
+
 	var (
 		uri           = c.Params("*")
 		refName       string
