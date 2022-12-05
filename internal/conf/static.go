@@ -147,7 +147,7 @@ var (
 		ActivateCodeLives         int
 		ResetPasswordCodeLives    int
 		RequireEmailConfirmation  bool
-		RequireSigninView         bool
+		RequireSigninView         bool `ini:"REQUIRE_SIGNIN_VIEW"`
 		DisableRegistration       bool
 		EnableRegistrationCaptcha bool
 
