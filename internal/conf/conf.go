@@ -97,8 +97,6 @@ func Init(customConf string) error {
 	// ----- Server settings -----
 	// ***************************
 
-	//後で消すこと　by tsukioka
-	log.Trace("[RCOS LOG in Init(customConf string)] File.Section(server).MapTo(&Server)")
 	if err = File.Section("server").MapTo(&Server); err != nil {
 		return errors.Wrap(err, "mapping [server] section")
 	}
@@ -237,18 +235,9 @@ func Init(customConf string) error {
 	// ----- Authentication settings -----
 	// ***********************************
 
-	//後で消すこと　by tsukioka
-	log.Trace("[RCOS LOG in Init(customConf string)] Start File.Section(auth).MapTo(&Auth)")
 	if err = File.Section("auth").MapTo(&Auth); err != nil {
 		return errors.Wrap(err, "mapping [auth] section")
 	}
-	//後で消すこと　by tsukioka
-	log.Trace("[RCOS LOG in Init(customConf string)] End File.Section(auth).MapTo(&Auth)")
-
-	// LEGACY [0.13]: In case there are values with old section name.
-	// if err = File.Section("service").MapTo(&Auth); err != nil {
-	// 	return errors.Wrap(err, "mapping [service] section")
-	// }
 
 	// *************************
 	// ----- User settings -----
