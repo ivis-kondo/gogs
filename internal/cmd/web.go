@@ -165,6 +165,8 @@ func runWeb(c *cli.Context) error {
 	m := newMacaron()
 
 	reqSignIn := context.Toggle(&context.ToggleOptions{SignInRequired: true})
+	//後で消すこと　by tsukioka
+	log.Trace("[RCOS LOG in runWeb] RequireSigninView : %x", conf.Auth.RequireSigninView)
 	ignSignIn := context.Toggle(&context.ToggleOptions{SignInRequired: conf.Auth.RequireSigninView})
 	reqSignOut := context.Toggle(&context.ToggleOptions{SignOutRequired: true})
 
