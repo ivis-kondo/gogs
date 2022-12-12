@@ -302,7 +302,7 @@ func Download(c *context.Context) {
 		}
 	}
 
-	log.Info("Downlaoded: %v", c.Repo.GitRepo.Path())
+	log.Info("Downloaded: %v", c.Repo.GitRepo.Path())
 
 	// Get corresponding commit.
 	var (
