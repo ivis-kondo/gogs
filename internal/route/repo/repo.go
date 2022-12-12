@@ -303,7 +303,6 @@ func Download(c *context.Context) {
 	}
 
 	log.Info("Downlaoded: %v", c.Repo.GitRepo.Path())
-	log.Info("conf: %v", conf.Auth.RequireSigninView)
 
 	// Get corresponding commit.
 	var (
