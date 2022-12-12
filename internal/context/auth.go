@@ -13,6 +13,7 @@ import (
 
 	"github.com/NII-DG/gogs/internal/auth"
 	"github.com/NII-DG/gogs/internal/conf"
+	log "unknwon.dev/clog/v2"
 )
 
 type ToggleOptions struct {
@@ -23,6 +24,10 @@ type ToggleOptions struct {
 }
 
 func Toggle(options *ToggleOptions) macaron.Handler {
+	log.Trace("options.SignInRequired", options.SignInRequired)
+	log.Trace("options.SignOutRequired", options.SignOutRequired)
+	log.Trace("options.AdminRequired", options.AdminRequired)
+	log.Trace("options.DisableCSRF", options.DisableCSRF)
 	return func(c *Context) {
 		// Cannot view any page before installation.
 		if !conf.Security.InstallLock {
