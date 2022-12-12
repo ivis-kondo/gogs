@@ -24,11 +24,20 @@ type ToggleOptions struct {
 }
 
 func Toggle(options *ToggleOptions) macaron.Handler {
-	log.Trace("options.SignInRequired", options.SignInRequired)
-	log.Trace("options.SignOutRequired", options.SignOutRequired)
-	log.Trace("options.AdminRequired", options.AdminRequired)
-	log.Trace("options.DisableCSRF", options.DisableCSRF)
+	log.Trace("options.SignInRequired: %s", options.SignInRequired)
+	log.Trace("options.SignOutRequired: %s", options.SignOutRequired)
+	log.Trace("options.AdminRequired: %s", options.AdminRequired)
+	log.Trace("options.DisableCSRF: %s", options.DisableCSRF)
+	println()
 	return func(c *Context) {
+		println("options.SignInRequired")
+		println(options.SignInRequired)
+		println("options.SignOutRequired")
+		println(options.SignOutRequired)
+		println("options.AdminRequired")
+		println(options.AdminRequired)
+		println("options.DisableCSRF")
+		println(options.DisableCSRF)
 		// Cannot view any page before installation.
 		if !conf.Security.InstallLock {
 			c.RedirectSubpath("/install")
