@@ -270,6 +270,7 @@ func Action(c *context.Context) {
 }
 
 func Download(c *context.Context) {
+	log.Trace("conf.Auth.RequireSigninView: %v", conf.Auth.RequireSigninView)
 	var (
 		uri           = c.Params("*")
 		refName       string
