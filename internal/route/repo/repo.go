@@ -9,7 +9,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"strconv"
 	"strings"
 
 	"github.com/unknwon/com"
@@ -271,7 +270,7 @@ func Action(c *context.Context) {
 }
 
 func Download(c *context.Context) {
-	log.Trace("conf.Auth.RequireSigninView: %v", conf.Auth.RequireSigninView)
+
 	var (
 		uri           = c.Params("*")
 		refName       string
@@ -295,9 +294,6 @@ func Download(c *context.Context) {
 		return
 	}
 	refName = strings.TrimSuffix(uri, ext)
-
-	//★
-	log.Info("Downloaded " + c.Repo.Repository.Name + "-" + refName + ext + " by " + c.User.Name + "(total: " + strconv.FormatUint(c.Repo.Repository.Downloaded, 10) + " downloaded)")
 
 	if !com.IsDir(archivePath) {
 		if err := os.MkdirAll(archivePath, os.ModePerm); err != nil {

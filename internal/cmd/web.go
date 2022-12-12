@@ -165,9 +165,7 @@ func runWeb(c *cli.Context) error {
 	m := newMacaron()
 
 	//URL時の認証設定
-	//URL実行時サインインが要
 	reqSignIn := context.Toggle(&context.ToggleOptions{SignInRequired: true})
-	//URL実行時サインインが不要
 	ignSignIn := context.Toggle(&context.ToggleOptions{SignInRequired: conf.Auth.RequireSigninView})
 	reqSignOut := context.Toggle(&context.ToggleOptions{SignOutRequired: true})
 
