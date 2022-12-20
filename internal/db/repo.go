@@ -2524,9 +2524,10 @@ func ForkRepository(doer, owner *User, baseRepo *Repository, name, desc string) 
 
 	if !baseRepo.IsOwnedBy(owner.ID) { //★
 		baseRepo.NumForks = baseRepo.NumForks + 1
+		baseRepo.Downloaded = baseRepo.Downloaded + 1
 		UpdateRepository(baseRepo, true)
 	}
-	log.Info(baseRepo.Name + " is forked by " + owner.Name + " (total: " + strconv.FormatUint(baseRepo.Downloaded, 10) + " downloaded)")
+	log.Info(fmt.Sprintf("%s is forked by %s (total: %d forked)", baseRepo.Name, owner.Name, baseRepo.NumForks))
 	return repo, nil
 }
 
