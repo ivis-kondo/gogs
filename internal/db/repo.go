@@ -2522,8 +2522,8 @@ func ForkRepository(doer, owner *User, baseRepo *Repository, name, desc string) 
 		log.Error("PrepareWebhooks [repo_id: %d]: %v", baseRepo.ID, err)
 	}
 
-	if !baseRepo.IsOwnedBy(owner.ID) {
-		baseRepo.Downloaded = baseRepo.Downloaded + 1
+	if !baseRepo.IsOwnedBy(owner.ID) { //★
+		baseRepo.NumForks = baseRepo.NumForks + 1
 		UpdateRepository(baseRepo, true)
 	}
 	log.Info(baseRepo.Name + " is forked by " + owner.Name + " (total: " + strconv.FormatUint(baseRepo.Downloaded, 10) + " downloaded)")
