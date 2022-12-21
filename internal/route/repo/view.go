@@ -80,6 +80,7 @@ func renderDirectory(c *context.Context, treeLink string) {
 		var d dmpUtil
 		if err := d.BidingDmpSchemaList(c, schemaUrl); err != nil {
 			c.Error(err, " Failure GITHUB API")
+			return
 		}
 	}
 
