@@ -233,9 +233,9 @@ func (f repoUtil) fetchContentsOnGithub(blobPath string) ([]byte, error) {
 	}
 	req.Header.Set("Accept", "application/vnd.github.v3+json")
 
-	bearerToken := fmt.Sprintf("Bearer %s", conf.GitHub.ApiToken)
+	//bearerToken := fmt.Sprintf("Bearer %s", conf.GitHub.ApiToken)
 	// When token is set, Github API rate limit increase.
-	req.Header.Set("Authorization", bearerToken)
+	//req.Header.Set("Authorization", bearerToken)
 
 	client := new(http.Client)
 
