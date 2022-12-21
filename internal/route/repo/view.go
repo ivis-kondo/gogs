@@ -79,6 +79,7 @@ func renderDirectory(c *context.Context, treeLink string) {
 
 		var d dmpUtil
 		if err := d.BidingDmpSchemaList(c, schemaUrl); err != nil {
+			log.Fatal("%v", err)
 			c.Flash.Warning(c.Tr("rcos.server.connect.failure")) //★
 		}
 	}

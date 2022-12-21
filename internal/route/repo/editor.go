@@ -633,29 +633,29 @@ func createDmp(c context.AbstructContext, f AbstructRepoUtil, d AbstructDmpUtil)
 	// (The pulldown on the repository top page is binded in repo.renderDirectory.)
 	err := d.BidingDmpSchemaList(c, schemaUrl+"orgs")
 	if err != nil {
-		log.Error("%v", err)
+		log.Fatal("%v", err)
 	}
 	err = d.FetchDmpSchema(c, schemaUrl+"json_schema/schema_dmp_"+schema)
 	if err != nil {
-		log.Error("%v", err)
+		log.Fatal("%v", err)
 	}
 
 	srcBasic, err := f.FetchContentsOnGithub(schemaUrl + "basic")
 	if err != nil {
-		log.Error("%v", err)
+		log.Fatal("%v", err)
 	}
 	decodedBasicSchema, err := f.DecodeBlobContent(srcBasic)
 	if err != nil {
-		log.Error("%v", err)
+		log.Fatal("%v", err)
 	}
 
 	srcOrg, err := f.FetchContentsOnGithub(schemaUrl + "orgs/" + schema)
 	if err != nil {
-		log.Error("%v", err)
+		log.Fatal("%v", err)
 	}
 	decodedOrgSchema, err := f.DecodeBlobContent(srcOrg)
 	if err != nil {
-		log.Error("%v", err)
+		log.Fatal("%v", err)
 	}
 
 	combinedDmp := decodedBasicSchema + decodedOrgSchema

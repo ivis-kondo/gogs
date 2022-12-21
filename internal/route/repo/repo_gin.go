@@ -244,15 +244,17 @@ func (f repoUtil) fetchContentsOnGithub(blobPath string) ([]byte, error) {
 		return nil, err
 	}
 	if resp.StatusCode == http.StatusNotFound {
-		return nil, fmt.Errorf("Error: blob not found.")
+		err = fmt.Errorf("Error: blob not found.")
 	} else if resp.StatusCode == http.StatusUnauthorized {
-		return nil, fmt.Errorf("Failure Authorization bacause Github API Token is invalid")
+		err = fmt.Errorf("Failure Authorization bacause Github API Token is invalid")
 	} else if resp.StatusCode == http.StatusForbidden {
-		return nil, fmt.Errorf("Failure Request for GitHub bacause Github API rate limit exceeded")
+		err = fmt.Errorf("Failure Request for GitHub bacause Github API rate limit exceeded")
 	}
 	defer resp.Body.Close()
-
 	log.Trace("Github api rate limit Remaining : %s", resp.Header.Values("X-RateLimit-Remaining")[0])
+	if err != nil {
+		return nil, err
+	}
 
 	contents, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
