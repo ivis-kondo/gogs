@@ -633,21 +633,21 @@ func createDmp(c context.AbstructContext, f AbstructRepoUtil, d AbstructDmpUtil)
 	// (The pulldown on the repository top page is binded in repo.renderDirectory.)
 	err := d.BidingDmpSchemaList(c, schemaUrl+"orgs")
 	c.Redirect(c.GetRepo().GetRepoLink())
-	log.Trace("[flag] %s", c.GetRepo().GetRepoLink())
 	if err != nil {
 		log.Warn("%v", err)
-		//c.Redirect(c.GetRepo().GetRepoLink())
+		c.Redirect(c.GetRepo().GetRepoLink())
 	}
 	err = d.FetchDmpSchema(c, schemaUrl+"json_schema/schema_dmp_"+schema)
 	if err != nil {
 		log.Warn("%v", err)
-
+		c.Redirect(c.GetRepo().GetRepoLink())
 	}
 
 	var decodedBasicSchema string
 	srcBasic, err := f.FetchContentsOnGithub(schemaUrl + "basic")
 	if err != nil {
 		log.Warn("%v", err)
+		c.Redirect(c.GetRepo().GetRepoLink())
 	} else {
 		decodedBasicSchema, err = f.DecodeBlobContent(srcBasic)
 		if err != nil {
@@ -655,25 +655,17 @@ func createDmp(c context.AbstructContext, f AbstructRepoUtil, d AbstructDmpUtil)
 		}
 	}
 
-	// decodedBasicSchema, err = f.DecodeBlobContent(srcBasic)
-	// if err != nil {
-	// 	log.Error("%v", err)
-	// }
-
 	var decodedOrgSchema string
 	srcOrg, err := f.FetchContentsOnGithub(schemaUrl + "orgs/" + schema)
 	if err != nil {
 		log.Warn("%v", err)
+		c.Redirect(c.GetRepo().GetRepoLink())
 	} else {
 		decodedOrgSchema, err = f.DecodeBlobContent(srcOrg)
 		if err != nil {
 			log.Error("%v", err)
 		}
 	}
-	// decodedOrgSchema, err := f.DecodeBlobContent(srcOrg)
-	// if err != nil {
-	// 	log.Error("%v", err)
-	// }
 
 	combinedDmp := decodedBasicSchema + decodedOrgSchema
 
