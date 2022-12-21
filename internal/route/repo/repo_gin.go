@@ -108,7 +108,7 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 	//       2. https://qiita.com/taizo/items/c397dbfed7215969b0a5
 	templateUrl := getTemplateUrl() + "maDMP.ipynb"
 
-	src, err := f.FetchContentsOnGithub(templateUrl)
+	src, err := f.FetchContentsOnGithub(c, templateUrl)
 	if err != nil {
 		log.Error("maDMP blob could not be fetched: %v", err)
 	}
@@ -207,14 +207,14 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 }
 
 type AbstructRepoUtil interface {
-	FetchContentsOnGithub(blobPath string) ([]byte, error)
+	FetchContentsOnGithub(c context.AbstructContext, blobPath string) ([]byte, error)
 	DecodeBlobContent(blobInfo []byte) (string, error)
 }
 
 type repoUtil func()
 
-func (f repoUtil) FetchContentsOnGithub(blobPath string) ([]byte, error) {
-	return f.fetchContentsOnGithub(blobPath)
+func (f repoUtil) FetchContentsOnGithub(c context.AbstructContext, blobPath string) ([]byte, error) {
+	return f.fetchContentsOnGithub(c, blobPath)
 }
 
 func (f repoUtil) DecodeBlobContent(blobInfo []byte) (string, error) {
@@ -226,7 +226,9 @@ func (f repoUtil) DecodeBlobContent(blobInfo []byte) (string, error) {
 // specified in the argument, and returns it in the type of []byte.
 // If any processing fails, it will return error.
 // refs: https://docs.github.com/en/rest/reference/repos#contents
-func (f repoUtil) fetchContentsOnGithub(blobPath string) ([]byte, error) {
+func (f repoUtil) fetchContentsOnGithub(c context.AbstructContext, blobPath string) ([]byte, error) {
+	err := fmt.Errorf("Failure Authorization bacause Github API Token is invalid")
+	c.Error(err, "")
 	req, err := http.NewRequest("GET", blobPath, nil)
 	if err != nil {
 		return nil, err
@@ -247,6 +249,7 @@ func (f repoUtil) fetchContentsOnGithub(blobPath string) ([]byte, error) {
 		err = fmt.Errorf("Error: blob not found.")
 	} else if resp.StatusCode == http.StatusUnauthorized {
 		err = fmt.Errorf("Failure Authorization bacause Github API Token is invalid")
+		c.Error(err, "")
 	} else if resp.StatusCode == http.StatusForbidden {
 		err = fmt.Errorf("Failure Request for GitHub bacause Github API rate limit exceeded")
 	}
@@ -299,7 +302,7 @@ func fetchDockerfile(c context.AbstructContext) {
 	dockerfileUrl := getTemplateUrl() + "Dockerfile"
 
 	var f repoUtil
-	src, err := f.FetchContentsOnGithub(dockerfileUrl)
+	src, err := f.FetchContentsOnGithub(c, dockerfileUrl)
 	if err != nil {
 		log.Error("Dockerfile could not be fetched: %v", err)
 	}
@@ -325,6 +328,7 @@ func fetchDockerfile(c context.AbstructContext) {
 	})
 }
 
+//★
 // fetchEmviromentfile is RCOS specific code.
 // This fetches the Dockerfile used when launching Binderhub.
 func fetchEmviromentfile(c context.AbstructContext) {
@@ -337,7 +341,7 @@ func fetchEmviromentfile(c context.AbstructContext) {
 
 	for i := 0; i < len(Emviromentfile); i++ {
 		path := Emviromentfilepath + Emviromentfile[i]
-		src, err := f.FetchContentsOnGithub(path)
+		src, err := f.FetchContentsOnGithub(c, path)
 		if err != nil {
 			log.Error("%s could not be fetched: %v", Emviromentfile[i], err)
 		}
@@ -377,7 +381,7 @@ func fetchImagefile(c context.AbstructContext) {
 
 	for i := 0; i < len(ImageFile); i++ {
 		path := ImageFilePath + ImageFile[i]
-		src, err := f.FetchContentsOnGithub(path)
+		src, err := f.FetchContentsOnGithub(c, path)
 		if err != nil {
 			log.Error("%s could not be fetched: %v", ImageFile[i], err)
 		}

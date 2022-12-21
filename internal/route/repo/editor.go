@@ -646,7 +646,7 @@ func createDmp(c context.AbstructContext, f AbstructRepoUtil, d AbstructDmpUtil)
 	}
 
 	var decodedBasicSchema string
-	srcBasic, err := f.FetchContentsOnGithub(schemaUrl + "basic")
+	srcBasic, err := f.FetchContentsOnGithub(c, schemaUrl+"basic")
 	if err != nil {
 		log.Warn("%v", err)
 		c.Redirect(c.GetRepo().GetRepoLink())
@@ -659,7 +659,7 @@ func createDmp(c context.AbstructContext, f AbstructRepoUtil, d AbstructDmpUtil)
 	}
 
 	var decodedOrgSchema string
-	srcOrg, err := f.FetchContentsOnGithub(schemaUrl + "orgs/" + schema)
+	srcOrg, err := f.FetchContentsOnGithub(c, schemaUrl+"orgs/"+schema)
 	if err != nil {
 		log.Warn("%v", err)
 		c.Redirect(c.GetRepo().GetRepoLink())
@@ -718,7 +718,7 @@ func (d dmpUtil) BidingDmpSchemaList(c context.AbstructContext, treePath string)
 // This function fetch&bind JSON Schema of DMP for validation.
 func (d dmpUtil) fetchDmpSchema(c context.AbstructContext, f AbstructRepoUtil, blobPath string) error {
 	var decodedScheme string
-	src, err := f.FetchContentsOnGithub(blobPath)
+	src, err := f.FetchContentsOnGithub(c, blobPath)
 	if err != nil {
 		return err
 	} else {
@@ -735,7 +735,7 @@ func (d dmpUtil) fetchDmpSchema(c context.AbstructContext, f AbstructRepoUtil, b
 // bidingDmpSchemaList is RCOS specific code.
 // This function binds DMP organization list.
 func (d dmpUtil) bidingDmpSchemaList(c context.AbstructContext, f AbstructRepoUtil, treePath string) error {
-	contents, err := f.FetchContentsOnGithub(treePath)
+	contents, err := f.FetchContentsOnGithub(c, treePath)
 	if err != nil {
 		return err
 	}
