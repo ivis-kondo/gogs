@@ -47,6 +47,7 @@ type AbstructContext interface {
 	UserID() int64
 	Success(name string)
 	Error(err error, msg string)
+	NotFoundOrError(err error, msg string)
 }
 
 // Context represents context of a request.

@@ -227,8 +227,8 @@ func (f repoUtil) DecodeBlobContent(blobInfo []byte) (string, error) {
 // If any processing fails, it will return error.
 // refs: https://docs.github.com/en/rest/reference/repos#contents
 func (f repoUtil) fetchContentsOnGithub(c context.AbstructContext, blobPath string) ([]byte, error) {
-	err := fmt.Errorf("Failure Authorization bacause Github API Token is invalid")
-	c.Error(err, "")
+	err := fmt.Errorf("Error: blob not found.")
+	c.NotFoundOrError(err, "")
 	req, err := http.NewRequest("GET", blobPath, nil)
 	if err != nil {
 		return nil, err
@@ -247,6 +247,7 @@ func (f repoUtil) fetchContentsOnGithub(c context.AbstructContext, blobPath stri
 	}
 	if resp.StatusCode == http.StatusNotFound {
 		err = fmt.Errorf("Error: blob not found.")
+		c.NotFoundOrError(err, "")
 	} else if resp.StatusCode == http.StatusUnauthorized {
 		err = fmt.Errorf("Failure Authorization bacause Github API Token is invalid")
 		c.Error(err, "")
