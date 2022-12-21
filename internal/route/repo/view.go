@@ -79,7 +79,7 @@ func renderDirectory(c *context.Context, treeLink string) {
 
 		var d dmpUtil
 		if err := d.BidingDmpSchemaList(c, schemaUrl); err != nil {
-			c.Flash.Success(c.Tr("rcos.users.new_success", "tsukioka"))
+			c.Flash.Success(c.Tr("rcos.server.connect.failure"))
 		}
 	}
 
