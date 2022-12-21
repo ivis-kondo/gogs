@@ -79,9 +79,7 @@ func renderDirectory(c *context.Context, treeLink string) {
 
 		var d dmpUtil
 		if err := d.BidingDmpSchemaList(c, schemaUrl); err != nil {
-			log.Error("[flag]F github api") //★
-			c.Flash.SuccessMsg = "[flag]F github api"
-			c.Data["Flash"] = c.Flash
+			c.Flash.Success(c.Tr("admin.users.new_success", "tsukioka"))
 		}
 	}
 
@@ -372,7 +370,7 @@ func Home(c *context.Context) {
 			c.Data["ParentPath"] = "/" + paths[len(paths)-2]
 		}
 	}
-
+	c.Data["Flash"] = c.Flash
 	c.Data["Paths"] = paths
 	c.Data["TreeLink"] = treeLink
 	c.Data["TreeNames"] = treeNames
