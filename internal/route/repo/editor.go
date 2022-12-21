@@ -728,8 +728,6 @@ func (d dmpUtil) fetchDmpSchema(c context.AbstructContext, f AbstructRepoUtil, b
 			return err
 		}
 	}
-	log.Trace("[flag] %s", decodedScheme)
-
 	c.CallData()["IsDmpJson"] = true
 	c.CallData()["Schema"] = decodedScheme
 	return nil
