@@ -634,34 +634,28 @@ func createDmp(c context.AbstructContext, f AbstructRepoUtil, d AbstructDmpUtil)
 	err := d.BidingDmpSchemaList(c, schemaUrl+"orgs")
 	if err != nil {
 		log.Error("%v", err)
-		return
 	}
 	err = d.FetchDmpSchema(c, schemaUrl+"json_schema/schema_dmp_"+schema)
 	if err != nil {
 		log.Error("%v", err)
-		return
 	}
 
 	srcBasic, err := f.FetchContentsOnGithub(schemaUrl + "basic")
 	if err != nil {
 		log.Error("%v", err)
-		return
 	}
 	decodedBasicSchema, err := f.DecodeBlobContent(srcBasic)
 	if err != nil {
 		log.Error("%v", err)
-		return
 	}
 
 	srcOrg, err := f.FetchContentsOnGithub(schemaUrl + "orgs/" + schema)
 	if err != nil {
 		log.Error("%v", err)
-		return
 	}
 	decodedOrgSchema, err := f.DecodeBlobContent(srcOrg)
 	if err != nil {
 		log.Error("%v", err)
-		return
 	}
 
 	combinedDmp := decodedBasicSchema + decodedOrgSchema
