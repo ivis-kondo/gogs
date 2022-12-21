@@ -636,11 +636,13 @@ func createDmp(c context.AbstructContext, f AbstructRepoUtil, d AbstructDmpUtil)
 	if err != nil {
 		log.Warn("%v", err)
 		c.Redirect(c.GetRepo().GetRepoLink())
+		return
 	}
 	err = d.FetchDmpSchema(c, schemaUrl+"json_schema/schema_dmp_"+schema)
 	if err != nil {
 		log.Warn("%v", err)
 		c.Redirect(c.GetRepo().GetRepoLink())
+		return
 	}
 
 	var decodedBasicSchema string
@@ -648,6 +650,7 @@ func createDmp(c context.AbstructContext, f AbstructRepoUtil, d AbstructDmpUtil)
 	if err != nil {
 		log.Warn("%v", err)
 		c.Redirect(c.GetRepo().GetRepoLink())
+		return
 	} else {
 		decodedBasicSchema, err = f.DecodeBlobContent(srcBasic)
 		if err != nil {
@@ -660,6 +663,7 @@ func createDmp(c context.AbstructContext, f AbstructRepoUtil, d AbstructDmpUtil)
 	if err != nil {
 		log.Warn("%v", err)
 		c.Redirect(c.GetRepo().GetRepoLink())
+		return
 	} else {
 		decodedOrgSchema, err = f.DecodeBlobContent(srcOrg)
 		if err != nil {
