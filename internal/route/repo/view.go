@@ -78,7 +78,9 @@ func renderDirectory(c *context.Context, treeLink string) {
 		schemaUrl := getTemplateUrl() + "dmp/orgs"
 
 		var d dmpUtil
-		d.BidingDmpSchemaList(c, schemaUrl)
+		if err := d.BidingDmpSchemaList(c, schemaUrl); err != nil {
+			c.Error(err, " Failure GITHUB API")
+		}
 	}
 
 	var readmeFile *git.Blob
