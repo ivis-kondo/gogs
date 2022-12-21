@@ -79,7 +79,8 @@ func renderDirectory(c *context.Context, treeLink string) {
 
 		var d dmpUtil
 		if err := d.BidingDmpSchemaList(c, schemaUrl); err != nil {
-			c.Flash.Error("Failure Git hub api")
+			log.Error("[flag]F github api")
+			c.GetFlash().Success("F github api")
 		}
 	}
 
