@@ -632,8 +632,8 @@ func createDmp(c context.AbstructContext, f AbstructRepoUtil, d AbstructDmpUtil)
 	// data binding for "Add DMP" pulldown at DMP editing page
 	// (The pulldown on the repository top page is binded in repo.renderDirectory.)
 	err := d.BidingDmpSchemaList(c, schemaUrl+"orgs")
-	if err == nil {
-		c.GetFlash().Warning(c.Tr("rcos.server.connect.failure")) //★
+	if err != nil {
+		//c.GetFlash().Warning(c.Tr("rcos.server.connect.failure")) //★
 		log.Warn("%v", err)
 	}
 	err = d.FetchDmpSchema(c, schemaUrl+"json_schema/schema_dmp_"+schema)
