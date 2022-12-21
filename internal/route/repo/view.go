@@ -79,13 +79,11 @@ func renderDirectory(c *context.Context, treeLink string) {
 
 		var d dmpUtil
 		if err := d.BidingDmpSchemaList(c, schemaUrl); err != nil {
-			log.Error("[flag]F github api")
-			sb := *c.GetFlash()
-			sb.Success("F github api")
-			//c.GetFlash().Success("F github api")
+			log.Error("[flag]F github api") //★
+			c.Flash.SuccessMsg = "[flag]F github api"
+			c.Data["Flash"] = c.Flash
 		}
 	}
-	c.GetFlash().Success("S github api")
 
 	var readmeFile *git.Blob
 	for _, entry := range entries {
