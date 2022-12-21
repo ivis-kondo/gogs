@@ -718,15 +718,17 @@ func (d dmpUtil) BidingDmpSchemaList(c context.AbstructContext, treePath string)
 // fetchDmpSchema is RCOS specific code.
 // This function fetch&bind JSON Schema of DMP for validation.
 func (d dmpUtil) fetchDmpSchema(c context.AbstructContext, f AbstructRepoUtil, blobPath string) error {
+	var decodedScheme string
 	src, err := f.FetchContentsOnGithub(blobPath)
 	if err != nil {
 		return err
+	} else {
+		decodedScheme, err = f.DecodeBlobContent(src)
+		if err != nil {
+			return err
+		}
 	}
-
-	decodedScheme, err := f.DecodeBlobContent(src)
-	if err != nil {
-		return err
-	}
+	log.Trace("[flag] %s", decodedScheme)
 
 	c.CallData()["IsDmpJson"] = true
 	c.CallData()["Schema"] = decodedScheme
