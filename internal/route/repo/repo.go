@@ -9,7 +9,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"strconv"
 	"strings"
 
 	"github.com/unknwon/com"
@@ -271,6 +270,7 @@ func Action(c *context.Context) {
 }
 
 func Download(c *context.Context) {
+
 	var (
 		uri           = c.Params("*")
 		refName       string
@@ -295,14 +295,14 @@ func Download(c *context.Context) {
 	}
 	refName = strings.TrimSuffix(uri, ext)
 
-	log.Info("Downloaded " + c.Repo.Repository.Name + "-" + refName + ext + " by " + c.User.Name + "(total: " + strconv.FormatUint(c.Repo.Repository.Downloaded, 10) + " downloaded)")
-
 	if !com.IsDir(archivePath) {
 		if err := os.MkdirAll(archivePath, os.ModePerm); err != nil {
 			c.Error(err, "create archive directory")
 			return
 		}
 	}
+
+	log.Info("Downloaded: %v", c.Repo.GitRepo.Path())
 
 	// Get corresponding commit.
 	var (
