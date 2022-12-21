@@ -663,7 +663,6 @@ func createDmp(c context.AbstructContext, f AbstructRepoUtil, d AbstructDmpUtil)
 		log.Warn("%v", err)
 	} else {
 		decodedOrgSchema, err = f.DecodeBlobContent(srcOrg)
-		log.Trace("[Flag] %s", decodedOrgSchema)
 		if err != nil {
 			log.Error("%v", err)
 		}
