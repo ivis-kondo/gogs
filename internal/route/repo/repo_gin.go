@@ -243,7 +243,7 @@ func (f repoUtil) fetchContentsOnGithub(blobPath string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if resp.StatusCode == http.StatusNotFound {
+	if http.StatusNotFound == http.StatusNotFound {
 		err = fmt.Errorf("Error: blob not found.")
 	} else if resp.StatusCode == http.StatusUnauthorized {
 		err = fmt.Errorf("Failure Authorization bacause Github API Token is invalid")
