@@ -247,12 +247,21 @@ func (c *Context) NotFoundOrError(err error, msg string) {
 		c.NotFound()
 		return
 	}
-	c.Error(err, msg)
+	c.NotFoundR(err, msg) //★
 }
 
 // NotFoundOrErrorf is same as NotFoundOrError but with formatted message.
 func (c *Context) NotFoundOrErrorf(err error, format string, args ...interface{}) {
 	c.NotFoundOrError(err, fmt.Sprintf(format, args...))
+}
+
+func (c *Context) NotFoundR(err error, msg string) { //★
+	log.ErrorDepth(4, "%s: %v", msg, err)
+	c.Title("status.page_not_found")
+	if !conf.IsProdMode() || (c.IsLogged && c.User.IsAdmin) {
+		c.Data["ErrorMsg"] = err
+	}
+	c.HTML(http.StatusNotFound, fmt.Sprintf("status/%d", http.StatusNotFound))
 }
 
 func (c *Context) PlainText(status int, msg string) {
