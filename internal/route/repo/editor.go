@@ -632,12 +632,15 @@ func createDmp(c context.AbstructContext, f AbstructRepoUtil, d AbstructDmpUtil)
 	// data binding for "Add DMP" pulldown at DMP editing page
 	// (The pulldown on the repository top page is binded in repo.renderDirectory.)
 	err := d.BidingDmpSchemaList(c, schemaUrl+"orgs")
+	log.Trace("[flag] %s", c.GetRepo().GetRepoLink())
 	if err != nil {
 		log.Warn("%v", err)
+		//c.Redirect(c.GetRepo().GetRepoLink())
 	}
 	err = d.FetchDmpSchema(c, schemaUrl+"json_schema/schema_dmp_"+schema)
 	if err != nil {
 		log.Warn("%v", err)
+
 	}
 
 	var decodedBasicSchema string
