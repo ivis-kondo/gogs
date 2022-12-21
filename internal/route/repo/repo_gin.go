@@ -248,7 +248,7 @@ func (f repoUtil) fetchContentsOnGithub(blobPath string) ([]byte, error) {
 	}
 	defer resp.Body.Close()
 
-	log.Trace("[Check Response Header]github api resoponse : limit", resp.Header.Values("X-RateLimit-Remaining"))
+	log.Trace("Github api rate limit Remaining : %s", resp.Header.Values("X-RateLimit-Remaining")[0])
 
 	contents, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
