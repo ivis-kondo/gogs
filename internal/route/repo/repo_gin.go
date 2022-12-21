@@ -227,6 +227,8 @@ func (f repoUtil) DecodeBlobContent(blobInfo []byte) (string, error) {
 // If any processing fails, it will return error.
 // refs: https://docs.github.com/en/rest/reference/repos#contents
 func (f repoUtil) fetchContentsOnGithub(c context.AbstructContext, blobPath string) ([]byte, error) {
+	err := fmt.Errorf("Error: blob not found.")
+	c.NotFoundOrError(err, "")
 	req, err := http.NewRequest("GET", blobPath, nil)
 	if err != nil {
 		return nil, err
