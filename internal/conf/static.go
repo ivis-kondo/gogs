@@ -378,6 +378,11 @@ var (
 	CLIConfig struct {
 		RSAHostKey string
 	}
+
+	// RCOS Specific Setting Struct
+	GitHub struct {
+		ApiToken string `ini:"API_TOKEN"`
+	}
 )
 
 type ServerOpts struct {

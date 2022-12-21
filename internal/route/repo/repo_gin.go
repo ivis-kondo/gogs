@@ -233,6 +233,10 @@ func (f repoUtil) fetchContentsOnGithub(blobPath string) ([]byte, error) {
 	}
 	req.Header.Set("Accept", "application/vnd.github.v3+json")
 
+	bearerToken := fmt.Sprintf("Bearer %s", conf.GitHub.ApiToken)
+	// When token is set, Github API rate limit increase.
+	req.Header.Set("Authorization", bearerToken)
+
 	client := new(http.Client)
 
 	resp, err := client.Do(req)
@@ -243,6 +247,8 @@ func (f repoUtil) fetchContentsOnGithub(blobPath string) ([]byte, error) {
 		return nil, fmt.Errorf("Error: blob not found.")
 	}
 	defer resp.Body.Close()
+
+	log.Trace("[Check Response Header]github api resoponse : limit", resp.Header.Values("X-RateLimit-Remaining"))
 
 	contents, err := ioutil.ReadAll(resp.Body)
 	if err != nil {

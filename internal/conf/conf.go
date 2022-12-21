@@ -231,6 +231,13 @@ func Init(customConf string) error {
 		Email.FromEmail = parsed.Address
 	}
 
+	// **************************
+	// ----- GitHub settings -----
+	// **************************
+	if err = File.Section("github").MapTo(&GitHub); err != nil {
+		return errors.Wrap(err, "mapping [github] section")
+	}
+
 	// ***********************************
 	// ----- Authentication settings -----
 	// ***********************************
