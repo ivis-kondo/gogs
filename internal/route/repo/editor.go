@@ -641,23 +641,37 @@ func createDmp(c context.AbstructContext, f AbstructRepoUtil, d AbstructDmpUtil)
 		log.Warn("%v", err)
 	}
 
+	var decodedBasicSchema string
 	srcBasic, err := f.FetchContentsOnGithub(schemaUrl + "basic")
 	if err != nil {
 		log.Warn("%v", err)
-	}
-	decodedBasicSchema, err := f.DecodeBlobContent(srcBasic)
-	if err != nil {
-		log.Warn("%v", err)
+	} else {
+		decodedBasicSchema, err = f.DecodeBlobContent(srcBasic)
+		if err != nil {
+			log.Error("%v", err)
+		}
 	}
 
+	// decodedBasicSchema, err = f.DecodeBlobContent(srcBasic)
+	// if err != nil {
+	// 	log.Error("%v", err)
+	// }
+
+	var decodedOrgSchema string
 	srcOrg, err := f.FetchContentsOnGithub(schemaUrl + "orgs/" + schema)
 	if err != nil {
 		log.Warn("%v", err)
+	} else {
+		decodedOrgSchema, err = f.DecodeBlobContent(srcOrg)
+		log.Trace("[Flag] %s", decodedOrgSchema)
+		if err != nil {
+			log.Error("%v", err)
+		}
 	}
-	decodedOrgSchema, err := f.DecodeBlobContent(srcOrg)
-	if err != nil {
-		log.Warn("%v", err)
-	}
+	// decodedOrgSchema, err := f.DecodeBlobContent(srcOrg)
+	// if err != nil {
+	// 	log.Error("%v", err)
+	// }
 
 	combinedDmp := decodedBasicSchema + decodedOrgSchema
 
