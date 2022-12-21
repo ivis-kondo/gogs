@@ -227,8 +227,6 @@ func (f repoUtil) DecodeBlobContent(blobInfo []byte) (string, error) {
 // If any processing fails, it will return error.
 // refs: https://docs.github.com/en/rest/reference/repos#contents
 func (f repoUtil) fetchContentsOnGithub(c context.AbstructContext, blobPath string) ([]byte, error) {
-	err := fmt.Errorf("Error: blob not found.")
-	c.NotFound()
 	req, err := http.NewRequest("GET", blobPath, nil)
 	if err != nil {
 		return nil, err
@@ -245,19 +243,16 @@ func (f repoUtil) fetchContentsOnGithub(c context.AbstructContext, blobPath stri
 	if err != nil {
 		return nil, err
 	}
-	if resp.StatusCode == http.StatusNotFound {
-		err = fmt.Errorf("Error: blob not found.")
-		c.NotFoundOrError(err, "")
-	} else if resp.StatusCode == http.StatusUnauthorized {
-		err = fmt.Errorf("Failure Authorization bacause Github API Token is invalid")
-		c.Error(err, "")
-	} else if resp.StatusCode == http.StatusForbidden {
-		err = fmt.Errorf("Failure Request for GitHub bacause Github API rate limit exceeded")
-	}
 	defer resp.Body.Close()
 	log.Trace("Github api rate limit Remaining : %s", resp.Header.Values("X-RateLimit-Remaining")[0])
-	if err != nil {
-		return nil, err
+	if resp.StatusCode == http.StatusNotFound {
+		log.Error("Error: blob not found.")
+		c.NotFound()
+	} else if resp.StatusCode == http.StatusUnauthorized {
+		log.Error("Failure Authorization bacause Github API Token is invalid")
+		c.Error(err, "")
+	} else if resp.StatusCode == http.StatusForbidden {
+		return nil, fmt.Errorf("failure Request for GitHub bacause Github API rate limit exceeded")
 	}
 
 	contents, err := ioutil.ReadAll(resp.Body)
