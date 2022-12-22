@@ -219,18 +219,11 @@ type AbstructRepoUtil interface {
 type repoUtil func()
 
 func (f repoUtil) FetchContentsOnGithub(c context.AbstructContext, blobPath string) ([]byte, error) {
-	log.Trace("blobPath : %s", blobPath)
-	log.Trace("conf.DG.MaDMPTemplateRepoBranch : %s", conf.DG.MaDMPTemplateRepoBranch)
-	log.Trace("is Empty : %v", conf.DG.MaDMPTemplateRepoBranch != "")
 	apiToken := conf.DG.ApiToken
-	log.Trace("apiToken : %v", conf.DG.ApiToken)
-	log.Trace("apiToken : %v", apiToken)
 	if conf.DG.MaDMPTemplateRepoBranch != "" {
 		blobPath = blobPath + fmt.Sprintf("?ref=%s", conf.DG.MaDMPTemplateRepoBranch)
-		log.Trace("[1 ]blobPath : %s", blobPath)
 		return f.fetchContentsOnGithub(c, blobPath, apiToken)
 	}
-	log.Trace("[2] blobPath : %s", blobPath)
 	return f.fetchContentsOnGithub(c, blobPath, apiToken)
 }
 
