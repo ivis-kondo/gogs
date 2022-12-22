@@ -99,6 +99,7 @@ func GenerateMaDmp(c context.AbstructContext) {
 	generateMaDmp(c, f)
 }
 
+//★
 // generateMaDmp is RCOS specific code.
 // This generates maDMP(machine actionable DMP) based on
 // DMP information created by the user in the repository.
@@ -108,18 +109,32 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 	//       2. https://qiita.com/taizo/items/c397dbfed7215969b0a5
 	templateUrl := getTemplateUrl() + "maDMP.ipynb"
 
+	var decodedMaDmp string
 	src, err := f.FetchContentsOnGithub(c, templateUrl)
-	if err != nil {
+	if err != nil && !c.IsInternalError() {
 		log.Error("maDMP blob could not be fetched: %v", err)
-	}
-
-	decodedMaDmp, err := f.DecodeBlobContent(src)
-	if err != nil {
-		log.Error("maDMP blob could not be decorded: %v", err)
-
-		failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed")
+		c.Redirect(c.GetRepo().GetRepoLink())
 		return
+	} else if err != nil && c.IsInternalError() {
+		log.Error("maDMP blob could not be fetched: %v", err)
+		c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
+		return
+	} else {
+		decodedMaDmp, err = f.DecodeBlobContent(src)
+		if err != nil {
+			log.Error("maDMP blob could not be decorded: %v", err)
+			failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed")
+			return
+		}
 	}
+
+	// decodedMaDmp, err := f.DecodeBlobContent(src)
+	// if err != nil {
+	// 	log.Error("maDMP blob could not be decorded: %v", err)
+
+	// 	failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed")
+	// 	return
+	// }
 
 	/* DMPの内容によって、DockerFileを利用しないケースがあったため、
 	　 DMPの内容を取得した後に、DockerFileを取得するように修正 */
@@ -305,12 +320,13 @@ func fetchDockerfile(c context.AbstructContext) {
 	src, err := f.FetchContentsOnGithub(c, dockerfileUrl)
 	if err != nil {
 		log.Error("Dockerfile could not be fetched: %v", err)
+		failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed(Dockerfile)")
+		return
 	}
 
 	decodedDockerfile, err := f.DecodeBlobContent(src)
 	if err != nil {
 		log.Error("Dockerfile could not be decorded: %v", err)
-
 		failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed(Dockerfile)")
 		return
 	}
@@ -344,6 +360,8 @@ func fetchEmviromentfile(c context.AbstructContext) {
 		src, err := f.FetchContentsOnGithub(c, path)
 		if err != nil {
 			log.Error("%s could not be fetched: %v", Emviromentfile[i], err)
+			failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed(Emviromentfile)")
+			return
 		}
 
 		decodefile, err := f.DecodeBlobContent(src)
@@ -384,6 +402,8 @@ func fetchImagefile(c context.AbstructContext) {
 		src, err := f.FetchContentsOnGithub(c, path)
 		if err != nil {
 			log.Error("%s could not be fetched: %v", ImageFile[i], err)
+			failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed(ImageFile)")
+			return
 		}
 
 		decodefile, err := f.DecodeBlobContent(src)
