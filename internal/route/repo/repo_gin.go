@@ -247,7 +247,7 @@ func (f repoUtil) fetchContentsOnGithub(c context.AbstructContext, blobPath stri
 	log.Trace("Github api rate limit Remaining : %s", resp.Header.Values("X-RateLimit-Remaining")[0])
 	if http.StatusNotFound == http.StatusNotFound {
 		log.Error("Error: blob not found.")
-		c.Error(fmt.Errorf(c.Tr("rocs.server.error")), "")
+		c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
 	} else if resp.StatusCode == http.StatusUnauthorized {
 		log.Error("Failure Authorization bacause Github API Token is invalid")
 		c.Error(err, "")
