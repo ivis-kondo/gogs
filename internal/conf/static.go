@@ -380,8 +380,9 @@ var (
 	}
 
 	// RCOS Specific Setting Struct
-	GitHub struct {
-		ApiToken string `ini:"API_TOKEN"`
+	DG struct {
+		ApiToken                string `ini:"GIT_API_TOKEN"`
+		MaDMPTemplateRepoBranch string `ini:"MA_DMP_TEMPLATE_BRANCH"`
 	}
 )
 

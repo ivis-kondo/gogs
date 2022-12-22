@@ -219,7 +219,12 @@ type AbstructRepoUtil interface {
 type repoUtil func()
 
 func (f repoUtil) FetchContentsOnGithub(c context.AbstructContext, blobPath string) ([]byte, error) {
-	return f.fetchContentsOnGithub(c, blobPath, conf.GitHub.ApiToken)
+	apiToken := conf.DG.ApiToken
+	if conf.DG.MaDMPTemplateRepoBranch != "" {
+		blobPath = blobPath + fmt.Sprintf("?ref=%s", conf.DG.MaDMPTemplateRepoBranch)
+		return f.fetchContentsOnGithub(c, blobPath, apiToken)
+	}
+	return f.fetchContentsOnGithub(c, blobPath, apiToken)
 }
 
 func (f repoUtil) DecodeBlobContent(blobInfo []byte) (string, error) {
