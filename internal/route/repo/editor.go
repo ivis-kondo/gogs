@@ -632,41 +632,62 @@ func createDmp(c context.AbstructContext, f AbstructRepoUtil, d AbstructDmpUtil)
 	// data binding for "Add DMP" pulldown at DMP editing page
 	// (The pulldown on the repository top page is binded in repo.renderDirectory.)
 	err := d.BidingDmpSchemaList(c, schemaUrl+"orgs")
-	if err != nil {
+	if err != nil && !c.IsInternalError() {
 		log.Warn("%v", err)
 		c.Redirect(c.GetRepo().GetRepoLink())
 		return
+	} else if err != nil && c.IsInternalError() {
+		log.Error(err.Error())
+		c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
+		return
 	}
+
 	err = d.FetchDmpSchema(c, schemaUrl+"json_schema/schema_dmp_"+schema)
-	if err != nil {
+	if err != nil && !c.IsInternalError() {
 		log.Warn("%v", err)
 		c.Redirect(c.GetRepo().GetRepoLink())
+		return
+	} else if err != nil && c.IsInternalError() {
+		log.Error(err.Error())
+		c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
 		return
 	}
 
 	var decodedBasicSchema string
 	srcBasic, err := f.FetchContentsOnGithub(c, schemaUrl+"basic")
-	if err != nil {
+	if err != nil && !c.IsInternalError() {
 		log.Warn("%v", err)
 		c.Redirect(c.GetRepo().GetRepoLink())
+		return
+	} else if err != nil && c.IsInternalError() {
+		log.Error(err.Error())
+		c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
 		return
 	} else {
 		decodedBasicSchema, err = f.DecodeBlobContent(srcBasic)
 		if err != nil {
-			log.Error("%v", err)
+			log.Error(err.Error())
+			c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
+			return
 		}
 	}
 
 	var decodedOrgSchema string
 	srcOrg, err := f.FetchContentsOnGithub(c, schemaUrl+"orgs/"+schema)
-	if err != nil {
+	if err != nil && !c.IsInternalError() {
 		log.Warn("%v", err)
 		c.Redirect(c.GetRepo().GetRepoLink())
+		return
+	} else if err != nil && c.IsInternalError() {
+		log.Error(err.Error())
+		c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
 		return
 	} else {
 		decodedOrgSchema, err = f.DecodeBlobContent(srcOrg)
 		if err != nil {
-			log.Error("%v", err)
+			log.Error(err.Error())
+			c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
+			return
 		}
 	}
 
@@ -723,6 +744,7 @@ func (d dmpUtil) fetchDmpSchema(c context.AbstructContext, f AbstructRepoUtil, b
 	} else {
 		decodedScheme, err = f.DecodeBlobContent(src)
 		if err != nil {
+			c.CallData()["IsInternalError"] = true
 			return err
 		}
 	}
@@ -742,6 +764,7 @@ func (d dmpUtil) bidingDmpSchemaList(c context.AbstructContext, f AbstructRepoUt
 	var orgsInfo interface{}
 	err = json.Unmarshal(contents, &orgsInfo)
 	if err != nil {
+		c.CallData()["IsInternalError"] = true
 		return err
 	}
 

@@ -50,6 +50,7 @@ type AbstructContext interface {
 	NotFoundOrError(err error, msg string)
 	NotFound()
 	NotFoundWithErrMsg(errMsg string)
+	IsInternalError() bool
 }
 
 // Context represents context of a request.
@@ -174,6 +175,14 @@ func (c *Context) HasError() bool {
 func (c *Context) HasValue(name string) bool {
 	_, ok := c.Data[name]
 	return ok
+}
+
+func (c *Context) IsInternalError() bool {
+	is, ok := c.Data["IsInternalError"]
+	if !ok {
+		return false
+	}
+	return is.(bool)
 }
 
 // HTML responses template with given status.
