@@ -119,13 +119,13 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 		log.Error("maDMP blob could not be fetched: %v", err)
 		c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
 		return
-	} else {
-		decodedMaDmp, err = f.DecodeBlobContent(src)
-		if err != nil {
-			log.Error("maDMP blob could not be decorded: %v", err)
-			failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed")
-			return
-		}
+	}
+
+	decodedMaDmp, err = f.DecodeBlobContent(src)
+	if err != nil {
+		log.Error("maDMP blob could not be decorded: %v", err)
+		failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed")
+		return
 	}
 
 	// decodedMaDmp, err := f.DecodeBlobContent(src)
