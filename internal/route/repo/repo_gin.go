@@ -229,7 +229,7 @@ func (f repoUtil) DecodeBlobContent(blobInfo []byte) (string, error) {
 func (f repoUtil) fetchContentsOnGithub(c context.AbstructContext, blobPath string) ([]byte, error) {
 	req, err := http.NewRequest("GET", blobPath, nil)
 	if err != nil {
-		c.CallData()["HasInternalError"] = true
+		c.CallData()["IsInternalError"] = true
 		return nil, fmt.Errorf("do not Create Request. blobPath : %s, Error Msg : %v", blobPath, err)
 	}
 	req.Header.Set("Accept", "application/vnd.github.v3+json")
@@ -242,7 +242,7 @@ func (f repoUtil) fetchContentsOnGithub(c context.AbstructContext, blobPath stri
 
 	resp, err := client.Do(req)
 	if err != nil {
-		c.CallData()["HasInternalError"] = true
+		c.CallData()["IsInternalError"] = true
 		return nil, fmt.Errorf("do not Request. blobPath : %s, Error Msg : %v", blobPath, err)
 	}
 	defer resp.Body.Close()
@@ -251,7 +251,7 @@ func (f repoUtil) fetchContentsOnGithub(c context.AbstructContext, blobPath stri
 		c.CallData()["IsInternalError"] = true
 		return nil, fmt.Errorf("blob not found. blobPath : %s, Error Msg : %v", blobPath, err)
 	} else if resp.StatusCode == http.StatusUnauthorized {
-		c.CallData()["HasInternalError"] = true
+		c.CallData()["IsInternalError"] = true
 		return nil, fmt.Errorf("failure Authorization bacause Github API Token is invalid. blobPath : %s, Error Msg : %v", blobPath, err)
 	} else if resp.StatusCode == http.StatusForbidden {
 		return nil, fmt.Errorf("failure Request for GitHub bacause Github API rate limit exceeded blobPath : %s, Error Msg : %v", blobPath, err)
@@ -259,7 +259,7 @@ func (f repoUtil) fetchContentsOnGithub(c context.AbstructContext, blobPath stri
 
 	contents, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		c.CallData()["HasInternalError"] = true
+		c.CallData()["IsInternalError"] = true
 		return nil, fmt.Errorf("connot Read Response Body. blobPath : %s, Error Msg : %v", blobPath, err)
 	}
 
