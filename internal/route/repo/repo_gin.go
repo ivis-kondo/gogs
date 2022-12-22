@@ -99,7 +99,6 @@ func GenerateMaDmp(c context.AbstructContext) {
 	generateMaDmp(c, f)
 }
 
-//★
 // generateMaDmp is RCOS specific code.
 // This generates maDMP(machine actionable DMP) based on
 // DMP information created by the user in the repository.
@@ -128,18 +127,9 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 		return
 	}
 
-	// decodedMaDmp, err := f.DecodeBlobContent(src)
-	// if err != nil {
-	// 	log.Error("maDMP blob could not be decorded: %v", err)
-
-	// 	failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed")
-	// 	return
-	// }
-
 	/* DMPの内容によって、DockerFileを利用しないケースがあったため、
 	　 DMPの内容を取得した後に、DockerFileを取得するように修正 */
 	// コード付帯機能の起動時間短縮のための暫定的な定義
-	// fetchDockerfile(c)
 
 	// ユーザが作成したDMP情報取得
 	entry, err := c.GetRepo().GetCommit().Blob("/dmp.json")
@@ -263,7 +253,7 @@ func (f repoUtil) fetchContentsOnGithub(c context.AbstructContext, blobPath stri
 	defer resp.Body.Close()
 	log.Trace("Github api rate limit Remaining : %s", resp.Header.Values("X-RateLimit-Remaining")[0])
 
-	if http.StatusNotFound == http.StatusNotFound {
+	if resp.StatusCode == http.StatusNotFound {
 		log.Trace("[flag] Test ERROR")
 		c.CallData()["IsInternalError"] = true
 		return nil, fmt.Errorf("blob not found. blobPath : %s, Error Msg : %v", blobPath, err)

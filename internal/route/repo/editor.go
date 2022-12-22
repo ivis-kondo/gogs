@@ -653,7 +653,6 @@ func createDmp(c context.AbstructContext, f AbstructRepoUtil, d AbstructDmpUtil)
 		return
 	}
 
-	var decodedBasicSchema string
 	srcBasic, err := f.FetchContentsOnGithub(c, schemaUrl+"basic")
 	if err != nil && !c.IsInternalError() {
 		log.Warn("%v", err)
@@ -663,16 +662,14 @@ func createDmp(c context.AbstructContext, f AbstructRepoUtil, d AbstructDmpUtil)
 		log.Error(err.Error())
 		c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
 		return
-	} else {
-		decodedBasicSchema, err = f.DecodeBlobContent(srcBasic)
-		if err != nil {
-			log.Error(err.Error())
-			c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
-			return
-		}
+	}
+	decodedBasicSchema, err := f.DecodeBlobContent(srcBasic)
+	if err != nil {
+		log.Error(err.Error())
+		c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
+		return
 	}
 
-	var decodedOrgSchema string
 	srcOrg, err := f.FetchContentsOnGithub(c, schemaUrl+"orgs/"+schema)
 	if err != nil && !c.IsInternalError() {
 		log.Warn("%v", err)
@@ -682,13 +679,12 @@ func createDmp(c context.AbstructContext, f AbstructRepoUtil, d AbstructDmpUtil)
 		log.Error(err.Error())
 		c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
 		return
-	} else {
-		decodedOrgSchema, err = f.DecodeBlobContent(srcOrg)
-		if err != nil {
-			log.Error(err.Error())
-			c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
-			return
-		}
+	}
+	decodedOrgSchema, err := f.DecodeBlobContent(srcOrg)
+	if err != nil {
+		log.Error(err.Error())
+		c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
+		return
 	}
 
 	combinedDmp := decodedBasicSchema + decodedOrgSchema
@@ -741,12 +737,11 @@ func (d dmpUtil) fetchDmpSchema(c context.AbstructContext, f AbstructRepoUtil, b
 	src, err := f.FetchContentsOnGithub(c, blobPath)
 	if err != nil {
 		return err
-	} else {
-		decodedScheme, err = f.DecodeBlobContent(src)
-		if err != nil {
-			c.CallData()["IsInternalError"] = true
-			return err
-		}
+	}
+	decodedScheme, err = f.DecodeBlobContent(src)
+	if err != nil {
+		c.CallData()["IsInternalError"] = true
+		return err
 	}
 	c.CallData()["IsDmpJson"] = true
 	c.CallData()["Schema"] = decodedScheme
