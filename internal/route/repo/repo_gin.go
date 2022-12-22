@@ -247,13 +247,14 @@ func (f repoUtil) fetchContentsOnGithub(c context.AbstructContext, blobPath stri
 	}
 	defer resp.Body.Close()
 	log.Trace("Github api rate limit Remaining : %s", resp.Header.Values("X-RateLimit-Remaining")[0])
+
 	if resp.StatusCode == http.StatusNotFound {
 		c.CallData()["IsInternalError"] = true
 		return nil, fmt.Errorf("blob not found. blobPath : %s, Error Msg : %v", blobPath, err)
 	} else if resp.StatusCode == http.StatusUnauthorized {
 		c.CallData()["IsInternalError"] = true
 		return nil, fmt.Errorf("failure Authorization bacause Github API Token is invalid. blobPath : %s, Error Msg : %v", blobPath, err)
-	} else if http.StatusForbidden == http.StatusForbidden {
+	} else if resp.StatusCode == http.StatusForbidden {
 		return nil, fmt.Errorf("failure Request for GitHub bacause Github API rate limit exceeded blobPath : %s, Error Msg : %v", blobPath, err)
 	}
 
