@@ -219,7 +219,6 @@ type AbstructRepoUtil interface {
 type repoUtil func()
 
 func (f repoUtil) FetchContentsOnGithub(c context.AbstructContext, blobPath string) ([]byte, error) {
-	log.Trace("githun api token : %s", conf.GitHub.ApiToken)
 	return f.fetchContentsOnGithub(c, blobPath, conf.GitHub.ApiToken)
 }
 
