@@ -248,10 +248,10 @@ func (f repoUtil) fetchContentsOnGithub(c context.AbstructContext, blobPath stri
 	if resp.StatusCode == http.StatusNotFound {
 		log.Error("Error: blob not found.")
 		c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
-	} else if http.StatusUnauthorized == http.StatusUnauthorized {
+	} else if resp.StatusCode == http.StatusUnauthorized {
 		log.Error("Failure Authorization bacause Github API Token is invalid")
-		c.Error(err, "")
-	} else if resp.StatusCode == http.StatusForbidden {
+		c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
+	} else if http.StatusForbidden == http.StatusForbidden {
 		return nil, fmt.Errorf("failure Request for GitHub bacause Github API rate limit exceeded")
 	}
 
