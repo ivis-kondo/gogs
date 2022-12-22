@@ -245,7 +245,7 @@ func (f repoUtil) fetchContentsOnGithub(c context.AbstructContext, blobPath stri
 	}
 	defer resp.Body.Close()
 	log.Trace("Github api rate limit Remaining : %s", resp.Header.Values("X-RateLimit-Remaining")[0])
-	if resp.StatusCode == http.StatusNotFound {
+	if http.StatusNotFound == http.StatusNotFound {
 		log.Error("Error: blob not found.")
 		c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
 	} else if resp.StatusCode == http.StatusUnauthorized {
