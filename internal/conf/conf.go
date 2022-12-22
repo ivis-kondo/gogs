@@ -232,9 +232,9 @@ func Init(customConf string) error {
 	}
 
 	// **************************
-	// ----- GitHub settings -----
+	// ----- DG settings -----
 	// **************************
-	if err = File.Section("github").MapTo(&GitHub); err != nil {
+	if err = File.Section("dg").MapTo(&DG); err != nil {
 		return errors.Wrap(err, "mapping [github] section")
 	}
 
