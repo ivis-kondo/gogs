@@ -104,6 +104,56 @@ func (mr *MockAbstructContextMockRecorder) GetUser() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUser", reflect.TypeOf((*MockAbstructContext)(nil).GetUser))
 }
 
+// IsInternalError mocks base method.
+func (m *MockAbstructContext) IsInternalError() bool {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "IsInternalError")
+	ret0, _ := ret[0].(bool)
+	return ret0
+}
+
+// IsInternalError indicates an expected call of IsInternalError.
+func (mr *MockAbstructContextMockRecorder) IsInternalError() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IsInternalError", reflect.TypeOf((*MockAbstructContext)(nil).IsInternalError))
+}
+
+// NotFound mocks base method.
+func (m *MockAbstructContext) NotFound() {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "NotFound")
+}
+
+// NotFound indicates an expected call of NotFound.
+func (mr *MockAbstructContextMockRecorder) NotFound() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "NotFound", reflect.TypeOf((*MockAbstructContext)(nil).NotFound))
+}
+
+// NotFoundOrError mocks base method.
+func (m *MockAbstructContext) NotFoundOrError(err error, msg string) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "NotFoundOrError", err, msg)
+}
+
+// NotFoundOrError indicates an expected call of NotFoundOrError.
+func (mr *MockAbstructContextMockRecorder) NotFoundOrError(err, msg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "NotFoundOrError", reflect.TypeOf((*MockAbstructContext)(nil).NotFoundOrError), err, msg)
+}
+
+// NotFoundWithErrMsg mocks base method.
+func (m *MockAbstructContext) NotFoundWithErrMsg(errMsg string) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "NotFoundWithErrMsg", errMsg)
+}
+
+// NotFoundWithErrMsg indicates an expected call of NotFoundWithErrMsg.
+func (mr *MockAbstructContextMockRecorder) NotFoundWithErrMsg(errMsg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "NotFoundWithErrMsg", reflect.TypeOf((*MockAbstructContext)(nil).NotFoundWithErrMsg), errMsg)
+}
+
 // PageIs mocks base method.
 func (m *MockAbstructContext) PageIs(name string) {
 	m.ctrl.T.Helper()
