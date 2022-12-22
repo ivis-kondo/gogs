@@ -34,38 +34,49 @@ func Test_fetchContentsOnGithub(t *testing.T) {
 	defer mockCtrl.Finish()
 
 	mockCtx := mock_context.NewMockAbstructContext(mockCtrl)
-	mockCtx.EXPECT().CallData().AnyTimes()
 
 	type args struct {
 		blobPath string
+		apiToken string
 	}
 	tests := []struct {
-		name    string
-		args    args
-		want    []byte
-		wantErr bool
+		name                string
+		args                args
+		want                []byte
+		wantErr             bool
+		PrepareMockContexts func() context.AbstructContext
 	}{
 		{
 			name: "succeed fetch blob",
 			args: args{
 				blobPath: "https://api.github.com/repos/NII-DG/maDMP-template/contents/maDMP_for_test.ipynb?ref=unittest",
+				apiToken: "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",
 			},
 			want:    wantByte,
 			wantErr: false,
+			PrepareMockContexts: func() context.AbstructContext {
+				mockCtx.EXPECT().CallData()
+				return mockCtx
+			},
 		},
 		{
 			name: "failed fetch blob",
 			args: args{
 				blobPath: "https://api.github.com/repos/no-exists/maDMP-template/contents/maDMP_for_test.ipynb",
+				apiToken: "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",
 			},
 			want:    nil,
 			wantErr: true,
+			PrepareMockContexts: func() context.AbstructContext {
+				mockCtx.EXPECT().CallData()
+				return mockCtx
+			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			var f repoUtil
-			got, err := f.fetchContentsOnGithub(mockCtx, tt.args.blobPath)
+			got, err := f.fetchContentsOnGithub(tt.PrepareMockContexts(), tt.args.blobPath, tt.args.apiToken)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("fetchContentsOnGithub() error = %v, wantErr %v", err, tt.wantErr)
 				return

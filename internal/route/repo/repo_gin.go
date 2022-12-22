@@ -219,7 +219,7 @@ type AbstructRepoUtil interface {
 type repoUtil func()
 
 func (f repoUtil) FetchContentsOnGithub(c context.AbstructContext, blobPath string) ([]byte, error) {
-	return f.fetchContentsOnGithub(c, blobPath)
+	return f.fetchContentsOnGithub(c, blobPath, conf.GitHub.ApiToken)
 }
 
 func (f repoUtil) DecodeBlobContent(blobInfo []byte) (string, error) {
@@ -231,7 +231,7 @@ func (f repoUtil) DecodeBlobContent(blobInfo []byte) (string, error) {
 // specified in the argument, and returns it in the type of []byte.
 // If any processing fails, it will return error.
 // refs: https://docs.github.com/en/rest/reference/repos#contents
-func (f repoUtil) fetchContentsOnGithub(c context.AbstructContext, blobPath string) ([]byte, error) {
+func (f repoUtil) fetchContentsOnGithub(c context.AbstructContext, blobPath string, apiToken string) ([]byte, error) {
 	req, err := http.NewRequest("GET", blobPath, nil)
 	if err != nil {
 		c.CallData()["IsInternalError"] = true
@@ -239,14 +239,13 @@ func (f repoUtil) fetchContentsOnGithub(c context.AbstructContext, blobPath stri
 	}
 	req.Header.Set("Accept", "application/vnd.github.v3+json")
 
-	bearerToken := fmt.Sprintf("Bearer %s", conf.GitHub.ApiToken)
+	bearerToken := fmt.Sprintf("Bearer %s", apiToken)
 	// When token is set, Github API rate limit increase.
 	req.Header.Set("Authorization", bearerToken)
 
 	client := new(http.Client)
 
 	resp, err := client.Do(req)
-	print(resp.Body)
 	if err != nil {
 		c.CallData()["IsInternalError"] = true
 		return nil, fmt.Errorf("do not Request. blobPath : %s, Error Msg : %v", blobPath, err)
@@ -255,7 +254,6 @@ func (f repoUtil) fetchContentsOnGithub(c context.AbstructContext, blobPath stri
 	log.Trace("Github api rate limit Remaining : %s", resp.Header.Values("X-RateLimit-Remaining")[0])
 
 	if resp.StatusCode == http.StatusNotFound {
-		log.Trace("[flag] Test ERROR")
 		c.CallData()["IsInternalError"] = true
 		return nil, fmt.Errorf("blob not found. blobPath : %s, Error Msg : %v", blobPath, err)
 	} else if resp.StatusCode == http.StatusUnauthorized {

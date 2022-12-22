@@ -38,7 +38,7 @@
 		},
 		"internal/mocks/repo/repo_gin_mock.go": {
 			"checksum": "vQh4r4zXUZE5w2rOlz517A==",
-			"source_checksum": "DpWN0WVZQAfQXPs7S15AWg==",
+			"source_checksum": "csqvK2LQb6EMJVsMQzOnQQ==",
 			"mode": "SOURCE_MODE",
 			"source_mode_runner": {
 				"source": "internal/route/repo/repo_gin.go",
