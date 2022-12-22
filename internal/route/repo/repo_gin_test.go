@@ -51,7 +51,7 @@ func Test_fetchContentsOnGithub(t *testing.T) {
 			name: "succeed fetch blob",
 			args: args{
 				blobPath: "https://api.github.com/repos/NII-DG/maDMP-template/contents/maDMP_for_test.ipynb?ref=unittest",
-				apiToken: "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",
+				apiToken: "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",
 			},
 			want:    wantByte,
 			wantErr: false,
@@ -60,19 +60,19 @@ func Test_fetchContentsOnGithub(t *testing.T) {
 				return mockCtx
 			},
 		},
-		// {
-		// 	name: "failed fetch blob",
-		// 	args: args{
-		// 		blobPath: "https://api.github.com/repos/no-exists/maDMP-template/contents/maDMP_for_test.ipynb",
-		// 		apiToken: "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",
-		// 	},
-		// 	want:    nil,
-		// 	wantErr: true,
-		// 	PrepareMockContexts: func() context.AbstructContext {
-		// 		mockCtx.EXPECT().CallData().AnyTimes().Return(dummyData)
-		// 		return mockCtx
-		// 	},
-		// },
+		{
+			name: "failed fetch blob",
+			args: args{
+				blobPath: "https://api.github.com/repos/no-exists/maDMP-template/contents/maDMP_for_test.ipynb",
+				apiToken: "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",
+			},
+			want:    nil,
+			wantErr: true,
+			PrepareMockContexts: func() context.AbstructContext {
+				mockCtx.EXPECT().CallData().AnyTimes().Return(dummyData)
+				return mockCtx
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
