@@ -223,6 +223,7 @@ func (f repoUtil) FetchContentsOnGithub(c context.AbstructContext, blobPath stri
 	log.Trace("conf.DG.MaDMPTemplateRepoBranch : %s", conf.DG.MaDMPTemplateRepoBranch)
 	log.Trace("is Empty : %v", conf.DG.MaDMPTemplateRepoBranch != "")
 	apiToken := conf.DG.ApiToken
+	log.Trace("apiToken : %v", conf.DG.ApiToken)
 	log.Trace("apiToken : %v", apiToken)
 	if conf.DG.MaDMPTemplateRepoBranch != "" {
 		blobPath = blobPath + fmt.Sprintf("?ref=%s", conf.DG.MaDMPTemplateRepoBranch)
