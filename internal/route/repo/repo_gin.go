@@ -246,6 +246,7 @@ func (f repoUtil) fetchContentsOnGithub(c context.AbstructContext, blobPath stri
 	client := new(http.Client)
 
 	resp, err := client.Do(req)
+	print(resp.Body)
 	if err != nil {
 		c.CallData()["IsInternalError"] = true
 		return nil, fmt.Errorf("do not Request. blobPath : %s, Error Msg : %v", blobPath, err)
