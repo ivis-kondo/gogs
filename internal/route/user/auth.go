@@ -311,6 +311,11 @@ func SignUpPost(c *context.Context, cpt *captcha.Captcha, f form.Register) {
 	} else if f.Sample.SampleName == "" {
 		log.Trace("[TEST LOG] f.Sample.SampleName is Empty")
 	}
+	if f.SampleName != "" {
+		log.Trace("[TEST LOG] f.SampleName : %s", f.SampleName)
+	} else if f.SampleName == "" {
+		log.Trace("[TEST LOG] f.SampleName is Empty")
+	}
 
 	c.Title("sign_up")
 

@@ -79,6 +79,7 @@ type Register struct {
 	//AffiliationDescription string  `binding:"MaxSize(255)"`          //所属組織説明（任意）
 	//AffiliationURL string `binding:"Required;Url"`                   //所属組織URL（必須）
 	Sample
+	SampleName string
 }
 
 type Sample struct {
