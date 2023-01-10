@@ -42,6 +42,12 @@
 						<label for="affiliation">Affiliation</label>
 						<input id="affiliation" name="affiliation" value="{{.affiliation}}">
 					</div>
+					<!-- サンプルフォーム-->
+					<div class="inline field">
+						<label for="samplename">Sample Name</label>
+						<input id="samplename" name="samplename" value="{{.name}}" required>
+					</div>
+					<!--  サンプルフォームエンド -->
 					{{if .EnableCaptcha}}
                         <div class="inline field">
                             <label></label>

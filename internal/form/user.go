@@ -74,11 +74,15 @@ type Register struct {
 	FullName string `binding:"Required;MaxSize(255)"` //氏名（必須）
 	//ERadResearcherNumber string                                      //研究者e-Rad番号（任意）
 	//PersonalURL string `binding:"Url"`                               //個人URL（任意）
-	Affiliation string `binding:"Required;MaxSize(255)"` //所属組織名（必須）
+	Affiliation string //`binding:"Required;MaxSize(255)"` //所属組織名（必須）
 	//AffiliationAlias string  `binding:"MaxSize(255)"`                //所属組織別名（任意）
 	//AffiliationDescription string  `binding:"MaxSize(255)"`          //所属組織説明（任意）
 	//AffiliationURL string `binding:"Required;Url"`                   //所属組織URL（必須）
+	Sample
+}
 
+type Sample struct {
+	SampleName string `binding:"Required;AlphaDashDot;MaxSize(35)"` //サンプル名
 }
 
 func (f *Register) Validate(ctx *macaron.Context, errs binding.Errors) binding.Errors {
