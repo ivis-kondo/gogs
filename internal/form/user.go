@@ -82,7 +82,7 @@ type Register struct {
 }
 
 type Sample struct {
-	SampleName string `binding:"Required;AlphaDashDot;MaxSize(35)"` //サンプル名
+	SampleName string //サンプル名
 }
 
 func (f *Register) Validate(ctx *macaron.Context, errs binding.Errors) binding.Errors {
