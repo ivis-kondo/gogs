@@ -66,24 +66,18 @@ type Register struct {
 	/*
 		ユーザ登録用フォーム構造体
 	*/
-	UserName string `binding:"Required;AlphaDashDot;MaxSize(35)"` //アカウント名（必須）
-	Email    string `binding:"Required;Email;MaxSize(254)"`       //メールアドレス（必須）
-	//Telephone   string                                               //電話番号（任意）
-	Password string `binding:"Required;MaxSize(255)"` //パスワード（必須）
-	Retype   string //パスワードの再入力（必須）
-	FullName string `binding:"Required;MaxSize(255)"` //氏名（必須）
-	//ERadResearcherNumber string                                      //研究者e-Rad番号（任意）
-	//PersonalURL string `binding:"Url"`                               //個人URL（任意）
-	Affiliation string //`binding:"Required;MaxSize(255)"` //所属組織名（必須）
-	//AffiliationAlias string  `binding:"MaxSize(255)"`                //所属組織別名（任意）
-	//AffiliationDescription string  `binding:"MaxSize(255)"`          //所属組織説明（任意）
-	//AffiliationURL string `binding:"Required;Url"`                   //所属組織URL（必須）
-	Sample
-	SampleName string
-}
-
-type Sample struct {
-	SampleName string //サンプル名
+	UserName               string `binding:"Required;AlphaDashDot;MaxSize(35)"` //アカウント名（必須）
+	Email                  string `binding:"Required;Email;MaxSize(254)"`       //メールアドレス（必須）
+	Telephone              string //電話番号（任意）
+	Password               string `binding:"Required;MaxSize(255)"` //パスワード（必須）
+	Retype                 string //パスワードの再入力（必須）
+	FullName               string `binding:"Required;MaxSize(255)"` //氏名（必須）
+	ERadResearcherNumber   string //研究者e-Rad番号（任意）
+	PersonalURL            string `binding:"Url"`                   //個人URL（任意）
+	Affiliation            string `binding:"Required;MaxSize(255)"` //所属組織名（必須）
+	AffiliationAlias       string `binding:"MaxSize(255)"`          //所属組織別名（任意）
+	AffiliationDescription string `binding:"MaxSize(255)"`          //所属組織説明（任意）
+	AffiliationURL         string `binding:"Required;Url"`          //所属組織URL（必須）
 }
 
 func (f *Register) Validate(ctx *macaron.Context, errs binding.Errors) binding.Errors {
