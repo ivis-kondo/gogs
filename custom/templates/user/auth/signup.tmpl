@@ -16,15 +16,21 @@
 						For Registration we require only username, password, and a valid email address, but adding your name and affiliation is recommended.
 						Please use an institutional email address for registration to benefit from the full set of features of GIN.
 					</div>
+
+					<div class="ui divider"></div>
+
+					<div class="inline field">
+						<label><h3>{{.i18n.Tr "user_info"}}</h3></label>
+					</div>
+
 					<div class="ui required inline field {{if .Err_UserName}}error{{end}}"
 							 data-tooltip="Username is used to create and to display your repositories. Choose wisely">
 						<label for="user_name">{{.i18n.Tr "username"}}</label>
 						<input id="user_name" name="user_name" value="{{.user_name}}" autofocus required>
 					</div>
-					<div class="required inline field {{if .Err_Email}}error{{end}}"
-							 data-tooltip="Please register with an institutional email (see above)">
-						<label for="email">{{.i18n.Tr "email"}}</label>
-						<input id="email" name="email" type="email" value="{{.email}}" required>
+					<div class="inline field">
+						<label for="full_name">{{.i18n.Tr "full_name"}}</label>
+						<input id="full_name" name="full_name" value="{{.full_name}}">
 					</div>
 					<div class="required inline field {{if .Err_Password}}error{{end}}">
 						<label for="password">{{.i18n.Tr "password"}}</label>
@@ -34,14 +40,49 @@
 						<label for="retype">{{.i18n.Tr "re_type"}}</label>
 						<input id="retype" name="retype" type="password" value="{{.retype}}" required>
 					</div>
-					<div class="inline field">
-						<label for="full_name">Full Name</label>
-						<input id="full_name" name="full_name" value="{{.full_name}}">
+					<div class="required inline field {{if .Err_Email}}error{{end}}"
+							 data-tooltip="Please register with an institutional email (see above)">
+						<label for="email">{{.i18n.Tr "email"}}</label>
+						<input id="email" name="email" type="email" value="{{.email}}" required>
 					</div>
 					<div class="inline field">
-						<label for="affiliation">Affiliation</label>
-						<input id="affiliation" name="affiliation" value="{{.affiliation}}">
+						<label for="telephone">{{.i18n.Tr "telephone"}}</label>
+						<input id="telephone" name="telephone" type="tel" value="{{.telephone}}">
 					</div>
+					<div class="inline field">
+						<label for="erad_number">{{.i18n.Tr "erad_researcher_number"}}</label>
+						<input id="erad_number" name="erad_number" value="{{.erad_number}}">
+					</div>
+					<div class="inline field">
+						<label for="researcher_url">{{.i18n.Tr "researcher_url"}}</label>
+						<input id="researcher_url" name="researcher_url" value="{{.researcher_url}}" placeholder="http://orcid.org/0000-0000-0000-0000">
+					</div>
+
+					<div class="ui divider"></div>
+
+					<div class="inline field">
+						<label><h3>{{.i18n.Tr "affiliation"}}</h3></label>
+					</div>
+					<div class="required inline field">
+						<label for="org_name">{{.i18n.Tr "org_name"}}</label>
+						<input id="org_name" name="org_name" value="{{.org_name}} " required>
+					</div>
+					<div class="inline field">
+						<label for="org_alias">{{.i18n.Tr "org_alias"}}</label>
+						<input id="org_alias" name="org_alias" value="{{.org_alias}}">
+					</div>
+					<div class="inline field">
+						<label for="org_description">{{.i18n.Tr "org_description"}}</label>
+						<input id="org_description" name="org_description" value="{{.org_description}}">
+					</div>
+					<div class="required inline field">
+						<label for="org_url">{{.i18n.Tr "org_url"}}</label>
+						<input id="org_url" name="org_url" value="{{.org_url}}" placeholder="https://ror.org/..." required>
+						<span class="help">{{.i18n.Tr "org_url_helper"}}</span>
+					</div>
+
+					<div class="ui divider"></div>
+
 					{{if .EnableCaptcha}}
                         <div class="inline field">
                             <label></label>
