@@ -67,6 +67,22 @@ type User struct {
 	Rands       string `xorm:"VARCHAR(10)" gorm:"TYPE:VARCHAR(10)"`
 	Salt        string `xorm:"VARCHAR(10)" gorm:"TYPE:VARCHAR(10)"`
 
+	/*
+		TODO:
+		ユーザー登録の追加分仮置き
+		既存分との兼ね合いを考慮し整理すること
+		水平展開 -> func SignUpPost
+		AffiliationはLocationとしている
+	*/
+	Telephone              string
+	FirstName              string //FullNameを残すかどうか
+	LastName               string
+	ERadResearcherNumber   string
+	PersonalURL            string //Websiteとの使い分けどうするか
+	AffiliationAlias       string
+	AffiliationDescription string
+	AffiliationURL         string
+
 	Created     time.Time `xorm:"-" gorm:"-" json:"-"`
 	CreatedUnix int64
 	Updated     time.Time `xorm:"-" gorm:"-" json:"-"`
