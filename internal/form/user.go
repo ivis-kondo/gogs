@@ -72,6 +72,8 @@ type Register struct {
 	Password               string `binding:"Required;MaxSize(255)"` //パスワード（必須）
 	Retype                 string //パスワードの再入力（必須）
 	FullName               string `binding:"Required;MaxSize(255)"` //氏名（必須）
+	FirstName              string
+	LastName               string
 	ERadResearcherNumber   string //研究者e-Rad番号（任意）
 	PersonalURL            string `binding:"Url"`                   //個人URL（任意）
 	Affiliation            string `binding:"Required;MaxSize(255)"` //所属組織名（必須）
