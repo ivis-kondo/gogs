@@ -31,3 +31,29 @@ func Search(c *context.APIContext) {
 	}
 	c.JSONSuccess(user)
 }
+
+func SearchUsers(c *context.APIContext) {
+	userName := c.Params(":username")
+	u, err := db.GetUserByName(userName)
+	if err != nil {
+		c.NotFoundOrError(err, "get user by name")
+		return
+	}
+
+	org := ds.UserOrgMetadata{
+		Name:      "東京大学",
+		Url:       "https://u_tokyo",
+		AliasName: "U-Tokyo",
+	}
+	user := ds.UserMatadata{
+		UserName:    u.FullName,
+		Url:         "https://sample",
+		FirstName:   "sam",
+		LastName:    "ple",
+		AliasName:   "sp",
+		EMail:       "sample@gmail.com",
+		Telephone:   "090-1111-22222",
+		Affiliation: org,
+	}
+	c.JSONSuccess(user)
+}

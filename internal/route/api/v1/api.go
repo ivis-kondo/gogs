@@ -426,8 +426,9 @@ func RegisterRoutes(m *macaron.Macaron) {
 		author : ivis-tsukioka
 		*/
 		m.Group("/metadata", func() {
-			m.Group("/user", func() {
+			m.Group("/users", func() {
 				m.Get("/:username", metadata.Search)
+				m.Post("", matadata.SearchUsers)
 			})
 		}, reqBasicAuth())
 

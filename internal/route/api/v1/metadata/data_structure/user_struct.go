@@ -29,7 +29,7 @@ type DownloadMetadat struct {
 	Url         string `json:"url"`
 	Description string `json:"description"`
 	SHA256      string `json:"sha256"`
-	Date        string `json:"date"`
+	Date        string `json:"date"` //ISO 8601
 }
 
 type ResearchPolicyMetadata struct {
@@ -55,6 +55,6 @@ type FileMetadata struct {
 	ContentSize        string `json:"content_size"`
 	EncodingFormat     string `json:"encoding_format"`
 	SHA256             string `json:"sha256"`
-	Date               string `json:"date"`
+	Date               string `json:"date"` //ISO 8601
 	IsExperimentPakage bool   `json:"is_experiment_pakage"`
 }
