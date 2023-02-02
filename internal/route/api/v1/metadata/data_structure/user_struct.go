@@ -11,6 +11,10 @@ type UserMatadata struct {
 	ERadNumber  string          `json:"e_rad_number"`
 	Affiliation UserOrgMetadata `json:"affiliation"`
 }
+
+type UsersMatadata struct {
+	Users []UserMatadata `json:"persons"`
+}
 type UserOrgMetadata struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
