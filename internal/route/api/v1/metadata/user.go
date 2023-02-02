@@ -38,8 +38,6 @@ func SearchUsers(c *context.APIContext, form ds.UserNameList) {
 	log.Trace("user : %s", req_user.ID)
 	log.Trace("user : %s", req_user.FullName)
 	log.Trace("user : %s", req_user.Email)
-	req_repo := c.Repo.Repository
-	log.Trace("repo : %s", req_repo.Name)
 
 	users := ds.UsersMatadata{}
 	for _, userName := range form.UsersName {
