@@ -429,7 +429,7 @@ func RegisterRoutes(m *macaron.Macaron) {
 			m.Group("/user", func() {
 				m.Get("/:username", metadata.Search)
 			})
-		}, reqToken())
+		}, reqAdmin())
 
 		m.Any("/*", func(c *context.Context) {
 			c.NotFound()
