@@ -3,11 +3,10 @@ package metadata
 import (
 	"github.com/NII-DG/gogs/internal/context"
 	"github.com/NII-DG/gogs/internal/db"
-	ds "github.com/NII-DG/gogs/internal/route/api/v1/metadata/data_structure"
 	log "unknwon.dev/clog/v2"
 )
 
-func Search(c *context.APIContext) {
+func SearchUser(c *context.APIContext) {
 	userName := c.Params(":username")
 	u, err := db.GetUserByName(userName)
 	if err != nil {
@@ -15,12 +14,12 @@ func Search(c *context.APIContext) {
 		return
 	}
 
-	org := ds.UserOrgMetadata{
+	org := UserOrgMetadata{
 		Name:      "東京大学",
 		Url:       "https://u_tokyo",
 		AliasName: "U-Tokyo",
 	}
-	user := ds.UserMatadata{
+	user := UserMatadata{
 		UserName:    u.FullName,
 		Url:         "https://sample",
 		FirstName:   "sam",
@@ -33,25 +32,25 @@ func Search(c *context.APIContext) {
 	c.JSONSuccess(user)
 }
 
-func SearchUsers(c *context.APIContext, form ds.UserNameList) {
+func SearchUsers(c *context.APIContext, form UserNameList) {
 	req_user := c.User
 	log.Trace("user : %s", req_user.ID)
 	log.Trace("user : %s", req_user.FullName)
 	log.Trace("user : %s", req_user.Email)
 
-	users := ds.UsersMatadata{}
+	users := UsersMatadata{}
 	for _, userName := range form.UsersName {
 		u, err := db.GetUserByName(userName)
 		if err != nil {
 			c.NotFoundOrError(err, "get user by name")
 			return
 		}
-		org := ds.UserOrgMetadata{
+		org := UserOrgMetadata{
 			Name:      "東京大学",
 			Url:       "https://u_tokyo",
 			AliasName: "U-Tokyo",
 		}
-		user := ds.UserMatadata{
+		user := UserMatadata{
 			UserName:    u.FullName,
 			Url:         "https://sample",
 			FirstName:   "sam",

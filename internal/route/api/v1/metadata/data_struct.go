@@ -1,4 +1,4 @@
-package datastructurego
+package metadata
 
 type UserMatadata struct {
 	UserName    string          `json:"gin_account_name"`
