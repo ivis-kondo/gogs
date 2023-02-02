@@ -14,6 +14,10 @@ func SearchRepo(c *context.APIContext) {
 	}
 	repoName := c.Params(":reponame")
 	repo, err := db.GetRepositoryByName(owner.ID, repoName)
+	if err != nil {
+		c.NotFoundOrError(err, "get repo by owner name and repository name")
+		return
+	}
 
 	repoUrl := c.BaseURL + "/" + repo.Owner.Name + "/" + repoName
 	repoMatadata := RepositoryMetadata{
