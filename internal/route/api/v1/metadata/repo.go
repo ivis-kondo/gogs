@@ -3,6 +3,7 @@ package metadata
 import (
 	"github.com/NII-DG/gogs/internal/context"
 	"github.com/NII-DG/gogs/internal/db"
+	"github.com/NII-DG/gogs/internal/urlutil"
 )
 
 func SearchRepo(c *context.APIContext) {
@@ -18,12 +19,15 @@ func SearchRepo(c *context.APIContext) {
 		c.NotFoundOrError(err, "get repo by owner name and repository name")
 		return
 	}
-
-	repoUrl := c.BaseURL + "/" + repo.Owner.Name + "/" + repoName
+	path := repo.Owner.Name + "/" + repoName
+	url, err := urlutil.UpdatePath(c.BaseURL, path)
+	if err != nil {
+		c.Errorf(err, "%v", err)
+	}
 	repoMatadata := RepositoryMetadata{
 		Name:        repo.Name,
 		Description: repo.Description,
-		Url:         repoUrl,
+		Url:         url,
 	}
 	c.JSONSuccess(repoMatadata)
 }
