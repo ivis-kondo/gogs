@@ -421,7 +421,7 @@ func RegisterRoutes(m *macaron.Macaron) {
 		}, reqAdmin())
 
 		/**
-		DG specific code for matadata
+		DG specific code for getting matadata
 
 		author : ivis-tsukioka
 		*/
