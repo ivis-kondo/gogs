@@ -419,6 +419,17 @@ func RegisterRoutes(m *macaron.Macaron) {
 			})
 		}, reqAdmin())
 
+		/**
+		DG specific code for matadata
+
+		author : ivis-tsukioka
+		*/
+		m.Group("/metadata", func() {
+			m.Group("/user", func() {
+				m.Get("/:username")
+			})
+		})
+
 		m.Any("/*", func(c *context.Context) {
 			c.NotFound()
 		})
