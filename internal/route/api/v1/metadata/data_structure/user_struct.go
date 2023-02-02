@@ -58,3 +58,7 @@ type FileMetadata struct {
 	Date               string `json:"date"` //ISO 8601
 	IsExperimentPakage bool   `json:"is_experiment_pakage"`
 }
+
+type UserNameList struct {
+	UsersName []string `json:"users_name"`
+}
