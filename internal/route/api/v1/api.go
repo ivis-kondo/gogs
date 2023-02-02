@@ -17,6 +17,7 @@ import (
 	"github.com/NII-DG/gogs/internal/db"
 	"github.com/NII-DG/gogs/internal/form"
 	"github.com/NII-DG/gogs/internal/route/api/v1/admin"
+	"github.com/NII-DG/gogs/internal/route/api/v1/metadata"
 	"github.com/NII-DG/gogs/internal/route/api/v1/misc"
 	"github.com/NII-DG/gogs/internal/route/api/v1/org"
 	"github.com/NII-DG/gogs/internal/route/api/v1/repo"
@@ -426,7 +427,7 @@ func RegisterRoutes(m *macaron.Macaron) {
 		*/
 		m.Group("/metadata", func() {
 			m.Group("/user", func() {
-				m.Get("/:username")
+				m.Get("/:username", metadata.Search)
 			})
 		})
 
