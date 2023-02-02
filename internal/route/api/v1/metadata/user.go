@@ -3,6 +3,7 @@ package metadata
 import (
 	"github.com/NII-DG/gogs/internal/context"
 	"github.com/NII-DG/gogs/internal/db"
+	ds "github.com/NII-DG/gogs/internal/route/api/v1/metadata/data_structure"
 )
 
 func Search(c *context.APIContext) {
@@ -12,5 +13,15 @@ func Search(c *context.APIContext) {
 		c.NotFoundOrError(err, "get user by name")
 		return
 	}
-	c.JSONSuccess(u.APIFormat())
+	user := ds.UserMatadata{
+		UserName:   u.FullName,
+		Url:        "https://sample",
+		FirstName:  "sam",
+		LastName:   "ple",
+		AliasName:  "sp",
+		EMail:      "sample@gmail.com",
+		Telephone:  "090-1111-22222",
+		ERadNumber: "12345678",
+	}
+	c.JSONSuccess(user)
 }
