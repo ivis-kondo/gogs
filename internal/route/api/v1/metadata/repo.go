@@ -7,6 +7,7 @@ import (
 	"github.com/NII-DG/gogs/internal/context"
 	"github.com/NII-DG/gogs/internal/db"
 	"github.com/NII-DG/gogs/internal/urlutil"
+	log "unknwon.dev/clog/v2"
 )
 
 func SearchRepo(c *context.APIContext) {
@@ -15,7 +16,10 @@ func SearchRepo(c *context.APIContext) {
 	ownerName := c.Params(":ownername")
 	owner, err := db.GetUserByName(ownerName)
 	if err != nil {
-		c.NotFoundOrError(err, fmt.Sprintf("failure getting user by name from DB. User Name : %s", ownerName))
+		c.JSON(http.StatusInternalServerError, map[string]interface{}{
+			"error": "Internal Server Error",
+		})
+		log.Error("failure getting user by name from DB. User Name : %s", ownerName)
 		return
 	}
 
@@ -23,14 +27,21 @@ func SearchRepo(c *context.APIContext) {
 	repoName := c.Params(":reponame")
 	repo, err := db.GetRepositoryByName(owner.ID, repoName)
 	if err != nil {
-		c.NotFoundOrError(err, fmt.Sprintf("failure getting repo by owner name and repository name from DB.  Repository : %s, Owner ID : %d", repoName, owner.ID))
+		c.JSON(http.StatusInternalServerError, map[string]interface{}{
+			"error": "Internal Server Error",
+		})
+		log.Error("failure getting repository by owner name and repository name from DB.  Repository : %s, Owner ID : %d", repoName, owner.ID)
 		return
 	}
 
 	// check request user access repository information
 	users, err := repo.GetAssignees()
 	if err != nil {
-		c.Error(err, fmt.Sprintf("failure getting read only user on repository from DB, Repository : %s", repo.Name))
+		c.JSON(http.StatusInternalServerError, map[string]interface{}{
+			"error": "Internal Server Error",
+		})
+		log.Error("failure getting read only user on repository from DB, Repository : %s", repo.Name)
+		return
 	}
 
 	request_user_id := c.User.ID
@@ -43,10 +54,10 @@ func SearchRepo(c *context.APIContext) {
 	}
 
 	if !accessRight {
-		c.JSON(http.StatusInternalServerError, map[string]interface{}{
-			"ok":    false,
-			"error": "not access",
+		c.JSON(http.StatusUnauthorized, map[string]interface{}{
+			"warm": fmt.Sprintf("you do not has access right to get %s/%s repository metadata.", ownerName, repoName),
 		})
+		log.Trace("user<%s> do not has access right to get %s/%s repository metadata.", c.User.Name, repoName)
 		return
 	}
 
