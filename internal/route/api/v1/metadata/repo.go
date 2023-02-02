@@ -2,6 +2,7 @@ package metadata
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/NII-DG/gogs/internal/context"
 	"github.com/NII-DG/gogs/internal/db"
@@ -14,7 +15,7 @@ func SearchRepo(c *context.APIContext) {
 	ownerName := c.Params(":ownername")
 	owner, err := db.GetUserByName(ownerName)
 	if err != nil {
-		c.NotFoundOrError(err, "get user by name")
+		c.NotFoundOrError(err, fmt.Sprintf("failure getting user by name from DB. User Name : %s", ownerName))
 		return
 	}
 
@@ -22,14 +23,14 @@ func SearchRepo(c *context.APIContext) {
 	repoName := c.Params(":reponame")
 	repo, err := db.GetRepositoryByName(owner.ID, repoName)
 	if err != nil {
-		c.NotFoundOrError(err, "get repo by owner name and repository name")
+		c.NotFoundOrError(err, fmt.Sprintf("failure getting repo by owner name and repository name from DB.  Repository : %s, Owner ID : %d", repoName, owner.ID))
 		return
 	}
 
 	// check request user access repository information
 	users, err := repo.GetAssignees()
 	if err != nil {
-		c.Error(err, "failure connect to DB")
+		c.Error(err, fmt.Sprintf("failure getting read only user on repository from DB, Repository : %s", repo.Name))
 	}
 
 	request_user_id := c.User.ID
@@ -42,7 +43,11 @@ func SearchRepo(c *context.APIContext) {
 	}
 
 	if !accessRight {
-		c.Error(fmt.Errorf("your not accessRight"), "failure connect to DB")
+		c.JSON(http.StatusInternalServerError, map[string]interface{}{
+			"ok":    false,
+			"error": "not access",
+		})
+		return
 	}
 
 	// Creating Repository Metadata
@@ -50,6 +55,7 @@ func SearchRepo(c *context.APIContext) {
 	url, err := urlutil.UpdatePath(c.BaseURL, path)
 	if err != nil {
 		c.Errorf(err, "%v", err)
+		return
 	}
 	repoMatadata := RepositoryMetadata{
 		Name:        repo.Name,
