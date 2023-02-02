@@ -61,6 +61,8 @@ func SearchRepo(c *context.APIContext) {
 		log.Trace("user<%s> do not has access right to get repository <%s of %s> metadata.", c.User.Name, repoName, ownerName)
 		return
 	}
+	log.Trace(c.Tr("form.UserName"))
+	log.Trace(c.Tr("form.UserName"))
 
 	// Creating Repository Metadata
 	path := repo.Owner.Name + "/" + repoName
