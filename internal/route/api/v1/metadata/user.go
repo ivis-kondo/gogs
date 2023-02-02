@@ -4,6 +4,7 @@ import (
 	"github.com/NII-DG/gogs/internal/context"
 	"github.com/NII-DG/gogs/internal/db"
 	ds "github.com/NII-DG/gogs/internal/route/api/v1/metadata/data_structure"
+	log "unknwon.dev/clog/v2"
 )
 
 func Search(c *context.APIContext) {
@@ -33,6 +34,9 @@ func Search(c *context.APIContext) {
 }
 
 func SearchUsers(c *context.APIContext, form ds.UserNameList) {
+	h := c.Header()
+	he := h.Get("Authorization")
+	log.Trace("HTTP Header %s", he)
 
 	users := ds.UsersMatadata{}
 	for _, userName := range form.UsersName {
