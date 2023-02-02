@@ -55,9 +55,9 @@ func SearchRepo(c *context.APIContext) {
 
 	if !accessRight {
 		c.JSON(http.StatusUnauthorized, map[string]interface{}{
-			"warm": fmt.Sprintf("you do not has access right to get %s/%s repository metadata.", ownerName, repoName),
+			"warm": fmt.Sprintf("you do not has access right to get repository<%s of %s> metadata.", repoName, ownerName),
 		})
-		log.Trace("user<%s> do not has access right to get %s/%s repository metadata.", c.User.Name, repoName)
+		log.Trace("user<%s> do not has access right to get repository<%s of %s> metadata.", c.User.Name, repoName, ownerName)
 		return
 	}
 
