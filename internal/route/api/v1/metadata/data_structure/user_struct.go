@@ -1,19 +1,60 @@
 package datastructurego
 
 type UserMatadata struct {
-	UserName    string `json:"gin_account_name"`
-	Url         string `json:"url"`
-	FirstName   string `json:"first_name"`
-	LastName    string `json:"last_name"`
-	AliasName   string `json:"alias"`
-	EMail       string `json:"email"`
-	Telephone   string `json:"telephone"`
-	ERadNumber  string `json:"e_rad_number"`
-	Affiliation UserOrgMetadata
+	UserName    string          `json:"gin_account_name"`
+	Url         string          `json:"url"`
+	FirstName   string          `json:"first_name"`
+	LastName    string          `json:"last_name"`
+	AliasName   string          `json:"alias"`
+	EMail       string          `json:"email"`
+	Telephone   string          `json:"telephone"`
+	ERadNumber  string          `json:"e_rad_number"`
+	Affiliation UserOrgMetadata `json:"affiliation"`
 }
 type UserOrgMetadata struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	Url         string `json:"url"`
 	AliasName   string `json:"alias"`
+}
+
+type RepositoryMetadata struct {
+	Name        string          `json:"name"`
+	Description string          `json:"description"`
+	Url         string          `json:"url"`
+	Download    DownloadMetadat `json:"download"`
+}
+
+type DownloadMetadat struct {
+	Url         string `json:"url"`
+	Description string `json:"description"`
+	SHA256      string `json:"sha256"`
+	Date        string `json:"date"`
+}
+
+type ResearchPolicyMetadata struct {
+	WorkflowIdentifier string `json:"workflow_identifier"`
+	ContentSize        string `json:"content_size"`
+	DatasetStructure   string `json:"dataset_structure"`
+}
+
+type ServiceMetadata struct {
+	Name                string `json:"name"`
+	BaseUrl             string `json:"base_url"`
+	DataAccessUrlPrefix string `json:"data_access_url_prefix"`
+}
+
+type ResearchProjectMetadata struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
+type FileMetadata struct {
+	Path               string `json:"path"`
+	Name               string `json:"name"`
+	ContentSize        string `json:"content_size"`
+	EncodingFormat     string `json:"encoding_format"`
+	SHA256             string `json:"sha256"`
+	Date               string `json:"date"`
+	IsExperimentPakage bool   `json:"is_experiment_pakage"`
 }
