@@ -58,7 +58,7 @@ func SearchRepo(c *context.APIContext) {
 		c.JSON(http.StatusUnauthorized, map[string]interface{}{
 			"warm": c.Tr("api.has_not_access_right", fmt.Sprintf("get repository <%s of %s> metadata.", repoName, ownerName)),
 		})
-		log.Trace(c.Tr("api.has_not_access_right", "mmmmmmm"))
+		log.Trace(c.Tr("has_not_access_right", "mmmmmmm"))
 		log.Trace(c.Tr("form.has_not_access_right", "mmmmmmm"))
 		log.Trace(c.Tr("form.include_error", "mmmmmmm"))
 		log.Trace(c.Tr("form.captcha_incorrect"))
