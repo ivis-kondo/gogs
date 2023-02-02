@@ -62,7 +62,7 @@ func SearchRepo(c *context.APIContext) {
 		return
 	}
 	log.Trace(c.Tr("form.UserName"))
-	log.Trace(c.Tr("form.UserName"))
+	log.Trace(c.Tr("form.RepoName"))
 
 	// Creating Repository Metadata
 	path := repo.Owner.Name + "/" + repoName
