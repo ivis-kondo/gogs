@@ -437,6 +437,7 @@ func RegisterRoutes(m *macaron.Macaron) {
 		}, reqBasicAuth())
 
 		m.Any("/*", func(c *context.Context) {
+			c.JSON(500, "aaaa")
 			c.NotFound()
 		})
 	}, context.APIContexter())
