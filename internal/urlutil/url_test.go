@@ -29,7 +29,7 @@ func TestUpdatePath(t *testing.T) {
 		{
 			url:      "https://sample.ac.jp/path1/path2?query1=value1&query1=value1#frag1",
 			newPath:  "/newpath1/newpath2/newpath3/",
-			want:     "https://sample.ac.jp/newpath1/newpath2/newpath3?query1=value1&query1=value1#frag1",
+			want:     "https://sample.ac.jp/newpath1/newpath2/newpath3/?query1=value1&query1=value1#frag1",
 			hasError: false,
 		},
 	}
@@ -38,7 +38,6 @@ func TestUpdatePath(t *testing.T) {
 		t.Run("", func(t *testing.T) {
 			result, err := urlutil.UpdatePath(test.url, test.newPath)
 			if err != nil && test.hasError {
-
 			} else if err != nil && !test.hasError {
 				t.Errorf("Failure Test. url : %s, newPath : %s, want : %s, hasError : %v", test.url, test.newPath, test.want, test.hasError)
 			} else if !test.hasError {
