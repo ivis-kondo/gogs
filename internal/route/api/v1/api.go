@@ -428,11 +428,12 @@ func RegisterRoutes(m *macaron.Macaron) {
 		m.Group("/metadata", func() {
 			m.Group("/users", func() {
 				m.Get("/:username", metadata.SearchUser)
-				m.Post("", bind(metadata.UserNameList{}), metadata.SearchUsers)
+				m.Get("", bind(metadata.UserNameList{}), metadata.SearchUsers)
 			})
 			m.Group("/repo", func() {
 				m.Get("/:ownername/:reponame", metadata.SearchRepo)
 			})
+			m.Get("")
 		}, reqBasicAuth())
 
 		m.Any("/*", func(c *context.Context) {
