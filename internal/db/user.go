@@ -72,7 +72,6 @@ type User struct {
 		ユーザー登録の追加分仮置き
 		既存分との兼ね合いを考慮し整理すること
 		水平展開 -> func SignUpPost
-		AffiliationはLocationとしている
 	*/
 	Telephone              string
 	FirstName              string `xorm:"NOT NULL" gorm:"NOT NULL"` //FullNameを残すかどうか
