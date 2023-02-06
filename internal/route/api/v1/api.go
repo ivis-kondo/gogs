@@ -434,7 +434,7 @@ func RegisterRoutes(m *macaron.Macaron) {
 				m.Get("/:ownername/:reponame", metadata.SearchRepo)
 			})
 			m.Get("")
-		}, reqBasicAuth())
+		}, reqToken())
 
 		// When request route is no defined route, return 404
 		m.Any("/*", func(c *context.Context) {
