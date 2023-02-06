@@ -28,12 +28,6 @@
 						<label for="user_name">{{.i18n.Tr "username"}}</label>
 						<input id="user_name" name="user_name" value="{{.user_name}}" autofocus required>
 					</div>
-					<div class="required inline fields field">
-						<label for="first_name">{{.i18n.Tr "first_name"}}</label>
-						<input id="first_name" name="first_name" value="{{.first_name}}" required>
-						<label for="last_name">{{.i18n.Tr "last_name"}}</label>
-						<input id="last_name" name="last_name" value="{{.last_name}}" required>
-					</div>
 					<div class="required inline field {{if .Err_Password}}error{{end}}">
 						<label for="password">{{.i18n.Tr "password"}}</label>
 						<input id="password" name="password" type="password" value="{{.password}}" required>
@@ -41,6 +35,12 @@
 					<div class="required inline field {{if .Err_Password}}error{{end}}">
 						<label for="retype">{{.i18n.Tr "re_type"}}</label>
 						<input id="retype" name="retype" type="password" value="{{.retype}}" required>
+					</div>
+					<div class="required inline fields field">
+						<label for="first_name">{{.i18n.Tr "first_name"}}</label>
+						<input id="first_name" name="first_name" value="{{.first_name}}" required>
+						<label for="last_name">{{.i18n.Tr "last_name"}}</label>
+						<input id="last_name" name="last_name" value="{{.last_name}}" required>
 					</div>
 					<div class="required inline field {{if .Err_Email}}error{{end}}"
 							 data-tooltip="Please register with an institutional email (see above)">
