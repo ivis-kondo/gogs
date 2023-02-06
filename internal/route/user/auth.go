@@ -13,6 +13,8 @@ import (
 	"github.com/pkg/errors"
 	log "unknwon.dev/clog/v2"
 
+	"regexp"
+
 	"github.com/NII-DG/gogs/internal/conf"
 	"github.com/NII-DG/gogs/internal/context"
 	"github.com/NII-DG/gogs/internal/db"
@@ -330,13 +332,19 @@ func SignUpPost(c *context.Context, cpt *captcha.Captcha, f form.Register) {
 		c.RenderWithErr(c.Tr("form.password_not_match"), SIGNUP, &f)
 		return
 	}
+	// generate User.FullName
+	is, _ := regexp.MatchString("[A-Za-z]+", f.FirstName)
+	log.Trace("f.FirstName is %v", is)
+
+	is, _ = regexp.MatchString("[A-Za-z]+", f.LastName)
+	log.Trace("f.LastName is %v", is)
 
 	u := &db.User{
 		Name:                   f.UserName,
 		Email:                  f.Email,
 		Telephone:              f.Telephone,
 		Passwd:                 f.Password,
-		FullName:               f.FullName,
+		FullName:               "",
 		FirstName:              f.FirstName,
 		LastName:               f.LastName,
 		ERadResearcherNumber:   f.ERadResearcherNumber,
