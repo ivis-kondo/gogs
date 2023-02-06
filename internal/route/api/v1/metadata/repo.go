@@ -45,6 +45,8 @@ func SearchRepo(c *context.APIContext) {
 	}
 
 	request_user_id := c.User.ID
+	log.Trace(" req user ID : %d", request_user_id)
+	log.Trace(" req user Name : %d", c.User.Name)
 
 	accessRight := false
 	for _, u := range users {
