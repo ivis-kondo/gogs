@@ -15,18 +15,20 @@ func SearchUser(c *context.APIContext) {
 	}
 
 	org := UserOrgMetadata{
-		Name:      "東京大学",
-		Url:       "https://u_tokyo",
-		AliasName: "U-Tokyo",
+		Name:        u.Location,
+		Url:         u.AffiliationURL,
+		AliasName:   u.AffiliationAlias,
+		Description: u.AffiliationDescription,
 	}
 	user := UserMatadata{
-		UserName:    u.FullName,
-		Url:         "https://sample",
-		FirstName:   "sam",
-		LastName:    "ple",
-		AliasName:   "sp",
-		EMail:       "sample@gmail.com",
-		Telephone:   "090-1111-22222",
+		UserName:    u.Name,
+		Url:         u.PersonalURL,
+		FirstName:   u.FirstName,
+		LastName:    u.LastName,
+		AliasName:   "",
+		EMail:       u.Email,
+		Telephone:   u.Telephone,
+		ERadNumber:  u.ERadResearcherNumber,
 		Affiliation: org,
 	}
 	c.JSONSuccess(user)
@@ -46,18 +48,20 @@ func SearchUsers(c *context.APIContext, form UserNameList) {
 			return
 		}
 		org := UserOrgMetadata{
-			Name:      "東京大学",
-			Url:       "https://u_tokyo",
-			AliasName: "U-Tokyo",
+			Name:        u.Location,
+			Url:         u.AffiliationURL,
+			AliasName:   u.AffiliationAlias,
+			Description: u.AffiliationDescription,
 		}
 		user := UserMatadata{
-			UserName:    u.FullName,
-			Url:         "https://sample",
-			FirstName:   "sam",
-			LastName:    "ple",
-			AliasName:   "sp",
-			EMail:       "sample@gmail.com",
-			Telephone:   "090-1111-22222",
+			UserName:    u.Name,
+			Url:         u.PersonalURL,
+			FirstName:   u.FirstName,
+			LastName:    u.LastName,
+			AliasName:   "",
+			EMail:       u.Email,
+			Telephone:   u.Telephone,
+			ERadNumber:  u.ERadResearcherNumber,
 			Affiliation: org,
 		}
 		users.Users = append(users.Users, user)
