@@ -73,7 +73,7 @@ func SettingsPost(c *context.Context, f form.UpdateOrgSetting) {
 	org.FullName = f.FullName
 	org.Description = f.Description
 	org.Website = f.Website
-	org.Location = f.Location
+	org.Affiliation = f.Location
 	if err := db.UpdateUser(org); err != nil {
 		c.Error(err, "update user")
 		return

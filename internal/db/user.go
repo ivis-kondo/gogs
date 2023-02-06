@@ -62,7 +62,7 @@ type User struct {
 	OwnedOrgs   []*User       `xorm:"-" gorm:"-" json:"-"`
 	Orgs        []*User       `xorm:"-" gorm:"-" json:"-"`
 	Repos       []*Repository `xorm:"-" gorm:"-" json:"-"`
-	Location    string
+	Affiliation string
 	Website     string
 	Rands       string `xorm:"VARCHAR(10)" gorm:"TYPE:VARCHAR(10)"`
 	Salt        string `xorm:"VARCHAR(10)" gorm:"TYPE:VARCHAR(10)"`
@@ -758,7 +758,7 @@ func updateUser(e Engine, u *User) error {
 	}
 
 	u.LowerName = strings.ToLower(u.Name)
-	u.Location = tool.TruncateString(u.Location, 255)
+	u.Affiliation = tool.TruncateString(u.Affiliation, 255)
 	u.Website = tool.TruncateString(u.Website, 255)
 	u.Description = tool.TruncateString(u.Description, 255)
 

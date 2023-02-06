@@ -52,7 +52,7 @@ func Settings(c *context.Context) {
 	c.Data["full_name"] = c.User.FullName
 	c.Data["email"] = c.User.Email
 	c.Data["website"] = c.User.Website
-	c.Data["location"] = c.User.Location
+	c.Data["location"] = c.User.Affiliation
 	c.Success(SETTINGS_PROFILE)
 }
 
@@ -98,7 +98,7 @@ func SettingsPost(c *context.Context, f form.UpdateProfile) {
 	c.User.FullName = f.FullName
 	c.User.Email = f.Email
 	c.User.Website = f.Website
-	c.User.Location = f.Location
+	c.User.Affiliation = f.Location
 	if err := db.UpdateUser(c.User); err != nil {
 		if db.IsErrEmailAlreadyUsed(err) {
 			msg := c.Tr("form.email_been_used")

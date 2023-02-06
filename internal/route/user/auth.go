@@ -341,7 +341,7 @@ func SignUpPost(c *context.Context, cpt *captcha.Captcha, f form.Register) {
 		LastName:               f.LastName,
 		ERadResearcherNumber:   f.ERadResearcherNumber,
 		PersonalURL:            f.PersonalURL,
-		Location:               f.Affiliation,
+		Affiliation:            f.Affiliation,
 		AffiliationAlias:       f.AffiliationAlias,
 		AffiliationDescription: f.AffiliationDescription,
 		AffiliationURL:         f.AffiliationURL,

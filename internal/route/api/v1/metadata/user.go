@@ -15,7 +15,7 @@ func SearchUser(c *context.APIContext) {
 	}
 
 	org := UserOrgMetadata{
-		Name:        u.Location,
+		Name:        u.Affiliation,
 		Url:         u.AffiliationURL,
 		AliasName:   u.AffiliationAlias,
 		Description: u.AffiliationDescription,
@@ -48,7 +48,7 @@ func SearchUsers(c *context.APIContext, form UserNameList) {
 			return
 		}
 		org := UserOrgMetadata{
-			Name:        u.Location,
+			Name:        u.Affiliation,
 			Url:         u.AffiliationURL,
 			AliasName:   u.AffiliationAlias,
 			Description: u.AffiliationDescription,

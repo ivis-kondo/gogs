@@ -199,7 +199,7 @@ func EditUserPost(c *context.Context, f form.AdminEditUser) {
 	u.FullName = f.FullName
 	u.Email = f.Email
 	u.Website = f.Website
-	u.Location = f.Location
+	u.Affiliation = f.Location
 	u.MaxRepoCreation = f.MaxRepoCreation
 	u.IsActive = f.Active
 	u.IsAdmin = f.Admin
