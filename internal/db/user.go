@@ -75,13 +75,13 @@ type User struct {
 		AffiliationはLocationとしている
 	*/
 	Telephone              string
-	FirstName              string //FullNameを残すかどうか
-	LastName               string
+	FirstName              string `xorm:"NOT NULL" gorm:"NOT NULL"` //FullNameを残すかどうか
+	LastName               string `xorm:"NOT NULL" gorm:"NOT NULL"`
 	ERadResearcherNumber   string
 	PersonalURL            string //Websiteとの使い分けどうするか
 	AffiliationAlias       string
 	AffiliationDescription string
-	AffiliationURL         string
+	AffiliationURL         string `xorm:"NOT NULL" gorm:"NOT NULL"`
 
 	Created     time.Time `xorm:"-" gorm:"-" json:"-"`
 	CreatedUnix int64
