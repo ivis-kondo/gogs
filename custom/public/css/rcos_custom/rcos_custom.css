@@ -1,0 +1,12 @@
+/*----------------
+    signup.tmpl
+-----------------*/
+.user.signup form .inline.fields.field input{
+    width: 18% !important;
+}
+.user.signup form .inline.fields.field label[for="last_name"]{
+    width: 80px !important;
+}
+.user.signup form .inline.field .help {
+    margin-left: 220px !important;
+}

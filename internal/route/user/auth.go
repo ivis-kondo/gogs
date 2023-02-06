@@ -332,12 +332,20 @@ func SignUpPost(c *context.Context, cpt *captcha.Captcha, f form.Register) {
 	}
 
 	u := &db.User{
-		Name:     f.UserName,
-		Email:    f.Email,
-		Passwd:   f.Password,
-		FullName: f.FullName,
-		Location: f.Affiliation,
-		IsActive: !conf.Auth.RequireEmailConfirmation,
+		Name:                   f.UserName,
+		Email:                  f.Email,
+		Telephone:              f.Telephone,
+		Passwd:                 f.Password,
+		FullName:               f.FullName,
+		FirstName:              f.FirstName,
+		LastName:               f.LastName,
+		ERadResearcherNumber:   f.ERadResearcherNumber,
+		PersonalURL:            f.PersonalURL,
+		Location:               f.Affiliation,
+		AffiliationAlias:       f.AffiliationAlias,
+		AffiliationDescription: f.AffiliationDescription,
+		AffiliationURL:         f.AffiliationURL,
+		IsActive:               !conf.Auth.RequireEmailConfirmation,
 	}
 	if err := db.CreateUser(u); err != nil {
 		switch {
