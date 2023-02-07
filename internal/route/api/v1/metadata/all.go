@@ -125,15 +125,20 @@ func GetAllMetadata(c *context.APIContext, form Repository) {
 			AliasName:   u.AffiliationAlias,
 			Description: u.AffiliationDescription,
 		}
-		// personalUrl := ""
-		// if len(u.PersonalURL) > 0 {
-		// 	personalUrl = u.PersonalURL
-		// } else {
-		// 	personalUrl = fmt.Sprintf()
-		// }
+		personalUrl := ""
+		if len(u.PersonalURL) > 0 {
+			personalUrl = u.PersonalURL
+		} else {
+			url, err := urlutil.UpdatePath(c.BaseURL, u.Name)
+			if err != nil {
+				c.Errorf(err, "%v", err)
+				return
+			}
+			personalUrl = url
+		}
 		user := UserMatadata{
 			UserName:    u.Name,
-			Url:         u.PersonalURL,
+			Url:         personalUrl,
 			FirstName:   u.FirstName,
 			LastName:    u.LastName,
 			AliasName:   u.AliasName,
