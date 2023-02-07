@@ -109,7 +109,6 @@ type UpdateProfile struct {
 	LastName               string `binding:"Required"`                          // 氏名(姓)
 	Email                  string `binding:"Required;Email;MaxSize(254)"`       //メールアドレス（必須）
 	Telephone              string //電話番号（任意）
-	Website                string `binding:"Url;MaxSize(100)"`
 	ERadResearcherNumber   string //研究者e-Rad番号（任意）
 	PersonalURL            string `binding:"Url"`                   //個人URL（任意）
 	Affiliation            string `binding:"Required;MaxSize(255)"` //所属組織名（必須）

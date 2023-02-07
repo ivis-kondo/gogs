@@ -116,8 +116,14 @@ func SettingsPost(c *context.Context, f form.UpdateProfile) {
 	}
 	c.User.FullName = fullName
 	c.User.Email = f.Email
-	c.User.Website = f.Website
+	c.User.Telephone = f.Telephone
+	c.User.PersonalURL = f.PersonalURL
+	c.User.ERadResearcherNumber = f.ERadResearcherNumber
 	c.User.Affiliation = f.Affiliation
+	c.User.AffiliationAlias = f.AffiliationAlias
+	c.User.AffiliationDescription = f.AffiliationDescription
+	c.User.AffiliationURL = f.AffiliationURL
+
 	if err := db.UpdateUser(c.User); err != nil {
 		if db.IsErrEmailAlreadyUsed(err) {
 			msg := c.Tr("form.email_been_used")
