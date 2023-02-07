@@ -73,13 +73,14 @@ func SearchRepo(c *context.APIContext) {
 		return
 	}
 
+	log.Trace("UpdatedUnix : %d", repo.UpdatedUnix)
 	updatetime := time.Unix(repo.UpdatedUnix, 0)
-	timeISO, _ := time.Parse("1900-01-01", updatetime.String())
+	log.Trace("updatetime : %s", updatetime.String())
 
 	download := DownloadMetadat{
 		Url:         url,
 		Description: fmt.Sprint(c.Tr("metadata.download.description", fmt.Sprintf("%s/%s", repo.Owner.Name, repoName))),
-		Date:        timeISO.String(),
+		Date:        "",
 	}
 
 	// Creating Repository Metadata
