@@ -129,6 +129,12 @@
 						<label for="project_description">{{.i18n.Tr "project_description"}}</label>
 						<textarea class="autosize" id="project_description" name="project_description" rows="3">{{.project_description}}</textarea>
 					</div>
+					<div class="inline field {{if .Err_Description}}error{{end}}">
+						<label for="description">{{.i18n.Tr "repo.repo_desc"}}</label>
+						<textarea class="autosize" id="description" name="description" rows="3">{{.description}}</textarea>
+						<span class="help">{{.i18n.Tr "repo.repo_description_helper" | Safe}}</span>
+						<span class="help">{{.i18n.Tr "repo.repo_description_length"}}: <span id="descLength"></span></span>
+					</div>
 					<!-- RCOS Code end-->
 
 					<div class="ui divider"></div>
