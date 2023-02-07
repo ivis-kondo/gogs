@@ -3,6 +3,7 @@ package metadata
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/NII-DG/gogs/internal/context"
 	"github.com/NII-DG/gogs/internal/db"
@@ -64,9 +65,25 @@ func SearchRepo(c *context.APIContext) {
 		return
 	}
 
-	// Creating Repository Metadata
-	path := repo.Owner.Name + "/" + repoName
+	///admin1/repo5/archive/master.zip
+	path := fmt.Sprintf("%s/%s/archive/%s.zip", repo.Owner.Name, repoName, c.Params(":ownername"))
 	url, err := urlutil.UpdatePath(c.BaseURL, path)
+	if err != nil {
+		c.Errorf(err, "%v", err)
+		return
+	}
+
+	updatetime := time.Unix(repo.UpdatedUnix, 0).Format("YYYY-MM-DD")
+
+	download := DownloadMetadat{
+		Url:         url,
+		Description: fmt.Sprint(c.Tr("metadata.download.description", fmt.Sprintf("%s/%s", repo.Owner.Name, repoName))),
+		Date:        updatetime,
+	}
+
+	// Creating Repository Metadata
+	path = repo.Owner.Name + "/" + repoName
+	url, err = urlutil.UpdatePath(c.BaseURL, path)
 	if err != nil {
 		c.Errorf(err, "%v", err)
 		return
@@ -75,6 +92,7 @@ func SearchRepo(c *context.APIContext) {
 		Name:        repo.Name,
 		Description: repo.Description,
 		Url:         url,
+		Download:    download,
 	}
 	c.JSONSuccess(repoMatadata)
 }
