@@ -60,7 +60,7 @@ func SettingsProtectePost(c *context.Context, f form.ResearchProtect) {
 		c.Error(err, "update repository")
 		return
 	}
-	c.Flash.Success(c.Tr("repo.settings.update_settings_success"))
+	c.Flash.Success(c.Tr("repo.settings.update_project_success"))
 	c.Redirect(repo.Link() + "/settings/project")
 }
 
