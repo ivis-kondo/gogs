@@ -37,6 +37,14 @@ func GetAllMetadata(c *context.APIContext, form Repository) {
 
 	// check repository has branch
 	log.Trace("repopath : %s", repo.RepoPath())
+	bs, _ := repo.GetBranches()
+	for _, b := range bs {
+		log.Trace("Branch : %s", b.Name)
+	}
+	if _, err := repo.GetBranch(form.BranchName); err != nil {
+		return
+	}
+	log.Trace("Get Branch")
 
 	// check request user access repository information
 	users, err := repo.GetAssignees()
