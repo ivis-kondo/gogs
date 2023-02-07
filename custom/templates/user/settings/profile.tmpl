@@ -19,10 +19,6 @@
 							<p class="help text blue">{{$.i18n.Tr "settings.password_username_disabled"}}</p>
 							{{end}}
 						</div>
-						<div class="field {{if .Err_FullName}}error{{end}}">
-							<label for="full_name">{{.i18n.Tr "settings.full_name"}}</label>
-							<input id="full_name" name="full_name" value="{{.full_name}}">
-						</div>
 						<!-- RCOS -->
 						<div class="required inline fields field">
 							<label for="first_name">{{.i18n.Tr "first_name"}}</label>

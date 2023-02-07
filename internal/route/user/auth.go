@@ -342,8 +342,6 @@ func SignUpPost(c *context.Context, cpt *captcha.Captcha, f form.Register) {
 		fullName = fmt.Sprintf("%s %s", f.FirstName, f.LastName)
 	}
 
-	log.Trace("fullName : %s", fullName)
-
 	u := &db.User{
 		Name:                   f.UserName,
 		Email:                  f.Email,

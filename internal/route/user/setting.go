@@ -11,6 +11,7 @@ import (
 	"html/template"
 	"image/png"
 	"io/ioutil"
+	"regexp"
 	"strings"
 
 	"github.com/pquerna/otp"
@@ -97,7 +98,17 @@ func SettingsPost(c *context.Context, f form.UpdateProfile) {
 		c.User.LowerName = strings.ToLower(f.Name)
 	}
 
-	c.User.FullName = f.FullName
+	c.User.FirstName = f.FirstName
+	c.User.LastName = f.LastName
+	r := regexp.MustCompile("[A-Za-z]+")
+	fullName := ""
+	if !r.MatchString(f.FirstName) || !r.MatchString(f.LastName) {
+		// japanese user name
+		fullName = fmt.Sprintf("%s %s", f.LastName, f.FirstName)
+	} else {
+		fullName = fmt.Sprintf("%s %s", f.FirstName, f.LastName)
+	}
+	c.User.FullName = fullName
 	c.User.Email = f.Email
 	c.User.Website = f.Website
 	c.User.Affiliation = f.Location

@@ -104,11 +104,12 @@ func (f *SignIn) Validate(ctx *macaron.Context, errs binding.Errors) binding.Err
 //         \/         \/                                   \/        \/        \/
 
 type UpdateProfile struct {
-	Name     string `binding:"Required;AlphaDashDot;MaxSize(35)"`
-	FullName string `binding:"MaxSize(100)"`
-	Email    string `binding:"Required;Email;MaxSize(254)"`
-	Website  string `binding:"Url;MaxSize(100)"`
-	Location string `binding:"MaxSize(50)"`
+	Name      string `binding:"Required;AlphaDashDot;MaxSize(35)"`
+	FirstName string `binding:"Required"` // 氏名(名)
+	LastName  string `binding:"Required"` // 氏名(姓)
+	Email     string `binding:"Required;Email;MaxSize(254)"`
+	Website   string `binding:"Url;MaxSize(100)"`
+	Location  string `binding:"MaxSize(50)"`
 }
 
 func (f *UpdateProfile) Validate(ctx *macaron.Context, errs binding.Errors) binding.Errors {
