@@ -36,6 +36,16 @@ func GetRepo(c *context.APIContext) {
 		log.Error("failure getting repository by owner name and repository name from DB.  Repository : %s, Owner ID : %d", repoName, owner.ID)
 		return
 	}
+	branchname := c.Params(":branchname")
+
+	// check repository has branch
+	if _, err := repo.GetBranch(branchname); err != nil {
+		c.JSON(http.StatusNotFound, map[string]interface{}{
+			"warm": fmt.Sprintf("this repository <%s/%s> dosen't have %s baranch.", ownerName, repoName, branchname),
+		})
+		log.Error("this repository <%s/%s> dosen't have %s baranch.", ownerName, repoName, branchname)
+		return
+	}
 
 	// check request user access repository information
 	users, err := repo.GetAssignees()
@@ -64,7 +74,7 @@ func GetRepo(c *context.APIContext) {
 		return
 	}
 
-	path := fmt.Sprintf("%s/%s/archive/%s.zip", repo.Owner.Name, repoName, c.Params(":ownername"))
+	path := fmt.Sprintf("%s/%s/archive/%s.zip", repo.Owner.Name, repoName, branchname)
 	url, err := urlutil.UpdatePath(c.BaseURL, path)
 	if err != nil {
 		c.Errorf(err, "%v", err)
