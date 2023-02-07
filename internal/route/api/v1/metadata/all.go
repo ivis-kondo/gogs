@@ -125,6 +125,12 @@ func GetAllMetadata(c *context.APIContext, form Repository) {
 			AliasName:   u.AffiliationAlias,
 			Description: u.AffiliationDescription,
 		}
+		// personalUrl := ""
+		// if len(u.PersonalURL) > 0 {
+		// 	personalUrl = u.PersonalURL
+		// } else {
+		// 	personalUrl = fmt.Sprintf()
+		// }
 		user := UserMatadata{
 			UserName:    u.Name,
 			Url:         u.PersonalURL,
