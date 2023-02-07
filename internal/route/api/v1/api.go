@@ -436,7 +436,7 @@ func RegisterRoutes(m *macaron.Macaron) {
 			m.Group("/project", func() {
 				m.Post("", bind(metadata.Repository{}), metadata.GetProject)
 			})
-			m.Get("")
+			m.Post("", bind(metadata.Repository{}), metadata.GetAllMetadata)
 		}, reqToken())
 
 		// When request route is no defined route, return 404

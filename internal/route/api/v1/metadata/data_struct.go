@@ -13,7 +13,7 @@ type UserMatadata struct {
 }
 
 type UsersMatadata struct {
-	Users []UserMatadata `json:"persons"`
+	Users []UserMatadata `json:"users"`
 }
 type UserOrgMetadata struct {
 	Name        string `json:"name"`
@@ -63,6 +63,18 @@ type FileMetadata struct {
 	IsExperimentPakage bool   `json:"is_experiment_pakage"`
 }
 
+type WholeMetadata struct {
+	Service                ServiceMetadata         `json:"service"`
+	ResearchProject        ResearchProjectMetadata `json:"resarch_project"`
+	ResearchPolicyMetadata ResearchPolicyMetadata  `json:"research_policy"`
+	RepositoryMetadata     RepositoryMetadata      `json:"repository"`
+	Users                  []UserMatadata          `json:"users"`
+	Files                  []FileMetadata          `json:"files"`
+}
+
+/*
+ Form structure
+**/
 type UserNameList struct {
 	UsersName []string `json:"users_name"`
 }
