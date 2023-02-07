@@ -449,8 +449,8 @@ func runWeb(c *cli.Context) error {
 					}
 				})
 				m.Group("/project", func() {
-					m.Get("")
-					m.Post("")
+					m.Get("", repo.SettingsProtecte)
+					m.Post("", repo.SettingsProtectePost)
 				})
 
 				m.Group("/hooks", func() {

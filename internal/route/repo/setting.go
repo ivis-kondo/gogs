@@ -37,7 +37,7 @@ const (
 	SETTINGS_PROJECT          = "repo/settings/project"
 )
 
-func SettingsProtected(c *context.Context) {
+func SettingsProtecte(c *context.Context) {
 	c.Data["Title"] = c.Tr("repo.settings")
 	c.Data["PageIsSettingsProject"] = true
 	c.Data["project_name"] = c.Repo.Repository.ProtectName
@@ -54,7 +54,7 @@ func SettingsProtected(c *context.Context) {
 
 }
 
-func SettingsProtectedPost(c *context.Context) {
+func SettingsProtectePost(c *context.Context) {
 
 }
 
