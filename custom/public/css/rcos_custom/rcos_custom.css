@@ -18,6 +18,10 @@
     width: 80px !important;
     margin:0px 0px 0px 40px;
 }
+.user.settings.profile .inline.fields.field label[for="first_name"]{
+    width: 80px !important;
+
+}
 .user.settings.profile .inline.field .help {
     margin-left: 220px !important;
 }
