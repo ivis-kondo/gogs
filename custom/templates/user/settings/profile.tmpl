@@ -26,6 +26,10 @@
 							<label for="last_name">{{.i18n.Tr "last_name"}}</label>
 							<input id="last_name" name="last_name" value="{{.last_name}}" required>
 						</div>
+						<div class="field">
+							<label for="alias_name">{{.i18n.Tr "alias_name"}}</label>
+							<input id="alias_name" name="alias_name" value="{{.alias_name}}">
+						</div>
 						<!-- RCOS -->
 						<div class="required field {{if .Err_Email}}error{{end}}">
 							<label for="email">{{.i18n.Tr "email"}}</label>

@@ -42,6 +42,10 @@
 						<label for="last_name">{{.i18n.Tr "last_name"}}</label>
 						<input id="last_name" name="last_name" value="{{.last_name}}" required>
 					</div>
+					<div class="inline field">
+						<label for="alias_name">{{.i18n.Tr "alias_name"}}</label>
+						<input id="alias_name" name="alias_name" value="{{.alias_name}}">
+					</div>
 					<div class="required inline field {{if .Err_Email}}error{{end}}"
 							 data-tooltip="Please register with an institutional email (see above)">
 						<label for="email">{{.i18n.Tr "email"}}</label>
