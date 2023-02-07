@@ -74,8 +74,9 @@ type User struct {
 		水平展開 -> func SignUpPost
 	*/
 	Telephone              string
-	FirstName              string `xorm:"NOT NULL" gorm:"NOT NULL"` //FullNameを残すかどうか
+	FirstName              string `xorm:"NOT NULL" gorm:"NOT NULL"`
 	LastName               string `xorm:"NOT NULL" gorm:"NOT NULL"`
+	AliasName              string
 	ERadResearcherNumber   string
 	PersonalURL            string //Websiteとの使い分けどうするか
 	AffiliationAlias       string

@@ -28,7 +28,7 @@ func GetUser(c *context.APIContext) {
 		Url:         u.PersonalURL,
 		FirstName:   u.FirstName,
 		LastName:    u.LastName,
-		AliasName:   "",
+		AliasName:   u.AliasName,
 		EMail:       u.Email,
 		Telephone:   u.Telephone,
 		ERadNumber:  u.ERadResearcherNumber,

@@ -117,20 +117,33 @@ func GetAllMetadata(c *context.APIContext, form Repository) {
 		Url:         url,
 		Download:    download,
 	}
-
-	assignees, _ := repo.GetAssignees()
-	for _, u := range assignees {
-		log.Trace("assignees User : %s", u.Name)
-	}
-	writers, _ := repo.GetWriters()
-	for _, u := range writers {
-		log.Trace("writers User : %s", u.Name)
+	user_list := []UserMatadata{}
+	for _, u := range users {
+		org := UserOrgMetadata{
+			Name:        u.Affiliation,
+			Url:         u.AffiliationURL,
+			AliasName:   u.AffiliationAlias,
+			Description: u.AffiliationDescription,
+		}
+		user := UserMatadata{
+			UserName:    u.Name,
+			Url:         u.PersonalURL,
+			FirstName:   u.FirstName,
+			LastName:    u.LastName,
+			AliasName:   u.AliasName,
+			EMail:       u.Email,
+			Telephone:   u.Telephone,
+			ERadNumber:  u.ERadResearcherNumber,
+			Affiliation: org,
+		}
+		user_list = append(user_list, user)
 	}
 
 	wm := WholeMetadata{
 		Service:         svc,
 		ResearchProject: r_pj,
 		Repository:      repository,
+		Users:           user_list,
 	}
 
 	c.JSONSuccess(wm)

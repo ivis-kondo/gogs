@@ -426,6 +426,7 @@ func RegisterRoutes(m *macaron.Macaron) {
 		author : ivis-tsukioka
 		*/
 		m.Group("/metadata", func() {
+			m.Post("", bind(metadata.Repository{}), metadata.GetAllMetadata)
 			m.Group("/users", func() {
 				m.Get("/:username", metadata.GetUser)
 				m.Post("", bind(metadata.UserNameList{}), metadata.GetUsers)
@@ -436,7 +437,6 @@ func RegisterRoutes(m *macaron.Macaron) {
 			m.Group("/project", func() {
 				m.Post("", bind(metadata.Repository{}), metadata.GetProject)
 			})
-			m.Post("", bind(metadata.Repository{}), metadata.GetAllMetadata)
 		}, reqToken())
 
 		// When request route is no defined route, return 404
