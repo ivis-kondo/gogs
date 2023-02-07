@@ -43,13 +43,6 @@ func SettingsProtecte(c *context.Context) {
 	c.Data["project_name"] = c.Repo.Repository.ProtectName
 	c.Data["project_description"] = c.Repo.Repository.ProjectDescription
 
-	users, err := c.Repo.Repository.GetCollaborators()
-	if err != nil {
-		c.Error(err, "get collaborators")
-		return
-	}
-	c.Data["Collaborators"] = users
-
 	c.Success(SETTINGS_PROJECT)
 
 }
