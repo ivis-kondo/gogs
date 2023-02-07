@@ -3,17 +3,15 @@ package metadata
 import (
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/NII-DG/gogs/internal/context"
 	"github.com/NII-DG/gogs/internal/db"
-	"github.com/NII-DG/gogs/internal/urlutil"
 	log "unknwon.dev/clog/v2"
 )
 
-func GetRepo(c *context.APIContext) {
+func GetProject(c *context.APIContext, form Repository) {
 	req_user := c.User
-	log.Trace("API to get Repository Metadata has been done by User[ID : %d]", req_user.ID)
+	log.Trace("API to get Research Project Metadata has been done by User[ID : %d]", req_user.ID)
 
 	// Getting repository owner information from DB
 	ownerName := c.Params(":ownername")
@@ -58,38 +56,15 @@ func GetRepo(c *context.APIContext) {
 	if !accessRight {
 
 		c.JSON(http.StatusUnauthorized, map[string]interface{}{
-			"warm": fmt.Sprintf("you do not has access right to get repository <%s of %s> metadata.", repoName, ownerName),
+			"warm": fmt.Sprintf("you do not has access right to get Reaserch Project <%s of %s> metadata.", repoName, ownerName),
 		})
-		log.Trace("user<%s> do not has access right to get repository <%s of %s> metadata.", req_user.Name, repoName, ownerName)
+		log.Trace("user<%s> do not has access right to get Reaserch Project <%s of %s> metadata.", req_user.Name, repoName, ownerName)
 		return
 	}
 
-	path := fmt.Sprintf("%s/%s/archive/%s.zip", repo.Owner.Name, repoName, c.Params(":ownername"))
-	url, err := urlutil.UpdatePath(c.BaseURL, path)
-	if err != nil {
-		c.Errorf(err, "%v", err)
-		return
+	pj := ResearchProjectMetadata{
+		Name:        repo.ProtectName,
+		Description: repo.ProjectDescription,
 	}
-
-	updatetime := time.Unix(repo.UpdatedUnix, 0).Format("2006-01-02")
-	download := DownloadMetadat{
-		Url:         url,
-		Description: fmt.Sprint(c.Tr("metadata.download.description", fmt.Sprintf("%s/%s", repo.Owner.Name, repoName))),
-		Date:        updatetime,
-	}
-
-	// Creating Repository Metadata
-	path = repo.Owner.Name + "/" + repoName
-	url, err = urlutil.UpdatePath(c.BaseURL, path)
-	if err != nil {
-		c.Errorf(err, "%v", err)
-		return
-	}
-	repoMatadata := RepositoryMetadata{
-		Name:        repo.Name,
-		Description: repo.Description,
-		Url:         url,
-		Download:    download,
-	}
-	c.JSONSuccess(repoMatadata)
+	c.JSONSuccess(pj)
 }

@@ -6,7 +6,10 @@ import (
 	log "unknwon.dev/clog/v2"
 )
 
-func SearchUser(c *context.APIContext) {
+func GetUser(c *context.APIContext) {
+	req_user := c.User
+	log.Trace("API to get Users Metadata has been done by User[ID : %d]", req_user.ID)
+
 	userName := c.Params(":username")
 	u, err := db.GetUserByName(userName)
 	if err != nil {
@@ -34,11 +37,9 @@ func SearchUser(c *context.APIContext) {
 	c.JSONSuccess(user)
 }
 
-func SearchUsers(c *context.APIContext, form UserNameList) {
+func GetUsers(c *context.APIContext, form UserNameList) {
 	req_user := c.User
-	log.Trace("user : %s", req_user.ID)
-	log.Trace("user : %s", req_user.FullName)
-	log.Trace("user : %s", req_user.Email)
+	log.Trace("API to get Users Metadata has been done by User[ID : %d]", req_user.ID)
 
 	users := UsersMatadata{}
 	for _, userName := range form.UsersName {

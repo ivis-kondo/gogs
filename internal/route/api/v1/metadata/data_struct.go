@@ -66,3 +66,9 @@ type FileMetadata struct {
 type UserNameList struct {
 	UsersName []string `json:"users_name"`
 }
+
+type Repository struct {
+	OwnerName  string `json:"owner_name"`
+	RepoName   string `json:"repo_name"`
+	BranchName string `json:"branch_name"`
+}
