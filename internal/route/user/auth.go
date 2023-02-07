@@ -333,18 +333,23 @@ func SignUpPost(c *context.Context, cpt *captcha.Captcha, f form.Register) {
 		return
 	}
 	// generate User.FullName
-	is, _ := regexp.MatchString("[A-Za-z]+", f.FirstName)
-	log.Trace("f.FirstName is %v", is)
+	r := regexp.MustCompile("[A-Za-z]+")
+	fullName := ""
+	if !r.MatchString(f.FirstName) || !r.MatchString(f.LastName) {
+		// japanese user name
+		fullName = fmt.Sprintf("%s %s", f.LastName, f.FirstName)
+	} else {
+		fullName = fmt.Sprintf("%s %s", f.FirstName, f.LastName)
+	}
 
-	is, _ = regexp.MatchString("[A-Za-z]+", f.LastName)
-	log.Trace("f.LastName is %v", is)
+	log.Trace("fullName : %s", fullName)
 
 	u := &db.User{
 		Name:                   f.UserName,
 		Email:                  f.Email,
 		Telephone:              f.Telephone,
 		Passwd:                 f.Password,
-		FullName:               "",
+		FullName:               fullName,
 		FirstName:              f.FirstName,
 		LastName:               f.LastName,
 		ERadResearcherNumber:   f.ERadResearcherNumber,
