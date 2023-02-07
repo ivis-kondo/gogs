@@ -32,7 +32,7 @@ type CreateRepo struct {
 	Gitignores         string
 	License            string
 	Readme             string
-	ProjectName        string
+	ProjectName        string `binding:"Required"`
 	ProjectDescription string
 }
 
