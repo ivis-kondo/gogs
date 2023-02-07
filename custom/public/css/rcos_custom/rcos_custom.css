@@ -11,13 +11,13 @@
     margin-left: 220px !important;
 }
 
-.inline.fields.field input{
+.user.settings.profile .inline.fields.field input{
     width: 18% !important;
 }
-.inline.fields.field label[for="last_name"]{
+.user.settings.profile .inline.fields.field label[for="last_name"]{
     width: 80px !important;
     margin:0px 0px 0px 40px;
 }
-.inline.field .help {
+.user.settings.profile .inline.field .help {
     margin-left: 220px !important;
 }
