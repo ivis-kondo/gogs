@@ -76,6 +76,8 @@ func SearchRepo(c *context.APIContext) {
 	log.Trace("UpdatedUnix : %d", repo.UpdatedUnix)
 	updatetime := time.Unix(repo.UpdatedUnix, 0)
 	log.Trace("updatetime : %s", updatetime.String())
+	day := updatetime.Format("2006-01-02")
+	log.Trace("day : %s", day)
 
 	download := DownloadMetadat{
 		Url:         url,
