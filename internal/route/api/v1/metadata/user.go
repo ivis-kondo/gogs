@@ -3,6 +3,7 @@ package metadata
 import (
 	"github.com/NII-DG/gogs/internal/context"
 	"github.com/NII-DG/gogs/internal/db"
+	"github.com/NII-DG/gogs/internal/urlutil"
 	log "unknwon.dev/clog/v2"
 )
 
@@ -23,9 +24,20 @@ func GetUser(c *context.APIContext) {
 		AliasName:   u.AffiliationAlias,
 		Description: u.AffiliationDescription,
 	}
+	personalUrl := ""
+	if len(u.PersonalURL) > 0 {
+		personalUrl = u.PersonalURL
+	} else {
+		url, err := urlutil.UpdatePath(c.BaseURL, u.Name)
+		if err != nil {
+			c.Errorf(err, "%v", err)
+			return
+		}
+		personalUrl = url
+	}
 	user := UserMatadata{
 		UserName:    u.Name,
-		Url:         u.PersonalURL,
+		Url:         personalUrl,
 		FirstName:   u.FirstName,
 		LastName:    u.LastName,
 		AliasName:   u.AliasName,
@@ -54,12 +66,23 @@ func GetUsers(c *context.APIContext, form UserNameList) {
 			AliasName:   u.AffiliationAlias,
 			Description: u.AffiliationDescription,
 		}
+		personalUrl := ""
+		if len(u.PersonalURL) > 0 {
+			personalUrl = u.PersonalURL
+		} else {
+			url, err := urlutil.UpdatePath(c.BaseURL, u.Name)
+			if err != nil {
+				c.Errorf(err, "%v", err)
+				return
+			}
+			personalUrl = url
+		}
 		user := UserMatadata{
 			UserName:    u.Name,
-			Url:         u.PersonalURL,
+			Url:         personalUrl,
 			FirstName:   u.FirstName,
 			LastName:    u.LastName,
-			AliasName:   "",
+			AliasName:   u.AliasName,
 			EMail:       u.Email,
 			Telephone:   u.Telephone,
 			ERadNumber:  u.ERadResearcherNumber,
