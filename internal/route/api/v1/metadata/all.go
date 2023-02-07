@@ -3,9 +3,11 @@ package metadata
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/NII-DG/gogs/internal/context"
 	"github.com/NII-DG/gogs/internal/db"
+	"github.com/NII-DG/gogs/internal/urlutil"
 	log "unknwon.dev/clog/v2"
 )
 
@@ -71,5 +73,65 @@ func GetAllMetadata(c *context.APIContext, form Repository) {
 		return
 	}
 
-	c.JSONSuccess(WholeMetadata{})
+	//Create Metadata Structure
+	baseUrl, err := urlutil.UpdatePath(c.BaseURL, "")
+	if err != nil {
+		c.Errorf(err, "%v", err)
+		return
+	}
+	prefixPath := fmt.Sprintf("%s/%s/src/%s", ownerName, repoName, form.BranchName)
+	svc := ServiceMetadata{
+		Name:                "gin-fork",
+		BaseUrl:             baseUrl,
+		DataAccessUrlPrefix: prefixPath,
+	}
+
+	r_pj := ResearchProjectMetadata{
+		Name:        repo.ProtectName,
+		Description: repo.ProjectDescription,
+	}
+
+	path := fmt.Sprintf("%s/%s/archive/%s.zip", repo.Owner.Name, repoName, form.BranchName)
+	download_url, err := urlutil.UpdatePath(c.BaseURL, path)
+	if err != nil {
+		c.Errorf(err, "%v", err)
+		return
+	}
+
+	updatetime := time.Unix(repo.UpdatedUnix, 0).Format("2006-01-02")
+	download := DownloadMetadat{
+		Url:         download_url,
+		Description: fmt.Sprint(c.Tr("metadata.download.description", fmt.Sprintf("%s/%s", repo.Owner.Name, repoName))),
+		Date:        updatetime,
+	}
+
+	url, err := urlutil.UpdatePath(c.BaseURL, fmt.Sprintf("%s/%s", ownerName, repoName))
+	if err != nil {
+		c.Errorf(err, "%v", err)
+		return
+	}
+
+	repository := RepositoryMetadata{
+		Name:        repo.Name,
+		Description: repo.Description,
+		Url:         url,
+		Download:    download,
+	}
+
+	assignees, _ := repo.GetAssignees()
+	for _, u := range assignees {
+		log.Trace("assignees User : %s", u.Name)
+	}
+	writers, _ := repo.GetWriters()
+	for _, u := range writers {
+		log.Trace("writers User : %s", u.Name)
+	}
+
+	wm := WholeMetadata{
+		Service:         svc,
+		ResearchProject: r_pj,
+		Repository:      repository,
+	}
+
+	c.JSONSuccess(wm)
 }

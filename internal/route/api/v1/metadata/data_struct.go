@@ -64,12 +64,12 @@ type FileMetadata struct {
 }
 
 type WholeMetadata struct {
-	Service                ServiceMetadata         `json:"service"`
-	ResearchProject        ResearchProjectMetadata `json:"resarch_project"`
-	ResearchPolicyMetadata ResearchPolicyMetadata  `json:"research_policy"`
-	RepositoryMetadata     RepositoryMetadata      `json:"repository"`
-	Users                  []UserMatadata          `json:"users"`
-	Files                  []FileMetadata          `json:"files"`
+	Service         ServiceMetadata         `json:"service"`
+	ResearchProject ResearchProjectMetadata `json:"resarch_project"`
+	ResearchPolicy  ResearchPolicyMetadata  `json:"research_policy"`
+	Repository      RepositoryMetadata      `json:"repository"`
+	Users           []UserMatadata          `json:"users"`
+	Files           []FileMetadata          `json:"files"`
 }
 
 /*
