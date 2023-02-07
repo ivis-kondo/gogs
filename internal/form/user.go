@@ -108,7 +108,8 @@ type UpdateProfile struct {
 	Name                   string `binding:"Required;AlphaDashDot;MaxSize(35)"` //アカウント名（必須）
 	FirstName              string `binding:"Required"`                          // 氏名(名)
 	LastName               string `binding:"Required"`                          // 氏名(姓)
-	Email                  string `binding:"Required;Email;MaxSize(254)"`       //メールアドレス（必須）
+	AliasName              string //氏名（別名）
+	Email                  string `binding:"Required;Email;MaxSize(254)"` //メールアドレス（必須）
 	Telephone              string //電話番号（任意）
 	ERadResearcherNumber   string //研究者e-Rad番号（任意）
 	PersonalURL            string `binding:"Url"`                   //個人URL（任意）

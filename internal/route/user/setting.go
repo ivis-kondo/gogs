@@ -119,6 +119,7 @@ func SettingsPost(c *context.Context, f form.UpdateProfile) {
 	c.User.Email = f.Email
 	c.User.Telephone = f.Telephone
 	c.User.PersonalURL = f.PersonalURL
+	c.User.AliasName = f.AliasName
 	c.User.ERadResearcherNumber = f.ERadResearcherNumber
 	c.User.Affiliation = f.Affiliation
 	c.User.AffiliationAlias = f.AffiliationAlias
