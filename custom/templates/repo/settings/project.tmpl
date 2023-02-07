@@ -1,0 +1,35 @@
+{{template "base/head" .}}
+<div class="repository settings options">
+    {{template "repo/header" .}}
+	<div class="ui container">
+        <div class="ui grid">
+            {{template "repo/settings/navbar" .}}
+			<div class="twelve wide column content">
+                {{template "base/alert" .}}
+				<div class="ui top attached header">
+					{{.i18n.Tr "repo.settings.basic_settings"}}
+				</div>
+                <div class="ui attached segment">
+                    <form class="ui form" action="{{.Link}}" method="POST">
+                        {{.CSRFTokenHTML}}
+                        <div class="required field">
+                            <label for="project_name">{{.i18n.Tr "project_name"}}</label>
+                            <input id="project_name" name="project_name" value="{{.project_name}}" autofocus required>
+                        </div>
+                        <div class="field">
+                            <label for="project_description">{{.i18n.Tr "project_description"}}</label>
+                            <textarea class="autosize" id="project_description" name="project_description" rows="3">{{.project_description}}</textarea>
+                        </div>
+                        <div class="inline field">
+                            <label></label>
+                            <button class="ui green button">
+                                {{.i18n.Tr repo.settings.update_settings"}}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{template "base/footer" .}}

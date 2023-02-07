@@ -34,7 +34,29 @@ const (
 	SETTINGS_GITHOOKS         = "repo/settings/githooks"
 	SETTINGS_GITHOOK_EDIT     = "repo/settings/githook_edit"
 	SETTINGS_DEPLOY_KEYS      = "repo/settings/deploy_keys"
+	SETTINGS_PROJECT          = "repo/settings/project"
 )
+
+func SettingsProtected(c *context.Context) {
+	c.Data["Title"] = c.Tr("repo.settings")
+	c.Data["PageIsSettingsProject"] = true
+	c.Data["project_name"] = c.Repo.Repository.ProtectName
+	c.Data["project_description"] = c.Repo.Repository.ProjectDescription
+
+	users, err := c.Repo.Repository.GetCollaborators()
+	if err != nil {
+		c.Error(err, "get collaborators")
+		return
+	}
+	c.Data["Collaborators"] = users
+
+	c.Success(SETTINGS_PROJECT)
+
+}
+
+func SettingsProtectedPost(c *context.Context) {
+
+}
 
 func Settings(c *context.Context) {
 	c.Title("repo.settings")

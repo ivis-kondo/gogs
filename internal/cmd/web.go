@@ -448,6 +448,10 @@ func runWeb(c *cli.Context) error {
 						return
 					}
 				})
+				m.Group("/project", func() {
+					m.Get("")
+					m.Post("")
+				})
 
 				m.Group("/hooks", func() {
 					webhookRoutes()
