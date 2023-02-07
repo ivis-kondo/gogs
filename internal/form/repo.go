@@ -426,3 +426,15 @@ func (f *DeleteRepoFile) Validate(ctx *macaron.Context, errs binding.Errors) bin
 func (f *DeleteRepoFile) IsNewBrnach() bool {
 	return f.CommitChoice == "commit-to-new-branch"
 }
+
+/*
+Research Project From
+**/
+type ResearchProtect struct {
+	ProjectName        string
+	ProjectDescription string
+}
+
+func (f *ResearchProtect) Validate(ctx *macaron.Context, errs binding.Errors) binding.Errors {
+	return validate(errs, ctx.Data, f, ctx.Locale)
+}

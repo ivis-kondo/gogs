@@ -450,7 +450,7 @@ func runWeb(c *cli.Context) error {
 				})
 				m.Group("/project", func() {
 					m.Get("", repo.SettingsProtecte)
-					m.Post("", repo.SettingsProtectePost)
+					m.Post("", bindIgnErr(form.ResearchProtect{}), repo.SettingsProtectePost)
 				})
 
 				m.Group("/hooks", func() {

@@ -47,8 +47,21 @@ func SettingsProtecte(c *context.Context) {
 
 }
 
-func SettingsProtectePost(c *context.Context) {
+func SettingsProtectePost(c *context.Context, f form.ResearchProtect) {
+	c.Data["Title"] = c.Tr("repo.settings")
+	c.Data["PageIsSettingsProject"] = true
 
+	repo := c.Repo.Repository
+
+	repo.ProtectName = f.ProjectName
+	repo.ProjectDescription = f.ProjectDescription
+
+	if err := db.UpdateRepository(repo, false); err != nil {
+		c.Error(err, "update repository")
+		return
+	}
+	c.Flash.Success(c.Tr("repo.settings.update_settings_success"))
+	c.Redirect(repo.Link() + "/settings/project")
 }
 
 func Settings(c *context.Context) {
