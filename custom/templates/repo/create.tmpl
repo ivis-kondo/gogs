@@ -125,9 +125,9 @@
 						<label for="project_name">{{.i18n.Tr "project_name"}}</label>
 						<input id="project_name" name="project_name" value="{{.project_name}}">
 					</div>
-					<div class="inline required field">
+					<div class="inline field">
 						<label for="project_description">{{.i18n.Tr "project_description"}}</label>
-						<input id="project_description" name="project_description" value="{{.project_description}}">
+						<textarea class="autosize" id="project_description" name="project_description" rows="3">{{.project_description}}</textarea>
 					</div>
 					<!-- RCOS Code end-->
 
