@@ -54,8 +54,14 @@ func Settings(c *context.Context) {
 	c.Data["first_name"] = c.User.FirstName
 	c.Data["last_name"] = c.User.LastName
 	c.Data["email"] = c.User.Email
+	c.Data["telephone"] = c.User.Telephone
+	c.Data["e_rad_researcher_number"] = c.User.ERadResearcherNumber
+	c.Data["personal_url"] = c.User.PersonalURL
 	c.Data["website"] = c.User.Website
-	c.Data["location"] = c.User.Affiliation
+	c.Data["affiliation"] = c.User.Affiliation
+	c.Data["affiliation_alias"] = c.User.AffiliationAlias
+	c.Data["affiliation_description"] = c.User.AffiliationDescription
+	c.Data["affiliation_url"] = c.User.AffiliationURL
 	c.Success(SETTINGS_PROFILE)
 }
 
@@ -111,7 +117,7 @@ func SettingsPost(c *context.Context, f form.UpdateProfile) {
 	c.User.FullName = fullName
 	c.User.Email = f.Email
 	c.User.Website = f.Website
-	c.User.Affiliation = f.Location
+	c.User.Affiliation = f.Affiliation
 	if err := db.UpdateUser(c.User); err != nil {
 		if db.IsErrEmailAlreadyUsed(err) {
 			msg := c.Tr("form.email_been_used")

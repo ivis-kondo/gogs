@@ -31,14 +31,49 @@
 							<label for="email">{{.i18n.Tr "email"}}</label>
 							<input id="email" name="email" value="{{.email}}" required>
 						</div>
+						<!-- RCOS -->
+						<div class="inline field">
+							<label for="telephone">{{.i18n.Tr "telephone"}}</label>
+							<input id="telephone" name="telephone" type="tel" value="{{.telephone}}">
+						</div>
+						<div class="inline field">
+							<label for="e_rad_researcher_number">{{.i18n.Tr "e_rad_researcher_number"}}</label>
+							<input id="e_rad_researcher_number" name="e_rad_researcher_number" value="{{.e_rad_researcher_number}}">
+						</div>
+						<div class="inline field">
+							<label for="personal_url">{{.i18n.Tr "personal_url"}}</label>
+							<input id="personal_url" name="personal_url" value="{{.personal_url}}" placeholder="http://orcid.org/0000-0000-0000-0000">
+						</div>
+						<!-- RCOS -->
 						<div class="field {{if .Err_Website}}error{{end}}">
 							<label for="website">{{.i18n.Tr "settings.website"}}</label>
 							<input id="website" name="website" type="url" value="{{.website}}">
 						</div>
-						<div class="field">
-							<label for="location">Affiliation</label>
-							<input id="location" name="location"  value="{{.location}}">
+						<!-- RCOS -->
+						<div class="ui divider"></div>
+
+						<div class="inline field">
+							<label><h3>{{.i18n.Tr "affiliation_title"}}</h3></label>
 						</div>
+							<div class="required inline field">
+							<label for="affiliation">{{.i18n.Tr "affiliation"}}</label>
+							<input id="affiliation" name="affiliation" value="{{.affiliation}} " required>
+						</div>
+						<div class="inline field">
+							<label for="affiliation_alias">{{.i18n.Tr "affiliation_alias"}}</label>
+							<input id="affiliation_alias" name="affiliation_alias" value="{{.affiliation_alias}}">
+						</div>
+						<div class="inline field">
+							<label for="affiliation_description">{{.i18n.Tr "affiliation_description"}}</label>
+							<input id="affiliation_description" name="affiliation_description" value="{{.affiliation_description}}">
+						</div>
+						<div class="required inline field">
+							<label for="affiliation_url">{{.i18n.Tr "affiliation_url"}}</label>
+							<input id="affiliation_url" name="affiliation_url" value="{{.affiliation_url}}" placeholder="https://ror.org/..." required>
+							<span class="help">{{.i18n.Tr "affiliation_url_helper"}}</span>
+						</div>
+						<!-- RCOS -->
+
 
 						<div class="field">
 							<button class="ui green button">{{$.i18n.Tr "settings.update_profile"}}</button>
