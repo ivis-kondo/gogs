@@ -50,6 +50,8 @@ func Settings(c *context.Context) {
 	c.Data["origin_name"] = c.User.Name
 	c.Data["name"] = c.User.Name
 	c.Data["full_name"] = c.User.FullName
+	c.Data["first_name"] = c.User.FirstName
+	c.Data["last_name"] = c.User.LastName
 	c.Data["email"] = c.User.Email
 	c.Data["website"] = c.User.Website
 	c.Data["location"] = c.User.Affiliation
