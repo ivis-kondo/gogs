@@ -14,7 +14,7 @@ func GetProject(c *context.APIContext, form Repository) {
 	log.Trace("API to get Research Project Metadata has been done by User[ID : %d]", req_user.ID)
 
 	// Getting repository owner information from DB
-	ownerName := c.Params(":ownername")
+	ownerName := form.OwnerName
 	owner, err := db.GetUserByName(ownerName)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, map[string]interface{}{
@@ -25,7 +25,7 @@ func GetProject(c *context.APIContext, form Repository) {
 	}
 
 	// Getting repository information from DB
-	repoName := c.Params(":reponame")
+	repoName := form.RepoName
 	repo, err := db.GetRepositoryByName(owner.ID, repoName)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, map[string]interface{}{
