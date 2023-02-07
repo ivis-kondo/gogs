@@ -37,33 +37,6 @@ const (
 	SETTINGS_PROJECT          = "repo/settings/project"
 )
 
-func SettingsProtecte(c *context.Context) {
-	c.Data["Title"] = c.Tr("repo.settings")
-	c.Data["PageIsSettingsProject"] = true
-	c.Data["project_name"] = c.Repo.Repository.ProtectName
-	c.Data["project_description"] = c.Repo.Repository.ProjectDescription
-
-	c.Success(SETTINGS_PROJECT)
-
-}
-
-func SettingsProtectePost(c *context.Context, f form.ResearchProtect) {
-	c.Data["Title"] = c.Tr("repo.settings")
-	c.Data["PageIsSettingsProject"] = true
-
-	repo := c.Repo.Repository
-
-	repo.ProtectName = f.ProjectName
-	repo.ProjectDescription = f.ProjectDescription
-
-	if err := db.UpdateRepository(repo, false); err != nil {
-		c.Error(err, "update repository")
-		return
-	}
-	c.Flash.Success(c.Tr("repo.settings.update_project_success"))
-	c.Redirect(repo.Link() + "/settings/project")
-}
-
 func Settings(c *context.Context) {
 	c.Title("repo.settings")
 	c.PageIs("SettingsOptions")
@@ -753,4 +726,35 @@ func DeleteDeployKey(c *context.Context) {
 	c.JSONSuccess(map[string]interface{}{
 		"redirect": c.Repo.RepoLink + "/settings/keys",
 	})
+}
+
+/*
+RCOS Code
+**/
+
+func SettingsProtecte(c *context.Context) {
+	c.Data["Title"] = c.Tr("repo.settings")
+	c.Data["PageIsSettingsProject"] = true
+	c.Data["project_name"] = c.Repo.Repository.ProtectName
+	c.Data["project_description"] = c.Repo.Repository.ProjectDescription
+
+	c.Success(SETTINGS_PROJECT)
+
+}
+
+func SettingsProtectePost(c *context.Context, f form.ResearchProtect) {
+	c.Data["Title"] = c.Tr("repo.settings")
+	c.Data["PageIsSettingsProject"] = true
+
+	repo := c.Repo.Repository
+
+	repo.ProtectName = f.ProjectName
+	repo.ProjectDescription = f.ProjectDescription
+
+	if err := db.UpdateRepository(repo, false); err != nil {
+		c.Error(err, "update repository")
+		return
+	}
+	c.Flash.Success(c.Tr("repo.settings.update_project_success"))
+	c.Redirect(repo.Link() + "/settings/project")
 }
