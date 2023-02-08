@@ -28,9 +28,6 @@ This css is be adapted to template files in custom>templates
     width: 80px !important;
 
 }
-.user.settings.profile .inline.field .help {
-    margin-left: 10px !important;
-}
 
 /*----------------
     repo>crete.tmpl
