@@ -13,8 +13,6 @@ import (
 	"github.com/pkg/errors"
 	log "unknwon.dev/clog/v2"
 
-	"regexp"
-
 	"github.com/NII-DG/gogs/internal/conf"
 	"github.com/NII-DG/gogs/internal/context"
 	"github.com/NII-DG/gogs/internal/db"
@@ -348,11 +346,15 @@ func SignUpPost(c *context.Context, cpt *captcha.Captcha, f form.Register) {
 			c.RenderWithErr(c.Tr("form.enterred_invalid_orcid_url"), SIGNUP, &f)
 		}
 	}
+	// check e-Rad Rearcher Number
+	if !regex.CheckERadRearcherNumberFormat(f.ERadResearcherNumber) {
+		c.FormErr("ERad")
+		c.RenderWithErr(c.Tr("form.enterred_invalid_erad"), SIGNUP, &f)
+	}
 
 	// generate User.FullName
-	r := regexp.MustCompile("[A-Za-z]+")
 	fullName := ""
-	if !r.MatchString(f.FirstName) || !r.MatchString(f.LastName) {
+	if !regex.CheckAlphabet(f.FirstName) || !regex.CheckAlphabet(f.LastName) {
 		// japanese user name
 		fullName = fmt.Sprintf("%s %s", f.LastName, f.FirstName)
 	} else {

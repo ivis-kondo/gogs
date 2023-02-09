@@ -56,7 +56,8 @@
 						<label for="telephone">{{.i18n.Tr "telephone"}}</label>
 						<input id="telephone" name="telephone" type="tel"  value="{{.telephone}}">
 					</div>
-					<div class="inline field">
+					<!-- e-Rad ID form -->
+					<div class="inline field {{if .Err_ERad}}error{{end}}">
 						<label for="e_rad_researcher_number">{{.i18n.Tr "e_rad_researcher_number"}}</label>
 						<input id="e_rad_researcher_number" name="e_rad_researcher_number" type="text" pattern="[0-9]{8}" value="{{.e_rad_researcher_number}}">
 						<span class="help">{{.i18n.Tr "e_rad_researcher_number_helper"}}</span>

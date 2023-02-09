@@ -11,7 +11,6 @@ import (
 	"html/template"
 	"image/png"
 	"io/ioutil"
-	"regexp"
 	"strings"
 
 	"github.com/pquerna/otp"
@@ -119,25 +118,29 @@ func SettingsPost(c *context.Context, f form.UpdateProfile) {
 		value := f.PersonalURL[len(orcid_prefix):]
 		if !regex.CheckORCIDFormat(value) {
 			c.FormErr("PersonalUrl")
-			c.RenderWithErr(c.Tr("form.enterred_invalid_orcid_url"), SIGNUP, &f)
+			c.RenderWithErr(c.Tr("form.enterred_invalid_orcid_url"), SETTINGS_PROFILE, &f)
 		}
+	}
+	// check e-Rad Rearcher Number
+	if !regex.CheckERadRearcherNumberFormat(f.ERadResearcherNumber) {
+		c.FormErr("ERad")
+		c.RenderWithErr(c.Tr("form.enterred_invalid_erad"), SETTINGS_PROFILE, &f)
 	}
 
 	c.User.FirstName = f.FirstName
 	c.User.LastName = f.LastName
-	r := regexp.MustCompile("[A-Za-z]+")
+
 	fullName := ""
-	if !r.MatchString(f.FirstName) || !r.MatchString(f.LastName) {
+	if !regex.CheckAlphabet(f.FirstName) || !regex.CheckAlphabet(f.LastName) {
 		// japanese user name
 		fullName = fmt.Sprintf("%s %s", f.LastName, f.FirstName)
 	} else {
 		fullName = fmt.Sprintf("%s %s", f.FirstName, f.LastName)
 	}
+
 	c.User.FullName = fullName
 	c.User.Email = f.Email
-
 	c.User.Telephone = f.Telephone
-
 	c.User.PersonalURL = f.PersonalURL
 	c.User.AliasName = f.AliasName
 	c.User.ERadResearcherNumber = f.ERadResearcherNumber
