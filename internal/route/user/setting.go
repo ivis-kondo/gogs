@@ -27,6 +27,7 @@ import (
 	"github.com/NII-DG/gogs/internal/email"
 	"github.com/NII-DG/gogs/internal/form"
 	"github.com/NII-DG/gogs/internal/tool"
+	"github.com/NII-DG/gogs/internal/utils/regex"
 )
 
 const (
@@ -117,6 +118,12 @@ func SettingsPost(c *context.Context, f form.UpdateProfile) {
 	}
 	c.User.FullName = fullName
 	c.User.Email = f.Email
+	// check telephone format
+	if len(f.Telephone) > 0 && !regex.CheckTelephoneFormat(f.Telephone) {
+		c.FormErr("Telephone")
+		c.RenderWithErr(c.Tr("form.enterred_invalid_telephone"), SETTINGS_PROFILE, &f)
+		return
+	}
 	c.User.Telephone = f.Telephone
 	c.User.PersonalURL = f.PersonalURL
 	c.User.AliasName = f.AliasName
