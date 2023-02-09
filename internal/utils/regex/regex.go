@@ -1,6 +1,7 @@
 package regex
 
 import (
+	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -50,7 +51,8 @@ func CheckERadRearcherNumberFormat(value string) bool {
 	if len(value) != 8 {
 		return false
 	}
-	check_digit, _ := strconv.Atoi(value[0:0])
+
+	check_digit, _ := strconv.Atoi(strings.Split(value, "")[0])
 	sum_val := 0
 
 	for i, num := range strings.Split(value, "") {
@@ -64,7 +66,7 @@ func CheckERadRearcherNumberFormat(value string) bool {
 			sum_val = sum_val + number
 		}
 	}
-
+	println(fmt.Sprintf("sum_val : %d, value : %s, check_digit : %d, remain : %d", sum_val, value, check_digit, (sum_val % 10)))
 	if (sum_val % 10) != check_digit {
 		return false
 	}
