@@ -339,6 +339,15 @@ func SignUpPost(c *context.Context, cpt *captcha.Captcha, f form.Register) {
 		c.RenderWithErr(c.Tr("form.enterred_invalid_telephone"), SIGNUP, &f)
 		return
 	}
+	// check ORDIC URL
+	orcid_prefix := "https://orcid.org/"
+	if strings.HasPrefix(f.PersonalURL, orcid_prefix) {
+		value := f.PersonalURL[len(orcid_prefix):]
+		if !regex.CheckORCIDFormat(value) {
+			c.FormErr("PersonalUrl")
+			c.RenderWithErr(c.Tr("form.enterred_invalid_orcid_url"), SIGNUP, &f)
+		}
+	}
 
 	// generate User.FullName
 	r := regexp.MustCompile("[A-Za-z]+")

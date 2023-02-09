@@ -106,6 +106,23 @@ func SettingsPost(c *context.Context, f form.UpdateProfile) {
 		c.User.LowerName = strings.ToLower(f.Name)
 	}
 
+	// validate form value
+	// check telephone format
+	if len(f.Telephone) > 0 && !regex.CheckTelephoneFormat(f.Telephone) {
+		c.FormErr("Telephone")
+		c.RenderWithErr(c.Tr("form.enterred_invalid_telephone"), SETTINGS_PROFILE, &f)
+		return
+	}
+	// check ORDIC URL
+	orcid_prefix := "https://orcid.org/"
+	if strings.HasPrefix(f.PersonalURL, orcid_prefix) {
+		value := f.PersonalURL[len(orcid_prefix):]
+		if !regex.CheckORCIDFormat(value) {
+			c.FormErr("PersonalUrl")
+			c.RenderWithErr(c.Tr("form.enterred_invalid_orcid_url"), SIGNUP, &f)
+		}
+	}
+
 	c.User.FirstName = f.FirstName
 	c.User.LastName = f.LastName
 	r := regexp.MustCompile("[A-Za-z]+")
@@ -118,13 +135,9 @@ func SettingsPost(c *context.Context, f form.UpdateProfile) {
 	}
 	c.User.FullName = fullName
 	c.User.Email = f.Email
-	// check telephone format
-	if len(f.Telephone) > 0 && !regex.CheckTelephoneFormat(f.Telephone) {
-		c.FormErr("Telephone")
-		c.RenderWithErr(c.Tr("form.enterred_invalid_telephone"), SETTINGS_PROFILE, &f)
-		return
-	}
+
 	c.User.Telephone = f.Telephone
+
 	c.User.PersonalURL = f.PersonalURL
 	c.User.AliasName = f.AliasName
 	c.User.ERadResearcherNumber = f.ERadResearcherNumber
