@@ -11,7 +11,10 @@ func CheckTelephoneFormat(tel string) bool {
 	return re.MatchString(tel)
 }
 
+// Check ORCID Format
+// This code is based on [https://github.com/NII-DG/nii-dg/blob/main/nii_dg/utils.py check_orcid_id()]
 func CheckORCIDFormat(value string) bool {
+
 	re := regexp.MustCompile(`^(\d{4}-){3}\d{3}[\dX]$`)
 	if !re.MatchString(value) {
 		return false
