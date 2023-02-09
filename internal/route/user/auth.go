@@ -21,6 +21,7 @@ import (
 	"github.com/NII-DG/gogs/internal/email"
 	"github.com/NII-DG/gogs/internal/form"
 	"github.com/NII-DG/gogs/internal/tool"
+	"github.com/NII-DG/gogs/internal/utils/regex"
 )
 
 const (
@@ -332,6 +333,13 @@ func SignUpPost(c *context.Context, cpt *captcha.Captcha, f form.Register) {
 		c.RenderWithErr(c.Tr("form.password_not_match"), SIGNUP, &f)
 		return
 	}
+	// check telephone format
+	if len(f.Telephone) > 0 && !regex.CheckTelephoneFormat(f.Telephone) {
+		c.FormErr("Telephone")
+		c.RenderWithErr(c.Tr("form.enterred_invalid_telephone"), SIGNUP, &f)
+		return
+	}
+
 	// generate User.FullName
 	r := regexp.MustCompile("[A-Za-z]+")
 	fullName := ""

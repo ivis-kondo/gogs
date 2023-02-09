@@ -52,9 +52,9 @@
 						<input id="email" name="email" type="email" value="{{.email}}" required>
 					</div>
 					<!-- telephone form -->
-					<div class="inline field">
+					<div class="inline field {{if .Err_Telephone}}error{{end}}">
 						<label for="telephone">{{.i18n.Tr "telephone"}}</label>
-						<input id="telephone" name="telephone" type="text" pattern="^0(\d{1}\-?\d{4}|\d{2}\-?\d{3}|\d{3}\-?\d{2}|\d{4}\-?\d{1})\-?\d{4}$|^0[5789]0\-?\d{4}\-?\d{4}$" value="{{.telephone}}">
+						<input id="telephone" name="telephone" type="tel"  value="{{.telephone}}">
 					</div>
 					<div class="inline field">
 						<label for="e_rad_researcher_number">{{.i18n.Tr "e_rad_researcher_number"}}</label>
