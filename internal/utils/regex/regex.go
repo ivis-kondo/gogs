@@ -38,6 +38,7 @@ func CheckORCIDFormat(value string) bool {
 
 	if (12-(sum_val%11))%11 != checksum {
 		return false
+	} else {
+		return true
 	}
-	return true
 }
