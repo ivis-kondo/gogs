@@ -42,3 +42,31 @@ func CheckORCIDFormat(value string) bool {
 		return true
 	}
 }
+
+// Check e-Rad researcher number Format
+// This code is based on [https://github.com/NII-DG/nii-dg/blob/main/nii_dg/utils.py check_erad_researcher_number()]
+func CheckERadRearcherNumberFormat(value string) bool {
+
+	if len(value) != 8 {
+		return false
+	}
+	check_digit, _ := strconv.Atoi(value[0:0])
+	sum_val := 0
+
+	for i, num := range strings.Split(value, "") {
+		if i == 0 {
+			continue
+		} else if i%2 == 0 {
+			number, _ := strconv.Atoi(num)
+			sum_val = sum_val + (number * 2)
+		} else {
+			number, _ := strconv.Atoi(num)
+			sum_val = sum_val + number
+		}
+	}
+
+	if (sum_val % 10) != check_digit {
+		return false
+	}
+	return true
+}
