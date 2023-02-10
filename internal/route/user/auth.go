@@ -347,7 +347,7 @@ func SignUpPost(c *context.Context, cpt *captcha.Captcha, f form.Register) {
 		}
 	}
 	// check e-Rad Rearcher Number
-	if !regex.CheckERadRearcherNumberFormat(f.ERadResearcherNumber) {
+	if len(f.ERadResearcherNumber) > 0 && !regex.CheckERadRearcherNumberFormat(f.ERadResearcherNumber) {
 		c.FormErr("ERad")
 		c.RenderWithErr(c.Tr("form.enterred_invalid_erad"), SIGNUP, &f)
 	}
