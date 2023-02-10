@@ -123,7 +123,7 @@ func SettingsPost(c *context.Context, f form.UpdateProfile) {
 		}
 	}
 	// check e-Rad Rearcher Number
-	if !regex.CheckERadRearcherNumberFormat(f.ERadResearcherNumber) {
+	if len(f.ERadResearcherNumber) > 0 && !regex.CheckERadRearcherNumberFormat(f.ERadResearcherNumber) {
 		c.FormErr("ERad")
 		c.RenderWithErr(c.Tr("form.enterred_invalid_erad"), SETTINGS_PROFILE, &f)
 		return
