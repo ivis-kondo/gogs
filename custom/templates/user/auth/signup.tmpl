@@ -69,7 +69,7 @@
 					</div>
 
 					<div class="ui divider"></div>
-
+					<!-- affiliation form -->
 					<div class="inline field">
 						<label><h3>{{.i18n.Tr "affiliation_title"}}</h3></label>
 					</div>
@@ -83,7 +83,7 @@
 					</div>
 					<div class="inline field">
 						<label for="affiliation_description">{{.i18n.Tr "affiliation_description"}}</label>
-						<input id="affiliation_description" name="affiliation_description" value="{{.affiliation_description}}">
+						<textarea class="autosize" id="affiliation_description" name="affiliation_description" rows="3">{{.affiliation_description}}</textarea>
 					</div>
 					<div class="required inline field">
 						<label for="affiliation_url">{{.i18n.Tr "affiliation_url"}}</label>
