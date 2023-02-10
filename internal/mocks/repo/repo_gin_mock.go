@@ -7,6 +7,7 @@ package mock_repo
 import (
 	reflect "reflect"
 
+	context "github.com/NII-DG/gogs/internal/context"
 	gomock "github.com/golang/mock/gomock"
 )
 
@@ -49,16 +50,16 @@ func (mr *MockAbstructRepoUtilMockRecorder) DecodeBlobContent(blobInfo interface
 }
 
 // FetchContentsOnGithub mocks base method.
-func (m *MockAbstructRepoUtil) FetchContentsOnGithub(blobPath string) ([]byte, error) {
+func (m *MockAbstructRepoUtil) FetchContentsOnGithub(c context.AbstructContext, blobPath string) ([]byte, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FetchContentsOnGithub", blobPath)
+	ret := m.ctrl.Call(m, "FetchContentsOnGithub", c, blobPath)
 	ret0, _ := ret[0].([]byte)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // FetchContentsOnGithub indicates an expected call of FetchContentsOnGithub.
-func (mr *MockAbstructRepoUtilMockRecorder) FetchContentsOnGithub(blobPath interface{}) *gomock.Call {
+func (mr *MockAbstructRepoUtilMockRecorder) FetchContentsOnGithub(c, blobPath interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FetchContentsOnGithub", reflect.TypeOf((*MockAbstructRepoUtil)(nil).FetchContentsOnGithub), blobPath)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FetchContentsOnGithub", reflect.TypeOf((*MockAbstructRepoUtil)(nil).FetchContentsOnGithub), c, blobPath)
 }

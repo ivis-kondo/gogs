@@ -231,16 +231,19 @@ func Init(customConf string) error {
 		Email.FromEmail = parsed.Address
 	}
 
+	// **************************
+	// ----- DG settings -----
+	// **************************
+	if err = File.Section("dg").MapTo(&DG); err != nil {
+		return errors.Wrap(err, "mapping [github] section")
+	}
+
 	// ***********************************
 	// ----- Authentication settings -----
 	// ***********************************
 
 	if err = File.Section("auth").MapTo(&Auth); err != nil {
 		return errors.Wrap(err, "mapping [auth] section")
-	}
-	// LEGACY [0.13]: In case there are values with old section name.
-	if err = File.Section("service").MapTo(&Auth); err != nil {
-		return errors.Wrap(err, "mapping [service] section")
 	}
 
 	// *************************

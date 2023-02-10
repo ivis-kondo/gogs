@@ -1,0 +1,34 @@
+/*----------------
+This css is be adapted to template files in custom>templates
+-----------------*/
+/*----------------
+    user>auth>signup.tmpl
+-----------------*/
+.user.signup form .inline.fields.field input{
+    width: 18% !important;
+}
+.user.signup form .inline.fields.field label[for="last_name"]{
+    width: 80px !important;
+}
+.user.signup form .inline.field .help {
+    margin-left: 220px !important;
+}
+
+/*----------------
+    user>settings>profile.tmpl
+------------------*/
+.user.settings.profile .inline.fields.field input{
+    width: 18% !important;
+}
+.user.settings.profile .inline.fields.field label[for="last_name"]{
+    width: 80px !important;
+    margin:0px 0px 0px 40px;
+}
+.user.settings.profile .inline.fields.field label[for="first_name"]{
+    width: 80px !important;
+
+}
+
+/*----------------
+    repo>crete.tmpl
+------------------*/

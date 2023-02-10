@@ -26,6 +26,7 @@ import (
 	"github.com/NII-DG/gogs/internal/email"
 	"github.com/NII-DG/gogs/internal/form"
 	"github.com/NII-DG/gogs/internal/tool"
+	"github.com/NII-DG/gogs/internal/utils/regex"
 )
 
 const (
@@ -50,9 +51,18 @@ func Settings(c *context.Context) {
 	c.Data["origin_name"] = c.User.Name
 	c.Data["name"] = c.User.Name
 	c.Data["full_name"] = c.User.FullName
+	c.Data["first_name"] = c.User.FirstName
+	c.Data["alias_name"] = c.User.AliasName
+	c.Data["last_name"] = c.User.LastName
 	c.Data["email"] = c.User.Email
+	c.Data["telephone"] = c.User.Telephone
+	c.Data["e_rad_researcher_number"] = c.User.ERadResearcherNumber
+	c.Data["personal_url"] = c.User.PersonalURL
 	c.Data["website"] = c.User.Website
-	c.Data["location"] = c.User.Location
+	c.Data["affiliation"] = c.User.Affiliation
+	c.Data["affiliation_alias"] = c.User.AffiliationAlias
+	c.Data["affiliation_description"] = c.User.AffiliationDescription
+	c.Data["affiliation_url"] = c.User.AffiliationURL
 	c.Success(SETTINGS_PROFILE)
 }
 
@@ -95,10 +105,52 @@ func SettingsPost(c *context.Context, f form.UpdateProfile) {
 		c.User.LowerName = strings.ToLower(f.Name)
 	}
 
-	c.User.FullName = f.FullName
+	// validate form value
+	// check telephone format
+	if len(f.Telephone) > 0 && !regex.CheckTelephoneFormat(f.Telephone) {
+		c.FormErr("Telephone")
+		c.RenderWithErr(c.Tr("form.enterred_invalid_telephone"), SETTINGS_PROFILE, &f)
+		return
+	}
+	// check ORDIC URL
+	orcid_prefix := "https://orcid.org/"
+	if strings.HasPrefix(f.PersonalURL, orcid_prefix) {
+		value := f.PersonalURL[len(orcid_prefix):]
+		if !regex.CheckORCIDFormat(value) {
+			c.FormErr("PersonalUrl")
+			c.RenderWithErr(c.Tr("form.enterred_invalid_orcid_url"), SETTINGS_PROFILE, &f)
+			return
+		}
+	}
+	// check e-Rad Rearcher Number
+	if !regex.CheckERadRearcherNumberFormat(f.ERadResearcherNumber) {
+		c.FormErr("ERad")
+		c.RenderWithErr(c.Tr("form.enterred_invalid_erad"), SETTINGS_PROFILE, &f)
+		return
+	}
+
+	c.User.FirstName = f.FirstName
+	c.User.LastName = f.LastName
+
+	fullName := ""
+	if !regex.CheckAlphabet(f.FirstName) || !regex.CheckAlphabet(f.LastName) {
+		// japanese user name
+		fullName = fmt.Sprintf("%s %s", f.LastName, f.FirstName)
+	} else {
+		fullName = fmt.Sprintf("%s %s", f.FirstName, f.LastName)
+	}
+
+	c.User.FullName = fullName
 	c.User.Email = f.Email
-	c.User.Website = f.Website
-	c.User.Location = f.Location
+	c.User.Telephone = f.Telephone
+	c.User.PersonalURL = f.PersonalURL
+	c.User.AliasName = f.AliasName
+	c.User.ERadResearcherNumber = f.ERadResearcherNumber
+	c.User.Affiliation = f.Affiliation
+	c.User.AffiliationAlias = f.AffiliationAlias
+	c.User.AffiliationDescription = f.AffiliationDescription
+	c.User.AffiliationURL = f.AffiliationURL
+
 	if err := db.UpdateUser(c.User); err != nil {
 		if db.IsErrEmailAlreadyUsed(err) {
 			msg := c.Tr("form.email_been_used")

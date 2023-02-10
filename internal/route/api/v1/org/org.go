@@ -25,7 +25,7 @@ func CreateOrgForUser(c *context.APIContext, apiForm api.CreateOrgOption, user *
 		FullName:    apiForm.FullName,
 		Description: apiForm.Description,
 		Website:     apiForm.Website,
-		Location:    apiForm.Location,
+		Affiliation: apiForm.Location,
 		IsActive:    true,
 		Type:        db.UserOrganization,
 	}
@@ -85,7 +85,7 @@ func Edit(c *context.APIContext, form api.EditOrgOption) {
 	org.FullName = form.FullName
 	org.Description = form.Description
 	org.Website = form.Website
-	org.Location = form.Location
+	org.Affiliation = form.Location
 	if err := db.UpdateUser(org); err != nil {
 		c.Error(err, "update user")
 		return

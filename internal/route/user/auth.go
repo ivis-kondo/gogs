@@ -19,6 +19,7 @@ import (
 	"github.com/NII-DG/gogs/internal/email"
 	"github.com/NII-DG/gogs/internal/form"
 	"github.com/NII-DG/gogs/internal/tool"
+	"github.com/NII-DG/gogs/internal/utils/regex"
 )
 
 const (
@@ -330,14 +331,54 @@ func SignUpPost(c *context.Context, cpt *captcha.Captcha, f form.Register) {
 		c.RenderWithErr(c.Tr("form.password_not_match"), SIGNUP, &f)
 		return
 	}
+	// check telephone format
+	if len(f.Telephone) > 0 && !regex.CheckTelephoneFormat(f.Telephone) {
+		c.FormErr("Telephone")
+		c.RenderWithErr(c.Tr("form.enterred_invalid_telephone"), SIGNUP, &f)
+		return
+	}
+	// check ORDIC URL
+	orcid_prefix := "https://orcid.org/"
+	if strings.HasPrefix(f.PersonalURL, orcid_prefix) {
+		value := f.PersonalURL[len(orcid_prefix):]
+		if !regex.CheckORCIDFormat(value) {
+			c.FormErr("PersonalUrl")
+			c.RenderWithErr(c.Tr("form.enterred_invalid_orcid_url"), SIGNUP, &f)
+			return
+		}
+	}
+	// check e-Rad Rearcher Number
+	if len(f.ERadResearcherNumber) > 0 && !regex.CheckERadRearcherNumberFormat(f.ERadResearcherNumber) {
+		c.FormErr("ERad")
+		c.RenderWithErr(c.Tr("form.enterred_invalid_erad"), SIGNUP, &f)
+		return
+	}
+
+	// generate User.FullName
+	fullName := ""
+	if !regex.CheckAlphabet(f.FirstName) || !regex.CheckAlphabet(f.LastName) {
+		// japanese user name
+		fullName = fmt.Sprintf("%s %s", f.LastName, f.FirstName)
+	} else {
+		fullName = fmt.Sprintf("%s %s", f.FirstName, f.LastName)
+	}
 
 	u := &db.User{
-		Name:     f.UserName,
-		Email:    f.Email,
-		Passwd:   f.Password,
-		FullName: f.FullName,
-		Location: f.Affiliation,
-		IsActive: !conf.Auth.RequireEmailConfirmation,
+		Name:                   f.UserName,
+		Email:                  f.Email,
+		Telephone:              f.Telephone,
+		Passwd:                 f.Password,
+		FullName:               fullName,
+		FirstName:              f.FirstName,
+		AliasName:              f.AliasName,
+		LastName:               f.LastName,
+		ERadResearcherNumber:   f.ERadResearcherNumber,
+		PersonalURL:            f.PersonalURL,
+		Affiliation:            f.Affiliation,
+		AffiliationAlias:       f.AffiliationAlias,
+		AffiliationDescription: f.AffiliationDescription,
+		AffiliationURL:         f.AffiliationURL,
+		IsActive:               !conf.Auth.RequireEmailConfirmation,
 	}
 	if err := db.CreateUser(u); err != nil {
 		switch {

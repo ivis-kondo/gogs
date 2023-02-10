@@ -164,6 +164,7 @@ func runWeb(c *cli.Context) error {
 
 	m := newMacaron()
 
+	//URL時の認証設定
 	reqSignIn := context.Toggle(&context.ToggleOptions{SignInRequired: true})
 	ignSignIn := context.Toggle(&context.ToggleOptions{SignInRequired: conf.Auth.RequireSigninView})
 	reqSignOut := context.Toggle(&context.ToggleOptions{SignOutRequired: true})
@@ -446,6 +447,10 @@ func runWeb(c *cli.Context) error {
 						c.NotFound()
 						return
 					}
+				})
+				m.Group("/project", func() {
+					m.Get("", repo.SettingsProtecte)
+					m.Post("", bindIgnErr(form.ResearchProtect{}), repo.SettingsProtectePost)
 				})
 
 				m.Group("/hooks", func() {

@@ -632,35 +632,58 @@ func createDmp(c context.AbstructContext, f AbstructRepoUtil, d AbstructDmpUtil)
 	// data binding for "Add DMP" pulldown at DMP editing page
 	// (The pulldown on the repository top page is binded in repo.renderDirectory.)
 	err := d.BidingDmpSchemaList(c, schemaUrl+"orgs")
-	if err != nil {
-		log.Error("%v", err)
+	if err != nil && !c.IsInternalError() {
+		log.Warn("%v", err)
+		c.Redirect(c.GetRepo().GetRepoLink())
 		return
-	}
-	err = d.FetchDmpSchema(c, schemaUrl+"json_schema/schema_dmp_"+schema)
-	if err != nil {
-		log.Error("%v", err)
+	} else if err != nil && c.IsInternalError() {
+		log.Error(err.Error())
+		c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
 		return
 	}
 
-	srcBasic, err := f.FetchContentsOnGithub(schemaUrl + "basic")
-	if err != nil {
-		log.Error("%v", err)
+	err = d.FetchDmpSchema(c, schemaUrl+"json_schema/schema_dmp_"+schema)
+	if err != nil && !c.IsInternalError() {
+		log.Warn("%v", err)
+		c.Redirect(c.GetRepo().GetRepoLink())
+		return
+	} else if err != nil && c.IsInternalError() {
+		log.Error(err.Error())
+		c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
+		return
+	}
+
+	srcBasic, err := f.FetchContentsOnGithub(c, schemaUrl+"basic")
+	if err != nil && !c.IsInternalError() {
+		log.Warn("%v", err)
+		c.Redirect(c.GetRepo().GetRepoLink())
+		return
+	} else if err != nil && c.IsInternalError() {
+		log.Error(err.Error())
+		c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
 		return
 	}
 	decodedBasicSchema, err := f.DecodeBlobContent(srcBasic)
 	if err != nil {
-		log.Error("%v", err)
+		log.Error(err.Error())
+		c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
 		return
 	}
 
-	srcOrg, err := f.FetchContentsOnGithub(schemaUrl + "orgs/" + schema)
-	if err != nil {
-		log.Error("%v", err)
+	srcOrg, err := f.FetchContentsOnGithub(c, schemaUrl+"orgs/"+schema)
+	if err != nil && !c.IsInternalError() {
+		log.Warn("%v", err)
+		c.Redirect(c.GetRepo().GetRepoLink())
+		return
+	} else if err != nil && c.IsInternalError() {
+		log.Error(err.Error())
+		c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
 		return
 	}
 	decodedOrgSchema, err := f.DecodeBlobContent(srcOrg)
 	if err != nil {
-		log.Error("%v", err)
+		log.Error(err.Error())
+		c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
 		return
 	}
 
@@ -710,16 +733,16 @@ func (d dmpUtil) BidingDmpSchemaList(c context.AbstructContext, treePath string)
 // fetchDmpSchema is RCOS specific code.
 // This function fetch&bind JSON Schema of DMP for validation.
 func (d dmpUtil) fetchDmpSchema(c context.AbstructContext, f AbstructRepoUtil, blobPath string) error {
-	src, err := f.FetchContentsOnGithub(blobPath)
+	var decodedScheme string
+	src, err := f.FetchContentsOnGithub(c, blobPath)
 	if err != nil {
 		return err
 	}
-
-	decodedScheme, err := f.DecodeBlobContent(src)
+	decodedScheme, err = f.DecodeBlobContent(src)
 	if err != nil {
+		c.CallData()["IsInternalError"] = true
 		return err
 	}
-
 	c.CallData()["IsDmpJson"] = true
 	c.CallData()["Schema"] = decodedScheme
 	return nil
@@ -728,7 +751,7 @@ func (d dmpUtil) fetchDmpSchema(c context.AbstructContext, f AbstructRepoUtil, b
 // bidingDmpSchemaList is RCOS specific code.
 // This function binds DMP organization list.
 func (d dmpUtil) bidingDmpSchemaList(c context.AbstructContext, f AbstructRepoUtil, treePath string) error {
-	contents, err := f.FetchContentsOnGithub(treePath)
+	contents, err := f.FetchContentsOnGithub(c, treePath)
 	if err != nil {
 		return err
 	}
@@ -736,6 +759,7 @@ func (d dmpUtil) bidingDmpSchemaList(c context.AbstructContext, f AbstructRepoUt
 	var orgsInfo interface{}
 	err = json.Unmarshal(contents, &orgsInfo)
 	if err != nil {
+		c.CallData()["IsInternalError"] = true
 		return err
 	}
 

@@ -317,7 +317,7 @@ func LoginViaGitHub(login, password string, sourceID int64, cfg *GitHubConfig, a
 		LoginSource: sourceID,
 		LoginName:   login,
 		IsActive:    true,
-		Location:    location,
+		Affiliation: location,
 	}
 	return user, CreateUser(user)
 }

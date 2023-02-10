@@ -9,7 +9,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"strconv"
 	"strings"
 
 	"github.com/unknwon/com"
@@ -122,14 +121,16 @@ func CreatePost(c *context.Context, f form.CreateRepo) {
 	}
 
 	repo, err := db.CreateRepository(c.User, ctxUser, db.CreateRepoOptions{
-		Name:        f.RepoName,
-		Description: f.Description,
-		Gitignores:  f.Gitignores,
-		License:     f.License,
-		Readme:      f.Readme,
-		IsPrivate:   f.Private || conf.Repository.ForcePrivate,
-		IsUnlisted:  f.Unlisted,
-		AutoInit:    f.AutoInit,
+		Name:               f.RepoName,
+		Description:        f.Description,
+		Gitignores:         f.Gitignores,
+		License:            f.License,
+		Readme:             f.Readme,
+		IsPrivate:          f.Private || conf.Repository.ForcePrivate,
+		IsUnlisted:         f.Unlisted,
+		AutoInit:           f.AutoInit,
+		ProjectName:        f.ProjectName,
+		ProjectDescription: f.ProjectDescription,
 	})
 	if err == nil {
 		log.Trace("Repository created [%d]: %s/%s", repo.ID, ctxUser.Name, repo.Name)
@@ -271,6 +272,7 @@ func Action(c *context.Context) {
 }
 
 func Download(c *context.Context) {
+
 	var (
 		uri           = c.Params("*")
 		refName       string
@@ -295,19 +297,14 @@ func Download(c *context.Context) {
 	}
 	refName = strings.TrimSuffix(uri, ext)
 
-	if !c.Repo.Repository.IsOwnedBy(c.User.ID) {
-		c.Repo.Repository.Downloaded = c.Repo.Repository.Downloaded + 1
-		db.UpdateRepository(c.Repo.Repository, true)
-	}
-
-	log.Info("Downloaded " + c.Repo.Repository.Name + "-" + refName + ext + " by " + c.User.Name + "(total: " + strconv.FormatUint(c.Repo.Repository.Downloaded, 10) + " downloaded)")
-
 	if !com.IsDir(archivePath) {
 		if err := os.MkdirAll(archivePath, os.ModePerm); err != nil {
 			c.Error(err, "create archive directory")
 			return
 		}
 	}
+
+	log.Info("Downloaded: %v", c.Repo.GitRepo.Path())
 
 	// Get corresponding commit.
 	var (
