@@ -104,7 +104,6 @@ func TestCheckTelephoneFormat(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.test_name, func(t *testing.T) {
 			for _, tel := range test.tels {
-				t.Logf("predict_value : %v, retrun_value : %v, tel : %s", test.predict_value, regex.CheckTelephoneFormat(tel), tel)
 				assert.Equal(t, test.predict_value, regex.CheckTelephoneFormat(tel))
 			}
 		})
@@ -151,8 +150,82 @@ func TestCheckERadRearcherNumberFormat(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.test_name, func(t *testing.T) {
 			for _, num := range test.numbers {
-				t.Logf("predict_value : %v, retrun_value : %v, num : %s", test.predict_value, regex.CheckTelephoneFormat(num), num)
 				assert.Equal(t, test.predict_value, regex.CheckERadRearcherNumberFormat(num))
+			}
+		})
+	}
+
+}
+
+func TestCheckNumeric(t *testing.T) {
+
+	tests := []struct {
+		test_name     string
+		values        []string
+		predict_value bool
+	}{
+		{
+			test_name: "OK value",
+			values: []string{
+				"1",
+				"999999999999999999999999999999999999999999999999",
+			},
+			predict_value: true,
+		},
+		{
+			test_name: "invlid format value",
+			values: []string{
+				"",
+				"a",
+				"qwertyuiopasdfghjklzxcvbnm",
+				"^",
+				"iufoaijjfd11234",
+			},
+			predict_value: false,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.test_name, func(t *testing.T) {
+			for _, v := range test.values {
+				assert.Equal(t, test.predict_value, regex.CheckNumeric(v))
+			}
+		})
+	}
+
+}
+
+func TestCheckAlphabet(t *testing.T) {
+
+	tests := []struct {
+		test_name     string
+		values        []string
+		predict_value bool
+	}{
+		{
+			test_name: "OK value",
+			values: []string{
+				"aphabet",
+				"APHABET",
+				"APHAbet",
+			},
+			predict_value: true,
+		},
+		{
+			test_name: "invlid format value",
+			values: []string{
+				"日本語",
+				"日本go",
+			},
+			predict_value: false,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.test_name, func(t *testing.T) {
+			for _, v := range test.values {
+				t.Logf("predict : %v, result : %v, value :%s", test.predict_value, regex.CheckAlphabet(v), v)
+				assert.Equal(t, test.predict_value, regex.CheckAlphabet(v))
 			}
 		})
 	}

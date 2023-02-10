@@ -1,14 +1,18 @@
 package regex
 
 import (
-	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
 )
 
 func CheckAlphabet(value string) bool {
-	re := regexp.MustCompile("[A-Za-z]+")
+	re := regexp.MustCompile("^[A-Za-z]+$")
+	return re.MatchString(value)
+}
+
+func CheckNumeric(value string) bool {
+	re := regexp.MustCompile("^[1-9]+$")
 	return re.MatchString(value)
 }
 
@@ -71,7 +75,6 @@ func CheckERadRearcherNumberFormat(value string) bool {
 			sum_val = sum_val + number
 		}
 	}
-	println(fmt.Sprintf("sum_val : %d, value : %s, check_digit : %d, remain : %d", sum_val, value, check_digit, (sum_val % 10)))
 	if (sum_val % 10) != check_digit {
 		return false
 	}
