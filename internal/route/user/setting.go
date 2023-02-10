@@ -119,12 +119,14 @@ func SettingsPost(c *context.Context, f form.UpdateProfile) {
 		if !regex.CheckORCIDFormat(value) {
 			c.FormErr("PersonalUrl")
 			c.RenderWithErr(c.Tr("form.enterred_invalid_orcid_url"), SETTINGS_PROFILE, &f)
+			return
 		}
 	}
 	// check e-Rad Rearcher Number
 	if !regex.CheckERadRearcherNumberFormat(f.ERadResearcherNumber) {
 		c.FormErr("ERad")
 		c.RenderWithErr(c.Tr("form.enterred_invalid_erad"), SETTINGS_PROFILE, &f)
+		return
 	}
 
 	c.User.FirstName = f.FirstName
