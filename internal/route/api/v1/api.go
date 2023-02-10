@@ -427,25 +427,6 @@ func RegisterRoutes(m *macaron.Macaron) {
 			})
 		}, reqAdmin())
 
-		/**
-		DG specific code for getting matadata
-
-		author : ivis-tsukioka
-		*/
-		m.Group("/metadata", func() {
-			m.Post("", bind(metadata.Repository{}), metadata.GetAllMetadata)
-			m.Group("/users", func() {
-				m.Get("/:username", metadata.GetUser)
-				m.Post("", bind(metadata.UserNameList{}), metadata.GetUsers)
-			})
-			m.Group("/repo", func() {
-				m.Get("/:ownername/:reponame/:branchname", metadata.GetRepo)
-			})
-			m.Group("/project", func() {
-				m.Post("", bind(metadata.Repository{}), metadata.GetProject)
-			})
-		}, reqToken())
-
 		// When request route is no defined route, return 404
 		m.Any("/*", func(c *context.Context) {
 			c.JSON(http.StatusNotFound, map[string]interface{}{
