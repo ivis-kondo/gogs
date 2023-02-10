@@ -260,7 +260,7 @@ func RegisterRoutes(m *macaron.Macaron) {
 			// RCOS Code
 			m.Group("/:repoid", func() {
 				m.Group("/:branch", func() {
-					m.Get("/matadate", metadata.GetAllMetadata)
+					m.Get("/metadata", metadata.GetAllMetadata)
 				})
 			})
 
