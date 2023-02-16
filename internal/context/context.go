@@ -47,6 +47,10 @@ type AbstructContext interface {
 	UserID() int64
 	Success(name string)
 	Error(err error, msg string)
+	NotFoundOrError(err error, msg string)
+	NotFound()
+	NotFoundWithErrMsg(errMsg string)
+	IsInternalError() bool
 }
 
 // Context represents context of a request.
@@ -173,6 +177,14 @@ func (c *Context) HasValue(name string) bool {
 	return ok
 }
 
+func (c *Context) IsInternalError() bool {
+	is, ok := c.Data["IsInternalError"]
+	if !ok {
+		return false
+	}
+	return is.(bool)
+}
+
 // HTML responses template with given status.
 func (c *Context) HTML(status int, name string) {
 	log.Trace("Template: %s", name)
@@ -247,6 +259,17 @@ func (c *Context) NotFoundOrError(err error, msg string) {
 		return
 	}
 	c.Error(err, msg)
+}
+
+//  NotFoundWithErrMsg responses with 404 page and your message
+// if without errMsg, dwfault message is
+// errMsg = "your message" | ""
+func (c *Context) NotFoundWithErrMsg(errMsg string) {
+	c.Title("status.page_not_found")
+	if len(errMsg) > 0 {
+		c.Data["ErrorMsg"] = errMsg
+	}
+	c.HTML(http.StatusNotFound, fmt.Sprintf("status/%d", http.StatusNotFound))
 }
 
 // NotFoundOrErrorf is same as NotFoundOrError but with formatted message.

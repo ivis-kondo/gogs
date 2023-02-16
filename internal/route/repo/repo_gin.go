@@ -108,15 +108,21 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 	//       2. https://qiita.com/taizo/items/c397dbfed7215969b0a5
 	templateUrl := getTemplateUrl() + "maDMP.ipynb"
 
-	src, err := f.FetchContentsOnGithub(templateUrl)
-	if err != nil {
+	var decodedMaDmp string
+	src, err := f.FetchContentsOnGithub(c, templateUrl)
+	if err != nil && !c.IsInternalError() {
 		log.Error("maDMP blob could not be fetched: %v", err)
+		c.Redirect(c.GetRepo().GetRepoLink())
+		return
+	} else if err != nil && c.IsInternalError() {
+		log.Error("maDMP blob could not be fetched: %v", err)
+		c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
+		return
 	}
 
-	decodedMaDmp, err := f.DecodeBlobContent(src)
+	decodedMaDmp, err = f.DecodeBlobContent(src)
 	if err != nil {
 		log.Error("maDMP blob could not be decorded: %v", err)
-
 		failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed")
 		return
 	}
@@ -124,7 +130,6 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 	/* DMPの内容によって、DockerFileを利用しないケースがあったため、
 	　 DMPの内容を取得した後に、DockerFileを取得するように修正 */
 	// コード付帯機能の起動時間短縮のための暫定的な定義
-	// fetchDockerfile(c)
 
 	// ユーザが作成したDMP情報取得
 	entry, err := c.GetRepo().GetCommit().Blob("/dmp.json")
@@ -207,14 +212,19 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 }
 
 type AbstructRepoUtil interface {
-	FetchContentsOnGithub(blobPath string) ([]byte, error)
+	FetchContentsOnGithub(c context.AbstructContext, blobPath string) ([]byte, error)
 	DecodeBlobContent(blobInfo []byte) (string, error)
 }
 
 type repoUtil func()
 
-func (f repoUtil) FetchContentsOnGithub(blobPath string) ([]byte, error) {
-	return f.fetchContentsOnGithub(blobPath)
+func (f repoUtil) FetchContentsOnGithub(c context.AbstructContext, blobPath string) ([]byte, error) {
+	apiToken := conf.DG.ApiToken
+	if conf.DG.MaDMPTemplateRepoBranch != "" {
+		blobPath = blobPath + fmt.Sprintf("?ref=%s", conf.DG.MaDMPTemplateRepoBranch)
+		return f.fetchContentsOnGithub(c, blobPath, apiToken)
+	}
+	return f.fetchContentsOnGithub(c, blobPath, apiToken)
 }
 
 func (f repoUtil) DecodeBlobContent(blobInfo []byte) (string, error) {
@@ -226,27 +236,42 @@ func (f repoUtil) DecodeBlobContent(blobInfo []byte) (string, error) {
 // specified in the argument, and returns it in the type of []byte.
 // If any processing fails, it will return error.
 // refs: https://docs.github.com/en/rest/reference/repos#contents
-func (f repoUtil) fetchContentsOnGithub(blobPath string) ([]byte, error) {
+func (f repoUtil) fetchContentsOnGithub(c context.AbstructContext, blobPath string, apiToken string) ([]byte, error) {
 	req, err := http.NewRequest("GET", blobPath, nil)
 	if err != nil {
-		return nil, err
+		c.CallData()["IsInternalError"] = true
+		return nil, fmt.Errorf("do not Create Request. blobPath : %s, Error Msg : %v", blobPath, err)
 	}
 	req.Header.Set("Accept", "application/vnd.github.v3+json")
+
+	bearerToken := fmt.Sprintf("Bearer %s", apiToken)
+	// When token is set, Github API rate limit increase.
+	req.Header.Set("Authorization", bearerToken)
 
 	client := new(http.Client)
 
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, err
-	}
-	if resp.StatusCode == http.StatusNotFound {
-		return nil, fmt.Errorf("Error: blob not found.")
+		c.CallData()["IsInternalError"] = true
+		return nil, fmt.Errorf("do not Request. blobPath : %s, Error Msg : %v", blobPath, err)
 	}
 	defer resp.Body.Close()
+	log.Trace("Github api rate limit Remaining : %s", resp.Header.Values("X-RateLimit-Remaining")[0])
+
+	if resp.StatusCode == http.StatusNotFound {
+		c.CallData()["IsInternalError"] = true
+		return nil, fmt.Errorf("blob not found. blobPath : %s, Error Msg : %v", blobPath, err)
+	} else if resp.StatusCode == http.StatusUnauthorized {
+		c.CallData()["IsInternalError"] = true
+		return nil, fmt.Errorf("failure Authorization bacause Github API Token is invalid. blobPath : %s, Error Msg : %v", blobPath, err)
+	} else if resp.StatusCode == http.StatusForbidden {
+		return nil, fmt.Errorf("failure Request for GitHub bacause Github API rate limit exceeded blobPath : %s, Error Msg : %v", blobPath, err)
+	}
 
 	contents, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return nil, err
+		c.CallData()["IsInternalError"] = true
+		return nil, fmt.Errorf("connot Read Response Body. blobPath : %s, Error Msg : %v", blobPath, err)
 	}
 
 	return contents, nil
@@ -287,15 +312,16 @@ func fetchDockerfile(c context.AbstructContext) {
 	dockerfileUrl := getTemplateUrl() + "Dockerfile"
 
 	var f repoUtil
-	src, err := f.FetchContentsOnGithub(dockerfileUrl)
+	src, err := f.FetchContentsOnGithub(c, dockerfileUrl)
 	if err != nil {
 		log.Error("Dockerfile could not be fetched: %v", err)
+		failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed(Dockerfile)")
+		return
 	}
 
 	decodedDockerfile, err := f.DecodeBlobContent(src)
 	if err != nil {
 		log.Error("Dockerfile could not be decorded: %v", err)
-
 		failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed(Dockerfile)")
 		return
 	}
@@ -313,6 +339,7 @@ func fetchDockerfile(c context.AbstructContext) {
 	})
 }
 
+//★
 // fetchEmviromentfile is RCOS specific code.
 // This fetches the Dockerfile used when launching Binderhub.
 func fetchEmviromentfile(c context.AbstructContext) {
@@ -325,9 +352,11 @@ func fetchEmviromentfile(c context.AbstructContext) {
 
 	for i := 0; i < len(Emviromentfile); i++ {
 		path := Emviromentfilepath + Emviromentfile[i]
-		src, err := f.FetchContentsOnGithub(path)
+		src, err := f.FetchContentsOnGithub(c, path)
 		if err != nil {
 			log.Error("%s could not be fetched: %v", Emviromentfile[i], err)
+			failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed(Emviromentfile)")
+			return
 		}
 
 		decodefile, err := f.DecodeBlobContent(src)
@@ -365,9 +394,11 @@ func fetchImagefile(c context.AbstructContext) {
 
 	for i := 0; i < len(ImageFile); i++ {
 		path := ImageFilePath + ImageFile[i]
-		src, err := f.FetchContentsOnGithub(path)
+		src, err := f.FetchContentsOnGithub(c, path)
 		if err != nil {
 			log.Error("%s could not be fetched: %v", ImageFile[i], err)
+			failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed(ImageFile)")
+			return
 		}
 
 		decodefile, err := f.DecodeBlobContent(src)

@@ -378,6 +378,12 @@ var (
 	CLIConfig struct {
 		RSAHostKey string
 	}
+
+	// RCOS Specific Setting Struct
+	DG struct {
+		ApiToken                string `ini:"GIT_API_TOKEN"`
+		MaDMPTemplateRepoBranch string `ini:"MA_DMP_TEMPLATE_BRANCH"`
+	}
 )
 
 type ServerOpts struct {

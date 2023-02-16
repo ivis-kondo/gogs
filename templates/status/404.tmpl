@@ -4,6 +4,9 @@
 	<div class="ui divider"></div>
 	<br>
 	{{if .ShowFooterVersion}}<p>Application Version: {{AppVer}}</p>{{end}}
-	<p>If you think this is an error, please open an issue on <a href="https://github.com/G-Node/gogs/issues/new">GitHub</a>.</p>
+	{{if .ErrorMsg}}
+	<p>An error has occurred : {{.ErrorMsg}}</p>
+	{{else}}
+	<p>If you think this is an error, please open an issue on <a href="https://github.com/NII-DG/gogs/issues/new">GitHub</a>.</p>{{end}}
 </div>
 {{template "base/footer" .}}
