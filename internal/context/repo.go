@@ -329,7 +329,7 @@ func RepoAssignment(pages ...bool) macaron.Handler {
 		c.Data["CloneLink"] = repo.CloneLink()
 		c.Data["WikiCloneLink"] = repo.WikiCloneLink()
 
-		c.Data["Domain"] = conf.Server.Domain
+		c.Data["ExternalURL"] = conf.Server.ExternalURL
 
 		if c.IsLogged {
 			c.Data["IsWatchingRepo"] = db.IsWatching(c.User.ID, repo.ID)
