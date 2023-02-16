@@ -328,8 +328,9 @@ func RepoAssignment(pages ...bool) macaron.Handler {
 		c.Data["ShowHTTP"] = conf.Repository.ShowHTTPGit
 		c.Data["CloneLink"] = repo.CloneLink()
 		c.Data["WikiCloneLink"] = repo.WikiCloneLink()
-
-		c.Data["Domain"] = conf.Server.Domain
+		u, _ := url.Parse(conf.Server.ExternalURL)
+		ginURL := fmt.Sprintf("%s://%s", u.Scheme, u.Host)
+		c.Data["ginURL"] = url.PathEscape(ginURL)
 
 		if c.IsLogged {
 			c.Data["IsWatchingRepo"] = db.IsWatching(c.User.ID, repo.ID)
