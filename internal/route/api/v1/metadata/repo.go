@@ -3,11 +3,14 @@ package metadata
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/NII-DG/gogs/internal/context"
 	"github.com/NII-DG/gogs/internal/db"
+	ds "github.com/NII-DG/gogs/internal/route/api/v1/metadata/datastruct"
 	"github.com/NII-DG/gogs/internal/urlutil"
+	"github.com/NII-DG/gogs/internal/utils/regex"
 	log "unknwon.dev/clog/v2"
 )
 
@@ -102,4 +105,72 @@ func GetRepo(c *context.APIContext) {
 		Download:    download,
 	}
 	c.JSONSuccess(repoMatadata)
+}
+
+func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
+	repoid_str := c.Params(":repoid")
+	if !regex.CheckNumeric(repoid_str) {
+		c.JSON(http.StatusNotAcceptable, map[string]interface{}{
+			"warm": "Repository ID is not Numeric.",
+		})
+		return
+	}
+	branch := c.Params(":branch")
+	req_user := c.User
+	log.Trace("API to get Research All Metadata[Repository ID : %s, Branch : %s] has been done by User[ID : %d]", repoid_str, branch, req_user.ID)
+
+	repoid, _ := strconv.Atoi(repoid_str)
+	repo, err := db.GetRepositoryByID(int64(repoid))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, map[string]interface{}{
+			"error": "Internal Server Error",
+		})
+		log.Error("failure getting repository by owner name and repository name from DB.  Repository ID : %s", repoid_str)
+		return
+	}
+
+	// check repository has branch
+	if _, err := repo.GetBranch(branch); err != nil {
+		c.JSON(http.StatusNotFound, map[string]interface{}{
+			"warm": fmt.Sprintf("this repository <ID : %s> dosen't have %s baranch.", repoid_str, branch),
+		})
+		log.Error("this repository <ID : %s> dosen't have %s baranch.", repoid_str, branch)
+		return
+	}
+
+	// check request user access repository information
+	users, err := repo.GetAssignees()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, map[string]interface{}{
+			"error": "Internal Server Error",
+		})
+		log.Error("failure getting read only user on repository from DB, Repository : %s", repo.Name)
+		return
+	}
+
+	request_user_id := req_user.ID
+	accessRight := false
+	for _, u := range users {
+		if u.ID == request_user_id {
+			accessRight = true
+		}
+	}
+
+	if !accessRight {
+		c.JSON(http.StatusUnauthorized, map[string]interface{}{
+			"warm": fmt.Sprintf("you do not has access right to get repository <ID : %s> metadata.", repoid_str),
+		})
+		log.Trace("user<%s> do not has access right to get repository <ID : %s> metadata.", req_user.Name, repoid_str)
+		return
+	}
+
+	// Create ResearchProject
+	r_pj := ds.ResearchProject{
+		Name:        repo.ProtectName,
+		Description: repo.ProjectDescription,
+	}
+	log.Info("%s, %s", r_pj.Name, r_pj.Description)
+	log.Info("repo.LocalCopyPath : %s", repo.LocalCopyPath())
+	log.Info("repo.RepoPath : %s", repo.RepoPath())
+
 }
