@@ -173,4 +173,5 @@ func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
 	log.Info("repo.LocalCopyPath : %s", repo.LocalCopyPath())
 	log.Info("repo.RepoPath : %s", repo.RepoPath())
 
+	c.JSONSuccess("OK")
 }
