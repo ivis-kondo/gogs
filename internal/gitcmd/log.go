@@ -28,10 +28,9 @@ func GitLog(repoPath, branch, format string, count int) (string, error) {
 	pretty := fmt.Sprintf("--pretty=format:\"%s\"", format)
 	count_num := fmt.Sprintf("-%d", count)
 	cmd := git.NewCommand("log", pretty, count_num, branch)
-	repoPath = repoPath + "/a"
 	raw_msg, err := cmd.RunInDir(repoPath)
 	if err != nil {
-		return "", fmt.Errorf("error msg : [%v]. exec cmd : [%v]", err, cmd.String())
+		return "", fmt.Errorf("[%v]. exec cmd : [%v]. exec dir : [%s]", err, cmd.String(), repoPath)
 	}
 	return utils.BytesToString(raw_msg), nil
 }

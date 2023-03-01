@@ -25,5 +25,8 @@ func (repo *Repository) ExtractMetadata(branch string) ([]datastruct.File, []dat
 	}
 	log.Trace("GetLastCommitByBranch() commit_id : %s", commit_id)
 
+	// get tree object id by commit_id
+	gitcmd.GetTreeIDByCommitId(repo.RepoPath(), commit_id)
+
 	return []datastruct.File{}, []datastruct.Dataset{}, nil
 }

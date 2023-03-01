@@ -205,7 +205,7 @@ func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
 	// Create Files
 	files, dataset, err := repo.ExtractMetadata(branch)
 	if err != nil {
-		log.Error("failure extracting metadata from repository <ID : %s>. err msg : %v", repo.ID, err)
+		log.Error("failure extracting metadata from repository <ID : %s>. err msg : %v", repoid_str, err)
 		c.JSON(http.StatusInternalServerError, map[string]interface{}{
 			"error": "Internal Server Error",
 		})
