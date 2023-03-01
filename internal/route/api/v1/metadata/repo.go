@@ -8,7 +8,7 @@ import (
 
 	"github.com/NII-DG/gogs/internal/context"
 	"github.com/NII-DG/gogs/internal/db"
-	ds "github.com/NII-DG/gogs/internal/route/api/v1/metadata/datastruct"
+	datastruct "github.com/NII-DG/gogs/internal/route/api/v1/metadata/datastruct"
 	"github.com/NII-DG/gogs/internal/urlutil"
 	"github.com/NII-DG/gogs/internal/utils/regex"
 	log "unknwon.dev/clog/v2"
@@ -165,13 +165,60 @@ func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
 	}
 
 	// Create ResearchProject
-	r_pj := ds.ResearchProject{
+	Research_pj := datastruct.ResearchProject{
 		Name:        repo.ProtectName,
 		Description: repo.ProjectDescription,
 	}
-	log.Info("%s, %s", r_pj.Name, r_pj.Description)
+	log.Info("%s, %s", Research_pj.Name, Research_pj.Description)
 	log.Info("repo.LocalCopyPath : %s", repo.LocalCopyPath())
 	log.Info("repo.RepoPath : %s", repo.RepoPath())
 
-	c.JSONSuccess("OK")
+	// Create Persons
+	persons := []datastruct.Person{}
+	for _, u := range users {
+
+		personalUrl := ""
+		if len(u.PersonalURL) > 0 {
+			personalUrl = u.PersonalURL
+		} else {
+			url, err := urlutil.UpdatePath(c.BaseURL, u.Name)
+			if err != nil {
+				c.Errorf(err, "%v", err)
+				return
+			}
+			personalUrl = url
+		}
+
+		person := datastruct.Person{
+			ID:                   u.IDStr(),
+			Url:                  personalUrl,
+			Name:                 u.FullName,
+			Alias:                u.AliasName,
+			Affiliation:          "",
+			Email:                u.Email,
+			Telephone:            u.Telephone,
+			ERadResearcherNumber: u.ERadResearcherNumber,
+		}
+		persons = append(persons, person)
+	}
+
+	// Create Files
+	files, dataset, err := repo.ExtractMetadata(branch)
+	if err != nil {
+		log.Error("failure extracting metadata from repository <ID : %s>. err msg : %v", repo.ID, err)
+		c.JSON(http.StatusInternalServerError, map[string]interface{}{
+			"error": "Internal Server Error",
+		})
+		return
+	}
+
+	// Create Metadata
+	metadata := datastruct.Metadata{
+		ResearchProject: Research_pj,
+		Files:           files,
+		Persons:         persons,
+		Datasets:        dataset,
+	}
+
+	c.JSONSuccess(metadata)
 }
