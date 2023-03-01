@@ -2,6 +2,7 @@ package gitcmd
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/NII-DG/gogs/internal/utils"
 	"github.com/gogs/git-module"
@@ -27,6 +28,7 @@ func GitLog(repoPath, branch, format string, count int) (string, error) {
 	pretty := fmt.Sprintf("--pretty=format:\"%s\"", format)
 	count_num := fmt.Sprintf("-%d", count)
 	cmd := git.NewCommand("log", pretty, count_num, branch)
+	repoPath = repoPath + "/a"
 	raw_msg, err := cmd.RunInDir(repoPath)
 	if err != nil {
 		return "", fmt.Errorf("error msg : [%v]. exec cmd : [%v]", err, cmd.String())
@@ -35,5 +37,9 @@ func GitLog(repoPath, branch, format string, count int) (string, error) {
 }
 
 func GetLastCommitByBranch(repoPath, branch string) (string, error) {
-	return GitLog(repoPath, branch, "%H", 1)
+	raw_msg, err := GitLog(repoPath, branch, "%H", 1)
+	if err != nil {
+		return "", err
+	}
+	return strings.Replace(raw_msg, "\"", "", -1), nil
 }
