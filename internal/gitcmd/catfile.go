@@ -3,6 +3,7 @@ package gitcmd
 import (
 	"fmt"
 	"regexp"
+	"strings"
 
 	"github.com/NII-DG/gogs/internal/utils"
 	"github.com/gogs/git-module"
@@ -27,5 +28,7 @@ func GetTreeIDByCommitId(repoPath, commit_id string) (string, error) {
 	msg_list := regexp.MustCompile(reg).Split(raw_msg, -1)
 	log.Trace("GetTreeIDByCommitId raw_msg : %s", raw_msg)
 	log.Trace("GetTreeIDByCommitId msg_list[0] : %s", msg_list[0])
+	treeid := strings.Split(msg_list[0], " ")[1]
+	log.Trace("GetTreeIDByCommitId treeid : %s", treeid)
 	return "", nil
 }
