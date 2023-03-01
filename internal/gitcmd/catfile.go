@@ -7,7 +7,6 @@ import (
 
 	"github.com/NII-DG/gogs/internal/utils"
 	"github.com/gogs/git-module"
-	log "unknwon.dev/clog/v2"
 )
 
 func GitCatFile(repoPath, hash string) (string, error) {
@@ -25,10 +24,6 @@ func GetTreeIDByCommitId(repoPath, commit_id string) (string, error) {
 		return "", err
 	}
 	reg := "\r\n|\n"
-	msg_list := regexp.MustCompile(reg).Split(raw_msg, -1)
-	log.Trace("GetTreeIDByCommitId raw_msg : %s", raw_msg)
-	log.Trace("GetTreeIDByCommitId msg_list[0] : %s", msg_list[0])
-	treeid := strings.Split(msg_list[0], " ")[1]
-	log.Trace("GetTreeIDByCommitId treeid : %s", treeid)
-	return "", nil
+	tree_id := strings.Split(regexp.MustCompile(reg).Split(raw_msg, -1)[0], " ")[1]
+	return tree_id, nil
 }
