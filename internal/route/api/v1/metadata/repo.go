@@ -202,6 +202,10 @@ func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
 		persons = append(persons, person)
 	}
 
+	log.Trace("repo.Name: %s", repo.Name)
+	log.Trace("repo.ExternalTrackerURL: %s", repo.ExternalTrackerURL)
+	log.Trace("repo.FullName: %s", repo.FullName())
+
 	// Create Files
 	files, dataset, err := repo.ExtractMetadata(branch)
 	if err != nil {

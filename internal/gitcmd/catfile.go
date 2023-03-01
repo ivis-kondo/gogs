@@ -9,21 +9,41 @@ import (
 	"github.com/gogs/git-module"
 )
 
-func GitCatFile(repoPath, hash string) (string, error) {
-	cmd := git.NewCommand("cat-file", "-p", hash)
+func GitCatFile(repoPath, option, hash string) ([]byte, error) {
+	cmd := git.NewCommand("cat-file", option, hash)
 	raw_msg, err := cmd.RunInDir(repoPath)
 	if err != nil {
-		return "", fmt.Errorf("[%v]. exec cmd : [%v]. exec dir : [%s]", err, cmd.String(), repoPath)
+		return nil, fmt.Errorf("[%v]. exec cmd : [%v]. exec dir : [%s]", err, cmd.String(), repoPath)
 	}
-	return utils.BytesToString(raw_msg), nil
+	return raw_msg, nil
 }
 
 func GetTreeIDByCommitId(repoPath, commit_id string) (string, error) {
-	raw_msg, err := GitCatFile(repoPath, commit_id)
+	raw_msg, err := GitCatFile(repoPath, "-p", commit_id)
 	if err != nil {
 		return "", err
 	}
 	reg := "\r\n|\n"
-	tree_id := strings.Split(regexp.MustCompile(reg).Split(raw_msg, -1)[0], " ")[1]
+	tree_id := strings.Split(regexp.MustCompile(reg).Split(utils.BytesToString(raw_msg), -1)[0], " ")[1]
 	return tree_id, nil
+}
+
+func GetFileSizeByObjectId(repoPath, object_id string) (int, error) {
+	raw_msg, err := GitCatFile(repoPath, "-s", object_id)
+	if err != nil {
+		return -1, err
+	}
+	size, err := utils.NumericStringToInt(utils.BytesToString(raw_msg))
+	if err != nil {
+		return -1, err
+	}
+	return size, nil
+}
+
+func GetContentByObjectId(repoPath, object_id string) ([]byte, error) {
+	raw_msg, err := GitCatFile(repoPath, "-p", object_id)
+	if err != nil {
+		return nil, err
+	}
+	return raw_msg, nil
 }

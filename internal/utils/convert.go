@@ -1,6 +1,9 @@
 package utils
 
-import "unsafe"
+import (
+	"strconv"
+	"unsafe"
+)
 
 func BytesToString(data []byte) string {
 	return *(*string)(unsafe.Pointer(&data))
@@ -13,4 +16,8 @@ func StringToBytes(data string) []byte {
 			Cap int
 		}{data, len(data)},
 	))
+}
+
+func NumericStringToInt(data string) (int, error) {
+	return strconv.Atoi(data)
 }

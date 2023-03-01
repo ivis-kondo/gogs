@@ -98,6 +98,10 @@ var (
 			MaxFiles         int
 			AnnexFileMinSize int64
 		} `ini:"repository.upload"`
+
+		Extract struct {
+			TempPath string
+		} `ini:"repository.extract"`
 	}
 
 	// Security settings

@@ -7,8 +7,7 @@ import (
 
 	"github.com/NII-DG/gogs/internal/utils"
 	"github.com/gogs/git-module"
-
-	log "unknwon.dev/clog/v2"
+	//log "unknwon.dev/clog/v2"
 )
 
 /*
@@ -26,27 +25,45 @@ func GitIsFile(repoPath, option string) (string, error) {
 	return utils.BytesToString(raw_msg), nil
 }
 
-type FileDetail struct {
+type DataDetail struct {
 	Mode     string
 	Hash     string
 	FilePath string
 }
 
-func GetFileDetailList(repoPath string) (string, error) {
+func GetFileDetailList(repoPath string) ([]DataDetail, error) {
 	raw_msg, err := GitIsFile(repoPath, "-s")
 	if err != nil {
-		return "", err
+		return []DataDetail{}, err
 	}
 	reg := "\r\n|\n"
 	file_list := regexp.MustCompile(reg).Split(raw_msg, -1)
 
-	//FileDetailList := []FileDetail{}
+	FileDetailList := []DataDetail{}
 
 	for _, v := range file_list {
 		file_info := strings.Fields(v)
-		for index, va := range file_info {
-			log.Trace("index : %d, value : %s", index, va)
+		fileDateil := DataDetail{
+			Mode:     file_info[0],
+			Hash:     file_info[1],
+			FilePath: file_info[3],
+		}
+		FileDetailList = append(FileDetailList, fileDateil)
+	}
+	return FileDetailList, nil
+}
+
+func DivideByMode(data_list []DataDetail) (file_list []DataDetail, symbolic_link_list []DataDetail) {
+
+	for _, v := range data_list {
+		switch v.Mode {
+
+		case "120000": // symbolic_link
+			symbolic_link_list = append(symbolic_link_list, v)
+		case "100644": // file
+			file_list = append(file_list, v)
+
 		}
 	}
-	return "", nil
+	return file_list, symbolic_link_list
 }
