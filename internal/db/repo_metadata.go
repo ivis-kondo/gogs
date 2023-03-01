@@ -39,5 +39,11 @@ func (repo *Repository) ExtractMetadata(branch string) ([]datastruct.File, []dat
 		return []datastruct.File{}, []datastruct.Dataset{}, err
 	}
 
+	// get file list from repository
+	_, err = gitcmd.GetFileDetailList(repoPath)
+	if err != nil {
+		return []datastruct.File{}, []datastruct.Dataset{}, err
+	}
+
 	return []datastruct.File{}, []datastruct.Dataset{}, nil
 }
