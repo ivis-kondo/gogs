@@ -43,7 +43,7 @@ func GetFileDetailList(repoPath string) (string, error) {
 	//FileDetailList := []FileDetail{}
 
 	for _, v := range file_list {
-		file_info := strings.Split(v, " ")
+		file_info := strings.Split(v, "")
 		for index, va := range file_info {
 			log.Trace("index : %d, value : %s", index, va)
 		}
