@@ -2,6 +2,7 @@ package gitcmd
 
 import (
 	"fmt"
+	"path/filepath"
 	"regexp"
 	"strings"
 
@@ -46,7 +47,7 @@ func GetFileDetailList(repoPath string) ([]DataDetail, error) {
 		fileDateil := DataDetail{
 			Mode:     file_info[0],
 			Hash:     file_info[1],
-			FilePath: file_info[3],
+			FilePath: filepath.ToSlash(file_info[3]),
 		}
 		FileDetailList = append(FileDetailList, fileDateil)
 	}
@@ -66,4 +67,48 @@ func DivideByMode(data_list []DataDetail) (file_list []DataDetail, symbolic_link
 		}
 	}
 	return file_list, symbolic_link_list
+}
+
+func (dd DataDetail) IsExperimentPackage(data_struct_type string) (bool, error) {
+	splited_file_path := strings.Split(filepath.ToSlash(dd.FilePath), "/")
+	if data_struct_type == "with_code" {
+		return IsExperimentPackageOnWithCode(splited_file_path), nil
+	} else if data_struct_type == "for_parameter" {
+		return IsExperimentPackageOnForParameter(splited_file_path), nil
+	} else {
+		return false, fmt.Errorf("data_struct_type[%s] is not defined", data_struct_type)
+	}
+}
+
+//experiments/test_ex/source/s3/sample.ipynb
+const EXPERIMENTS = "experiments"
+const INPUT_DATA = "input_data"
+const SOURCE = "source"
+const OUTPUT_DATA = "output_data"
+const PARAM = "param"
+const GIT_KEEP = ".gitkeep"
+
+func IsExperimentPackageOnWithCode(splited_file_path []string) bool {
+	if splited_file_path[0] != EXPERIMENTS {
+		return false
+	}
+	if splited_file_path[2] == INPUT_DATA || splited_file_path[2] == SOURCE || splited_file_path[2] == OUTPUT_DATA {
+		return splited_file_path[len(splited_file_path)-1] != GIT_KEEP
+	}
+	return false
+}
+
+func IsExperimentPackageOnForParameter(splited_file_path []string) bool {
+	if splited_file_path[0] != EXPERIMENTS {
+		return false
+	}
+
+	if splited_file_path[2] == INPUT_DATA || splited_file_path[2] == SOURCE {
+		return splited_file_path[len(splited_file_path)-1] != GIT_KEEP
+	}
+
+	if splited_file_path[3] == PARAM || splited_file_path[3] == OUTPUT_DATA {
+		return splited_file_path[len(splited_file_path)-1] != GIT_KEEP
+	}
+	return false
 }

@@ -21,3 +21,7 @@ func StringToBytes(data string) []byte {
 func NumericStringToInt(data string) (int, error) {
 	return strconv.Atoi(data)
 }
+
+func NumericIntToString(data int) string {
+	return strconv.Itoa(data)
+}

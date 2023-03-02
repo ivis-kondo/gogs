@@ -202,12 +202,8 @@ func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
 		persons = append(persons, person)
 	}
 
-	log.Trace("repo.Name: %s", repo.Name)
-	log.Trace("repo.ExternalTrackerURL: %s", repo.ExternalTrackerURL)
-	log.Trace("repo.FullName: %s", repo.FullName())
-
-	// Create Files
-	files, dataset, err := repo.ExtractMetadata(branch)
+	// Create Files and GinMonitoring
+	files, dataset, gin_monitoring, err := repo.ExtractMetadata(branch)
 	if err != nil {
 		log.Error("failure extracting metadata from repository <ID : %s>. err msg : %v", repoid_str, err)
 		c.JSON(http.StatusInternalServerError, map[string]interface{}{
@@ -222,6 +218,7 @@ func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
 		Files:           files,
 		Persons:         persons,
 		Datasets:        dataset,
+		GinMonitorings:  []datastruct.GinMonitoring{gin_monitoring},
 	}
 
 	c.JSONSuccess(metadata)

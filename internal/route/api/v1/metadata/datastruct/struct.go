@@ -60,12 +60,12 @@ type Person struct {
 type File struct {
 	ID                    string `json:"@id"`
 	Name                  string `json:"name"`
-	ContentSize           int    `json:"contentSize"`
+	ContentSize           string `json:"contentSize"`
 	EncodingFormat        string `json:"encodingFormat"`
 	Sha256                string `json:"sha256"`
 	Url                   string `json:"url"`
 	SdDatePublished       string `json:"sdDatePublished"`
-	ExperimentPackageFlag string `json:"experimentPackageFlag"`
+	ExperimentPackageFlag bool   `json:"experimentPackageFlag"`
 }
 
 type Dataset struct {
