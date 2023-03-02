@@ -215,7 +215,7 @@ func CreateFilesToDatasets(repo *Repository, files []datastruct.File, branch str
 	for _, file := range files {
 		path := file.ID
 		splited_file_path := strings.Split(path, "/")
-
+		splited_file_path = splited_file_path[0 : len(splited_file_path)-1]
 		dataset_id := ""
 		for _, element := range splited_file_path {
 			dataset_id = dataset_id + element + "/"
