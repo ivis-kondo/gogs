@@ -39,7 +39,7 @@ func GetFileDetailList(repoPath string) ([]DataDetail, error) {
 	}
 	reg := "\r\n|\n"
 	file_list := regexp.MustCompile(reg).Split(raw_msg, -1)
-
+	file_list = file_list[0 : len(file_list)-1]
 	FileDetailList := []DataDetail{}
 
 	for _, v := range file_list {
