@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/NII-DG/gogs/internal/context"
 	"github.com/NII-DG/gogs/internal/db"
@@ -16,8 +17,8 @@ import (
 func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
 	repoid_str := c.Params(":repoid")
 	if !regex.CheckNumeric(repoid_str) {
-		c.JSON(http.StatusNotAcceptable, map[string]interface{}{
-			"warm": "Repository ID is not Numeric.",
+		c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"message": "Repository ID is not Numeric.",
 		})
 		return
 	}
@@ -28,8 +29,15 @@ func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
 	repoid, _ := strconv.Atoi(repoid_str)
 	repo, err := db.GetRepositoryByID(int64(repoid))
 	if err != nil {
+		err_msg := err.Error()
+		if strings.Contains(err_msg, "repoID") {
+			c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"message": "Repository ID is not exist.",
+			})
+			return
+		}
 		c.JSON(http.StatusInternalServerError, map[string]interface{}{
-			"error": "Internal Server Error",
+			"message": "Internal Server Error",
 		})
 		log.Error("failure getting repository by owner name and repository name from DB.  Repository ID : %s", repoid_str)
 		return
@@ -37,10 +45,9 @@ func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
 
 	// check repository has branch
 	if _, err := repo.GetBranch(branch); err != nil {
-		c.JSON(http.StatusNotFound, map[string]interface{}{
-			"warm": fmt.Sprintf("this repository <ID : %s> dosen't have %s baranch.", repoid_str, branch),
+		c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"message": fmt.Sprintf("this repository <ID : %s> dosen't have %s baranch.", repoid_str, branch),
 		})
-		log.Error("this repository <ID : %s> dosen't have %s baranch.", repoid_str, branch)
 		return
 	}
 
@@ -48,7 +55,7 @@ func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
 	users, err := repo.GetAssignees()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, map[string]interface{}{
-			"error": "Internal Server Error",
+			"message": "Internal Server Error",
 		})
 		log.Error("failure getting read only user on repository from DB, Repository : %s", repo.Name)
 		return
@@ -63,8 +70,8 @@ func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
 	}
 
 	if !accessRight {
-		c.JSON(http.StatusUnauthorized, map[string]interface{}{
-			"warm": fmt.Sprintf("you do not has access right to get repository <ID : %s> metadata.", repoid_str),
+		c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"message": fmt.Sprintf("you do not has access right to get repository <ID : %s> metadata.", repoid_str),
 		})
 		log.Trace("user<%s> do not has access right to get repository <ID : %s> metadata.", req_user.Name, repoid_str)
 		return
@@ -115,7 +122,7 @@ func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
 	if err != nil {
 		log.Error("failure extracting metadata from repository <ID : %s>. err msg : %v", repoid_str, err)
 		c.JSON(http.StatusInternalServerError, map[string]interface{}{
-			"error": "Internal Server Error",
+			"InternalServerError": "Internal Server Error",
 		})
 		return
 	}
