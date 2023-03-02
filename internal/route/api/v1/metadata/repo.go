@@ -190,11 +190,11 @@ func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
 		}
 
 		person := datastruct.Person{
-			ID:                   u.IDStr(),
-			Url:                  personalUrl,
-			Name:                 u.FullName,
-			Alias:                u.AliasName,
-			Affiliation:          "",
+			ID:    u.IDStr(),
+			Url:   personalUrl,
+			Name:  u.FullName,
+			Alias: u.AliasName,
+			//Affiliation:          "",
 			Email:                u.Email,
 			Telephone:            u.Telephone,
 			ERadResearcherNumber: u.ERadResearcherNumber,
@@ -212,13 +212,28 @@ func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
 		return
 	}
 
+	//TODO : Create dmps
+	//TODO : Create funder_orgs
+	//TODO : Create research_orgs
+	//TODO : Create licenses
+	//TODO : Create data_downloads
+	//TODO : Create repository_objs
+	//TODO : Create hosting_institutions
+
 	// Create Metadata
 	metadata := datastruct.Metadata{
-		ResearchProject: Research_pj,
-		Files:           files,
-		Persons:         persons,
-		Datasets:        dataset,
-		GinMonitorings:  []datastruct.GinMonitoring{gin_monitoring},
+		ResearchProject:     Research_pj,
+		FunderOrgs:          []datastruct.FunderOrg{},
+		ResearchOrgs:        []datastruct.ResearchOrg{},
+		Licenses:            []datastruct.License{},
+		DataDownloads:       []datastruct.DataDownload{},
+		RepositoryObjects:   []datastruct.RepositoryObject{},
+		HostingInstitutions: []datastruct.HostingInstitution{},
+		Persons:             persons,
+		Files:               files,
+		Datasets:            dataset,
+		GinMonitorings:      []datastruct.GinMonitoring{gin_monitoring},
+		Dmps:                []datastruct.Dmp{},
 	}
 
 	c.JSONSuccess(metadata)

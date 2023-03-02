@@ -80,6 +80,11 @@ type GinMonitoring struct {
 	DatasetStructure   string `json:"datasetStructure"`
 }
 
+type Dmp struct {
+	Type string `json:"type"`
+	// TODO : add Property
+}
+
 type Metadata struct {
 	ResearchProject     ResearchProject      `json:"research_project"`
 	FunderOrgs          []FunderOrg          `json:"funder_orgs"`
@@ -92,5 +97,5 @@ type Metadata struct {
 	Files               []File               `json:"files"`
 	Datasets            []Dataset            `json:"datasets"`
 	GinMonitorings      []GinMonitoring      `json:"gin_monitorings"`
-	Dmps                []interface{}        `json:"dmps"`
+	Dmps                []Dmp                `json:"dmps"`
 }
