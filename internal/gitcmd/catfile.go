@@ -28,16 +28,12 @@ func GetTreeIDByCommitId(repoPath, commit_id string) (string, error) {
 	return tree_id, nil
 }
 
-func GetFileSizeByObjectId(repoPath, object_id string) (int, error) {
+func GetFileSizeByObjectId(repoPath, object_id string) (string, error) {
 	raw_msg, err := GitCatFile(repoPath, "-s", object_id)
 	if err != nil {
-		return -1, err
+		return "", err
 	}
-	size, err := utils.NumericStringToInt(utils.BytesToString(raw_msg))
-	if err != nil {
-		return -1, err
-	}
-	return size, nil
+	return strings.ReplaceAll(utils.BytesToString(raw_msg), "\n", ""), nil
 }
 
 func GetContentByObjectId(repoPath, object_id string) ([]byte, error) {

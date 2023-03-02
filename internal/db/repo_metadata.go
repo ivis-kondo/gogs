@@ -140,11 +140,10 @@ func ExtractMetaDataGitContent(repo *Repository, git_contents []gitcmd.DataDetai
 		if err != nil {
 			return nil, err
 		}
-		size := utils.NumericIntToString(file_size)
 		file := datastruct.File{
 			ID:                    git_content.FilePath,
 			Name:                  filepath.Base(git_content.FilePath),
-			ContentSize:           size,
+			ContentSize:           file_size,
 			EncodingFormat:        mime_type,
 			Sha256:                hash,
 			Url:                   url,
