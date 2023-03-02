@@ -12,7 +12,7 @@
 									<a class="ui basic button" href="{{$.RepoLink}}/src/{{EscapePound $.BranchName}}/maDMP.ipynb" data-position="bottom center"><i class="octicon octicon-file"></i>View maDMP</a>
 									<div class="ui labeled button" data-tooltip="Transition to the maDMP execution environment. Please click this after 'Generate maDMP'" data-position="bottom center">
                                 	<button class="ui basic button" data-position="bottom center">
-										<a href="https://binder.cs.rcos.nii.ac.jp/v2/git/http%3A%2F%2F{{.Domain}}%2F{{.Owner.Name}}%2F{{.Repository.Name}}.git/master?filepath=maDMP.ipynb">
+										<a href="https://binder.cs.rcos.nii.ac.jp/v2/git/{{.ginURL}}%2F{{.Owner.Name}}%2F{{.Repository.Name}}.git/master?filepath=maDMP.ipynb">
 											<img src="https://binder.cs.rcos.nii.ac.jp/badge_logo.svg">
 										</a>
 									</button>
