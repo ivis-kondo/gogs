@@ -18,7 +18,6 @@ import (
 	"github.com/NII-DG/gogs/internal/urlutil"
 	"github.com/NII-DG/gogs/internal/utils"
 	"github.com/unknwon/com"
-	log "unknwon.dev/clog/v2"
 )
 
 /*
@@ -39,14 +38,12 @@ func (repo *Repository) ExtractMetadata(branch string) ([]datastruct.File, []dat
 	if err != nil {
 		return nil, nil, datastruct.GinMonitoring{}, err
 	}
-	log.Trace("GetLastCommitByBranch() commit_id : %s", commit_id)
 
 	// get tree object id by commit_id
 	tree_id, err := gitcmd.GetTreeIDByCommitId(repoPath, commit_id)
 	if err != nil {
 		return nil, nil, datastruct.GinMonitoring{}, err
 	}
-	log.Trace("GetLastCommitByBranch() tree_id : %s", tree_id)
 
 	// read tree on bare repo
 	if err = gitcmd.GitReadTree(repoPath, tree_id); err != nil {

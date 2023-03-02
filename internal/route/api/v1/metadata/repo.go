@@ -82,9 +82,6 @@ func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
 		Name:        repo.ProtectName,
 		Description: repo.ProjectDescription,
 	}
-	log.Info("%s, %s", Research_pj.Name, Research_pj.Description)
-	log.Info("repo.LocalCopyPath : %s", repo.LocalCopyPath())
-	log.Info("repo.RepoPath : %s", repo.RepoPath())
 
 	// Create Persons
 	persons := []datastruct.Person{}

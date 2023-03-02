@@ -8,7 +8,6 @@ import (
 
 	"github.com/NII-DG/gogs/internal/utils"
 	"github.com/gogs/git-module"
-	log "unknwon.dev/clog/v2"
 )
 
 /*
@@ -44,7 +43,6 @@ func GetFileDetailList(repoPath string) ([]DataDetail, error) {
 
 	for _, v := range file_list {
 		file_info := strings.Fields(v)
-		log.Trace("file_info : %v", file_info)
 		fileDateil := DataDetail{
 			Mode:     file_info[0],
 			Hash:     file_info[1],
