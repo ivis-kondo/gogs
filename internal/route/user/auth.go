@@ -295,6 +295,8 @@ func SignUp(c *context.Context) {
 	c.Title("sign_up")
 
 	c.Data["EnableCaptcha"] = conf.Auth.EnableRegistrationCaptcha
+	list, _ := db.GetAffiliationList()
+	c.Data["AffiliationList"] = list
 
 	if conf.Auth.DisableRegistration {
 		c.Data["DisableRegistration"] = true
@@ -364,21 +366,18 @@ func SignUpPost(c *context.Context, cpt *captcha.Captcha, f form.Register) {
 	}
 
 	u := &db.User{
-		Name:                   f.UserName,
-		Email:                  f.Email,
-		Telephone:              f.Telephone,
-		Passwd:                 f.Password,
-		FullName:               fullName,
-		FirstName:              f.FirstName,
-		AliasName:              f.AliasName,
-		LastName:               f.LastName,
-		ERadResearcherNumber:   f.ERadResearcherNumber,
-		PersonalURL:            f.PersonalURL,
-		Affiliation:            f.Affiliation,
-		AffiliationAlias:       f.AffiliationAlias,
-		AffiliationDescription: f.AffiliationDescription,
-		AffiliationURL:         f.AffiliationURL,
-		IsActive:               !conf.Auth.RequireEmailConfirmation,
+		Name:                 f.UserName,
+		Email:                f.Email,
+		Telephone:            f.Telephone,
+		Passwd:               f.Password,
+		FullName:             fullName,
+		FirstName:            f.FirstName,
+		AliasName:            f.AliasName,
+		LastName:             f.LastName,
+		ERadResearcherNumber: f.ERadResearcherNumber,
+		PersonalURL:          f.PersonalURL,
+		AffiliationId:        f.AffiliationId,
+		IsActive:             !conf.Auth.RequireEmailConfirmation,
 	}
 	if err := db.CreateUser(u); err != nil {
 		switch {
