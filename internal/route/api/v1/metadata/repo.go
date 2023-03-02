@@ -189,12 +189,14 @@ func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
 			personalUrl = url
 		}
 
+		//TODO : Cretae User affiation
+
 		person := datastruct.Person{
-			ID:    u.IDStr(),
-			Url:   personalUrl,
-			Name:  u.FullName,
-			Alias: u.AliasName,
-			//Affiliation:          "",
+			ID:                   u.IDStr(),
+			Url:                  personalUrl,
+			Name:                 u.FullName,
+			Alias:                u.AliasName,
+			Affiliation:          "",
 			Email:                u.Email,
 			Telephone:            u.Telephone,
 			ERadResearcherNumber: u.ERadResearcherNumber,
