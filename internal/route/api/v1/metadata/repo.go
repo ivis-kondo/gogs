@@ -102,36 +102,37 @@ func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
 		}
 
 		//TODO : Cretae User affiation
-		aff_id := u.Affiliation
-		aff_db, err := GetAffiliationByID(aff_id)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, map[string]interface{}{
-				"message": "Internal Server Error",
-			})
-			log.Error("failure getting affiliation from DB.  Affiliation ID : %v", aff_id)
-			return
+		// aff_id := u.Affiliation
+		// aff_db, err := GetAffiliationByID(aff_id)
+		// if err != nil {
+		// 	c.JSON(http.StatusInternalServerError, map[string]interface{}{
+		// 		"message": "Internal Server Error",
+		// 	})
+		// 	log.Error("failure getting affiliation from DB.  Affiliation ID : %v", aff_id)
+		// 	return
 
-		}
-		var research_org_id string
-		if _, ok := tmp_research_orgs[aff_db.Url]; !ok {
-			research_org := datastruct.ResearchOrg{
-				ID:          aff_db.Url,
-				Name:        aff_db.Name,
-				Description: aff_db.Description,
-				AliasName:   aff_db.Alias,
-			}
-			tmp_research_orgs[aff_db.Url] = research_org
-			research_org_id = aff_db.Url
-		} else {
-			research_org_id = aff_db.Url
-		}
+		// }
+
+		// var research_org_id string
+		// if _, ok := tmp_research_orgs[aff_db.Url]; !ok {
+		// 	research_org := datastruct.ResearchOrg{
+		// 		ID:          aff_db.Url,
+		// 		Name:        aff_db.Name,
+		// 		Description: aff_db.Description,
+		// 		AliasName:   aff_db.Alias,
+		// 	}
+		// 	tmp_research_orgs[aff_db.Url] = research_org
+		// 	research_org_id = aff_db.Url
+		// } else {
+		// 	research_org_id = aff_db.Url
+		// }
 
 		person := datastruct.Person{
 			ID:                   u.IDStr(),
 			Url:                  personalUrl,
 			Name:                 u.FullName,
 			Alias:                u.AliasName,
-			Affiliation:          research_org_id,
+			Affiliation:          "",
 			Email:                u.Email,
 			Telephone:            u.Telephone,
 			ERadResearcherNumber: u.ERadResearcherNumber,
