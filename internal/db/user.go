@@ -54,30 +54,26 @@ type User struct {
 	Name      string `xorm:"UNIQUE NOT NULL" gorm:"NOT NULL"`
 	FullName  string
 	// Email is the primary email address (to be used for communication)
-	Email         string `xorm:"NOT NULL" gorm:"NOT NULL"`
-	Passwd        string `xorm:"NOT NULL" gorm:"NOT NULL"`
-	LoginSource   int64  `xorm:"NOT NULL DEFAULT 0" gorm:"NOT NULL;DEFAULT:0"`
-	LoginName     string
-	Type          UserType
-	OwnedOrgs     []*User       `xorm:"-" gorm:"-" json:"-"`
-	Orgs          []*User       `xorm:"-" gorm:"-" json:"-"`
-	Repos         []*Repository `xorm:"-" gorm:"-" json:"-"`
-	AffiliationId int64
-	Website       string
-	Rands         string `xorm:"VARCHAR(10)" gorm:"TYPE:VARCHAR(10)"`
-	Salt          string `xorm:"VARCHAR(10)" gorm:"TYPE:VARCHAR(10)"`
+	Email       string `xorm:"NOT NULL" gorm:"NOT NULL"`
+	Passwd      string `xorm:"NOT NULL" gorm:"NOT NULL"`
+	LoginSource int64  `xorm:"NOT NULL DEFAULT 0" gorm:"NOT NULL;DEFAULT:0"`
+	LoginName   string
+	Type        UserType
+	OwnedOrgs   []*User       `xorm:"-" gorm:"-" json:"-"`
+	Orgs        []*User       `xorm:"-" gorm:"-" json:"-"`
+	Repos       []*Repository `xorm:"-" gorm:"-" json:"-"`
+	Location    string
+	Website     string
+	Rands       string `xorm:"VARCHAR(10)" gorm:"TYPE:VARCHAR(10)"`
+	Salt        string `xorm:"VARCHAR(10)" gorm:"TYPE:VARCHAR(10)"`
 
-	/*
-		ユーザー登録の追加分仮置き
-		TODO:既存分との兼ね合いを考慮し整理すること
-		水平展開 -> func SignUpPost
-	*/
+	AffiliationId        int64
 	Telephone            string
 	FirstName            string `xorm:"NOT NULL" gorm:"NOT NULL"`
 	LastName             string `xorm:"NOT NULL" gorm:"NOT NULL"`
 	AliasName            string
 	ERadResearcherNumber string
-	PersonalURL          string //Websiteとの使い分けどうするか
+	PersonalURL          string
 
 	// TODO: 水平展開後消去?
 	Affiliation            string

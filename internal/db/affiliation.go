@@ -8,13 +8,6 @@ import (
 	log "unknwon.dev/clog/v2"
 )
 
-const (
-	// RCOS spesific code.
-	// Affiliation.Type (Research Laboratory or Funding Agency)
-	laboratory = "RL"
-	funder     = "FA"
-)
-
 // RCOS spesific code
 type Affiliation struct {
 	ID          int64
@@ -22,7 +15,6 @@ type Affiliation struct {
 	Url         string `xorm:"UNIQUE NOT NULL" gorm:"UNIQUE"`
 	Alias       string
 	Description string
-	Type        string
 }
 
 // RCOS spesific code.
@@ -50,7 +42,6 @@ func InitAffiliation() {
 		orgs = append(orgs, Affiliation{
 			Name: v[0],
 			Url:  v[1],
-			Type: laboratory,
 		})
 	}
 
