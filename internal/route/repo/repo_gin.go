@@ -157,8 +157,8 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 	}
 
 	// dmp.jsonに"fields"プロパティがある想定
-	selectedField := dmp.(map[string]interface{})["field"]
-	selectedDataSize := dmp.(map[string]interface{})["dataSize"]
+	selectedField := dmp.(map[string]interface{})["workflowIdentifier"]
+	selectedDataSize := dmp.(map[string]interface{})["contentSize"]
 	selectedDatasetStructure := dmp.(map[string]interface{})["datasetStructure"]
 	selectedUseDocker := dmp.(map[string]interface{})["useDocker"]
 	/* maDMPへ埋め込む情報を追加する際は
