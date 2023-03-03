@@ -58,6 +58,12 @@ paths:
             application/json:
               schema:
                 $ref: '#components/schemas/GeneralError'
+        400:
+          description: Invalid URL-Path, Parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/GeneralError'
         500:
           description: Internal Server Error
           content:

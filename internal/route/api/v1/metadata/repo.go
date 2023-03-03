@@ -149,9 +149,9 @@ func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
 		})
 		return
 	}
-	gin_monitoring.DatasetStructure = "assddf"
+	gin_monitoring.DatasetStructure = ""
 	if gin_monitoring.DatasetStructure == "" {
-		c.JSON(http.StatusNotFound, map[string]interface{}{
+		c.JSON(999, map[string]interface{}{
 			"message": fmt.Sprintf("This repository <ID : %s, Name: %s> dosen't have Research Policy. Please 'ADD DMP' on Gin-fork UI", repoid_str, repo.FullName()),
 		})
 		return
