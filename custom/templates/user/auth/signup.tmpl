@@ -46,6 +46,18 @@
 						<label for="alias_name">{{.i18n.Tr "alias_name"}}</label>
 						<input id="alias_name" name="alias_name" value="{{.alias_name}}">
 					</div>
+					<div class="required inline field">
+						<label>{{.i18n.Tr "affiliation"}}</label>
+						<div class="ui selection dropdown">
+							<input type="hidden" name="affiliation_id" value="{{.affiliation_id}}" required>
+							<div class="default text">{{.i18n.Tr "affiliation_helper"}}</div>
+							<div class="menu">
+								{{range $key, $value :=.AffiliationList}}
+									<div class="item" data-value="{{$key}}">{{$value}}</div>
+								{{end}}
+							</div>
+						</div>
+					</div>
 					<div class="required inline field {{if .Err_Email}}error{{end}}"
 							 data-tooltip="Please register with an institutional email (see above)">
 						<label for="email">{{.i18n.Tr "email"}}</label>
@@ -68,28 +80,7 @@
 						<span class="help">{{.i18n.Tr "personal_url_helper"}}</span>
 					</div>
 
-					<div class="ui divider"></div>
-					<!-- affiliation form -->
-					<div class="inline field">
-						<label><h3>{{.i18n.Tr "affiliation_title"}}</h3></label>
-					</div>
-					<div class="required inline field">
-						<label for="affiliation">{{.i18n.Tr "affiliation"}}</label>
-						<input id="affiliation" name="affiliation" value="{{.affiliation}} " required>
-					</div>
-					<div class="inline field">
-						<label for="affiliation_alias">{{.i18n.Tr "affiliation_alias"}}</label>
-						<input id="affiliation_alias" name="affiliation_alias" value="{{.affiliation_alias}}">
-					</div>
-					<div class="inline field">
-						<label for="affiliation_description">{{.i18n.Tr "affiliation_description"}}</label>
-						<textarea class="autosize" id="affiliation_description" name="affiliation_description" rows="3">{{.affiliation_description}}</textarea>
-					</div>
-					<div class="required inline field">
-						<label for="affiliation_url">{{.i18n.Tr "affiliation_url"}}</label>
-						<input id="affiliation_url" name="affiliation_url" value="{{.affiliation_url}}" placeholder="https://ror.org/..." required>
-						<span class="help">{{.i18n.Tr "affiliation_url_helper"}}</span>
-					</div>
+					
 
 					<div class="ui divider"></div>
 
