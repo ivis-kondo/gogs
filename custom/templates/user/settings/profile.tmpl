@@ -19,7 +19,7 @@
 							<p class="help text blue">{{$.i18n.Tr "settings.password_username_disabled"}}</p>
 							{{end}}
 						</div>
-
+						<!-- name form -->
 						<div class="required inline fields field">
 							<label for="first_name">{{.i18n.Tr "first_name"}}</label>
 							<input id="first_name" name="first_name" value="{{.first_name}}" required>
@@ -30,7 +30,20 @@
 							<label for="alias_name">{{.i18n.Tr "alias_name"}}</label>
 							<input id="alias_name" name="alias_name" value="{{.alias_name}}">
 						</div>
-
+						<!-- affiliation form -->
+						<div class="required inline field">
+							<label>{{.i18n.Tr "affiliation"}}</label>
+							<div class="ui selection dropdown">
+								<input type="hidden" name="affiliation_id" value="{{.affiliation_id}}" required>
+								<div class="default text">{{.i18n.Tr "affiliation_helper"}}</div>
+								<div class="menu">
+									{{range $key, $value :=.AffiliationList}}
+										<div class="item" data-value="{{$key}}">{{$value}}</div>
+									{{end}}
+								</div>
+							</div>
+						</div>
+						<!-- email form -->
 						<div class="required field {{if .Err_Email}}error{{end}}">
 							<label for="email">{{.i18n.Tr "email"}}</label>
 							<input id="email" name="email" value="{{.email}}" required>

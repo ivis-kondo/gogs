@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	// RCOS spesific code
+	// RCOS spesific code.
 	// Affiliation.Type (Research Laboratory or Funding Agency)
 	laboratory = "RL"
 	funder     = "FA"
@@ -25,10 +25,10 @@ type Affiliation struct {
 	Type        string
 }
 
-// RCOS spesific code
+// RCOS spesific code.
 // RegisterAffiliation register Research Laboratory from a csv file.
 // TODO: うまくいったらinternal/route/install.go GlobalInitへ
-func RegisterAffiliation() {
+func InitAffiliation() {
 
 	filePath := "conf/affiliation/affiliation.csv"
 	file, err := os.Open(filePath)
@@ -44,11 +44,10 @@ func RegisterAffiliation() {
 		log.Fatal("Failed to read %s file: %v", filePath, err)
 	}
 
-	orgs := make([]*Affiliation, len(rows))
+	orgs := make([]Affiliation, 0, len(rows))
 
 	for _, v := range rows {
-		fmt.Printf("%v", v)
-		orgs = append(orgs, &Affiliation{
+		orgs = append(orgs, Affiliation{
 			Name: v[0],
 			Url:  v[1],
 			Type: laboratory,
@@ -65,6 +64,8 @@ func RegisterAffiliation() {
 	}
 }
 
+// RCOS spesific code.
+// GetAffiliationList return map like {Affiliation.ID:Affliation.Name}.
 func GetAffiliationList() (map[int64]string, error) {
 
 	var beans []*Affiliation
@@ -78,7 +79,7 @@ func GetAffiliationList() (map[int64]string, error) {
 	return list, err
 }
 
-// RCOS spesific code
+// RCOS spesific code.
 // GetAffiliationByID returns an affiliation by given ID.
 func GetAffiliationByID(id int64) (*Affiliation, error) {
 

@@ -68,9 +68,8 @@ type User struct {
 	Salt          string `xorm:"VARCHAR(10)" gorm:"TYPE:VARCHAR(10)"`
 
 	/*
-		TODO:
 		ユーザー登録の追加分仮置き
-		既存分との兼ね合いを考慮し整理すること
+		TODO:既存分との兼ね合いを考慮し整理すること
 		水平展開 -> func SignUpPost
 	*/
 	Telephone            string
@@ -761,7 +760,6 @@ func updateUser(e Engine, u *User) error {
 	}
 
 	u.LowerName = strings.ToLower(u.Name)
-	u.Affiliation = tool.TruncateString(u.Affiliation, 255)
 	u.Website = tool.TruncateString(u.Website, 255)
 	u.Description = tool.TruncateString(u.Description, 255)
 

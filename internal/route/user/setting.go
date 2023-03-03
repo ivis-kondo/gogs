@@ -54,15 +54,19 @@ func Settings(c *context.Context) {
 	c.Data["first_name"] = c.User.FirstName
 	c.Data["alias_name"] = c.User.AliasName
 	c.Data["last_name"] = c.User.LastName
+	c.Data["affiliation_id"] = c.User.AffiliationId
 	c.Data["email"] = c.User.Email
 	c.Data["telephone"] = c.User.Telephone
 	c.Data["e_rad_researcher_number"] = c.User.ERadResearcherNumber
 	c.Data["personal_url"] = c.User.PersonalURL
 	c.Data["website"] = c.User.Website
-	c.Data["affiliation"] = c.User.Affiliation
-	c.Data["affiliation_alias"] = c.User.AffiliationAlias
-	c.Data["affiliation_description"] = c.User.AffiliationDescription
-	c.Data["affiliation_url"] = c.User.AffiliationURL
+
+	list, err := db.GetAffiliationList()
+	if err != nil {
+		log.Error("Failed to get affiliation: %v", err)
+	}
+	c.Data["AffiliationList"] = list
+
 	c.Success(SETTINGS_PROFILE)
 }
 
@@ -70,6 +74,12 @@ func SettingsPost(c *context.Context, f form.UpdateProfile) {
 	c.Title("settings.profile")
 	c.PageIs("SettingsProfile")
 	c.Data["origin_name"] = c.User.Name
+
+	list, err := db.GetAffiliationList()
+	if err != nil {
+		log.Error("Failed to get affiliation: %v", err)
+	}
+	c.Data["AffiliationList"] = list
 
 	if c.HasError() {
 		c.Success(SETTINGS_PROFILE)
@@ -146,10 +156,7 @@ func SettingsPost(c *context.Context, f form.UpdateProfile) {
 	c.User.PersonalURL = f.PersonalURL
 	c.User.AliasName = f.AliasName
 	c.User.ERadResearcherNumber = f.ERadResearcherNumber
-	c.User.Affiliation = f.Affiliation
-	c.User.AffiliationAlias = f.AffiliationAlias
-	c.User.AffiliationDescription = f.AffiliationDescription
-	c.User.AffiliationURL = f.AffiliationURL
+	c.User.AffiliationId = f.AffiliationId
 
 	if err := db.UpdateUser(c.User); err != nil {
 		if db.IsErrEmailAlreadyUsed(err) {
