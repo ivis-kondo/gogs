@@ -12,7 +12,7 @@ func CheckAlphabet(value string) bool {
 }
 
 func CheckNumeric(value string) bool {
-	re := regexp.MustCompile("^[1-9]+$")
+	re := regexp.MustCompile("^[0-9]+$")
 	return re.MatchString(value)
 }
 

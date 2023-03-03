@@ -168,6 +168,7 @@ func TestCheckNumeric(t *testing.T) {
 			test_name: "OK value",
 			values: []string{
 				"1",
+				"10",
 				"999999999999999999999999999999999999999999999999",
 			},
 			predict_value: true,
