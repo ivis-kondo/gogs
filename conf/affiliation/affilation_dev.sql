@@ -1,0 +1,3 @@
+INSERT INTO gf_test_db.affiliation (id,name,url,alias,description,type) VALUES (1,'University JJYSCUVI','https://ror.org/05wks2t16','MOCATQBE','MUSTSAWDGDIODSYCGSNOANLJBYASPBBOMNSMXHTBCYIEXHGRCJ','RL');
+INSERT INTO gf_test_db.affiliation (id,name,url,alias,description,type) VALUES (2,'University PUHFVPTI','https://ror.org/01dq60k83','NARDYBLE','ZTTICWDLEERQEGLCHXNVLJRIYNDJNLCDZXIJXVESSUYTSBSPYZ','RL');
+INSERT INTO gf_test_db.affiliation (id,name,url,alias,description,type) VALUES (3,'University JVBJHQPH','https://ror.org/04cd75h10','GVMQAQSN','LGLNYSIWZAFDFZBEWHIIUUZGZCZUWJWGUZXOHFKJNJDKBQURJR','RL');
