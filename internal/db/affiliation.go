@@ -71,6 +71,10 @@ func GetAffiliationList() (map[int64]string, error) {
 	err := x.Find(&beans)
 	list := make(map[int64]string)
 
+	for _, bean := range beans {
+		list[bean.ID] = bean.Name
+	}
+
 	return list, err
 }
 
@@ -78,13 +82,13 @@ func GetAffiliationList() (map[int64]string, error) {
 // GetAffiliationByID returns an affiliation by given ID.
 func GetAffiliationByID(id int64) (*Affiliation, error) {
 
-	var affiliation *Affiliation
-	has, err := x.Where("id = ?", id).Get(&affiliation)
+	affi := new(Affiliation)
+	has, err := x.ID(id).Get(affi)
 	if err != nil {
 		return nil, err
 	} else if !has {
-		return nil, fmt.Errorf("failed to get affiliation by id= %v", id)
+		return nil, fmt.Errorf("no affiliation:id= %v", id)
 	}
-	return affiliation, nil
+	return affi, nil
 
 }
