@@ -295,7 +295,10 @@ func SignUp(c *context.Context) {
 	c.Title("sign_up")
 
 	c.Data["EnableCaptcha"] = conf.Auth.EnableRegistrationCaptcha
-	list, _ := db.GetAffiliationList()
+	list, err := db.GetAffiliationList()
+	if err != nil {
+		log.Error("Failed to get affiliation: %v", err)
+	}
 	c.Data["AffiliationList"] = list
 
 	if conf.Auth.DisableRegistration {
@@ -311,6 +314,11 @@ func SignUpPost(c *context.Context, cpt *captcha.Captcha, f form.Register) {
 	c.Title("sign_up")
 
 	c.Data["EnableCaptcha"] = conf.Auth.EnableRegistrationCaptcha
+	list, err := db.GetAffiliationList()
+	if err != nil {
+		log.Error("Failed to get affiliation: %v", err)
+	}
+	c.Data["AffiliationList"] = list
 
 	if conf.Auth.DisableRegistration {
 		c.Status(403)

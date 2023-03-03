@@ -10,6 +10,7 @@ import (
 	"github.com/NII-DG/gogs/internal/db"
 	datastruct "github.com/NII-DG/gogs/internal/route/api/v1/metadata/datastruct"
 	"github.com/NII-DG/gogs/internal/urlutil"
+	constval "github.com/NII-DG/gogs/internal/utils/const"
 	"github.com/NII-DG/gogs/internal/utils/regex"
 	log "unknwon.dev/clog/v2"
 )
@@ -101,38 +102,37 @@ func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
 			personalUrl = url
 		}
 
-		//TODO : Cretae User affiation
-		// aff_id := u.Affiliation
-		// aff_db, err := GetAffiliationByID(aff_id)
-		// if err != nil {
-		// 	c.JSON(http.StatusInternalServerError, map[string]interface{}{
-		// 		"message": "Internal Server Error",
-		// 	})
-		// 	log.Error("failure getting affiliation from DB.  Affiliation ID : %v", aff_id)
-		// 	return
+		aff_id := u.AffiliationId
+		aff_db, err := db.GetAffiliationByID(aff_id)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"message": "Internal Server Error",
+			})
+			log.Error("failure getting affiliation from DB.  Affiliation ID : %d", aff_id)
+			return
 
-		// }
+		}
 
-		// var research_org_id string
-		// if _, ok := tmp_research_orgs[aff_db.Url]; !ok {
-		// 	research_org := datastruct.ResearchOrg{
-		// 		ID:          aff_db.Url,
-		// 		Name:        aff_db.Name,
-		// 		Description: aff_db.Description,
-		// 		AliasName:   aff_db.Alias,
-		// 	}
-		// 	tmp_research_orgs[aff_db.Url] = research_org
-		// 	research_org_id = aff_db.Url
-		// } else {
-		// 	research_org_id = aff_db.Url
-		// }
+		var research_org_id string
+		if _, ok := tmp_research_orgs[aff_db.Url]; !ok {
+			research_org := datastruct.ResearchOrg{
+				ID:          aff_db.Url,
+				Name:        aff_db.Name,
+				Description: aff_db.Description,
+				AliasName:   aff_db.Alias,
+			}
+			tmp_research_orgs[aff_db.Url] = research_org
+			research_org_id = aff_db.Url
+		} else {
+			research_org_id = aff_db.Url
+		}
 
 		person := datastruct.Person{
 			ID:                   u.IDStr(),
 			Url:                  personalUrl,
 			Name:                 u.FullName,
 			Alias:                u.AliasName,
-			Affiliation:          "",
+			Affiliation:          research_org_id,
 			Email:                u.Email,
 			Telephone:            u.Telephone,
 			ERadResearcherNumber: u.ERadResearcherNumber,
@@ -140,7 +140,7 @@ func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
 		persons = append(persons, person)
 	}
 
-	// Create Files and GinMonitoring
+	// Create Files and Dataset
 	files, dataset, gin_monitoring, err := repo.ExtractMetadata(branch)
 	if err != nil {
 		log.Error("failure extracting metadata from repository <ID : %s>. err msg : %v", repoid_str, err)
@@ -148,6 +148,20 @@ func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
 			"InternalServerError": "Internal Server Error",
 		})
 		return
+	}
+
+	if gin_monitoring.DatasetStructure == "" {
+		c.JSON(http.StatusNotFound, map[string]interface{}{
+			"message": fmt.Sprintf("This repository <ID : %s, Name: %s> dosen't have Research Policy. Please 'ADD DMP' on Gin-fork UI", repoid_str, repo.FullName()),
+		})
+		return
+	} else {
+		if !constval.IsDatasetStructType(gin_monitoring.DatasetStructure) {
+			c.JSON(http.StatusNotFound, map[string]interface{}{
+				"message": fmt.Sprintf("Set Dataset Structure Type[%s] in this repository <ID : %s, Name: %s> is not invaid value. Please Edit DMP on Gin-fork UI", gin_monitoring.DatasetStructure, repoid_str, repo.FullName()),
+			})
+			return
+		}
 	}
 
 	//TODO : Create dmps
@@ -181,20 +195,4 @@ func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
 	}
 
 	c.JSONSuccess(metadata)
-}
-
-// TODO : Remove after deve Affiliation master
-func GetAffiliationByID(id string) (*Affiliation, error) {
-	aff := Affiliation{}
-	aff_p := &aff
-	return aff_p, nil
-}
-
-type Affiliation struct {
-	ID          int64
-	Name        string
-	Url         string `xorm:"UNIQUE NOT NULL" gorm:"UNIQUE"`
-	Alias       string
-	Description string
-	Type        string
 }

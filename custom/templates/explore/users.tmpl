@@ -13,8 +13,8 @@
 						  <div class="content">
 						  	<span class="header"><a href="{{.HomeLink}}">{{.Name}}</a> {{.FullName}}</span>
 						    <div class="description">
-									{{if .Affiliation}}
-										<i class="octicon octicon-location"></i> {{.Affiliation}}
+									{{if .Location}}
+										<i class="octicon octicon-location"></i> {{.Location}}
 									{{end}}
 									<i class="octicon octicon-clock"></i> {{$.i18n.Tr "user.join_on"}} {{DateFmtShort .Created}}
 						    </div>
