@@ -190,7 +190,7 @@ func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
 		Persons:             persons,
 		Files:               files,
 		Datasets:            dataset,
-		GinMonitorings:      []datastruct.GinMonitoring{gin_monitoring},
+		GinMonitorings:      gin_monitoring,
 		Dmps:                []datastruct.IFDmp{},
 	}
 
