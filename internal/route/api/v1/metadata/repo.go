@@ -10,6 +10,7 @@ import (
 	"github.com/NII-DG/gogs/internal/db"
 	datastruct "github.com/NII-DG/gogs/internal/route/api/v1/metadata/datastruct"
 	"github.com/NII-DG/gogs/internal/urlutil"
+	constval "github.com/NII-DG/gogs/internal/utils/const"
 	"github.com/NII-DG/gogs/internal/utils/regex"
 	log "unknwon.dev/clog/v2"
 )
@@ -107,7 +108,7 @@ func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
 			c.JSON(http.StatusInternalServerError, map[string]interface{}{
 				"message": "Internal Server Error",
 			})
-			log.Error("failure getting affiliation from DB.  Affiliation ID : %v", aff_id)
+			log.Error("failure getting affiliation from DB.  Affiliation ID : %d", aff_id)
 			return
 
 		}
@@ -139,7 +140,7 @@ func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
 		persons = append(persons, person)
 	}
 
-	// Create Files and GinMonitoring
+	// Create Files and Dataset
 	files, dataset, gin_monitoring, err := repo.ExtractMetadata(branch)
 	if err != nil {
 		log.Error("failure extracting metadata from repository <ID : %s>. err msg : %v", repoid_str, err)
@@ -147,6 +148,20 @@ func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
 			"InternalServerError": "Internal Server Error",
 		})
 		return
+	}
+
+	if gin_monitoring.DatasetStructure == "" {
+		c.JSON(http.StatusNotFound, map[string]interface{}{
+			"message": fmt.Sprintf("This repository <ID : %s, Name: %s> dosen't have Research Policy. Please 'ADD DMP' on Gin-fork UI", repoid_str, repo.FullName()),
+		})
+		return
+	} else {
+		if !constval.IsDatasetStructType(gin_monitoring.DatasetStructure) {
+			c.JSON(http.StatusNotFound, map[string]interface{}{
+				"message": fmt.Sprintf("Set Dataset Structure Type[%s] in this repository <ID : %s, Name: %s> is not invaid value. Please Edit DMP on Gin-fork UI", gin_monitoring.DatasetStructure, repoid_str, repo.FullName()),
+			})
+			return
+		}
 	}
 
 	//TODO : Create dmps

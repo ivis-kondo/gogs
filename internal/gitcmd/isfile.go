@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/NII-DG/gogs/internal/utils"
+	constval "github.com/NII-DG/gogs/internal/utils/const"
 	"github.com/gogs/git-module"
 )
 
@@ -70,9 +71,9 @@ func DivideByMode(data_list []DataDetail) (file_list []DataDetail, symbolic_link
 
 func (dd DataDetail) IsExperimentPackage(data_struct_type string) (bool, error) {
 	splited_file_path := strings.Split(filepath.ToSlash(dd.FilePath), "/")
-	if data_struct_type == "with_code" {
+	if data_struct_type == constval.WITH_CODE {
 		return IsExperimentPackageOnWithCode(splited_file_path), nil
-	} else if data_struct_type == "for_parameter" {
+	} else if data_struct_type == constval.FOR_PARAMETER {
 		return IsExperimentPackageOnForParameter(splited_file_path), nil
 	} else {
 		return false, fmt.Errorf("data_struct_type[%s] is not defined", data_struct_type)

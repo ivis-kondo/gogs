@@ -84,7 +84,7 @@ func (repo *Repository) ExtractMetadata(branch string) ([]datastruct.File, []dat
 	}
 
 	if !isDMP {
-		return nil, nil, datastruct.GinMonitoring{}, fmt.Errorf("dmp.json is not")
+		return nil, nil, datastruct.GinMonitoring{}, nil
 	}
 
 	// extract git/git-annex content metadat
@@ -92,6 +92,7 @@ func (repo *Repository) ExtractMetadata(branch string) ([]datastruct.File, []dat
 	if err != nil {
 		return nil, nil, datastruct.GinMonitoring{}, err
 	}
+
 	git_annex_files, err := ExtractMetaDataGitAnnexContent(repo, annex_contents, branch, gin_monitoring.DatasetStructure)
 	if err != nil {
 		return nil, nil, datastruct.GinMonitoring{}, err
