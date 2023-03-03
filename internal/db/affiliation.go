@@ -8,6 +8,7 @@ import (
 	log "unknwon.dev/clog/v2"
 )
 
+
 // RCOS spesific code
 type Affiliation struct {
 	ID          int64
@@ -36,12 +37,14 @@ func InitAffiliation() {
 		log.Fatal("Failed to read %s file: %v", filePath, err)
 	}
 
+
 	orgs := make([]Affiliation, 0, len(rows))
 
 	for _, v := range rows {
 		orgs = append(orgs, Affiliation{
 			Name: v[0],
 			Url:  v[1],
+
 		})
 	}
 
@@ -55,6 +58,7 @@ func InitAffiliation() {
 	}
 }
 
+
 // RCOS spesific code.
 // GetAffiliationList return map like {Affiliation.ID:Affliation.Name}.
 func GetAffiliationList() (map[int64]string, error) {
@@ -62,6 +66,7 @@ func GetAffiliationList() (map[int64]string, error) {
 	var beans []*Affiliation
 	err := x.Find(&beans)
 	list := make(map[int64]string)
+
 
 	for _, bean := range beans {
 		list[bean.ID] = bean.Name
@@ -82,5 +87,4 @@ func GetAffiliationByID(id int64) (*Affiliation, error) {
 		return nil, fmt.Errorf("no affiliation:id= %v", id)
 	}
 	return affi, nil
-
 }

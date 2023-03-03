@@ -68,6 +68,7 @@ type User struct {
 	Salt        string `xorm:"VARCHAR(10)" gorm:"TYPE:VARCHAR(10)"`
 
 	AffiliationId        int64
+
 	Telephone            string
 	FirstName            string `xorm:"NOT NULL" gorm:"NOT NULL"`
 	LastName             string `xorm:"NOT NULL" gorm:"NOT NULL"`
