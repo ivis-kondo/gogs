@@ -14,7 +14,6 @@ import (
 	"github.com/NII-DG/gogs/internal/db"
 	"github.com/NII-DG/gogs/internal/route/repo"
 	"github.com/NII-DG/gogs/internal/tool"
-	log "unknwon.dev/clog/v2"
 )
 
 const (
@@ -41,7 +40,6 @@ func Profile(c *context.Context, puser *context.ParamsUser) {
 
 	c.Title(puser.DisplayName())
 	c.PageIs("UserProfile")
-	log.Trace("", puser.Affiliation)
 	c.Data["Owner"] = puser
 
 	orgs, err := db.GetOrgsByUserID(puser.ID, c.IsLogged && (c.User.IsAdmin || c.User.ID == puser.ID))
