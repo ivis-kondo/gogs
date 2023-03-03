@@ -113,7 +113,7 @@ func ToOrganization(org *db.User) *api.Organization {
 		FullName:    org.FullName,
 		Description: org.Description,
 		Website:     org.Website,
-		Location:    org.Affiliation,
+		Location:    org.Location,
 	}
 }
 

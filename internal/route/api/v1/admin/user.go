@@ -95,7 +95,7 @@ func EditUser(c *context.APIContext, form api.EditUserOption) {
 	u.FullName = form.FullName
 	u.Email = form.Email
 	u.Website = form.Website
-	u.Affiliation = form.Location
+	u.Location = form.Location
 	if form.Active != nil {
 		u.IsActive = *form.Active
 	}
