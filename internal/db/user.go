@@ -75,12 +75,6 @@ type User struct {
 	ERadResearcherNumber string
 	PersonalURL          string
 
-	// TODO: 水平展開後消去?
-	Affiliation            string
-	AffiliationAlias       string
-	AffiliationDescription string
-	AffiliationURL         string `xorm:"NOT NULL" gorm:"NOT NULL"`
-
 	Created     time.Time `xorm:"-" gorm:"-" json:"-"`
 	CreatedUnix int64
 	Updated     time.Time `xorm:"-" gorm:"-" json:"-"`
