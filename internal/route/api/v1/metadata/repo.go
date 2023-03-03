@@ -176,7 +176,7 @@ func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
 		Files:               files,
 		Datasets:            dataset,
 		GinMonitorings:      []datastruct.GinMonitoring{gin_monitoring},
-		Dmps:                []datastruct.Dmp{},
+		Dmps:                []datastruct.IFDmp{},
 	}
 
 	c.JSONSuccess(metadata)

@@ -80,9 +80,113 @@ type GinMonitoring struct {
 	DatasetStructure   string `json:"datasetStructure"`
 }
 
-type Dmp struct {
+type IFDmp interface {
+}
+
+type CaoDmp struct {
+	Type          string       `json:"type"`
+	Repository    string       `json:"repository"`
+	Distribution  string       `json:"distribution"`
+	Keyword       string       `json:"keyword"`
+	ERadProjectId string       `json:"eradProjectId"`
+	HasPart       []CaoDmpData `json:"hasPart"`
+}
+
+type CaoDmpData struct {
+	Name                string           `json:"name"`
+	Description         string           `json:"description"`
+	Creator             []string         `json:"creator"`
+	Keyword             string           `json:"keyword"`
+	AccessRights        string           `json:"accessRights"`
+	AvailabilityStarts  string           `json:"availabilityStarts"`
+	IsAccessibleForFree string           `json:"isAccessibleForFree"`
+	License             string           `json:"license"`
+	UsageInfo           string           `json:"usageInfo"`
+	Repository          string           `json:"repository"`
+	Distribution        string           `json:"distribution"`
+	ContentSize         string           `json:"contentSize"`
+	HostingInstitution  string           `json:"hostingInstitution"`
+	DataManager         string           `json:"dataManager"`
+	Relateddata         []DmpRelatedData `json:"related_data"`
+}
+
+type MetiDmp struct {
+	Type         string        `json:"type"`
+	Creator      []string      `json:"creator"`
+	Repository   string        `json:"repository"`
+	Distribution string        `json:"distribution"`
+	HasPart      []MetiDmpData `json:"hasPart"`
+}
+
+type MetiDmpData struct {
+	Name                 string           `json:"name"`
+	Description          string           `json:"description"`
+	HostingInstitution   string           `json:"hostingInstitution"`
+	WayOfManage          string           `json:"wayOfManage"`
+	AccessRights         string           `json:"accessRights"`
+	ReasonForConcealment string           `json:"reasonForConcealment"`
+	AvailabilityStarts   string           `json:"availabilityStarts"`
+	Creator              []string         `json:"creator"`
+	MeasurementTechnique string           `json:"measurementTechnique"`
+	IsAccessibleForFree  string           `json:"isAccessibleForFree"`
+	License              string           `json:"license"`
+	UsageInfo            string           `json:"usageInfo"`
+	Repository           string           `json:"repository"`
+	ContentSize          string           `json:"contentSize"`
+	Distribution         string           `json:"distribution"`
+	ContactPoint         ContactPoint     `json:"contactPoint"`
+	Relateddata          []DmpRelatedData `json:"related_data"`
+}
+
+type ContactPoint struct {
+	Name      string `json:"name"`
+	Email     string `json:"email"`
+	Telephone string `json:"telephone"`
+}
+
+type AmedDmp struct {
 	Type string `json:"type"`
-	// TODO : add Property
+
+	Funding            string        `json:"funding"`
+	ChiefResearcher    string        `json:"chiefResearcher"`
+	Creator            []string      `json:"creator"`
+	HostingInstitution string        `json:"hostingInstitution"`
+	DataManager        string        `json:"dataManager"`
+	Repository         string        `json:"repository"`
+	Distribution       string        `json:"distribution"`
+	HasPart            []AmedDmpData `json:"hasPart"`
+}
+
+type AmedDmpData struct {
+	Name                  string                         `json:"name"`
+	Description           string                         `json:"description"`
+	Keyword               string                         `json:"keyword"`
+	AccessRights          string                         `json:"accessRights"`
+	AvailabilityStarts    string                         `json:"availabilityStarts"`
+	ReasonForConcealment  string                         `json:"reasonForConcealment"`
+	Repository            string                         `json:"repository"`
+	Distribution          string                         `json:"distribution"`
+	ContentSize           string                         `json:"contentSize"`
+	GotInformedConsent    string                         `json:"gotInformedConsent"`
+	InformedConsentFormat string                         `json:"informedConsentFormat"`
+	Identifier            []ClinicalResearchRegistration `json:"identifier"`
+	RelatedData           []DmpRelatedData               `json:"related_data"`
+}
+
+type ClinicalResearchRegistration struct {
+	ID    string `json:"@id"`
+	Name  string `json:"name"`
+	Value string `json:"value"`
+}
+
+type DmpRelatedData struct {
+	ID              string `json:"@id"`
+	Name            string `json:"name"`
+	ContentSize     string `json:"contentSize"`
+	EncodingFormat  string `json:"encodingFormat"`
+	Sha256          string `json:"sha256"`
+	Url             string `json:"url"`
+	SdDatePublished string `json:"sdDatePublished"`
 }
 
 type Metadata struct {
@@ -97,5 +201,5 @@ type Metadata struct {
 	Files               []File               `json:"files"`
 	Datasets            []Dataset            `json:"datasets"`
 	GinMonitorings      []GinMonitoring      `json:"gin_monitorings"`
-	Dmps                []Dmp                `json:"dmps"`
+	Dmps                []IFDmp              `json:"dmps"`
 }
