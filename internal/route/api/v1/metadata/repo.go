@@ -143,7 +143,7 @@ func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
 	// Create Files and Dataset
 	files, dataset, gin_monitoring, err := repo.ExtractMetadata(branch)
 	if err != nil {
-		log.Error("failure extracting metadata from repository <ID : %s>. err msg : %v", repoid_str, err)
+		log.Error("failure extracting metadata of data from repository <ID : %s>. err msg : %v", repoid_str, err)
 		c.JSON(http.StatusInternalServerError, map[string]interface{}{
 			"InternalServerError": "Internal Server Error",
 		})
@@ -170,12 +170,22 @@ func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
 	//TODO : Create licenses
 	//TODO : Create data_downloads
 	//TODO : Create repository_objs
+
 	//TODO : Create hosting_institutions
 
 	// Create research_orgs
 	research_orgs := []datastruct.ResearchOrg{}
 	for _, v := range tmp_research_orgs {
 		research_orgs = append(research_orgs, v)
+	}
+
+	repo_obj, err := repo.ExtractRepoMetadata()
+	if err != nil {
+		log.Error("failure extracting repository metadata from repository <ID : %s>. err msg : %v", repoid_str, err)
+		c.JSON(http.StatusInternalServerError, map[string]interface{}{
+			"InternalServerError": "Internal Server Error",
+		})
+		return
 	}
 
 	// Create Metadata
@@ -185,7 +195,7 @@ func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
 		ResearchOrgs:        research_orgs,
 		Licenses:            []datastruct.License{},
 		DataDownloads:       []datastruct.DataDownload{},
-		RepositoryObjects:   []datastruct.RepositoryObject{},
+		RepositoryObjects:   []datastruct.RepositoryObject{repo_obj},
 		HostingInstitutions: []datastruct.HostingInstitution{},
 		Persons:             persons,
 		Files:               files,
