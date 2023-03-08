@@ -425,7 +425,7 @@ func InstallPost(c *context.Context, f form.Install) {
 
 func HeathFileInit() error {
 	if len(conf.DG.HealthFilePath) <= 0 || len(conf.DG.HealthFileName) <= 0 {
-		log.Trace("Creating file for file system health check  is skip")
+		log.Trace("Creating file for file system health check is skip")
 		return nil
 	}
 
