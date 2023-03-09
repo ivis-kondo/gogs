@@ -1,3 +1,3 @@
-INSERT INTO gf_test_db.affiliation (id,name,url,alias,description,type) VALUES (1,'University JJYSCUVI','https://ror.org/05wks2t16','MOCATQBE','MUSTSAWDGDIODSYCGSNOANLJBYASPBBOMNSMXHTBCYIEXHGRCJ','RL');
-INSERT INTO gf_test_db.affiliation (id,name,url,alias,description,type) VALUES (2,'University PUHFVPTI','https://ror.org/01dq60k83','NARDYBLE','ZTTICWDLEERQEGLCHXNVLJRIYNDJNLCDZXIJXVESSUYTSBSPYZ','RL');
-INSERT INTO gf_test_db.affiliation (id,name,url,alias,description,type) VALUES (3,'University JVBJHQPH','https://ror.org/04cd75h10','GVMQAQSN','LGLNYSIWZAFDFZBEWHIIUUZGZCZUWJWGUZXOHFKJNJDKBQURJR','RL');
+INSERT INTO gf_test_db.affiliation (id,name,displayed_name,url,alias,description) VALUES (1,'University WNNTEKHR','Displayed University BRXDGZKO','https://ror.org/05wks2t16','HSXLPJZV','CNTAKCHFLZXUNBKWSHULJJDEYOUUHJYTGHYHPYSPCYCFSDEOGS');
+INSERT INTO gf_test_db.affiliation (id,name,displayed_name,url,alias,description) VALUES (2,'University GYYPLGHQ','Displayed University UGBVBMJD','https://ror.org/01dq60k83','EAWCVRBN','RFYOPLSNGVIDACWORYGDRNDYPXSHCFMKHPAZIFYLHRUEJLNWMT');
+INSERT INTO gf_test_db.affiliation (id,name,displayed_name,url,alias,description) VALUES (3,'University XTVJOFNF','Displayed University GFJWQIRY','https://ror.org/04cd75h10','JTPFUZLG','DUPIMESSOOKIXGVGLWCBEZDQNRYIBNRXGNZDUBKCYZBBBEBLGU');
