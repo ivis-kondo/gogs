@@ -383,6 +383,8 @@ var (
 	DG struct {
 		ApiToken                string `ini:"GIT_API_TOKEN"`
 		MaDMPTemplateRepoBranch string `ini:"MA_DMP_TEMPLATE_BRANCH"`
+		HealthFilePath          string `ini:"HEALTH_FILE_PATH"`
+		HealthFileName          string `ini:"HEALTH_FILE_NAME"`
 	}
 )
 
