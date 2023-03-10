@@ -438,7 +438,7 @@ func HeathFileInit() error {
 	filepath := filepath.Join(dirpath, conf.DG.HealthFileName)
 	file, err := os.OpenFile(filepath, os.O_WRONLY|os.O_CREATE, os.ModePerm)
 	if err != nil {
-		return fmt.Errorf("failure to create File. filepaht : %s, err: %v", filepath, err)
+		return fmt.Errorf("failure to create File. file : %s, err: %v", filepath, err)
 	}
 	defer file.Close()
 	return nil

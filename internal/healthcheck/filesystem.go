@@ -21,6 +21,6 @@ func CheckFileSystem() error {
 	if utils.ExistData(filepath) {
 		return nil
 	} else {
-		return fmt.Errorf("Not exits %s for health check", filepath)
+		return fmt.Errorf("not exist %s for health check", filepath)
 	}
 }
