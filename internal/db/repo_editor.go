@@ -554,7 +554,7 @@ func (repo *Repository) UploadRepoFiles(doer *User, opts UploadRepoFileOptions) 
 			// get sha256
 			hash := sha256.New()
 			if _, err := io.Copy(hash, f); err != nil {
-				// error handling
+				return fmt.Errorf("get hash [%s]: %v", file_name, err)
 			}
 			sha256 := hash.Sum(nil)
 			f.Close()
