@@ -6,6 +6,7 @@ package db
 
 import (
 	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -560,7 +561,8 @@ func (repo *Repository) UploadRepoFiles(doer *User, opts UploadRepoFileOptions) 
 			sha256 := hash.Sum(nil)
 			f.Close()
 			log.Trace("[debug_log_annex_metadata]sha256 : %v", sha256)
-			log.Trace("[debug_log_annex_metadata]sha256 : %v", utils.BytesToString(sha256))
+			log.Trace("[debug_log_annex_metadata]sha256 : %s", utils.BytesToString(sha256))
+			log.Trace("[debug_log_annex_metadata]sha256 : %s", hex.EncodeToString(sha256[:]))
 			key := val.(string)
 			if err = git_annex_cmd.SetAnnexMetadata(localPath, key, size, "", mimetype); err != nil {
 				return fmt.Errorf("add annex metadata: %v", err)
