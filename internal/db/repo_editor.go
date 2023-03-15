@@ -581,12 +581,13 @@ func (repo *Repository) UploadRepoFiles(doer *User, opts UploadRepoFileOptions) 
 		RepoName:  repo.Name,
 		RepoPath:  repo.RepoPath(),
 	})
-	if err = git.RepoPush(localPath, "origin", opts.NewBranch, git.PushOptions{Envs: envs}); err != nil {
-		return fmt.Errorf("git push origin %s: %v", opts.NewBranch, err)
-	}
 
 	if err := annexUpload(localPath, "origin"); err != nil { // Copy new files
 		return fmt.Errorf("annex copy %s: %v", localPath, err)
+	}
+
+	if err = git.RepoPush(localPath, "origin", opts.NewBranch, git.PushOptions{Envs: envs}); err != nil {
+		return fmt.Errorf("git push origin %s: %v", opts.NewBranch, err)
 	}
 	annexUninit(localPath) // Uninitialise annex to prepare for deletion
 	StartIndexing(*repo)   // Index the new data
