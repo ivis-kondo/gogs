@@ -526,7 +526,8 @@ func (repo *Repository) UploadRepoFiles(doer *User, opts UploadRepoFileOptions) 
 	for _, v := range add_file_info {
 		jsonBytes := []byte(v)
 		var js interface{}
-		_ = json.Unmarshal(jsonBytes, &js)
+		err = json.Unmarshal(jsonBytes, &js)
+		log.Trace("[debug_log_annex_metadata] v : %v", v)
 		log.Trace("[debug_log_annex_metadata]jsonBytes : %v", jsonBytes)
 
 		jsonObj := js.(map[string]interface{})
