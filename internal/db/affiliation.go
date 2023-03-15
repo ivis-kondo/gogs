@@ -11,7 +11,7 @@ import (
 // RCOS spesific code
 type Affiliation struct {
 	ID            int64
-	Name          string
+	Name          string `xorm:"NOT NULL" gorm:"NOT NULL"`
 	DisplayedName string
 	Url           string `xorm:"UNIQUE NOT NULL" gorm:"UNIQUE"`
 	Alias         string
@@ -78,7 +78,7 @@ func InitAffiliation() {
 }
 
 // RCOS spesific code.
-// GetAffiliationList return map like {Affiliation.ID:Affliation.Name}.
+// GetAffiliationList returns map like {Affiliation.ID:Affliation.DisplayedName}.
 func GetAffiliationList() (map[int64]string, error) {
 
 	var beans []*Affiliation
@@ -86,14 +86,18 @@ func GetAffiliationList() (map[int64]string, error) {
 	list := make(map[int64]string)
 
 	for _, bean := range beans {
-		list[bean.ID] = bean.DisplayedName
+		if len(bean.DisplayedName) > 0 {
+			list[bean.ID] = bean.DisplayedName
+		} else {
+			list[bean.ID] = bean.Name
+		}
 	}
 
 	return list, err
 }
 
 // RCOS spesific code.
-// GetAffiliationByID returns an affiliation by given ID.
+// GetAffiliationByID returns the affiliation by given ID.
 func GetAffiliationByID(id int64) (*Affiliation, error) {
 
 	affi := new(Affiliation)
