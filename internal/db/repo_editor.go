@@ -523,7 +523,7 @@ func (repo *Repository) UploadRepoFiles(doer *User, opts UploadRepoFileOptions) 
 	log.Trace("[debug_log_annex_metadata] add_file_info : %v", add_file_info)
 
 	// exctract annex content
-	for _, v := range add_file_info {
+	for _, v := range add_file_info[0 : len(add_file_info)-1] {
 		jsonBytes := []byte(v)
 		var js interface{}
 		err = json.Unmarshal(jsonBytes, &js)
