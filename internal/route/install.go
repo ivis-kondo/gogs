@@ -79,6 +79,7 @@ func GlobalInit(customConf string) error {
 
 		db.LoadRepoConfig()
 		db.NewRepoContext()
+		db.InitAffiliation() //RCOS spesific code
 
 		// Booting long running goroutines.
 		cron.NewContext()

@@ -8,7 +8,6 @@ import (
 	log "unknwon.dev/clog/v2"
 )
 
-
 // RCOS spesific code
 type Affiliation struct {
 	ID          int64
@@ -19,32 +18,28 @@ type Affiliation struct {
 }
 
 // RCOS spesific code.
-// RegisterAffiliation register Research Laboratory from a csv file.
-// TODO: うまくいったらinternal/route/install.go GlobalInitへ
+// InitAffiliation inserts or updates affiliation's table from a csv file.
 func InitAffiliation() {
-
 	filePath := "conf/affiliation/affiliation.csv"
 	file, err := os.Open(filePath)
 	if err != nil {
-		log.Fatal("Failed to get %s file: %v", filePath, err)
+		log.Fatal("Failed to open %s file: %v", filePath, err)
+		return
 	}
 	defer file.Close()
 
 	r := csv.NewReader(file)
-	r.Comment = '#' // If the line starts with #, treat it as a comment
 	rows, err := r.ReadAll()
 	if err != nil {
 		log.Fatal("Failed to read %s file: %v", filePath, err)
+		return
 	}
 
-
 	orgs := make([]Affiliation, 0, len(rows))
-
 	for _, v := range rows {
 		orgs = append(orgs, Affiliation{
 			Name: v[0],
 			Url:  v[1],
-
 		})
 	}
 
@@ -52,12 +47,33 @@ func InitAffiliation() {
 	defer sess.Close()
 	if err = sess.Begin(); err != nil {
 		log.Fatal("Failed to begin a transaction : %v", err)
+		return
 	}
-	if _, err = sess.Insert(orgs); err != nil {
-		log.Fatal("Failed to insert affiliation : %v", err)
-	}
-}
 
+	for _, org := range orgs {
+		bean := &Affiliation{Url: org.Url}
+		has, err := sess.Get(bean)
+		if err != nil {
+			log.Fatal("Failed to get affiliation : %v", err)
+			sess.Rollback()
+			return
+		} else if has {
+			if _, err = sess.Where("url = ?", org.Url).Update(org); err != nil {
+				log.Fatal("Failed to update affiliation : %v", err)
+				sess.Rollback()
+				return
+			}
+		} else {
+			if _, err = sess.Insert(org); err != nil {
+				log.Fatal("Failed to insert affiliation : %v", err)
+				sess.Rollback()
+				return
+			}
+		}
+	}
+
+	sess.Commit()
+}
 
 // RCOS spesific code.
 // GetAffiliationList return map like {Affiliation.ID:Affliation.Name}.
@@ -66,7 +82,6 @@ func GetAffiliationList() (map[int64]string, error) {
 	var beans []*Affiliation
 	err := x.Find(&beans)
 	list := make(map[int64]string)
-
 
 	for _, bean := range beans {
 		list[bean.ID] = bean.Name
