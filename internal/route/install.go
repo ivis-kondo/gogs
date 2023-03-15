@@ -5,6 +5,7 @@
 package route
 
 import (
+	"fmt"
 	"net/mail"
 	"os"
 	"os/exec"
@@ -29,6 +30,7 @@ import (
 	"github.com/NII-DG/gogs/internal/ssh"
 	"github.com/NII-DG/gogs/internal/strutil"
 	"github.com/NII-DG/gogs/internal/template/highlight"
+	"github.com/NII-DG/gogs/internal/utils"
 )
 
 const (
@@ -109,6 +111,11 @@ func GlobalInit(customConf string) error {
 		if err := db.RewriteAuthorizedKeys(); err != nil {
 			log.Warn("Failed to rewrite authorized_keys file: %v", err)
 		}
+	}
+
+	if err = HeathFileInit(); err != nil {
+		log.Error("Failed to init create file for health: %v", err)
+		return errors.Wrap(err, "init preparation health check")
 	}
 
 	return nil
@@ -415,4 +422,25 @@ func InstallPost(c *context.Context, f form.Install) {
 	log.Info("First-time run install finished!")
 	c.Flash.Success(c.Tr("install.install_success"))
 	c.Redirect(f.AppUrl + "user/login")
+}
+
+func HeathFileInit() error {
+	if len(conf.DG.HealthFilePath) <= 0 || len(conf.DG.HealthFileName) <= 0 {
+		log.Trace("Creating file for file system health check is skip")
+		return nil
+	}
+
+	dirpath := conf.DG.HealthFilePath
+	if !utils.ExistData(dirpath) {
+		if err := os.Mkdir(dirpath, os.ModePerm); err != nil {
+			return fmt.Errorf("failure to create directory. dir : %s, err: %v", dirpath, err)
+		}
+	}
+	filepath := filepath.Join(dirpath, conf.DG.HealthFileName)
+	file, err := os.OpenFile(filepath, os.O_WRONLY|os.O_CREATE, os.ModePerm)
+	if err != nil {
+		return fmt.Errorf("failure to create File. file : %s, err: %v", filepath, err)
+	}
+	defer file.Close()
+	return nil
 }

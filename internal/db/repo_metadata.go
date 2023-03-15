@@ -129,7 +129,7 @@ func ExtractMetaDataGitContent(repo *Repository, git_contents []gitcmd.DataDetai
 		r := sha256.Sum256(content)
 		hash := hex.EncodeToString(r[:])
 
-		url, err := repo.CreateAccessUrl(branch, git_content.FilePath)
+		url, err := repo.CreateAccessUrlToFile(branch, git_content.FilePath)
 		if err != nil {
 			return nil, err
 		}
@@ -176,7 +176,7 @@ func ExtractMetaDataGitAnnexContent(repo *Repository, git_annex_contents []gitcm
 			return nil, err
 		}
 
-		url, err := repo.CreateAccessUrl(branch, git_annex_content.FilePath)
+		url, err := repo.CreateAccessUrlToFile(branch, git_annex_content.FilePath)
 		if err != nil {
 			return nil, err
 		}
@@ -196,7 +196,7 @@ func ExtractMetaDataGitAnnexContent(repo *Repository, git_annex_contents []gitcm
 	return files, nil
 }
 
-func (repo *Repository) CreateAccessUrl(branch, file_path string) (string, error) {
+func (repo *Repository) CreateAccessUrlToFile(branch, file_path string) (string, error) {
 	urlPath := fmt.Sprintf("%s/src/%s/%s", repo.FullName(), branch, file_path)
 	url, err := urlutil.UpdatePath(conf.Server.ExternalURL, urlPath)
 	if err != nil {
@@ -218,7 +218,7 @@ func CreateFilesToDatasets(repo *Repository, files []datastruct.File, branch str
 		for _, element := range splited_file_path {
 			dataset_id = dataset_id + element + "/"
 			if _, ok := tmp_data[dataset_id]; !ok {
-				dataset_url, err := repo.CreateAccessUrl(branch, dataset_id)
+				dataset_url, err := repo.CreateAccessUrlToFile(branch, dataset_id)
 				if err != nil {
 					return nil, err
 				}
@@ -236,4 +236,26 @@ func CreateFilesToDatasets(repo *Repository, files []datastruct.File, branch str
 		datasets = append(datasets, v)
 	}
 	return datasets, nil
+}
+
+func (repo *Repository) CreateAccessUrlToRepo() (string, error) {
+	urlPath := fmt.Sprintf("%s", repo.FullName())
+	url, err := urlutil.UpdatePath(conf.Server.ExternalURL, urlPath)
+	if err != nil {
+		return "", err
+	}
+	return url, nil
+}
+
+func (repo *Repository) ExtractRepoMetadata() (datastruct.RepositoryObject, error) {
+	url, err := repo.CreateAccessUrlToRepo()
+	if err != nil {
+		return datastruct.RepositoryObject{}, err
+	}
+	return datastruct.RepositoryObject{
+		ID:          url,
+		Name:        repo.Name,
+		Description: repo.Description,
+	}, nil
+
 }

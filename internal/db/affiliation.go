@@ -10,11 +10,12 @@ import (
 
 // RCOS spesific code
 type Affiliation struct {
-	ID          int64
-	Name        string
-	Url         string `xorm:"UNIQUE NOT NULL" gorm:"UNIQUE"`
-	Alias       string
-	Description string
+	ID            int64
+	Name          string
+	DisplayedName string
+	Url           string `xorm:"UNIQUE NOT NULL" gorm:"UNIQUE"`
+	Alias         string
+	Description   string
 }
 
 // RCOS spesific code.
@@ -84,7 +85,7 @@ func GetAffiliationList() (map[int64]string, error) {
 	list := make(map[int64]string)
 
 	for _, bean := range beans {
-		list[bean.ID] = bean.Name
+		list[bean.ID] = bean.DisplayedName
 	}
 
 	return list, err

@@ -200,6 +200,6 @@ type Metadata struct {
 	Persons             []Person             `json:"persons"`
 	Files               []File               `json:"files"`
 	Datasets            []Dataset            `json:"datasets"`
-	GinMonitorings      []GinMonitoring      `json:"gin_monitorings"`
+	GinMonitorings      GinMonitoring        `json:"gin_monitoring"`
 	Dmps                []IFDmp              `json:"dmps"`
 }

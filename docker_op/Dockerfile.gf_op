@@ -28,6 +28,7 @@ RUN mkdir git
 WORKDIR /data/gogs
 RUN mkdir custom
 RUN mkdir -p mnt/log
+RUN mkdir -p mnt/data/gogs
 
 # copy custom file to /data/gogs/
 COPY ./custom/ /data/gogs/custom/
@@ -56,3 +57,4 @@ USER git
 VOLUME ["/data", "/backup"]
 EXPOSE 80 3001
 ENTRYPOINT ["/app/gogs/gogs", "web"]
+
