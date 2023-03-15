@@ -56,25 +56,24 @@ func InitAffiliation() {
 		bean := &Affiliation{Url: org.Url}
 		has, err := sess.Get(bean)
 		if err != nil {
-			log.Fatal("Failed to get affiliation : %v", err)
-			sess.Rollback()
+			log.Fatal("Failed to get: %v", err)
 			return
 		} else if has {
 			if _, err = sess.Where("url = ?", org.Url).Update(org); err != nil {
-				log.Fatal("Failed to update affiliation : %v", err)
-				sess.Rollback()
+				log.Fatal("Failed to update: %v", err)
 				return
 			}
 		} else {
 			if _, err = sess.Insert(org); err != nil {
-				log.Fatal("Failed to insert affiliation : %v", err)
-				sess.Rollback()
+				log.Fatal("Failed to insert: %v", err)
 				return
 			}
 		}
 	}
 
-	sess.Commit()
+	if err = sess.Commit(); err != nil {
+		log.Fatal("Failed to commit: %v", err)
+	}
 }
 
 // RCOS spesific code.
