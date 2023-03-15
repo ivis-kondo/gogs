@@ -5,6 +5,7 @@
 package db
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -18,16 +19,19 @@ import (
 
 	gouuid "github.com/satori/go.uuid"
 	"github.com/unknwon/com"
+	log "unknwon.dev/clog/v2"
 
 	"github.com/gogs/git-module"
 
 	"github.com/NII-DG/gogs/internal/conf"
 	"github.com/NII-DG/gogs/internal/cryptoutil"
 	"github.com/NII-DG/gogs/internal/db/errors"
+	git_annex_cmd "github.com/NII-DG/gogs/internal/gitcmd/annex"
 	"github.com/NII-DG/gogs/internal/gitutil"
 	"github.com/NII-DG/gogs/internal/osutil"
 	"github.com/NII-DG/gogs/internal/process"
 	"github.com/NII-DG/gogs/internal/tool"
+	"github.com/NII-DG/gogs/internal/utils"
 )
 
 const (
@@ -495,6 +499,8 @@ func (repo *Repository) UploadRepoFiles(doer *User, opts UploadRepoFileOptions) 
 		}
 
 		targetPath := path.Join(dirPath, upload.Name)
+		log.Trace("[debug_log_annex_metadata] upload.Name : %s", upload.Name)
+		log.Trace("[debug_log_annex_metadata] targetPath : %s", targetPath)
 		// GIN: Create subdirectory for dirtree uploads
 		if err = os.MkdirAll(filepath.Dir(targetPath), os.ModePerm); err != nil {
 			return fmt.Errorf("mkdir: %v", err)
@@ -505,9 +511,40 @@ func (repo *Repository) UploadRepoFiles(doer *User, opts UploadRepoFileOptions) 
 	}
 
 	annexSetup(localPath) // Initialise annex and set configuration (with add filter for filesizes)
-	if err = annexAdd(localPath, true); err != nil {
+	annexAddMsg, err := annexAdd(localPath, true)
+	if err != nil {
 		return fmt.Errorf("git annex add: %v", err)
-	} else if err = git.RepoCommit(localPath, doer.NewGitSig(), opts.Message); err != nil {
+	}
+	// decode annexAddMsg
+	add_file_info := strings.Split(utils.BytesToString(annexAddMsg), "\n")
+	log.Trace("[debug_log_annex_metadata] add_file_info : %v", add_file_info)
+
+	// exctract annex content
+	for _, v := range add_file_info {
+		jsonBytes := []byte(v)
+		var js interface{}
+		_ = json.Unmarshal(jsonBytes, &js)
+
+		jsonObj := js.(map[string]string)
+		if val, ok := jsonObj["key"]; ok {
+			log.Trace("[debug_log_annex_metadata]val, ok := jsonObj[key] val : %s", val)
+			// add metadata to annex
+
+			// get file size
+
+			// get sha256
+
+			// get mimetype
+
+			if err = git_annex_cmd.SetAnnexMetadata(localPath, val, 1, "", ""); err != nil {
+				return fmt.Errorf("add annex metadata: %v", err)
+			}
+
+		}
+
+	}
+
+	if err = git.RepoCommit(localPath, doer.NewGitSig(), opts.Message); err != nil {
 		return fmt.Errorf("commit changes on %q: %v", localPath, err)
 	}
 
