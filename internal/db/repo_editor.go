@@ -5,6 +5,7 @@
 package db
 
 import (
+	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -487,6 +488,7 @@ func (repo *Repository) UploadRepoFiles(doer *User, opts UploadRepoFileOptions) 
 	}
 
 	// Copy uploaded files into repository
+	uploads_map := map[string]string{}
 	for _, upload := range uploads {
 		tmpPath := upload.LocalPath()
 		if !osutil.IsFile(tmpPath) {
@@ -508,6 +510,7 @@ func (repo *Repository) UploadRepoFiles(doer *User, opts UploadRepoFileOptions) 
 		if err = com.Copy(tmpPath, targetPath); err != nil {
 			return fmt.Errorf("copy: %v", err)
 		}
+		uploads_map[upload.Name] = targetPath
 	}
 
 	annexSetup(localPath) // Initialise annex and set configuration (with add filter for filesizes)
@@ -524,19 +527,41 @@ func (repo *Repository) UploadRepoFiles(doer *User, opts UploadRepoFileOptions) 
 		jsonBytes := []byte(v)
 		var js interface{}
 		_ = json.Unmarshal(jsonBytes, &js)
+		log.Trace("[debug_log_annex_metadata]jsonBytes : %v", jsonBytes)
 
-		jsonObj := js.(map[string]string)
+		jsonObj := js.(map[string]interface{})
 		if val, ok := jsonObj["key"]; ok {
 			log.Trace("[debug_log_annex_metadata]val, ok := jsonObj[key] val : %s", val)
 			// add metadata to annex
-
+			file_name := jsonObj["file"].(string)
+			local_file_path := uploads_map[file_name]
+			fileinfo, err := os.Stat(local_file_path)
+			if err != nil {
+				return fmt.Errorf("get file info: %v", err)
+			}
 			// get file size
+			size := fileinfo.Size()
+			log.Trace("[debug_log_annex_metadata]size : %d", size)
 
-			// get sha256
+			f, err := os.Open(local_file_path)
 
 			// get mimetype
-
-			if err = git_annex_cmd.SetAnnexMetadata(localPath, val, 1, "", ""); err != nil {
+			if err != nil {
+				return fmt.Errorf("open file [%s]: %v", file_name, err)
+			}
+			mimetype := utils.DetectFileContentType(f)
+			log.Trace("[debug_log_annex_metadata]mimetype : %s", mimetype)
+			// get sha256
+			hash := sha256.New()
+			if _, err := io.Copy(hash, f); err != nil {
+				// error handling
+			}
+			sha256 := hash.Sum(nil)
+			f.Close()
+			log.Trace("[debug_log_annex_metadata]sha256 : %v", sha256)
+			log.Trace("[debug_log_annex_metadata]sha256 : %v", utils.BytesToString(sha256))
+			key := val.(string)
+			if err = git_annex_cmd.SetAnnexMetadata(localPath, key, size, "", mimetype); err != nil {
 				return fmt.Errorf("add annex metadata: %v", err)
 			}
 

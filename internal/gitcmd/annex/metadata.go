@@ -16,7 +16,7 @@ func GitAnnexMetadata(repoPath, key string) ([]byte, error) {
 	return raw_msg, nil
 }
 
-func SetAnnexMetadata(repoPath, key string, size int, hash, mimetype string) error {
+func SetAnnexMetadata(repoPath, key string, size int64, hash, mimetype string) error {
 
 	content_size := fmt.Sprintf("content_size=%d", size)
 	sha256 := fmt.Sprintf("sha256=%s", hash)
