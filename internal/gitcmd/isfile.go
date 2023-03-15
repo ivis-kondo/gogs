@@ -57,6 +57,7 @@ func GetFileDetailList(repoPath string) ([]DataDetail, error) {
 func DivideByMode(data_list []DataDetail) (file_list []DataDetail, symbolic_link_list []DataDetail) {
 
 	for _, v := range data_list {
+
 		switch v.Mode {
 
 		case "120000": // symbolic_link
