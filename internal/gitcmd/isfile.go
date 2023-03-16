@@ -54,10 +54,17 @@ func GetFileDetailList(repoPath string) ([]DataDetail, error) {
 		log.Trace("[GetFileDetailList()] file_info[1] : %v", file_info[1])
 		log.Trace("[GetFileDetailList()] file_info[3] : %v", file_info[3])
 		log.Trace("[GetFileDetailList()] filepath.ToSlash(file_info[3]) : %v", filepath.ToSlash(file_info[3]))
+		var file_path string
+		if len(file_info) >= 5 {
+			data_com := file_info[3:]
+			file_path = strings.Join(data_com, " ")
+		} else {
+			file_path = filepath.ToSlash(file_info[3])
+		}
 		fileDateil := DataDetail{
 			Mode:     file_info[0],
 			Hash:     file_info[1],
-			FilePath: filepath.ToSlash(file_info[3]),
+			FilePath: filepath.ToSlash(file_path),
 		}
 		FileDetailList = append(FileDetailList, fileDateil)
 	}
