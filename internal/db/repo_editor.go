@@ -508,6 +508,14 @@ func (repo *Repository) UploadRepoFiles(doer *User, opts UploadRepoFileOptions) 
 		}
 		log.Trace("[UploadRepoFiles()] tmpPath : $s", tmpPath)
 		log.Trace("[UploadRepoFiles()] targetPath : $s", targetPath)
+		// check symbol link in local repository
+		info, err := os.Lstat(targetPath)
+		if err != nil {
+			return fmt.Errorf("lstat: %v", err)
+		}
+		if info.Mode()&os.ModeSymlink == os.ModeSymlink {
+			log.Trace("[UploadRepoFiles()] Is simbolic link targetPath : $s", targetPath)
+		}
 		if err = com.Copy(tmpPath, targetPath); err != nil {
 			return fmt.Errorf("copy: %v", err)
 		}
