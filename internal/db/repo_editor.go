@@ -500,6 +500,8 @@ func (repo *Repository) UploadRepoFiles(doer *User, opts UploadRepoFileOptions) 
 		if isRepositoryGitPath(upload.Name) {
 			continue
 		}
+		log.Trace("[UploadRepoFiles()] dirPath : $s", dirPath)
+		log.Trace("[UploadRepoFiles()] upload.Name : $s", upload.Name)
 
 		targetPath := path.Join(dirPath, upload.Name)
 		// GIN: Create subdirectory for dirtree uploads
@@ -513,6 +515,8 @@ func (repo *Repository) UploadRepoFiles(doer *User, opts UploadRepoFileOptions) 
 		if err == nil {
 			if info.Mode()&os.ModeSymlink == os.ModeSymlink {
 				log.Trace("[UploadRepoFiles()] Is simbolic link targetPath : $s", targetPath)
+				// git_annex_cmd.GitAnnexUnlock(dirPath, upload.Name)
+
 			}
 		}
 
