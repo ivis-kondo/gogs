@@ -553,8 +553,12 @@ func (repo *Repository) UploadRepoFiles(doer *User, opts UploadRepoFileOptions) 
 			if err != nil {
 				return fmt.Errorf("open file [%s]: %v", file_name, err)
 			}
-			mimetype := utils.DetectFileContentType(f)
-			log.Trace("[debug_log_annex_metadata]mimetype : %s", mimetype)
+			mime_type := utils.DetectFileContentType(f)
+			if strings.Contains(mime_type, ";") {
+				index := strings.Index(mime_type, ";")
+				mime_type = mime_type[0:index]
+			}
+			log.Trace("[debug_log_annex_metadata]mimetype : %s", mime_type)
 			// get sha256
 			hash := sha256.New()
 			if _, err := io.Copy(hash, f); err != nil {
@@ -564,7 +568,7 @@ func (repo *Repository) UploadRepoFiles(doer *User, opts UploadRepoFileOptions) 
 			f.Close()
 
 			key := val.(string)
-			if err = git_annex_cmd.SetAnnexMetadata(localPath, key, size, hex.EncodeToString(sha256[:]), mimetype); err != nil {
+			if err = git_annex_cmd.SetAnnexMetadata(localPath, key, size, hex.EncodeToString(sha256[:]), mime_type); err != nil {
 				return fmt.Errorf("add annex metadata: %v", err)
 			}
 
