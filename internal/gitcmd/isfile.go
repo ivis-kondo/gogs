@@ -50,7 +50,13 @@ func GetFileDetailList(repoPath string) ([]DataDetail, error) {
 		aaaa := strings.Split(v, " ")
 		log.Trace("[GetFileDetailList()] len(aaaa) : %v", len(aaaa))
 		log.Trace("[GetFileDetailList()] aaaa : %v", aaaa)
+		for i, v := range aaaa {
+			log.Trace("[GetFileDetailList()] aaaa i : %d, v : %s", i, v)
+		}
 		bbbb := strings.Split(v, "　")
+		for i, v := range bbbb {
+			log.Trace("[GetFileDetailList()] bbbb i : %d, v : %s", i, v)
+		}
 		log.Trace("[GetFileDetailList()] len(bbbb) : %v", len(bbbb))
 		log.Trace("[GetFileDetailList()] bbbb : %v", bbbb)
 		file_info := strings.Fields(v)
