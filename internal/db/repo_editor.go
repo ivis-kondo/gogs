@@ -500,22 +500,25 @@ func (repo *Repository) UploadRepoFiles(doer *User, opts UploadRepoFileOptions) 
 		if isRepositoryGitPath(upload.Name) {
 			continue
 		}
-		log.Trace("[UploadRepoFiles()] dirPath : $s", dirPath)
-		log.Trace("[UploadRepoFiles()] upload.Name : $s", upload.Name)
+		log.Trace("[UploadRepoFiles()] dirPath : %s", dirPath)
+		log.Trace("[UploadRepoFiles()] upload.Name : %s", upload.Name)
 
 		targetPath := path.Join(dirPath, upload.Name)
 		// GIN: Create subdirectory for dirtree uploads
 		if err = os.MkdirAll(filepath.Dir(targetPath), os.ModePerm); err != nil {
 			return fmt.Errorf("mkdir: %v", err)
 		}
-		log.Trace("[UploadRepoFiles()] tmpPath : $s", tmpPath)
-		log.Trace("[UploadRepoFiles()] targetPath : $s", targetPath)
+		log.Trace("[UploadRepoFiles()] tmpPath : %s", tmpPath)
+		log.Trace("[UploadRepoFiles()] targetPath : %s", targetPath)
 		// check symbol link in local repository
 		info, err := os.Lstat(targetPath)
 		if err == nil {
 			if info.Mode()&os.ModeSymlink == os.ModeSymlink {
-				log.Trace("[UploadRepoFiles()] Is simbolic link targetPath : $s", targetPath)
-				// git_annex_cmd.GitAnnexUnlock(dirPath, upload.Name)
+				log.Trace("[UploadRepoFiles()] Is simbolic link targetPath : %s", targetPath)
+				if err := git_annex_cmd.GitAnnexUnlock(filepath.Dir(targetPath), filepath.Base(targetPath)); err != nil {
+					log.Trace("[git_annex_cmd.GitAnnexUnlock()] err : %v", err)
+					return fmt.Errorf("annex unlock: %v", err)
+				}
 
 			}
 		}
