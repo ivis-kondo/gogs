@@ -35,16 +35,24 @@ type DataDetail struct {
 
 func GetFileDetailList(repoPath string) ([]DataDetail, error) {
 	raw_msg, err := GitIsFile(repoPath, "-s")
+	log.Trace("[GetFileDetailList()] raw_msg : %s", raw_msg)
 	if err != nil {
 		return []DataDetail{}, err
 	}
 	reg := "\r\n|\n"
 	file_list := regexp.MustCompile(reg).Split(raw_msg, -1)
+	log.Trace("[GetFileDetailList()] file_list : %v", file_list)
 	file_list = file_list[0 : len(file_list)-1]
 	FileDetailList := []DataDetail{}
 
 	for _, v := range file_list {
+		log.Trace("[GetFileDetailList()] v : %v", v)
 		file_info := strings.Fields(v)
+		log.Trace("[GetFileDetailList()] file_info : %v", file_info)
+		log.Trace("[GetFileDetailList()] file_info[0] : %v", file_info[0])
+		log.Trace("[GetFileDetailList()] file_info[1] : %v", file_info[1])
+		log.Trace("[GetFileDetailList()] file_info[3] : %v", file_info[3])
+		log.Trace("[GetFileDetailList()] filepath.ToSlash(file_info[3]) : %v", filepath.ToSlash(file_info[3]))
 		fileDateil := DataDetail{
 			Mode:     file_info[0],
 			Hash:     file_info[1],
