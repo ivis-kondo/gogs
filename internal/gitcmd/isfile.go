@@ -44,21 +44,21 @@ func GetFileDetailList(repoPath string) ([]DataDetail, error) {
 	log.Trace("[GetFileDetailList()] file_list : %v", file_list)
 	file_list = file_list[0 : len(file_list)-1]
 
-	raw_msg, err = GitIsFile(repoPath, "--full-name")
-	if err != nil {
-		return []DataDetail{}, err
-	}
+	// raw_msg, err = GitIsFile(repoPath, "--full-name")
+	// if err != nil {
+	// 	return []DataDetail{}, err
+	// }
 
-	var space_files []string
-	file_name_list_all := regexp.MustCompile(reg).Split(raw_msg, -1)
-	for _, file_name := range file_name_list_all {
-		half_widths := strings.Split(file_name, " ")
-		full_widths := strings.Split(file_name, "　")
-		if len(half_widths) > 1 || len(full_widths) > 1 {
-			log.Trace("[GetFileDetailList()] file_name : %s", file_name)
-			space_files = append(space_files, file_name)
-		}
-	}
+	// var space_files []string
+	// file_name_list_all := regexp.MustCompile(reg).Split(raw_msg, -1)
+	// for _, file_name := range file_name_list_all {
+	// 	half_widths := strings.Split(file_name, " ")
+	// 	full_widths := strings.Split(file_name, "　")
+	// 	if len(half_widths) > 1 || len(full_widths) > 1 {
+	// 		log.Trace("[GetFileDetailList()] file_name : %s", file_name)
+	// 		space_files = append(space_files, file_name)
+	// 	}
+	// }
 
 	FileDetailList := []DataDetail{}
 
@@ -79,15 +79,15 @@ func GetFileDetailList(repoPath string) ([]DataDetail, error) {
 		file_info := strings.Fields(v)
 		log.Trace("[GetFileDetailList()] len(file_info) : %v", len(file_info))
 		log.Trace("[GetFileDetailList()] file_info : %v", file_info)
-		log.Trace("[GetFileDetailList()] file_info[0] : %v", file_info[0])
-		log.Trace("[GetFileDetailList()] file_info[1] : %v", file_info[1])
-		log.Trace("[GetFileDetailList()] file_info[3] : %v", file_info[3])
-		log.Trace("[GetFileDetailList()] filepath.ToSlash(file_info[3]) : %v", filepath.ToSlash(file_info[3]))
 		var file_path string
 		if len(file_info) >= 5 {
-			data_com := file_info[3:]
-			log.Trace("[GetFileDetailList()] data_com : %v", data_com)
-			file_path = strings.Join(data_com, " ")
+			//半角と全角のスペースが複数含まれている。
+			head := file_info[3]
+			log.Trace("[GetFileDetailList()] head : %v", head)
+			index := strings.Index(v, head)
+			log.Trace("[GetFileDetailList()] index : %v", index)
+			file_path = v[index:]
+			log.Trace("[GetFileDetailList()] file_path : %v", file_path)
 		} else {
 			file_path = filepath.ToSlash(file_info[3])
 		}
