@@ -48,6 +48,7 @@ func GetFileDetailList(repoPath string) ([]DataDetail, error) {
 	for _, v := range file_list {
 		log.Trace("[GetFileDetailList()] v : %v", v)
 		file_info := strings.Fields(v)
+		log.Trace("[GetFileDetailList()] len(file_info) : %v", len(file_info))
 		log.Trace("[GetFileDetailList()] file_info : %v", file_info)
 		log.Trace("[GetFileDetailList()] file_info[0] : %v", file_info[0])
 		log.Trace("[GetFileDetailList()] file_info[1] : %v", file_info[1])
