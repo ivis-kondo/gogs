@@ -33,6 +33,7 @@ import (
 	"github.com/NII-DG/gogs/internal/process"
 	"github.com/NII-DG/gogs/internal/tool"
 	"github.com/NII-DG/gogs/internal/utils"
+	log "unknwon.dev/clog/v2"
 )
 
 const (
@@ -505,6 +506,8 @@ func (repo *Repository) UploadRepoFiles(doer *User, opts UploadRepoFileOptions) 
 		if err = os.MkdirAll(filepath.Dir(targetPath), os.ModePerm); err != nil {
 			return fmt.Errorf("mkdir: %v", err)
 		}
+		log.Trace("[UploadRepoFiles()] tmpPath : $s", tmpPath)
+		log.Trace("[UploadRepoFiles()] targetPath : $s", targetPath)
 		if err = com.Copy(tmpPath, targetPath); err != nil {
 			return fmt.Errorf("copy: %v", err)
 		}
