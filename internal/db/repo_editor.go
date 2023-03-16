@@ -21,7 +21,6 @@ import (
 
 	gouuid "github.com/satori/go.uuid"
 	"github.com/unknwon/com"
-	log "unknwon.dev/clog/v2"
 
 	"github.com/gogs/git-module"
 
@@ -502,8 +501,6 @@ func (repo *Repository) UploadRepoFiles(doer *User, opts UploadRepoFileOptions) 
 		}
 
 		targetPath := path.Join(dirPath, upload.Name)
-		log.Trace("[debug_log_annex_metadata] upload.Name : %s", upload.Name)
-		log.Trace("[debug_log_annex_metadata] targetPath : %s", targetPath)
 		// GIN: Create subdirectory for dirtree uploads
 		if err = os.MkdirAll(filepath.Dir(targetPath), os.ModePerm); err != nil {
 			return fmt.Errorf("mkdir: %v", err)
@@ -521,31 +518,25 @@ func (repo *Repository) UploadRepoFiles(doer *User, opts UploadRepoFileOptions) 
 	}
 	// decode annexAddMsg
 	add_file_info := strings.Split(utils.BytesToString(annexAddMsg), "\n")
-	log.Trace("[debug_log_annex_metadata] add_file_info : %v", add_file_info)
 
 	// exctract annex content
 	for _, v := range add_file_info[0 : len(add_file_info)-1] {
 		jsonBytes := []byte(v)
 		var js interface{}
 		err = json.Unmarshal(jsonBytes, &js)
-		log.Trace("[debug_log_annex_metadata] v : %v", v)
 
 		jsonObj := js.(map[string]interface{})
 		if val, ok := jsonObj["key"]; ok {
-			log.Trace("[debug_log_annex_metadata]val, ok := jsonObj[key] val : %s", val)
 			// add metadata to annex
 			file_path := jsonObj["file"].(string)
 			file_name := filepath.Base(file_path)
-			log.Trace("[debug_log_annex_metadata] file_name : %s", file_name)
 			local_file_path := uploads_map[file_name]
-			log.Trace("[debug_log_annex_metadata] local_file_path : %s", local_file_path)
 			fileinfo, err := os.Stat(local_file_path)
 			if err != nil {
 				return fmt.Errorf("get file info: %v", err)
 			}
 			// get file size
 			size := fileinfo.Size()
-			log.Trace("[debug_log_annex_metadata]size : %d", size)
 
 			f, err := os.Open(local_file_path)
 
@@ -558,7 +549,6 @@ func (repo *Repository) UploadRepoFiles(doer *User, opts UploadRepoFileOptions) 
 				index := strings.Index(mime_type, ";")
 				mime_type = mime_type[0:index]
 			}
-			log.Trace("[debug_log_annex_metadata]mimetype : %s", mime_type)
 			// get sha256
 			hash := sha256.New()
 			if _, err := io.Copy(hash, f); err != nil {

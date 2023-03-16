@@ -118,7 +118,6 @@ func annexSetup(path string) {
 		return
 	}
 
-	//★
 	//Enable addunlocked for annex v8
 	// if msg, err := annex.SetAddUnlocked(path); err != nil {
 	// 	log.Error(2, "Failed to set 'addunlocked' annex option: %v (%s)", err, msg)
