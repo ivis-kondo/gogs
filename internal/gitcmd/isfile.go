@@ -43,6 +43,23 @@ func GetFileDetailList(repoPath string) ([]DataDetail, error) {
 	file_list := regexp.MustCompile(reg).Split(raw_msg, -1)
 	log.Trace("[GetFileDetailList()] file_list : %v", file_list)
 	file_list = file_list[0 : len(file_list)-1]
+
+	raw_msg, err = GitIsFile(repoPath, "--full-name")
+	if err != nil {
+		return []DataDetail{}, err
+	}
+
+	var space_files []string
+	file_name_list_all := regexp.MustCompile(reg).Split(raw_msg, -1)
+	for _, file_name := range file_name_list_all {
+		half_widths := strings.Split(file_name, " ")
+		full_widths := strings.Split(file_name, "　")
+		if len(half_widths) > 1 || len(full_widths) > 1 {
+			log.Trace("[GetFileDetailList()] file_name : %s", file_name)
+			space_files = append(space_files, file_name)
+		}
+	}
+
 	FileDetailList := []DataDetail{}
 
 	for _, v := range file_list {
@@ -69,6 +86,7 @@ func GetFileDetailList(repoPath string) ([]DataDetail, error) {
 		var file_path string
 		if len(file_info) >= 5 {
 			data_com := file_info[3:]
+			log.Trace("[GetFileDetailList()] data_com : %v", data_com)
 			file_path = strings.Join(data_com, " ")
 		} else {
 			file_path = filepath.ToSlash(file_info[3])
