@@ -9,6 +9,7 @@ import (
 	"github.com/NII-DG/gogs/internal/utils"
 	constval "github.com/NII-DG/gogs/internal/utils/const"
 	"github.com/gogs/git-module"
+	log "unknwon.dev/clog/v2"
 )
 
 /*
@@ -57,7 +58,7 @@ func GetFileDetailList(repoPath string) ([]DataDetail, error) {
 func DivideByMode(data_list []DataDetail) (file_list []DataDetail, symbolic_link_list []DataDetail) {
 
 	for _, v := range data_list {
-
+		log.Trace("[DivideByMode()] v.FilePath : %s", v.FilePath)
 		switch v.Mode {
 
 		case "120000": // symbolic_link

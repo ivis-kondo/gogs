@@ -18,6 +18,7 @@ import (
 	"github.com/NII-DG/gogs/internal/urlutil"
 	"github.com/NII-DG/gogs/internal/utils"
 	"github.com/unknwon/com"
+	log "unknwon.dev/clog/v2"
 )
 
 /*
@@ -138,6 +139,9 @@ func ExtractMetaDataGitContent(repo *Repository, git_contents []gitcmd.DataDetai
 		if err != nil {
 			return nil, err
 		}
+		log.Trace("[ExtractMetaDataGitContent()] git_content.FilePath : %s", git_content.FilePath)
+		log.Trace("[ExtractMetaDataGitContent()] filepath.Base(git_content.FilePath) : %s", filepath.Base(git_content.FilePath))
+		log.Trace("[ExtractMetaDataGitContent()] url : %s", url)
 		file := datastruct.File{
 			ID:                    git_content.FilePath,
 			Name:                  filepath.Base(git_content.FilePath),
