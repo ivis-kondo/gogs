@@ -512,7 +512,6 @@ func (repo *Repository) UploadRepoFiles(doer *User, opts UploadRepoFileOptions) 
 				if err := git_annex_cmd.GitAnnexUnlock(filepath.Dir(targetPath), filepath.Base(targetPath)); err != nil {
 					return fmt.Errorf("annex unlock: %v", err)
 				}
-
 			}
 		}
 
