@@ -535,8 +535,9 @@ func (repo *Repository) UploadRepoFiles(doer *User, opts UploadRepoFileOptions) 
 			log.Trace("[debug_log_annex_metadata]val, ok := jsonObj[key] val : %s", val)
 			// add metadata to annex
 			file_name := jsonObj["file"].(string)
+			log.Trace("[debug_log_annex_metadata] file_name : %s", file_name)
 			local_file_path := uploads_map[file_name]
-			log.Trace("[debug_log_annex_metadata]size : %s", local_file_path)
+			log.Trace("[debug_log_annex_metadata] local_file_path : %s", local_file_path)
 			fileinfo, err := os.Stat(local_file_path)
 			if err != nil {
 				return fmt.Errorf("get file info: %v", err)
