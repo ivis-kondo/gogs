@@ -35,59 +35,22 @@ type DataDetail struct {
 
 func GetFileDetailList(repoPath string) ([]DataDetail, error) {
 	raw_msg, err := GitIsFile(repoPath, "-s")
-	log.Trace("[GetFileDetailList()] raw_msg : %s", raw_msg)
 	if err != nil {
 		return []DataDetail{}, err
 	}
 	reg := "\r\n|\n"
 	file_list := regexp.MustCompile(reg).Split(raw_msg, -1)
-	log.Trace("[GetFileDetailList()] file_list : %v", file_list)
 	file_list = file_list[0 : len(file_list)-1]
-
-	// raw_msg, err = GitIsFile(repoPath, "--full-name")
-	// if err != nil {
-	// 	return []DataDetail{}, err
-	// }
-
-	// var space_files []string
-	// file_name_list_all := regexp.MustCompile(reg).Split(raw_msg, -1)
-	// for _, file_name := range file_name_list_all {
-	// 	half_widths := strings.Split(file_name, " ")
-	// 	full_widths := strings.Split(file_name, "　")
-	// 	if len(half_widths) > 1 || len(full_widths) > 1 {
-	// 		log.Trace("[GetFileDetailList()] file_name : %s", file_name)
-	// 		space_files = append(space_files, file_name)
-	// 	}
-	// }
 
 	FileDetailList := []DataDetail{}
 
 	for _, v := range file_list {
-		log.Trace("[GetFileDetailList()] v : %v", v)
-		aaaa := strings.Split(v, " ")
-		log.Trace("[GetFileDetailList()] len(aaaa) : %v", len(aaaa))
-		log.Trace("[GetFileDetailList()] aaaa : %v", aaaa)
-		for i, v := range aaaa {
-			log.Trace("[GetFileDetailList()] aaaa i : %d, v : %s", i, v)
-		}
-		bbbb := strings.Split(v, "　")
-		for i, v := range bbbb {
-			log.Trace("[GetFileDetailList()] bbbb i : %d, v : %s", i, v)
-		}
-		log.Trace("[GetFileDetailList()] len(bbbb) : %v", len(bbbb))
-		log.Trace("[GetFileDetailList()] bbbb : %v", bbbb)
 		file_info := strings.Fields(v)
-		log.Trace("[GetFileDetailList()] len(file_info) : %v", len(file_info))
-		log.Trace("[GetFileDetailList()] file_info : %v", file_info)
 		var file_path string
 		if len(file_info) >= 5 {
-			//半角と全角のスペースが複数含まれている。
 			head := file_info[3]
-			log.Trace("[GetFileDetailList()] head : %v", head)
 			index := strings.Index(v, head)
-			log.Trace("[GetFileDetailList()] index : %v", index)
 			file_path = v[index:]
-			log.Trace("[GetFileDetailList()] file_path : %v", file_path)
 		} else {
 			file_path = filepath.ToSlash(file_info[3])
 		}
