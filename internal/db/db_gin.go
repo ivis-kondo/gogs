@@ -119,9 +119,9 @@ func annexSetup(path string) {
 	}
 
 	//Enable addunlocked for annex v8
-	if msg, err := annex.SetAddUnlocked(path); err != nil {
-		log.Error(2, "Failed to set 'addunlocked' annex option: %v (%s)", err, msg)
-	}
+	// if msg, err := annex.SetAddUnlocked(path); err != nil {
+	// 	log.Error(2, "Failed to set 'addunlocked' annex option: %v (%s)", err, msg)
+	// }
 
 	// Set MD5 as default backend
 	if msg, err := annex.MD5(path); err != nil {
