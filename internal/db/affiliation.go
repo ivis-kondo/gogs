@@ -71,7 +71,7 @@ func InitAffiliation() {
 			return
 		} else if has {
 
-			if _, err = sess.Where("url = ?", org.Url).Delete(org); err != nil {
+			if _, err = sess.Where("url = ?", org.Url).Delete(&Affiliation{}); err != nil {
 				log.Fatal("Failed to delete: %v", err)
 				return
 			}
