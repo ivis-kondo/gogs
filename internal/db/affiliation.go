@@ -46,11 +46,13 @@ func InitAffiliation() {
 	}
 
 	orgs := make([]Affiliation, 0, len(rows))
-	for _, v := range rows {
+	for _, v := range rows[1:] {
 		orgs = append(orgs, Affiliation{
 			Name:          v[0],
 			DisplayedName: v[1],
 			Url:           v[2],
+			Alias:         v[3],
+			Description:   v[4],
 		})
 	}
 
