@@ -31,7 +31,7 @@ func InitAffiliation() {
 	// }
 	// defer file.Close()
 
-	data, err := conf.Asset("conf/affiliation/affiliation.csv")
+	data, err := conf.Asset(dataname)
 	if err != nil {
 		log.Fatal("Failed to read %s affiliation data: %v", dataname, err)
 		return
@@ -70,16 +70,17 @@ func InitAffiliation() {
 			log.Fatal("Failed to get: %v", err)
 			return
 		} else if has {
-			if _, err = sess.Where("url = ?", org.Url).Update(org); err != nil {
-				log.Fatal("Failed to update: %v", err)
-				return
-			}
-		} else {
-			if _, err = sess.Insert(org); err != nil {
-				log.Fatal("Failed to insert: %v", err)
+
+			if _, err = sess.Where("url = ?", org.Url).Delete(org); err != nil {
+				log.Fatal("Failed to delete: %v", err)
 				return
 			}
 		}
+		if _, err = sess.Insert(org); err != nil {
+			log.Fatal("Failed to insert: %v", err)
+			return
+		}
+
 	}
 
 	if err = sess.Commit(); err != nil {
