@@ -21,16 +21,9 @@ type Affiliation struct {
 
 // RCOS spesific code.
 // InitAffiliation inserts or updates affiliation's table from a csv file.
-//★
+// TODO:Open-sourcing support: Make it possible to optionally select in app.ini whether to call this function.
 func InitAffiliation() {
 	dataname := "conf/affiliation/affiliation.csv"
-	// file, err := os.Open(filePath)
-	// if err != nil {
-	// 	log.Fatal("Failed to open %s file: %v", filePath, err)
-	// 	return
-	// }
-	// defer file.Close()
-
 	data, err := conf.Asset(dataname)
 	if err != nil {
 		log.Fatal("Failed to read %s affiliation data: %v", dataname, err)
