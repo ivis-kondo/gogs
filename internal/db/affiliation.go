@@ -1,10 +1,11 @@
 package db
 
 import (
+	"bytes"
 	"encoding/csv"
 	"fmt"
-	"os"
 
+	"github.com/NII-DG/gogs/internal/conf"
 	log "unknwon.dev/clog/v2"
 )
 
@@ -20,19 +21,27 @@ type Affiliation struct {
 
 // RCOS spesific code.
 // InitAffiliation inserts or updates affiliation's table from a csv file.
+//★
 func InitAffiliation() {
-	filePath := "conf/affiliation/affiliation.csv"
-	file, err := os.Open(filePath)
+	dataname := "conf/affiliation/affiliation.csv"
+	// file, err := os.Open(filePath)
+	// if err != nil {
+	// 	log.Fatal("Failed to open %s file: %v", filePath, err)
+	// 	return
+	// }
+	// defer file.Close()
+
+	data, err := conf.Asset("conf/affiliation/affiliation.csv")
 	if err != nil {
-		log.Fatal("Failed to open %s file: %v", filePath, err)
+		log.Fatal("Failed to read %s affiliation data: %v", dataname, err)
 		return
 	}
-	defer file.Close()
+	byte_r := bytes.NewReader(data)
 
-	r := csv.NewReader(file)
+	r := csv.NewReader(byte_r)
 	rows, err := r.ReadAll()
 	if err != nil {
-		log.Fatal("Failed to read %s file: %v", filePath, err)
+		log.Fatal("Failed to read %s file: %v", dataname, err)
 		return
 	}
 
