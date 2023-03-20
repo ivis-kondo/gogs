@@ -134,10 +134,6 @@ func ExtractMetaDataGitContent(repo *Repository, git_contents []gitcmd.DataDetai
 			return nil, err
 		}
 
-		//isExperimentPackageFlag, err := git_content.IsExperimentPackage(data_struct_type)
-		// if err != nil {
-		// 	return nil, err
-		// }
 		isExperimentPackageFlag := git_content.IsExperimentPackage()
 
 		file := datastruct.File{
@@ -173,10 +169,7 @@ func ExtractMetaDataGitAnnexContent(repo *Repository, git_annex_contents []gitcm
 		if err != nil {
 			return nil, err
 		}
-		// isExperimentPackageFlag, err := git_annex_content.IsExperimentPackage(data_struct_type)
-		// if err != nil {
-		// 	return nil, err
-		// }
+
 		isExperimentPackageFlag := git_annex_content.IsExperimentPackage()
 
 		url, err := repo.CreateAccessUrlToFile(branch, git_annex_content.FilePath)
