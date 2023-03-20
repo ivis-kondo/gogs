@@ -119,6 +119,10 @@ func IsExperimentPackageOnForParameter(splited_file_path []string) bool {
 		return splited_file_path[len(splited_file_path)-1] != GIT_KEEP
 	}
 
+	if len(splited_file_path) < 3 {
+		return false
+	}
+
 	if splited_file_path[3] == PARAM || splited_file_path[3] == OUTPUT_DATA {
 		return splited_file_path[len(splited_file_path)-1] != GIT_KEEP
 	}
