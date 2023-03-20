@@ -119,7 +119,7 @@ func IsExperimentPackageOnForParameter(splited_file_path []string) bool {
 		return splited_file_path[len(splited_file_path)-1] != GIT_KEEP
 	}
 	log.Trace("[IsExperimentPackageOnForParameter()] len(splited_file_path) : %v", len(splited_file_path))
-	if len(splited_file_path) < 3 {
+	if len(splited_file_path) < 4 {
 		return false
 	}
 
