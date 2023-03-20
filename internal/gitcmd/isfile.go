@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/NII-DG/gogs/internal/utils"
-	constval "github.com/NII-DG/gogs/internal/utils/const"
+	//constval "github.com/NII-DG/gogs/internal/utils/const"
 	"github.com/gogs/git-module"
 )
 
@@ -78,15 +78,20 @@ func DivideByMode(data_list []DataDetail) (file_list []DataDetail, symbolic_link
 	return file_list, symbolic_link_list
 }
 
-func (dd DataDetail) IsExperimentPackage(data_struct_type string) (bool, error) {
+// func (dd DataDetail) IsExperimentPackage(data_struct_type string) (bool, error) {
+// 	splited_file_path := strings.Split(filepath.ToSlash(dd.FilePath), "/")
+// 	if data_struct_type == constval.WITH_CODE {
+// 		return IsExperimentPackageOnWithCode(splited_file_path), nil
+// 	} else if data_struct_type == constval.FOR_PARAMETERS {
+// 		return IsExperimentPackageOnForParameter(splited_file_path), nil
+// 	} else {
+// 		return false, fmt.Errorf("data_struct_type[%s] is not defined", data_struct_type)
+// 	}
+// }
+
+func (dd DataDetail) IsExperimentPackage() bool {
 	splited_file_path := strings.Split(filepath.ToSlash(dd.FilePath), "/")
-	if data_struct_type == constval.WITH_CODE {
-		return IsExperimentPackageOnWithCode(splited_file_path), nil
-	} else if data_struct_type == constval.FOR_PARAMETERS {
-		return IsExperimentPackageOnForParameter(splited_file_path), nil
-	} else {
-		return false, fmt.Errorf("data_struct_type[%s] is not defined", data_struct_type)
-	}
+	return IsExperimentPackage(splited_file_path)
 }
 
 //experiments/test_ex/source/s3/sample.ipynb
@@ -96,6 +101,16 @@ const SOURCE = "source"
 const OUTPUT_DATA = "output_data"
 const PARAMS = "params"
 const GIT_KEEP = ".gitkeep"
+
+func IsExperimentPackage(splited_file_path []string) bool {
+	if splited_file_path[0] != EXPERIMENTS {
+		return false
+	}
+	if splited_file_path[len(splited_file_path)-1] != GIT_KEEP {
+		return true
+	}
+	return false
+}
 
 func IsExperimentPackageOnWithCode(splited_file_path []string) bool {
 	if splited_file_path[0] != EXPERIMENTS {
