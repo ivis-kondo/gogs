@@ -9,7 +9,6 @@ import (
 	"github.com/NII-DG/gogs/internal/utils"
 	constval "github.com/NII-DG/gogs/internal/utils/const"
 	"github.com/gogs/git-module"
-	log "unknwon.dev/clog/v2"
 )
 
 /*
@@ -109,7 +108,6 @@ func IsExperimentPackageOnWithCode(splited_file_path []string) bool {
 }
 
 func IsExperimentPackageOnForParameter(splited_file_path []string) bool {
-	log.Trace("[IsExperimentPackageOnForParameter()] splited_file_path : %v", splited_file_path)
 
 	if splited_file_path[0] != EXPERIMENTS {
 		return false
@@ -118,7 +116,6 @@ func IsExperimentPackageOnForParameter(splited_file_path []string) bool {
 	if splited_file_path[2] == INPUT_DATA || splited_file_path[2] == SOURCE {
 		return splited_file_path[len(splited_file_path)-1] != GIT_KEEP
 	}
-	log.Trace("[IsExperimentPackageOnForParameter()] len(splited_file_path) : %v", len(splited_file_path))
 	if len(splited_file_path) < 4 {
 		return false
 	}
