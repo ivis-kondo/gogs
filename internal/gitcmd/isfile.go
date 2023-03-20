@@ -83,7 +83,6 @@ func (dd DataDetail) IsExperimentPackage() bool {
 	return isExperimentPackage(splited_file_path)
 }
 
-//experiments/test_ex/source/s3/sample.ipynb
 const EXPERIMENTS = "experiments"
 const GIT_KEEP = ".gitkeep"
 
