@@ -254,6 +254,14 @@ components:
           type: string
         datasetStructure:
           type: string
+        experimentPackageList:
+          type: array
+          items:
+            $ref: '#components/schemas/String'
+        parameterExperimentList:
+          type: array
+          items:
+            $ref: '#components/schemas/String'
     DmpFile:
       type: object
       properties:
