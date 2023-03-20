@@ -82,7 +82,7 @@ func (dd DataDetail) IsExperimentPackage(data_struct_type string) (bool, error) 
 	splited_file_path := strings.Split(filepath.ToSlash(dd.FilePath), "/")
 	if data_struct_type == constval.WITH_CODE {
 		return IsExperimentPackageOnWithCode(splited_file_path), nil
-	} else if data_struct_type == constval.FOR_PARAMETER {
+	} else if data_struct_type == constval.FOR_PARAMETERS {
 		return IsExperimentPackageOnForParameter(splited_file_path), nil
 	} else {
 		return false, fmt.Errorf("data_struct_type[%s] is not defined", data_struct_type)
