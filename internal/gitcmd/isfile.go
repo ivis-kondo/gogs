@@ -95,7 +95,7 @@ const EXPERIMENTS = "experiments"
 const INPUT_DATA = "input_data"
 const SOURCE = "source"
 const OUTPUT_DATA = "output_data"
-const PARAM = "param"
+const PARAMS = "params"
 const GIT_KEEP = ".gitkeep"
 
 func IsExperimentPackageOnWithCode(splited_file_path []string) bool {
@@ -123,7 +123,7 @@ func IsExperimentPackageOnForParameter(splited_file_path []string) bool {
 		return false
 	}
 
-	if splited_file_path[3] == PARAM || splited_file_path[3] == OUTPUT_DATA {
+	if splited_file_path[3] == PARAMS || splited_file_path[3] == OUTPUT_DATA {
 		return splited_file_path[len(splited_file_path)-1] != GIT_KEEP
 	}
 	return false
