@@ -22,3 +22,29 @@ func GetForParameters() string {
 func GetWithCode() string {
 	return WITH_CODE
 }
+
+/*
+Folder Name in Dataset
+*/
+const (
+	INPUT_DATA  = "input_data"
+	SOURCE      = "source"
+	OUTPUT_DATA = "output_data"
+	CI          = "ci"
+)
+
+func Get_INPUT_DATA() string {
+	return INPUT_DATA
+}
+
+func Get_SOURCE() string {
+	return SOURCE
+}
+
+func Get_OUTPUT_DATA() string {
+	return OUTPUT_DATA
+}
+
+func Get_CI() string {
+	return CI
+}
