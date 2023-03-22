@@ -48,3 +48,16 @@ func Get_OUTPUT_DATA() string {
 func Get_CI() string {
 	return CI
 }
+
+func IsParameterFolder(name string) bool {
+	if name == INPUT_DATA {
+		return false
+	}
+	if name == SOURCE {
+		return false
+	}
+	if name == CI {
+		return false
+	}
+	return true
+}

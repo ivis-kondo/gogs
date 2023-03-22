@@ -148,7 +148,8 @@ func ExtractExperimentPackageList(struct_type string, datasets []datastruct.Data
 						parameterExperimentList = append(parameterExperimentList, dataset.ID)
 					}
 				}
-				if !isInvoled && (path_compoment[len(path_compoment)-1] != const_utils.Get_INPUT_DATA() && path_compoment[len(path_compoment)-1] != const_utils.Get_SOURCE() && path_compoment[len(path_compoment)-1] != const_utils.Get_CI()) {
+
+				if !isInvoled && const_utils.IsParameterFolder(path_compoment[len(path_compoment)-1]) {
 					log.Trace("[ExtractExperimentPackageList()] dataset.ID(Path) : %s add to parameterExperimentList", dataset.ID)
 					parameterExperimentList = append(parameterExperimentList, dataset.ID)
 				}
