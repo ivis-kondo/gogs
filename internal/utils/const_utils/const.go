@@ -1,5 +1,7 @@
 package const_utils
 
+import log "unknwon.dev/clog/v2"
+
 /*
 Dataset Struct Type
 */
@@ -50,14 +52,19 @@ func Get_CI() string {
 }
 
 func IsParameterFolder(name string) bool {
+	log.Trace("[IsParameterFolder()] name: %s", name)
 	if name == INPUT_DATA {
+		log.Trace("[IsParameterFolder()] name: %s is %s", name, INPUT_DATA)
 		return false
 	}
 	if name == SOURCE {
+		log.Trace("[IsParameterFolder()] name: %s is %s", name, SOURCE)
 		return false
 	}
 	if name == CI {
+		log.Trace("[IsParameterFolder()] name: %s is %s", name, CI)
 		return false
 	}
+	log.Trace("[IsParameterFolder()] name: %s is ParameterFolder", name)
 	return true
 }
