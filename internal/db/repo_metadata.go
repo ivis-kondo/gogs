@@ -17,6 +17,7 @@ import (
 	datastruct "github.com/NII-DG/gogs/internal/route/api/v1/metadata/datastruct"
 	"github.com/NII-DG/gogs/internal/urlutil"
 	"github.com/NII-DG/gogs/internal/utils"
+	"github.com/NII-DG/gogs/internal/utils/const_utils"
 	"github.com/unknwon/com"
 	log "unknwon.dev/clog/v2"
 )
@@ -133,7 +134,7 @@ func ExtractExperimentPackageList(struct_type string, datasets []datastruct.Data
 					}
 				}
 			}
-			if struct_type == utils.GetForParameters() && len(path_compoment) == 3 {
+			if struct_type == const_utils.GetForParameters() && len(path_compoment) == 3 {
 				for _, v := range parameterExperimentList {
 					if v != dataset.ID {
 						parameterExperimentList = append(parameterExperimentList, dataset.ID)
