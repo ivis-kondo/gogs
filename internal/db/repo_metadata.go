@@ -135,7 +135,7 @@ func ExtractExperimentPackageList(struct_type string, datasets []datastruct.Data
 				for _, v := range experimentPackageList {
 					log.Trace("[ExtractExperimentPackageList()] v(paht) : %s", v)
 					log.Trace("[ExtractExperimentPackageList()] dataset.ID : %s", dataset.ID)
-					if v != dataset.ID {
+					if v == dataset.ID {
 						log.Trace("[ExtractExperimentPackageList()] dataset.ID : %s is Involed", dataset.ID)
 						isInvoledExperimentPackageList = true
 					}
@@ -149,7 +149,7 @@ func ExtractExperimentPackageList(struct_type string, datasets []datastruct.Data
 				log.Trace("[ExtractExperimentPackageList()] struct_type: %s is ForParameters", struct_type)
 				isInvoledParameterExperimentList := false
 				for _, v := range parameterExperimentList {
-					if v != dataset.ID {
+					if v == dataset.ID {
 						isInvoledParameterExperimentList = true
 						parameterExperimentList = append(parameterExperimentList, dataset.ID)
 					}
