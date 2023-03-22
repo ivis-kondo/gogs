@@ -127,18 +127,30 @@ func ExtractExperimentPackageList(struct_type string, datasets []datastruct.Data
 			log.Trace("[ExtractExperimentPackageList()] dataset.ID(Path) : %s is ExperimentPackage", dataset.ID)
 			log.Trace("[ExtractExperimentPackageList()] len(strings.Split(filepath.ToSlash(dataset.ID) : %d.", len(strings.Split(filepath.ToSlash(dataset.ID), "/")))
 			path_compoment := strings.Split(filepath.ToSlash(dataset.ID), "/")
+			log.Trace("[ExtractExperimentPackageList()] path_compoment) : %v", path_compoment)
 			if len(path_compoment) == 2 {
+				isInvoled := false
 				for _, v := range experimentPackageList {
 					if v != dataset.ID {
-						experimentPackageList = append(experimentPackageList, dataset.ID)
+						isInvoled = true
 					}
+				}
+				if !isInvoled {
+					log.Trace("[ExtractExperimentPackageList()] dataset.ID(Path) : %s add to experimentPackageList", dataset.ID)
+					experimentPackageList = append(experimentPackageList, dataset.ID)
 				}
 			}
 			if struct_type == const_utils.GetForParameters() && len(path_compoment) == 3 {
+				isInvoled := false
 				for _, v := range parameterExperimentList {
 					if v != dataset.ID {
+						isInvoled = true
 						parameterExperimentList = append(parameterExperimentList, dataset.ID)
 					}
+				}
+				if !isInvoled {
+					log.Trace("[ExtractExperimentPackageList()] dataset.ID(Path) : %s add to parameterExperimentList", dataset.ID)
+					parameterExperimentList = append(parameterExperimentList, dataset.ID)
 				}
 			}
 		}
