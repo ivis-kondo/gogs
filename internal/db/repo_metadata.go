@@ -128,28 +128,30 @@ func ExtractExperimentPackageList(struct_type string, datasets []datastruct.Data
 		if IsExperimentPackage(dataset.ID) {
 			log.Error("[ExtractExperimentPackageList()] dataset.ID: %s is ExperimentPackage", dataset.ID)
 			path_compoment := strings.Split(filepath.ToSlash(dataset.ID), "/")
+			log.Error("[ExtractExperimentPackageList()] path_compoment: %v", path_compoment)
+			log.Error("[ExtractExperimentPackageList()] len(path_compoment[:len(path_compoment)-1]): %v", len(path_compoment[:len(path_compoment)-1]))
 			if len(path_compoment[:len(path_compoment)-1]) == 2 {
-				isInvoled := false
+				isInvoledExperimentPackageList := false
 				for _, v := range experimentPackageList {
 					if v != dataset.ID {
-						isInvoled = true
+						isInvoledExperimentPackageList = true
 					}
 				}
-				if !isInvoled {
+				if !isInvoledExperimentPackageList {
 					log.Error("[ExtractExperimentPackageList()] dataset.ID: %s add to experimentPackageList", dataset.ID)
 					experimentPackageList = append(experimentPackageList, dataset.ID)
 				}
 			}
 			if struct_type == const_utils.GetForParameters() && len(path_compoment[:len(path_compoment)-1]) == 3 {
 				log.Error("[ExtractExperimentPackageList()] struct_type: %s is ForParameters", struct_type)
-				isInvoled := false
+				isInvoledParameterExperimentList := false
 				for _, v := range parameterExperimentList {
 					if v != dataset.ID {
-						isInvoled = true
+						isInvoledParameterExperimentList = true
 						parameterExperimentList = append(parameterExperimentList, dataset.ID)
 					}
 				}
-				if !isInvoled && const_utils.IsParameterFolder(path_compoment[2]) {
+				if !isInvoledParameterExperimentList && const_utils.IsParameterFolder(path_compoment[2]) {
 					log.Error("[ExtractExperimentPackageList()] dataset.ID: %s add to parameterExperimentList", dataset.ID)
 					parameterExperimentList = append(parameterExperimentList, dataset.ID)
 				}
