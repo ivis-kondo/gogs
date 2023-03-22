@@ -14,3 +14,11 @@ func IsDatasetStructType(struct_type string) bool {
 	}
 	return false
 }
+
+func GetForParameters() string {
+	return FOR_PARAMETERS
+}
+
+func GetWithCode() string {
+	return WITH_CODE
+}

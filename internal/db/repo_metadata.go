@@ -18,6 +18,7 @@ import (
 	"github.com/NII-DG/gogs/internal/urlutil"
 	"github.com/NII-DG/gogs/internal/utils"
 	"github.com/unknwon/com"
+	log "unknwon.dev/clog/v2"
 )
 
 /*
@@ -58,6 +59,25 @@ func (repo *Repository) ExtractMetadata(branch string) ([]datastruct.File, []dat
 	git_contents, annex_contents := gitcmd.DivideByMode(data_list)
 	files := []datastruct.File{}
 
+	// extract git/git-annex content metadat
+	git_files, err := ExtractMetaDataGitContent(repo, git_contents, branch)
+	if err != nil {
+		return nil, nil, datastruct.GinMonitoring{}, err
+	}
+
+	git_annex_files, err := ExtractMetaDataGitAnnexContent(repo, annex_contents, branch)
+	if err != nil {
+		return nil, nil, datastruct.GinMonitoring{}, err
+	}
+	files = append(files, git_files...)
+	files = append(files, git_annex_files...)
+
+	//create Dataset
+	datasets, err := CreateFilesToDatasets(repo, files, branch)
+	if err != nil {
+		return nil, nil, datastruct.GinMonitoring{}, err
+	}
+
 	//get research policy
 	isDMP := false
 	var gin_monitoring datastruct.GinMonitoring
@@ -74,10 +94,16 @@ func (repo *Repository) ExtractMetadata(branch string) ([]datastruct.File, []dat
 			field := jsonObj.(map[string]interface{})["workflowIdentifier"].(string)
 			dataSize := jsonObj.(map[string]interface{})["contentSize"].(string)
 			datasetStructure := jsonObj.(map[string]interface{})["datasetStructure"].(string)
+
+			//create ExperimentPackageList from datasets
+			//create ParameterExperimentList datasets
+			experimentPackageList, parameterExperimentList := ExtractExperimentPackageList(datasetStructure, datasets)
 			gin_monitoring = datastruct.GinMonitoring{
-				WorkflowIdentifier: field,
-				ContentSize:        dataSize,
-				DatasetStructure:   datasetStructure,
+				WorkflowIdentifier:      field,
+				ContentSize:             dataSize,
+				DatasetStructure:        datasetStructure,
+				ExperimentPackageList:   experimentPackageList,
+				ParameterExperimentList: parameterExperimentList,
 			}
 
 		}
@@ -87,28 +113,40 @@ func (repo *Repository) ExtractMetadata(branch string) ([]datastruct.File, []dat
 		return nil, nil, datastruct.GinMonitoring{}, nil
 	}
 
-	// extract git/git-annex content metadat
-	git_files, err := ExtractMetaDataGitContent(repo, git_contents, branch, gin_monitoring.DatasetStructure)
-	if err != nil {
-		return nil, nil, datastruct.GinMonitoring{}, err
-	}
-
-	git_annex_files, err := ExtractMetaDataGitAnnexContent(repo, annex_contents, branch, gin_monitoring.DatasetStructure)
-	if err != nil {
-		return nil, nil, datastruct.GinMonitoring{}, err
-	}
-	files = append(files, git_files...)
-	files = append(files, git_annex_files...)
-
-	//create Dataset
-	datasets, err := CreateFilesToDatasets(repo, files, branch)
-	if err != nil {
-		return nil, nil, datastruct.GinMonitoring{}, err
-	}
 	return files, datasets, gin_monitoring, nil
 }
 
-func ExtractMetaDataGitContent(repo *Repository, git_contents []gitcmd.DataDetail, branch, data_struct_type string) ([]datastruct.File, error) {
+func ExtractExperimentPackageList(struct_type string, datasets []datastruct.Dataset) ([]string, []string) {
+	experimentPackageList := []string{}
+	parameterExperimentList := []string{}
+	//create ExperimentPackageList from datasets
+	for _, dataset := range datasets {
+		log.Trace("[ExtractExperimentPackageList()] dataset.ID(Path) : %s", dataset.ID)
+		if IsExperimentPackage(dataset.ID) {
+			log.Trace("[ExtractExperimentPackageList()] dataset.ID(Path) : %s is ExperimentPackage", dataset.ID)
+			log.Trace("[ExtractExperimentPackageList()] len(strings.Split(filepath.ToSlash(dataset.ID) : %d.", len(strings.Split(filepath.ToSlash(dataset.ID), "/")))
+			path_compoment := strings.Split(filepath.ToSlash(dataset.ID), "/")
+			if len(path_compoment) == 2 {
+				for _, v := range experimentPackageList {
+					if v != dataset.ID {
+						experimentPackageList = append(experimentPackageList, dataset.ID)
+					}
+				}
+			}
+			if struct_type == utils.GetForParameters() && len(path_compoment) == 3 {
+				for _, v := range parameterExperimentList {
+					if v != dataset.ID {
+						parameterExperimentList = append(parameterExperimentList, dataset.ID)
+					}
+				}
+			}
+		}
+	}
+	return experimentPackageList, parameterExperimentList
+
+}
+
+func ExtractMetaDataGitContent(repo *Repository, git_contents []gitcmd.DataDetail, branch string) ([]datastruct.File, error) {
 	files := []datastruct.File{}
 	for _, git_content := range git_contents {
 		repoPath := repo.RepoPath()
@@ -134,7 +172,7 @@ func ExtractMetaDataGitContent(repo *Repository, git_contents []gitcmd.DataDetai
 			return nil, err
 		}
 
-		isExperimentPackageFlag := git_content.IsExperimentPackage()
+		isExperimentPackageFlag := IsExperimentPackage(git_content.FilePath)
 
 		file := datastruct.File{
 			ID:                    git_content.FilePath,
@@ -151,7 +189,7 @@ func ExtractMetaDataGitContent(repo *Repository, git_contents []gitcmd.DataDetai
 
 }
 
-func ExtractMetaDataGitAnnexContent(repo *Repository, git_annex_contents []gitcmd.DataDetail, branch, data_struct_type string) ([]datastruct.File, error) {
+func ExtractMetaDataGitAnnexContent(repo *Repository, git_annex_contents []gitcmd.DataDetail, branch string) ([]datastruct.File, error) {
 	files := []datastruct.File{}
 	for _, git_annex_content := range git_annex_contents {
 		object_id := git_annex_content.Hash
@@ -170,7 +208,7 @@ func ExtractMetaDataGitAnnexContent(repo *Repository, git_annex_contents []gitcm
 			return nil, err
 		}
 
-		isExperimentPackageFlag := git_annex_content.IsExperimentPackage()
+		isExperimentPackageFlag := IsExperimentPackage(git_annex_content.FilePath)
 
 		url, err := repo.CreateAccessUrlToFile(branch, git_annex_content.FilePath)
 		if err != nil {
@@ -254,4 +292,18 @@ func (repo *Repository) ExtractRepoMetadata() (datastruct.RepositoryObject, erro
 		Description: repo.Description,
 	}, nil
 
+}
+
+const EXPERIMENTS = "experiments"
+const GIT_KEEP = ".gitkeep"
+
+func IsExperimentPackage(file_path string) bool {
+	splited_file_path := strings.Split(filepath.ToSlash(file_path), "/")
+	if splited_file_path[0] != EXPERIMENTS {
+		return false
+	}
+	if splited_file_path[len(splited_file_path)-1] != GIT_KEEP {
+		return true
+	}
+	return false
 }

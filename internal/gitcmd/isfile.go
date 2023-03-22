@@ -77,21 +77,3 @@ func DivideByMode(data_list []DataDetail) (file_list []DataDetail, symbolic_link
 	}
 	return file_list, symbolic_link_list
 }
-
-func (dd DataDetail) IsExperimentPackage() bool {
-	splited_file_path := strings.Split(filepath.ToSlash(dd.FilePath), "/")
-	return isExperimentPackage(splited_file_path)
-}
-
-const EXPERIMENTS = "experiments"
-const GIT_KEEP = ".gitkeep"
-
-func isExperimentPackage(splited_file_path []string) bool {
-	if splited_file_path[0] != EXPERIMENTS {
-		return false
-	}
-	if splited_file_path[len(splited_file_path)-1] != GIT_KEEP {
-		return true
-	}
-	return false
-}

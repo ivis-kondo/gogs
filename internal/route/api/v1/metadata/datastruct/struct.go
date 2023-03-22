@@ -75,9 +75,11 @@ type Dataset struct {
 }
 
 type GinMonitoring struct {
-	ContentSize        string `json:"contentSize"`
-	WorkflowIdentifier string `json:"workflowIdentifier"`
-	DatasetStructure   string `json:"datasetStructure"`
+	ContentSize             string   `json:"contentSize"`
+	WorkflowIdentifier      string   `json:"workflowIdentifier"`
+	DatasetStructure        string   `json:"datasetStructure"`
+	ExperimentPackageList   []string `json:"experimentPackageList"`
+	ParameterExperimentList []string `json:"parameterExperimentList"`
 }
 
 type IFDmp interface {
