@@ -279,7 +279,7 @@ func CreateFilesToDatasets(repo *Repository, files []datastruct.File, branch str
 }
 
 func (repo *Repository) CreateAccessUrlToRepo() (string, error) {
-	urlPath := fmt.Sprintf("%s", repo.FullName())
+	urlPath := repo.FullName()
 	url, err := urlutil.UpdatePath(conf.Server.ExternalURL, urlPath)
 	if err != nil {
 		return "", err
