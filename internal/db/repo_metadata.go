@@ -19,7 +19,6 @@ import (
 	"github.com/NII-DG/gogs/internal/utils"
 	"github.com/NII-DG/gogs/internal/utils/const_utils"
 	"github.com/unknwon/com"
-	log "unknwon.dev/clog/v2"
 )
 
 /*
@@ -122,12 +121,8 @@ func ExtractExperimentPackageList(struct_type string, datasets []datastruct.Data
 	parameterExperimentList := []string{}
 	//create ExperimentPackageList from datasets
 	for _, dataset := range datasets {
-		log.Trace("[ExtractExperimentPackageList()] dataset.ID(Path) : %s", dataset.ID)
 		if IsExperimentPackage(dataset.ID) {
-			log.Trace("[ExtractExperimentPackageList()] dataset.ID(Path) : %s is ExperimentPackage", dataset.ID)
-			log.Trace("[ExtractExperimentPackageList()] len(strings.Split(filepath.ToSlash(dataset.ID) : %d.", len(strings.Split(filepath.ToSlash(dataset.ID), "/")))
 			path_compoment := strings.Split(filepath.ToSlash(dataset.ID), "/")
-			log.Trace("[ExtractExperimentPackageList()] path_compoment) : %v", path_compoment)
 			if len(path_compoment[:len(path_compoment)-1]) == 2 {
 				isInvoled := false
 				for _, v := range experimentPackageList {
@@ -136,7 +131,6 @@ func ExtractExperimentPackageList(struct_type string, datasets []datastruct.Data
 					}
 				}
 				if !isInvoled {
-					log.Trace("[ExtractExperimentPackageList()] dataset.ID(Path) : %s add to experimentPackageList", dataset.ID)
 					experimentPackageList = append(experimentPackageList, dataset.ID)
 				}
 			}
@@ -148,9 +142,7 @@ func ExtractExperimentPackageList(struct_type string, datasets []datastruct.Data
 						parameterExperimentList = append(parameterExperimentList, dataset.ID)
 					}
 				}
-				log.Trace("[ExtractExperimentPackageList()] path_compoment[2] : %s ", path_compoment[2])
 				if !isInvoled && const_utils.IsParameterFolder(path_compoment[2]) {
-					log.Trace("[ExtractExperimentPackageList()] dataset.ID(Path) : %s add to parameterExperimentList", dataset.ID)
 					parameterExperimentList = append(parameterExperimentList, dataset.ID)
 				}
 			}
