@@ -133,7 +133,10 @@ func ExtractExperimentPackageList(struct_type string, datasets []datastruct.Data
 			if len(path_compoment[:len(path_compoment)-1]) == 2 {
 				isInvoledExperimentPackageList := false
 				for _, v := range experimentPackageList {
+					log.Trace("[ExtractExperimentPackageList()] v(paht) : %s", v)
+					log.Trace("[ExtractExperimentPackageList()] dataset.ID : %s", dataset.ID)
 					if v != dataset.ID {
+						log.Trace("[ExtractExperimentPackageList()] dataset.ID : %s is Involed", dataset.ID)
 						isInvoledExperimentPackageList = true
 					}
 				}
