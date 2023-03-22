@@ -126,6 +126,7 @@ func ExtractExperimentPackageList(struct_type string, datasets []datastruct.Data
 		log.Error("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
 		log.Error("[ExtractExperimentPackageList()] dataset.ID: %s", dataset.ID)
 		if IsExperimentPackage(dataset.ID) {
+			log.Error("[ExtractExperimentPackageList()] dataset.ID: %s is ExperimentPackage", dataset.ID)
 			path_compoment := strings.Split(filepath.ToSlash(dataset.ID), "/")
 			if len(path_compoment[:len(path_compoment)-1]) == 2 {
 				isInvoled := false
@@ -140,6 +141,7 @@ func ExtractExperimentPackageList(struct_type string, datasets []datastruct.Data
 				}
 			}
 			if struct_type == const_utils.GetForParameters() && len(path_compoment[:len(path_compoment)-1]) == 3 {
+				log.Error("[ExtractExperimentPackageList()] struct_type: %s is ForParameters", struct_type)
 				isInvoled := false
 				for _, v := range parameterExperimentList {
 					if v != dataset.ID {
