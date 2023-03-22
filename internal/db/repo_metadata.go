@@ -118,18 +118,18 @@ func (repo *Repository) ExtractMetadata(branch string) ([]datastruct.File, []dat
 }
 
 func ExtractExperimentPackageList(struct_type string, datasets []datastruct.Dataset) ([]string, []string) {
-	log.Error("[ExtractExperimentPackageList()] len(datasets): %d", len(datasets))
+	log.Trace("[ExtractExperimentPackageList()] len(datasets): %d", len(datasets))
 	experimentPackageList := []string{}
 	parameterExperimentList := []string{}
 	//create ExperimentPackageList from datasets
 	for _, dataset := range datasets {
-		log.Error("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-		log.Error("[ExtractExperimentPackageList()] dataset.ID: %s", dataset.ID)
+		log.Trace("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+		log.Trace("[ExtractExperimentPackageList()] dataset.ID: %s", dataset.ID)
 		if IsExperimentPackage(dataset.ID) {
-			log.Error("[ExtractExperimentPackageList()] dataset.ID: %s is ExperimentPackage", dataset.ID)
+			log.Trace("[ExtractExperimentPackageList()] dataset.ID: %s is ExperimentPackage", dataset.ID)
 			path_compoment := strings.Split(filepath.ToSlash(dataset.ID), "/")
-			log.Error("[ExtractExperimentPackageList()] path_compoment: %v", path_compoment)
-			log.Error("[ExtractExperimentPackageList()] len(path_compoment[:len(path_compoment)-1]): %v", len(path_compoment[:len(path_compoment)-1]))
+			log.Trace("[ExtractExperimentPackageList()] path_compoment: %v", path_compoment)
+			log.Trace("[ExtractExperimentPackageList()] len(path_compoment[:len(path_compoment)-1]): %v", len(path_compoment[:len(path_compoment)-1]))
 			if len(path_compoment[:len(path_compoment)-1]) == 2 {
 				isInvoledExperimentPackageList := false
 				for _, v := range experimentPackageList {
@@ -138,12 +138,12 @@ func ExtractExperimentPackageList(struct_type string, datasets []datastruct.Data
 					}
 				}
 				if !isInvoledExperimentPackageList {
-					log.Error("[ExtractExperimentPackageList()] dataset.ID: %s add to experimentPackageList", dataset.ID)
+					log.Trace("[ExtractExperimentPackageList()] dataset.ID: %s add to experimentPackageList", dataset.ID)
 					experimentPackageList = append(experimentPackageList, dataset.ID)
 				}
 			}
 			if struct_type == const_utils.GetForParameters() && len(path_compoment[:len(path_compoment)-1]) == 3 {
-				log.Error("[ExtractExperimentPackageList()] struct_type: %s is ForParameters", struct_type)
+				log.Trace("[ExtractExperimentPackageList()] struct_type: %s is ForParameters", struct_type)
 				isInvoledParameterExperimentList := false
 				for _, v := range parameterExperimentList {
 					if v != dataset.ID {
@@ -152,7 +152,7 @@ func ExtractExperimentPackageList(struct_type string, datasets []datastruct.Data
 					}
 				}
 				if !isInvoledParameterExperimentList && const_utils.IsParameterFolder(path_compoment[2]) {
-					log.Error("[ExtractExperimentPackageList()] dataset.ID: %s add to parameterExperimentList", dataset.ID)
+					log.Trace("[ExtractExperimentPackageList()] dataset.ID: %s add to parameterExperimentList", dataset.ID)
 					parameterExperimentList = append(parameterExperimentList, dataset.ID)
 				}
 			}
