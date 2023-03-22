@@ -19,6 +19,7 @@ import (
 	"github.com/NII-DG/gogs/internal/utils"
 	"github.com/NII-DG/gogs/internal/utils/const_utils"
 	"github.com/unknwon/com"
+	log "unknwon.dev/clog/v2"
 )
 
 /*
@@ -117,10 +118,13 @@ func (repo *Repository) ExtractMetadata(branch string) ([]datastruct.File, []dat
 }
 
 func ExtractExperimentPackageList(struct_type string, datasets []datastruct.Dataset) ([]string, []string) {
+	log.Error("[ExtractExperimentPackageList()] len(datasets): %d", len(datasets))
 	experimentPackageList := []string{}
 	parameterExperimentList := []string{}
 	//create ExperimentPackageList from datasets
 	for _, dataset := range datasets {
+		log.Error("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+		log.Error("[ExtractExperimentPackageList()] dataset.ID: %s", dataset.ID)
 		if IsExperimentPackage(dataset.ID) {
 			path_compoment := strings.Split(filepath.ToSlash(dataset.ID), "/")
 			if len(path_compoment[:len(path_compoment)-1]) == 2 {
@@ -131,6 +135,7 @@ func ExtractExperimentPackageList(struct_type string, datasets []datastruct.Data
 					}
 				}
 				if !isInvoled {
+					log.Error("[ExtractExperimentPackageList()] dataset.ID: %s add to experimentPackageList", dataset.ID)
 					experimentPackageList = append(experimentPackageList, dataset.ID)
 				}
 			}
@@ -143,6 +148,7 @@ func ExtractExperimentPackageList(struct_type string, datasets []datastruct.Data
 					}
 				}
 				if !isInvoled && const_utils.IsParameterFolder(path_compoment[2]) {
+					log.Error("[ExtractExperimentPackageList()] dataset.ID: %s add to parameterExperimentList", dataset.ID)
 					parameterExperimentList = append(parameterExperimentList, dataset.ID)
 				}
 			}
