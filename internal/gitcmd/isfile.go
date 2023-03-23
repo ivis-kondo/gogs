@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/NII-DG/gogs/internal/utils"
-	constval "github.com/NII-DG/gogs/internal/utils/const"
+	//constval "github.com/NII-DG/gogs/internal/utils/const"
 	"github.com/gogs/git-module"
 )
 
@@ -76,48 +76,4 @@ func DivideByMode(data_list []DataDetail) (file_list []DataDetail, symbolic_link
 		}
 	}
 	return file_list, symbolic_link_list
-}
-
-func (dd DataDetail) IsExperimentPackage(data_struct_type string) (bool, error) {
-	splited_file_path := strings.Split(filepath.ToSlash(dd.FilePath), "/")
-	if data_struct_type == constval.WITH_CODE {
-		return IsExperimentPackageOnWithCode(splited_file_path), nil
-	} else if data_struct_type == constval.FOR_PARAMETER {
-		return IsExperimentPackageOnForParameter(splited_file_path), nil
-	} else {
-		return false, fmt.Errorf("data_struct_type[%s] is not defined", data_struct_type)
-	}
-}
-
-//experiments/test_ex/source/s3/sample.ipynb
-const EXPERIMENTS = "experiments"
-const INPUT_DATA = "input_data"
-const SOURCE = "source"
-const OUTPUT_DATA = "output_data"
-const PARAM = "param"
-const GIT_KEEP = ".gitkeep"
-
-func IsExperimentPackageOnWithCode(splited_file_path []string) bool {
-	if splited_file_path[0] != EXPERIMENTS {
-		return false
-	}
-	if splited_file_path[2] == INPUT_DATA || splited_file_path[2] == SOURCE || splited_file_path[2] == OUTPUT_DATA {
-		return splited_file_path[len(splited_file_path)-1] != GIT_KEEP
-	}
-	return false
-}
-
-func IsExperimentPackageOnForParameter(splited_file_path []string) bool {
-	if splited_file_path[0] != EXPERIMENTS {
-		return false
-	}
-
-	if splited_file_path[2] == INPUT_DATA || splited_file_path[2] == SOURCE {
-		return splited_file_path[len(splited_file_path)-1] != GIT_KEEP
-	}
-
-	if splited_file_path[3] == PARAM || splited_file_path[3] == OUTPUT_DATA {
-		return splited_file_path[len(splited_file_path)-1] != GIT_KEEP
-	}
-	return false
 }

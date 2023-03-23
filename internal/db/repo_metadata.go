@@ -17,6 +17,7 @@ import (
 	datastruct "github.com/NII-DG/gogs/internal/route/api/v1/metadata/datastruct"
 	"github.com/NII-DG/gogs/internal/urlutil"
 	"github.com/NII-DG/gogs/internal/utils"
+	"github.com/NII-DG/gogs/internal/utils/const_utils"
 	"github.com/unknwon/com"
 )
 
@@ -58,6 +59,25 @@ func (repo *Repository) ExtractMetadata(branch string) ([]datastruct.File, []dat
 	git_contents, annex_contents := gitcmd.DivideByMode(data_list)
 	files := []datastruct.File{}
 
+	// extract git/git-annex content metadat
+	git_files, err := ExtractMetaDataGitContent(repo, git_contents, branch)
+	if err != nil {
+		return nil, nil, datastruct.GinMonitoring{}, err
+	}
+
+	git_annex_files, err := ExtractMetaDataGitAnnexContent(repo, annex_contents, branch)
+	if err != nil {
+		return nil, nil, datastruct.GinMonitoring{}, err
+	}
+	files = append(files, git_files...)
+	files = append(files, git_annex_files...)
+
+	//create Dataset
+	datasets, err := CreateFilesToDatasets(repo, files, branch)
+	if err != nil {
+		return nil, nil, datastruct.GinMonitoring{}, err
+	}
+
 	//get research policy
 	isDMP := false
 	var gin_monitoring datastruct.GinMonitoring
@@ -74,10 +94,16 @@ func (repo *Repository) ExtractMetadata(branch string) ([]datastruct.File, []dat
 			field := jsonObj.(map[string]interface{})["workflowIdentifier"].(string)
 			dataSize := jsonObj.(map[string]interface{})["contentSize"].(string)
 			datasetStructure := jsonObj.(map[string]interface{})["datasetStructure"].(string)
+
+			//create ExperimentPackageList from datasets
+			//create ParameterExperimentList datasets
+			experimentPackageList, parameterExperimentList := ExtractExperimentPackageList(datasetStructure, datasets)
 			gin_monitoring = datastruct.GinMonitoring{
-				WorkflowIdentifier: field,
-				ContentSize:        dataSize,
-				DatasetStructure:   datasetStructure,
+				WorkflowIdentifier:      field,
+				ContentSize:             dataSize,
+				DatasetStructure:        datasetStructure,
+				ExperimentPackageList:   experimentPackageList,
+				ParameterExperimentList: parameterExperimentList,
 			}
 
 		}
@@ -87,28 +113,46 @@ func (repo *Repository) ExtractMetadata(branch string) ([]datastruct.File, []dat
 		return nil, nil, datastruct.GinMonitoring{}, nil
 	}
 
-	// extract git/git-annex content metadat
-	git_files, err := ExtractMetaDataGitContent(repo, git_contents, branch, gin_monitoring.DatasetStructure)
-	if err != nil {
-		return nil, nil, datastruct.GinMonitoring{}, err
-	}
-
-	git_annex_files, err := ExtractMetaDataGitAnnexContent(repo, annex_contents, branch, gin_monitoring.DatasetStructure)
-	if err != nil {
-		return nil, nil, datastruct.GinMonitoring{}, err
-	}
-	files = append(files, git_files...)
-	files = append(files, git_annex_files...)
-
-	//create Dataset
-	datasets, err := CreateFilesToDatasets(repo, files, branch)
-	if err != nil {
-		return nil, nil, datastruct.GinMonitoring{}, err
-	}
 	return files, datasets, gin_monitoring, nil
 }
 
-func ExtractMetaDataGitContent(repo *Repository, git_contents []gitcmd.DataDetail, branch, data_struct_type string) ([]datastruct.File, error) {
+func ExtractExperimentPackageList(struct_type string, datasets []datastruct.Dataset) ([]string, []string) {
+	experimentPackageList := []string{}
+	parameterExperimentList := []string{}
+	//create ExperimentPackageList from datasets
+	for _, dataset := range datasets {
+		if IsExperimentPackage(dataset.ID) {
+			path_compoment := strings.Split(filepath.ToSlash(dataset.ID), "/")
+			if len(path_compoment[:len(path_compoment)-1]) == 2 {
+				isInvoledExperimentPackageList := false
+				for _, v := range experimentPackageList {
+					if v == dataset.ID {
+						isInvoledExperimentPackageList = true
+					}
+				}
+				if !isInvoledExperimentPackageList {
+					experimentPackageList = append(experimentPackageList, dataset.ID)
+				}
+			}
+			if struct_type == const_utils.GetForParameters() && len(path_compoment[:len(path_compoment)-1]) == 3 {
+				isInvoledParameterExperimentList := false
+				for _, v := range parameterExperimentList {
+					if v == dataset.ID {
+						isInvoledParameterExperimentList = true
+						parameterExperimentList = append(parameterExperimentList, dataset.ID)
+					}
+				}
+				if !isInvoledParameterExperimentList && const_utils.IsParameterFolder(path_compoment[2]) {
+					parameterExperimentList = append(parameterExperimentList, dataset.ID)
+				}
+			}
+		}
+	}
+	return experimentPackageList, parameterExperimentList
+
+}
+
+func ExtractMetaDataGitContent(repo *Repository, git_contents []gitcmd.DataDetail, branch string) ([]datastruct.File, error) {
 	files := []datastruct.File{}
 	for _, git_content := range git_contents {
 		repoPath := repo.RepoPath()
@@ -134,10 +178,8 @@ func ExtractMetaDataGitContent(repo *Repository, git_contents []gitcmd.DataDetai
 			return nil, err
 		}
 
-		isExperimentPackageFlag, err := git_content.IsExperimentPackage(data_struct_type)
-		if err != nil {
-			return nil, err
-		}
+		isExperimentPackageFlag := IsExperimentPackage(git_content.FilePath)
+
 		file := datastruct.File{
 			ID:                    git_content.FilePath,
 			Name:                  filepath.Base(git_content.FilePath),
@@ -153,7 +195,7 @@ func ExtractMetaDataGitContent(repo *Repository, git_contents []gitcmd.DataDetai
 
 }
 
-func ExtractMetaDataGitAnnexContent(repo *Repository, git_annex_contents []gitcmd.DataDetail, branch, data_struct_type string) ([]datastruct.File, error) {
+func ExtractMetaDataGitAnnexContent(repo *Repository, git_annex_contents []gitcmd.DataDetail, branch string) ([]datastruct.File, error) {
 	files := []datastruct.File{}
 	for _, git_annex_content := range git_annex_contents {
 		object_id := git_annex_content.Hash
@@ -171,10 +213,8 @@ func ExtractMetaDataGitAnnexContent(repo *Repository, git_annex_contents []gitcm
 		if err != nil {
 			return nil, err
 		}
-		isExperimentPackageFlag, err := git_annex_content.IsExperimentPackage(data_struct_type)
-		if err != nil {
-			return nil, err
-		}
+
+		isExperimentPackageFlag := IsExperimentPackage(git_annex_content.FilePath)
 
 		url, err := repo.CreateAccessUrlToFile(branch, git_annex_content.FilePath)
 		if err != nil {
@@ -239,7 +279,7 @@ func CreateFilesToDatasets(repo *Repository, files []datastruct.File, branch str
 }
 
 func (repo *Repository) CreateAccessUrlToRepo() (string, error) {
-	urlPath := fmt.Sprintf("%s", repo.FullName())
+	urlPath := repo.FullName()
 	url, err := urlutil.UpdatePath(conf.Server.ExternalURL, urlPath)
 	if err != nil {
 		return "", err
@@ -258,4 +298,18 @@ func (repo *Repository) ExtractRepoMetadata() (datastruct.RepositoryObject, erro
 		Description: repo.Description,
 	}, nil
 
+}
+
+const EXPERIMENTS = "experiments"
+const GIT_KEEP = ".gitkeep"
+
+func IsExperimentPackage(file_path string) bool {
+	splited_file_path := strings.Split(filepath.ToSlash(file_path), "/")
+	if splited_file_path[0] != EXPERIMENTS {
+		return false
+	}
+	if splited_file_path[len(splited_file_path)-1] != GIT_KEEP {
+		return true
+	}
+	return false
 }

@@ -10,7 +10,7 @@ import (
 	"github.com/NII-DG/gogs/internal/db"
 	datastruct "github.com/NII-DG/gogs/internal/route/api/v1/metadata/datastruct"
 	"github.com/NII-DG/gogs/internal/urlutil"
-	constval "github.com/NII-DG/gogs/internal/utils/const"
+	"github.com/NII-DG/gogs/internal/utils/const_utils"
 	"github.com/NII-DG/gogs/internal/utils/regex"
 	log "unknwon.dev/clog/v2"
 )
@@ -156,7 +156,7 @@ func GetAllMetadataByRepoIDAndBranch(c *context.APIContext) {
 		})
 		return
 	} else {
-		if !constval.IsDatasetStructType(gin_monitoring.DatasetStructure) {
+		if !const_utils.IsDatasetStructType(gin_monitoring.DatasetStructure) {
 			c.JSON(http.StatusNotFound, map[string]interface{}{
 				"message": fmt.Sprintf("Set Dataset Structure Type[%s] in this repository <ID : %s, Name: %s> is not invaid value. Please Edit DMP on Gin-fork UI", gin_monitoring.DatasetStructure, repoid_str, repo.FullName()),
 			})
