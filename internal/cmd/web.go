@@ -36,6 +36,7 @@ import (
 	"github.com/NII-DG/gogs/internal/context"
 	"github.com/NII-DG/gogs/internal/db"
 	"github.com/NII-DG/gogs/internal/form"
+	"github.com/NII-DG/gogs/internal/healthcheck"
 	"github.com/NII-DG/gogs/internal/osutil"
 	"github.com/NII-DG/gogs/internal/route"
 	"github.com/NII-DG/gogs/internal/route/admin"
@@ -149,6 +150,10 @@ func newMacaron() *macaron.Macaron {
 			{
 				Desc: "Database connection",
 				Func: db.Ping,
+			},
+			{ // RCOS code
+				Desc: "File System connection",
+				Func: healthcheck.CheckFileSystem,
 			},
 		},
 	}))
@@ -447,6 +452,10 @@ func runWeb(c *cli.Context) error {
 						c.NotFound()
 						return
 					}
+				})
+				m.Group("/project", func() {
+					m.Get("", repo.SettingsProtecte)
+					m.Post("", bindIgnErr(form.ResearchProtect{}), repo.SettingsProtectePost)
 				})
 
 				m.Group("/hooks", func() {

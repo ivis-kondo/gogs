@@ -214,6 +214,10 @@ type Repository struct {
 	UpdatedUnix int64
 
 	Downloaded uint64 `xorm:"NOT NULL DEFAULT 0" gorm:"NOT NULL;DEFAULT:0"`
+
+	// below code is RCOS code
+	ProtectName        string
+	ProjectDescription string
 }
 
 // GetDefaultBranch is RCOS specific code.
@@ -939,15 +943,17 @@ func initRepoCommit(tmpPath string, sig *git.Signature) (err error) {
 }
 
 type CreateRepoOptions struct {
-	Name        string
-	Description string
-	Gitignores  string
-	License     string
-	Readme      string
-	IsPrivate   bool
-	IsUnlisted  bool
-	IsMirror    bool
-	AutoInit    bool
+	Name               string
+	Description        string
+	Gitignores         string
+	License            string
+	Readme             string
+	IsPrivate          bool
+	IsUnlisted         bool
+	IsMirror           bool
+	AutoInit           bool
+	ProjectName        string
+	ProjectDescription string
 }
 
 func getRepoInitFile(tp, name string) ([]byte, error) {
@@ -1186,16 +1192,18 @@ func CreateRepository(doer, owner *User, opts CreateRepoOptions) (_ *Repository,
 	}
 
 	repo := &Repository{
-		OwnerID:      owner.ID,
-		Owner:        owner,
-		Name:         opts.Name,
-		LowerName:    strings.ToLower(opts.Name),
-		Description:  opts.Description,
-		IsPrivate:    opts.IsPrivate,
-		IsUnlisted:   opts.IsUnlisted,
-		EnableWiki:   true,
-		EnableIssues: true,
-		EnablePulls:  true,
+		OwnerID:            owner.ID,
+		Owner:              owner,
+		Name:               opts.Name,
+		LowerName:          strings.ToLower(opts.Name),
+		Description:        opts.Description,
+		IsPrivate:          opts.IsPrivate,
+		IsUnlisted:         opts.IsUnlisted,
+		EnableWiki:         true,
+		EnableIssues:       true,
+		EnablePulls:        true,
+		ProtectName:        opts.ProjectName,
+		ProjectDescription: opts.ProjectDescription,
 	}
 
 	sess := x.NewSession()

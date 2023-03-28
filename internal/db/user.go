@@ -67,6 +67,15 @@ type User struct {
 	Rands       string `xorm:"VARCHAR(10)" gorm:"TYPE:VARCHAR(10)"`
 	Salt        string `xorm:"VARCHAR(10)" gorm:"TYPE:VARCHAR(10)"`
 
+	AffiliationId        int64
+
+	Telephone            string
+	FirstName            string `xorm:"NOT NULL" gorm:"NOT NULL"`
+	LastName             string `xorm:"NOT NULL" gorm:"NOT NULL"`
+	AliasName            string
+	ERadResearcherNumber string
+	PersonalURL          string
+
 	Created     time.Time `xorm:"-" gorm:"-" json:"-"`
 	CreatedUnix int64
 	Updated     time.Time `xorm:"-" gorm:"-" json:"-"`
@@ -742,7 +751,6 @@ func updateUser(e Engine, u *User) error {
 	}
 
 	u.LowerName = strings.ToLower(u.Name)
-	u.Location = tool.TruncateString(u.Location, 255)
 	u.Website = tool.TruncateString(u.Website, 255)
 	u.Description = tool.TruncateString(u.Description, 255)
 

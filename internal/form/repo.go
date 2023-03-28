@@ -23,15 +23,17 @@ import (
 //         \/        \/                   \/        \/                        \/       \/ \/
 
 type CreateRepo struct {
-	UserID      int64  `binding:"Required"`
-	RepoName    string `binding:"Required;AlphaDashDot;MaxSize(100)"`
-	Private     bool
-	Unlisted    bool
-	Description string `binding:"MaxSize(512)"`
-	AutoInit    bool
-	Gitignores  string
-	License     string
-	Readme      string
+	UserID             int64  `binding:"Required"`
+	RepoName           string `binding:"Required;AlphaDashDot;MaxSize(100)"`
+	Private            bool
+	Unlisted           bool
+	Description        string `binding:"MaxSize(512)"`
+	AutoInit           bool
+	Gitignores         string
+	License            string
+	Readme             string
+	ProjectName        string `binding:"Required"`
+	ProjectDescription string
 }
 
 func (f *CreateRepo) Validate(ctx *macaron.Context, errs binding.Errors) binding.Errors {
@@ -423,4 +425,16 @@ func (f *DeleteRepoFile) Validate(ctx *macaron.Context, errs binding.Errors) bin
 
 func (f *DeleteRepoFile) IsNewBrnach() bool {
 	return f.CommitChoice == "commit-to-new-branch"
+}
+
+/*
+Research Project From
+**/
+type ResearchProtect struct {
+	ProjectName        string
+	ProjectDescription string
+}
+
+func (f *ResearchProtect) Validate(ctx *macaron.Context, errs binding.Errors) binding.Errors {
+	return validate(errs, ctx.Data, f, ctx.Locale)
 }

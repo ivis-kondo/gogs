@@ -17,6 +17,7 @@ import (
 	"github.com/NII-DG/gogs/internal/db"
 	"github.com/NII-DG/gogs/internal/form"
 	"github.com/NII-DG/gogs/internal/route/api/v1/admin"
+	"github.com/NII-DG/gogs/internal/route/api/v1/metadata"
 	"github.com/NII-DG/gogs/internal/route/api/v1/misc"
 	"github.com/NII-DG/gogs/internal/route/api/v1/org"
 	"github.com/NII-DG/gogs/internal/route/api/v1/repo"
@@ -256,6 +257,13 @@ func RegisterRoutes(m *macaron.Macaron) {
 			m.Post("/migrate", bind(form.MigrateRepo{}), repo.Migrate)
 			m.Delete("/:username/:reponame", repoAssignment(), repo.Delete)
 
+			// RCOS Code
+			m.Group("/:repoid", func() {
+				m.Group("/:branch", func() {
+					m.Get("/metadata", metadata.GetAllMetadataByRepoIDAndBranch)
+				})
+			})
+
 			m.Group("/:username/:reponame", func() {
 				m.Group("/hooks", func() {
 					m.Combo("").
@@ -419,8 +427,11 @@ func RegisterRoutes(m *macaron.Macaron) {
 			})
 		}, reqAdmin())
 
+		// When request route is no defined route, return 404
 		m.Any("/*", func(c *context.Context) {
-			c.NotFound()
+			c.JSON(http.StatusNotFound, map[string]interface{}{
+				"message": "Not Found : invalid URL",
+			})
 		})
 	}, context.APIContexter())
 }
