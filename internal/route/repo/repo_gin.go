@@ -390,7 +390,7 @@ func fetchImagefile(c context.AbstructContext) {
 
 	var f repoUtil
 
-	ImageFile := []string{"maDMP_to_workflow.jpg"}
+	ImageFile := []string{} //add the image file name if maDMP.ipynb has images.
 
 	for i := 0; i < len(ImageFile); i++ {
 		path := ImageFilePath + ImageFile[i]
