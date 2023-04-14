@@ -58,13 +58,11 @@ func ExploreRepos(c *context.Context) {
 	c.Data["PageIsExploreRepositories"] = true
 
 	// for "Metadata" link on navbar
-	uname := c.GetCookie(conf.Security.CookieUsername)
-	if len(uname) == 0 {
+	if !c.IsLogged {
 		c.Data["IsUserFA"] = 0
 	} else {
 		c.Data["IsUserFA"] = (c.User.Type >= db.UserFA)
 	}
-
 	page := c.QueryInt("page")
 	if page <= 0 {
 		page = 1
@@ -114,8 +112,8 @@ func exploreMetadata(c context.AbstructContext) {
 	if page <= 0 {
 		page = 1
 	}
-
-	repos, count, err := db.SearchRepositoryByName(&db.SearchRepoOptions{
+	has_dmp_count := 0
+	repos, _, err := db.SearchRepositoryByName(&db.SearchRepoOptions{
 		Keyword:  "",
 		UserID:   c.UserID(),
 		OrderBy:  "updated_unix DESC",
@@ -162,13 +160,14 @@ func exploreMetadata(c context.AbstructContext) {
 			c.CallData()["SelectedKey"] = selectedKey
 			c.CallData()["SearchResult"] = keyword
 			repo.HasMetadata = true
+			has_dmp_count += 1
 		}
 	}
 
 	// below is search
 	c.CallData()["Keyword"] = keyword
-	c.CallData()["Total"] = count
-	c.CallData()["Page"] = paginater.New(int(count), conf.UI.ExplorePagingNum, page, 5)
+	c.CallData()["Total"] = has_dmp_count
+	c.CallData()["Page"] = paginater.New(int(has_dmp_count), conf.UI.ExplorePagingNum, page, 5)
 
 	if err = db.RepositoryList(repos).LoadAttributes(); err != nil {
 		c.Error(err, "load attributes")
@@ -236,6 +235,7 @@ func DmpBrowsing(c context.AbstructContext) {
 		c.CallData()["OwnerName"] = owner.Name
 		c.CallData()["RepoName"] = repoName
 		c.CallData()["DOIInfo"] = string(buf)
+		c.CallData()["IsUserFA"] = (c.GetUser().Type >= db.UserFA)
 	}
 	c.Success(DMP_BROWSING)
 }
@@ -302,8 +302,7 @@ func ExploreUsers(c *context.Context) {
 	c.Data["PageIsExploreUsers"] = true
 
 	// for "Metadata" link on navbar
-	uname := c.GetCookie(conf.Security.CookieUsername)
-	if len(uname) == 0 {
+	if !c.IsLogged {
 		c.Data["IsUserFA"] = 0
 	} else {
 		c.Data["IsUserFA"] = (c.User.Type >= db.UserFA)
@@ -325,8 +324,7 @@ func ExploreOrganizations(c *context.Context) {
 	c.Data["PageIsExploreOrganizations"] = true
 
 	// for "Metadata" link on navbar
-	uname := c.GetCookie(conf.Security.CookieUsername)
-	if len(uname) == 0 {
+	if !c.IsLogged {
 		c.Data["IsUserFA"] = 0
 	} else {
 		c.Data["IsUserFA"] = (c.User.Type >= db.UserFA)
