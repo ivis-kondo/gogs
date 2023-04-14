@@ -147,8 +147,7 @@ func ExploreData(c *context.Context) {
 	c.Data["PageIsExploreData"] = true
 
 	// for "Metadata" link on navbar
-	uname := c.GetCookie(conf.Security.CookieUsername)
-	if len(uname) == 0 {
+	if !c.IsLogged {
 		c.Data["IsUserFA"] = 0
 	} else {
 		c.Data["IsUserFA"] = (c.User.Type >= db.UserFA)
@@ -198,8 +197,7 @@ func ExploreCommits(c *context.Context) {
 	c.Data["PageIsExploreCommits"] = true
 
 	// for "Metadata" link on navbar
-	uname := c.GetCookie(conf.Security.CookieUsername)
-	if len(uname) == 0 {
+	if !c.IsLogged {
 		c.Data["IsUserFA"] = 0
 	} else {
 		c.Data["IsUserFA"] = (c.User.Type >= db.UserFA)
