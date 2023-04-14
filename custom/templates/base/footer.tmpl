@@ -7,7 +7,6 @@
         <footer>
             <div class="ui container">
                 <div class="ui center links item brand footertext">
-                    {{template "base/footer_gin_text" $}}
                     {{if .PageIsAdmin}}<span>{{.i18n.Tr "version"}}: {{AppVer}}</span>{{end}}
                     <div class="ui language bottom floating slide up dropdown link item" data-tooltip="Non-English translations may be incomplete">
                         <i class="world icon"></i>
@@ -18,6 +17,9 @@
                             {{end}}
                         </div>
                     </div>
+                </div>
+                <div class="ui center links item brand footertext">
+                    {{template "base/footer_gin_brand" $}}
                 </div>
             </div>
         </footer>
