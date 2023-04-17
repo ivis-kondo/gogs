@@ -94,20 +94,16 @@ func ExploreRepos(c *context.Context) {
 }
 
 // ExploreMetadata is RCOS specific code
-func ExploreMetadata(c context.AbstructContext, con *context.Context) {
-	exploreMetadata(c, con)
+func ExploreMetadata(c context.AbstructContext) {
+	exploreMetadata(c)
 }
 
 // exploreMetadata is RCOS specific code
-func exploreMetadata(c context.AbstructContext, con *context.Context) {
+func exploreMetadata(c context.AbstructContext) {
 	c.CallData()["Title"] = c.Tr("explore")
 	c.CallData()["PageIsExplore"] = true
 	c.CallData()["PageIsExploreMetadata"] = true
-	if !con.IsLogged {
-		c.CallData()["IsUserFA"] = 0
-	} else {
-		c.CallData()["IsUserFA"] = (c.GetUser().Type >= db.UserFA)
-	}
+	c.CallData()["IsUserFA"] = (c.GetUser().Type >= db.UserFA)
 
 	selectedKey := c.Query("selectKey")
 	keyword := c.Query("q")
