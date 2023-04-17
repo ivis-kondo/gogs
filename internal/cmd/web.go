@@ -189,8 +189,8 @@ func runWeb(c *cli.Context) error {
 			m.Get("/repos", route.ExploreRepos)
 			m.Get("/users", route.ExploreUsers)
 			m.Get("/organizations", route.ExploreOrganizations)
-			m.Get("/_suggest/:keywords", route.ExploreSuggest) // GIN specific code
-			m.Get("/metadata", route.ExploreMetadata)          // RCOS specific code
+			m.Get("/_suggest/:keywords", route.ExploreSuggest)   // GIN specific code
+			m.Get("/metadata", reqSignIn, route.ExploreMetadata) // RCOS specific code
 			m.Group("/dmp", func() {
 				m.Get("/browsing/", route.DmpBrowsing)
 			})
