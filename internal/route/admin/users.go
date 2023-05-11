@@ -5,6 +5,7 @@
 package admin
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/unknwon/com"
@@ -16,6 +17,7 @@ import (
 	"github.com/NII-DG/gogs/internal/email"
 	"github.com/NII-DG/gogs/internal/form"
 	"github.com/NII-DG/gogs/internal/route"
+	"github.com/NII-DG/gogs/internal/utils/regex"
 )
 
 const (
@@ -151,6 +153,11 @@ func EditUser(c *context.Context) {
 	c.Data["PageIsAdmin"] = true
 	c.Data["PageIsAdminUsers"] = true
 	c.Data["EnableLocalPathMigration"] = conf.Repository.EnableLocalPathMigration
+	list, err := db.GetAffiliationList()
+	if err != nil {
+		log.Error("Failed to get affiliation: %v", err)
+	}
+	c.Data["AffiliationList"] = list
 
 	prepareUserInfo(c)
 	if c.Written() {
@@ -165,6 +172,11 @@ func EditUserPost(c *context.Context, f form.AdminEditUser) {
 	c.Data["PageIsAdmin"] = true
 	c.Data["PageIsAdminUsers"] = true
 	c.Data["EnableLocalPathMigration"] = conf.Repository.EnableLocalPathMigration
+	list, err := db.GetAffiliationList()
+	if err != nil {
+		log.Error("Failed to get affiliation: %v", err)
+	}
+	c.Data["AffiliationList"] = list
 
 	u := prepareUserInfo(c)
 	if c.Written() {
@@ -195,9 +207,47 @@ func EditUserPost(c *context.Context, f form.AdminEditUser) {
 		u.EncodePassword()
 	}
 
+	// check telephone format
+	if len(f.Telephone) > 0 && !regex.CheckTelephoneFormat(f.Telephone) {
+		c.FormErr("Telephone")
+		c.RenderWithErr(c.Tr("form.enterred_invalid_telephone"), USER_EDIT, &f)
+		return
+	}
+	// check ORDIC URL
+	orcid_prefix := "https://orcid.org/"
+	if strings.HasPrefix(f.PersonalURL, orcid_prefix) {
+		value := f.PersonalURL[len(orcid_prefix):]
+		if !regex.CheckORCIDFormat(value) {
+			c.FormErr("PersonalUrl")
+			c.RenderWithErr(c.Tr("form.enterred_invalid_orcid_url"), USER_EDIT, &f)
+			return
+		}
+	}
+	// check e-Rad Rearcher Number
+	if len(f.ERadResearcherNumber) > 0 && !regex.CheckERadRearcherNumberFormat(f.ERadResearcherNumber) {
+		c.FormErr("ERad")
+		c.RenderWithErr(c.Tr("form.enterred_invalid_erad"), USER_EDIT, &f)
+		return
+	}
+	// generate User.FullName
+	fullName := ""
+	if !regex.CheckAlphabet(f.FirstName) || !regex.CheckAlphabet(f.LastName) {
+		// japanese user name
+		fullName = fmt.Sprintf("%s %s", f.LastName, f.FirstName)
+	} else {
+		fullName = fmt.Sprintf("%s %s", f.FirstName, f.LastName)
+	}
+
 	u.LoginName = f.LoginName
-	u.FullName = f.FullName
+	u.FirstName = f.FirstName
+	u.LastName = f.LastName
+	u.FullName = fullName
+	u.AliasName = f.AliasName
+	u.AffiliationId = f.AffiliationId
 	u.Email = f.Email
+	u.Telephone = f.Telephone
+	u.ERadResearcherNumber = f.ERadResearcherNumber
+	u.PersonalURL = f.PersonalURL
 	u.Website = f.Website
 	u.Location = f.Location
 	u.MaxRepoCreation = f.MaxRepoCreation

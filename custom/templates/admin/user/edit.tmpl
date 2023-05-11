@@ -34,19 +34,53 @@
 							<label for="login_name">{{.i18n.Tr "admin.users.auth_login_name"}}</label>
 							<input id="login_name" name="login_name" value="{{.User.LoginName}}" autofocus>
 						</div>
-						<div class="field {{if .Err_FullName}}error{{end}}">
-							<label for="full_name">{{.i18n.Tr "settings.full_name"}}</label>
-							<input id="full_name" name="full_name" value="{{.User.FullName}}">
+						<div class="required inline fields field {{if .Err_Name}}error{{end}}">
+							<label for="first_name">{{.i18n.Tr "first_name"}}</label>
+							<input id="first_name" name="first_name" value="{{.User.FirstName}}" required>
+							<label for="last_name">{{.i18n.Tr "last_name"}}</label>
+							<input id="last_name" name="last_name" value="{{.User.LastName}}" required>
+						</div>
+						<div class="field">
+							<label for="alias_name">{{.i18n.Tr "alias_name"}}</label>
+							<input id="alias_name" name="alias_name" value="{{.User.AliasName}}">
+						</div>
+						<div class="required field">
+							<label>{{.i18n.Tr "affiliation"}}</label>
+							<div class="ui selection dropdown">
+								<input type="hidden" name="affiliation_id" value="{{.User.AffiliationId}}" required>
+								<div class="default text">{{.i18n.Tr "affiliation_helper"}}</div>
+								<div class="menu">
+									{{range $key, $value :=.AffiliationList}}
+										<div class="item" data-value="{{$key}}">{{$value}}</div>
+									{{end}}
+								</div>
+							</div>
 						</div>
 						<div class="required field {{if .Err_Email}}error{{end}}">
 							<label for="email">{{.i18n.Tr "email"}}</label>
 							<input id="email" name="email" type="email" value="{{.User.Email}}" autofocus required>
+						</div>
+						<!-- telephone form -->
+						<div class="field {{if .Err_Telephone}}error{{end}}">
+							<label for="telephone">{{.i18n.Tr "telephone"}}</label>
+							<input id="telephone" name="telephone" type="tel"  value="{{.User.Telephone}}">
 						</div>
 						<input class="fake" type="password">
 						<div class="local field {{if .Err_Password}}error{{end}} {{if not (eq .User.LoginSource 0)}}hide{{end}}">
 							<label for="password">{{.i18n.Tr "password"}}</label>
 							<input id="password" name="password" type="password">
 							<p class="help">{{.i18n.Tr "admin.users.password_helper"}}</p>
+						</div>
+						<!-- e-Rad ID form -->
+						<div class="field {{if .Err_ERad}}error{{end}}">
+							<label for="e_rad_researcher_number">{{.i18n.Tr "e_rad_researcher_number"}}</label>
+							<input id="e_rad_researcher_number" name="e_rad_researcher_number" type="text" pattern="[0-9]{8}" value="{{.User.ERadResearcherNumber}}">
+							<span class="help">{{.i18n.Tr "e_rad_researcher_number_helper"}}</span>
+						</div>
+						<div class="field {{if .Err_PersonalUrl}}error{{end}}">
+							<label for="personal_url">{{.i18n.Tr "personal_url"}}</label>
+							<input id="personal_url" name="personal_url" value="{{.User.PersonalURL}}" placeholder="http://orcid.org/0000-0000-0000-0000">
+							<span class="help">{{.i18n.Tr "personal_url_helper"}}</span>
 						</div>
 						<div class="field {{if .Err_Website}}error{{end}}">
 							<label for="website">{{.i18n.Tr "settings.website"}}</label>
