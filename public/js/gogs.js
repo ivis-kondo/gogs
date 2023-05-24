@@ -1676,6 +1676,10 @@ $(document).ready(function() {
     autosize($("#org_description"));
     showMessageMaxLength(255, "org_description", "orgDescLength");
   }
+  if ($("#commit_description.autosize").length > 0) {
+    autosize($("#commit_description"));
+    showMessageMaxLength(100, "commit_description", "commitDescLength");
+  }
 
 
   // AJAX load buttons
