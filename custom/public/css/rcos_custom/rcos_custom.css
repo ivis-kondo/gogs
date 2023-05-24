@@ -30,5 +30,8 @@ This css is be adapted to template files in custom>templates
 }
 
 /*----------------
-    repo>crete.tmpl
+    repo>header_gin.tmpl
 ------------------*/
+.repository .ui.header .ui.right select{
+    height: 2.2em;
+}
