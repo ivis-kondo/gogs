@@ -1652,10 +1652,11 @@ $(document).ready(function() {
     autosize($("#project_description"));
     showMessageMaxLength(255, "project_description", "projectDescLength");
   }
-  if ($("#commit_message.autosize").length > 0) {
-    autosize($("#commit_message"));
-    showMessageMaxLength(100, "commit_message", "commitMessageLength");
+  if ($("#release_content.autosize").length > 0) {
+    autosize($("#release_content"));
+    showMessageMaxLength(3000, "release_content", "releaseContentLength");
   }
+  if ($("#commit_message.autosize").length > 0) {
 
   // AJAX load buttons
   $(".ajax-load-button").click(function() {
