@@ -1672,6 +1672,10 @@ $(document).ready(function() {
     autosize($("#team_description"));
     showMessageMaxLength(255, "team_description", "teamDescLength");
   }
+  if ($("#org_description.autosize").length > 0) {
+    autosize($("#org_description"));
+    showMessageMaxLength(255, "org_description", "orgDescLength");
+  }
 
 
   // AJAX load buttons
