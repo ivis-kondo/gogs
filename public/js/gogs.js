@@ -1657,6 +1657,14 @@ $(document).ready(function() {
     showMessageMaxLength(3000, "release_content", "releaseContentLength");
   }
   if ($("#commit_message.autosize").length > 0) {
+    autosize($("#commit_message"));
+    showMessageMaxLength(100, "commit_message", "commitMessageLength");
+  }
+  if ($("#milestone_content.autosize").length > 0) {
+    autosize($("#milestone_content"));
+    showMessageMaxLength(3000, "milestone_content", "milestoneContentLength");
+  }
+
 
   // AJAX load buttons
   $(".ajax-load-button").click(function() {
