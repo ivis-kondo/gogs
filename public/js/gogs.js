@@ -1644,6 +1644,18 @@ $(document).ready(function() {
     autosize($("#description"));
     showMessageMaxLength(512, "description", "descLength");
   }
+  if ($("#project_name.autosize").length > 0) {
+    autosize($("#project_name"));
+    showMessageMaxLength(255, "project_name", "projectNameLength");
+  }
+  if ($("#project_description.autosize").length > 0) {
+    autosize($("#project_description"));
+    showMessageMaxLength(255, "project_description", "projectDescLength");
+  }
+  if ($("#commit_message.autosize").length > 0) {
+    autosize($("#commit_message"));
+    showMessageMaxLength(100, "commit_message", "commitMessageLength");
+  }
 
   // AJAX load buttons
   $(".ajax-load-button").click(function() {
@@ -1875,8 +1887,10 @@ function getByteLen(normalVal) {
 }
 
 function showMessageMaxLength(maxLen, textElemId, counterId) {
+  console.log("showMessageMaxLength")
   var $msg = $("#" + textElemId);
   $("#" + counterId).html(maxLen - getByteLen($msg.val()));
+  console.log($msg)
 
   var onMessageKey = function(e) {
     var $msg = $(this);
