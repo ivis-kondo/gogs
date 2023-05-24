@@ -1652,21 +1652,13 @@ $(document).ready(function() {
     autosize($("#project_description"));
     showMessageMaxLength(255, "project_description", "projectDescLength");
   }
-  if ($("#release_content.autosize").length > 0) {
-    autosize($("#release_content"));
-    showMessageMaxLength(3000, "release_content", "releaseContentLength");
-  }
   if ($("#commit_message.autosize").length > 0) {
     autosize($("#commit_message"));
     showMessageMaxLength(100, "commit_message", "commitMessageLength");
   }
-  if ($("#milestone_content.autosize").length > 0) {
-    autosize($("#milestone_content"));
-    showMessageMaxLength(3000, "milestone_content", "milestoneContentLength");
-  }
-  if ($("#comment_content.autosize").length > 0) {
-    autosize($("#comment_content"));
-    showMessageMaxLength(3000, "comment_content", "commentContentLength");
+  if ($("#content.autosize").length > 0) {
+    autosize($("#content"));
+    showMessageMaxLength(3000, "content", "contentLength");
   }
   if ($("#team_description.autosize").length > 0) {
     autosize($("#team_description"));
@@ -1912,10 +1904,8 @@ function getByteLen(normalVal) {
 }
 
 function showMessageMaxLength(maxLen, textElemId, counterId) {
-  console.log("showMessageMaxLength")
   var $msg = $("#" + textElemId);
   $("#" + counterId).html(maxLen - getByteLen($msg.val()));
-  console.log($msg)
 
   var onMessageKey = function(e) {
     var $msg = $(this);
