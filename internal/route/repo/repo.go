@@ -67,7 +67,6 @@ func checkContextUser(c *context.Context, uid int64) *db.User {
 
 func Create(c *context.Context) {
 	c.Title("new_repo")
-	c.RequireAutosize()
 
 	// Give default value for template to render.
 	c.Data["Gitignores"] = db.Gitignores
