@@ -1664,6 +1664,10 @@ $(document).ready(function() {
     autosize($("#milestone_content"));
     showMessageMaxLength(3000, "milestone_content", "milestoneContentLength");
   }
+  if ($("#comment_content.autosize").length > 0) {
+    autosize($("#comment_content"));
+    showMessageMaxLength(3000, "comment_content", "commentContentLength");
+  }
 
 
   // AJAX load buttons
