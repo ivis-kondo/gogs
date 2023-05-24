@@ -1905,12 +1905,12 @@ function getByteLen(normalVal) {
 
 function showMessageMaxLength(maxLen, textElemId, counterId) {
   var $msg = $("#" + textElemId);
-  $("#" + counterId).html(maxLen - getByteLen($msg.val()));
+  $("#" + counterId).html(maxLen - $msg.val().length);
 
   var onMessageKey = function(e) {
     var $msg = $(this);
     var text = $msg.val();
-    var len = getByteLen(text);
+    var len = text.length;
     var remainder = maxLen - len;
 
     if (len >= maxLen) {
