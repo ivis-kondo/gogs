@@ -1668,6 +1668,10 @@ $(document).ready(function() {
     autosize($("#comment_content"));
     showMessageMaxLength(3000, "comment_content", "commentContentLength");
   }
+  if ($("#team_description.autosize").length > 0) {
+    autosize($("#team_description"));
+    showMessageMaxLength(255, "team_description", "teamDescLength");
+  }
 
 
   // AJAX load buttons
