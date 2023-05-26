@@ -31,44 +31,354 @@
 //     createTable(tableEle, items)
 // });
 
-function CreateTableFromJSON(table, items) {
-    // var table = document.createElement("table");                             // the table elements
-
-    // var col = Object.keys(array[0]);                                         // the columns names (I think taking the keys of the first object will suffice)
-    var col = items;
-    // HEADER:
-    var tr = table.insertRow(-1);                                            // the header row
-    col.forEach(function(key) {                                              // for each key in col
-      var th = document.createElement("th");                                 // create a header cell
-      th.textContent = key;                                                  // use textContent instead of innerHTML (it's better)
-      tr.appendChild(th);
-    });
-
-    // ROWS:
-    array.forEach(function(obj) {                                            // for each object obj in company_info
-      var tr = table.insertRow(-1);                                          // create a row for it
-      col.forEach(function(key) {                                            // and for each key in col
-        var tabCell = tr.insertCell(-1);                                     // create a cell
-        if (Array.isArray(obj[key])) {                                       // if the current value is an array, then
-          obj[key].forEach(function(contact) {                               // for each entry in that array
-            var div = document.createElement("div");                         // create a div and fill it
-            div.textContent = contact.first_name + " " + contact.last_name + ", " + contact.position;
-            tabCell.appendChild(div);                                        // then add the div to the current cell
-          });
-        } else {                                                             // otherwise, if the value is not an array (it's a string)
-          tabCell.textContent = obj[key];                                    // add it as text
-        }
+function outputLog(msg) {
+    const fs = require("fs");
+    log_msg = String(msg) + '\n'
+    fs.appendFile("./log.txt",log_msg, (err) => {
+        if (err) throw err;
+        // console.log('正常に書き込みが完了しました');
       });
-    });
+}
 
-    var divContainer = document.getElementById("showData");
-    divContainer.innerHTML = "";
-    divContainer.appendChild(table);
-  }
+function IsArrayObject(data)  {
+    return Array.isArray(data)
+}
 
-$(document).ready(function () {
-    let tableEle = document.getElementById("dmp");
-    let items = JSON.parse($('#items').val());
-    (document.getElementById("title")).innerHTML = "dmp.json (" + items.schema + ")";
-    CreateTableFromJSON(tableEle, items)
-});
+function IsObject(data)  {
+    return (typeof data === "object")
+}
+
+function IsStringOrBoolOrNumber(data) {
+    type = typeof data
+    if (type === 'string') {
+        return true
+    } else if (type === 'number') {
+        return true
+    } else if (type === 'boolean') {
+        return true
+    } else {
+        return false
+    }
+}
+
+function createDmp2dArr(rowNum, colNum) {
+    // create dmp2DArr 2d array
+    var dmp2DArr = [] //DMP data 2D array
+    for (let i =0; i < rowNum; i++)  {
+        let dmpArrChild = []
+        for (let j = 0; j < colNum; j++) {
+            dmpArrChild.push("")
+        }
+        dmp2DArr.push(dmpArrChild)
+    }
+    return dmp2DArr
+}
+
+function fillDmp2dArr(dmp2DArr, dmp, raw_index, col_index) {
+    outputLog('fillDmp2dArr start')
+    outputLog('raw_index :' + raw_index)
+    outputLog('col_index :' + col_index)
+    // fill DMP data 2d Array
+    for (const key in dmp) {
+        outputLog('key_1 :' + key)
+        const value = dmp[key]
+        outputLog('value :' + value)
+        outputLog('value type :' + typeof value)
+        const record_num =  getLeafNum(value)
+        outputLog('record_num :' + record_num)
+        outputLog('raw_index :' + raw_index)
+        endPoint = raw_index + record_num
+        outputLog('endPoint :' + endPoint)
+
+        for (i =raw_index; i< endPoint; i++) {
+            outputLog('dmp2DArr[' + i + '][' + col_index + '] = ' + key)
+            dmp2DArr[i][col_index] = key
+            outputLog('dmp2DArr[i] :' + dmp2DArr[i])
+            if (record_num == 1) {
+                outputLog('dmp2DArr[' + i + '][' + (col_index+1) + '] = ' + String(value))
+                dmp2DArr[i][col_index+1] = String(value)
+                outputLog('dmp2DArr[i] :' + dmp2DArr[i])
+            }else{
+                if (IsArrayObject(value)) {
+                    // is array
+                    outputLog('Is Array!!!!!')
+                    outputLog('value.length :' + value.length)
+                    outputLog('value :' + value)
+                    outputLog('value :' + JSON.stringify(value))
+                    let arr_start_index = i
+                    for (let nested_i = 0; nested_i < value.length; ++nested_i) {
+                        outputLog('nested_i :' + nested_i)
+                        outputLog('value.length :' + value.length)
+                        const arr_data = value[nested_i]
+                        outputLog('arr_data :' + arr_data)
+                        outputLog('arr_data :' + JSON.stringify(arr_data))
+                        const arr_data_record_num =  getLeafNum(value)
+                        outputLog('arr_data_record_num :' + arr_data_record_num)
+                        outputLog('dmp2DArr[' + arr_start_index + '][' + (col_index+1) + '] = ' + nested_i)
+                        dmp2DArr[arr_start_index][col_index+1] = nested_i
+                        next_raw_index = arr_start_index
+                        next_col_index = col_index+2
+                        dmp2DArr = fillDmp2dArr(dmp2DArr, arr_data, next_raw_index, next_col_index)
+                        arr_start_index = arr_start_index + arr_data_record_num
+                    }
+
+                } else {
+                    next_raw_index = raw_index
+                    next_col_index = col_index+1
+                    dmp2DArr = fillDmp2dArr(dmp2DArr, value, next_raw_index, next_col_index)
+                }
+
+            }
+        }
+
+        raw_index = raw_index + record_num
+        outputLog('changed raw_index :' + raw_index)
+    }
+
+    outputLog('dmp2DArr.length :' + dmp2DArr.length)
+    for (let i = 0; i < dmp2DArr.length; ++i) {
+        outputLog(dmp2DArr[i]);
+    }
+    return dmp2DArr
+}
+
+function createRowspanOrColspan2DArr(rowNum, colNum) {
+        // create resed each 2d array
+        var rowspanOrColspan2DArr = [] //rowspan info 2D array
+        for (let i =0; i < rowNum; i++)  {
+            let rowspanArrChild = []
+            for (let j = 0; j < colNum; j++) {
+                rowspanArrChild.push(0)
+            }
+            rowspanOrColspan2DArr.push(rowspanArrChild)
+        }
+    // outputLog('rowspanOrColspan2DArr.length :' + rowspanOrColspan2DArr.length)
+    // for (let i = 0; i < rowspanOrColspan2DArr.length; ++i) {
+    //     outputLog(rowspanOrColspan2DArr[i]);
+    // }
+    return rowspanOrColspan2DArr
+}
+
+
+
+function getLeafNum(data) {
+    if (IsStringOrBoolOrNumber(data)) {
+        return 1
+    } else {
+        return getRowNum(data)
+    }
+}
+
+function getRowNum(data) {
+    //get creating row num
+    let row_num = 0
+    for (const key in data) {
+        let value = data[key]
+        if (IsArrayObject(value)) {
+            // is array
+            for (let i = 0; i < value.length; ++i) {
+                row_num = row_num + getRowNum(value[i])
+            }
+        } else if (IsObject(value)) {
+            // is json object
+            row_num = row_num + getRowNum(value)
+        } else {
+            // is str, num, bool...
+            row_num = row_num + 1
+        }
+    }
+    return row_num
+}
+
+function getColNum(data) {
+    //get creating col num
+    return getNestedNum(data, 0) + 2 //列数
+}
+
+function getNestedNum(data, pre_nested_num) {
+    // get nested num in dmp json
+    let nested_num = pre_nested_num
+
+    for (key in data) {
+        let value = data[key]
+        if (IsArrayObject(value)) {
+            // is array
+            for (let i = 0; i < value.length; ++i) {
+                arr_tmp = getNestedNum(value[i], pre_nested_num+1) + 1
+                if (arr_tmp > nested_num) {
+                    nested_num = arr_tmp
+                }
+            }
+        } else if (IsObject(value)) {
+            // is json object
+            tmp = getNestedNum(value, pre_nested_num+1)
+            if (tmp > nested_num) {
+                nested_num = tmp
+            }
+
+        } else {
+            // is str, num, bool...
+        }
+    }
+    return nested_num
+}
+
+
+function CreateTableFromJSON(tbodyEle, dmp) {
+    let rowNum = getRowNum(dmp) //行数
+    let colNum = getColNum(dmp) //列数
+
+    // create reseted 3
+    dmpData2DArr = createDmp2dArr(rowNum, colNum)
+
+}
+
+// $(document).ready(function () {
+//     let tbodyEle = document.getElementById("dmp");
+//     let items = JSON.parse($('#items').val());
+//     (document.getElementById("title")).innerHTML = "dmp.json (" + items.schema + ")";
+//     CreateTableFromJSON(tbodyEle, items)
+// });
+
+
+
+// outputLog('テスト')
+// var amed_data = JSON.parse(amed);
+// let rowNum = getRowNum(amed_data) //行数
+// outputLog('rowNum :' + rowNum)
+// let colNum = getColNum(amed_data) //列数
+// outputLog('colNum :' + colNum)
+// let dmpData2dArr = createDmp2dArr(rowNum, colNum)
+// outputLog('dmpData2dArr.length :' + dmpData2dArr.length)
+// for (let i = 0; i < dmpData2dArr.length; ++i) {
+//     outputLog(dmpData2dArr[i]);
+// }
+// fillDmp2dArr(dmpData2dArr, amed_data, 0, 0)
+
+
+// var min = '{ "workflowIdentifier": "basic","project": {"fiscalYear": 2021,"title": "The Project","problemName": "aaaa","representative": {"belongTo": "NII","post": "aaaaaa","name": "John Doe"}}}'
+// outputLog('テスト')
+// var min_data = JSON.parse(min);
+// let rowNum = getRowNum(min_data) //行数
+// outputLog('rowNum :' + rowNum)
+// let colNum = getColNum(min_data) //列数
+// outputLog('colNum :' + colNum)
+// let dmpData2dArr_1 = createDmp2dArr(rowNum, colNum)
+// outputLog('dmpData2dArr.length :' + dmpData2dArr_1.length)
+// for (let i = 0; i < dmpData2dArr_1.length; ++i) {
+//     outputLog(dmpData2dArr_1[i]);
+// }
+// dmptable = fillDmp2dArr(dmpData2dArr_1, min_data, 0, 0)
+// outputLog('finish fillDmp2dArr')
+// for (let i = 0; i < dmptable.length; ++i) {
+//     outputLog(dmptable[i]);
+// }
+
+// var min = '{ "workflowIdentifier": "basic","project": {"fiscalYear": 2021,"title": "The Project","problemName": "","representative": {"belongTo": "NII","post": "a","name": "John Doe"}}, "researches": {"description": "a","data": [{"title": "The Data","releasePolicy": "a","concealReason": "a","repositoryType": "a","repositoryName": "a","dataAmount": "a"}]}}'
+
+// amed
+// rowNum :38　行　OK
+// colNum :5　列　OK
+// OK
+var min = '{"workflowIdentifier": "basic","contentSize": "1GB","datasetStructure": "with_code","useDocker": "YES","schema": "amed","createDate": "2021/07/21","project": {"fiscalYear": 2021,"title": "The Project","problemName": "hogeho","representative": {"belongTo": "NII","post": "hogeho","name": "John Doe"}},"required": {"hasRegistNecessity": false,"noRegistReason": "hogeho"},"researches": {"description": "hogeho","data": [{"title": "The Data","releasePolicy": "hogeho","concealReason": "hogeho","repositoryType": "hogeho","repositoryName": "hogeho","dataAmount": "hogeho"}]},"forPublication": {"hasOfferPolicy": false,"policyName": "This is just content when \'hasOfferPolicy\' is true"},"researchers": {"numberOfPeople": 1,"manager": {"isConcurrent": false,"personal": {"belongTo": "NII","post": "hogeho","name": "Bill Doe"}},"staff": [{"belongTo": "NII","post": "hogeho","name": "Mary Doe","e-Rad": "0000","canPublished": false,"postType": "Professor","financialResource": "AMED","employmentStatus": "full-time","roles": "data curation","remarks": "hogeho"}]}}'
+outputLog('テスト AMED')
+var min_data = JSON.parse(min);
+var rowNum = getRowNum(min_data) //行数
+outputLog('rowNum :' + rowNum)
+console.log('rowNum :' + rowNum)
+var colNum = getColNum(min_data) //列数
+outputLog('colNum :' + colNum)
+console.log('colNum :' + colNum)
+var dmpData2dArr_1 = createDmp2dArr(rowNum, colNum)
+outputLog('dmpData2dArr.length :' + dmpData2dArr_1.length)
+for (let i = 0; i < dmpData2dArr_1.length; ++i) {
+    outputLog(dmpData2dArr_1[i]);
+}
+dmptable = fillDmp2dArr(dmpData2dArr_1, min_data, 0, 0)
+outputLog('dmptable.length :' + dmptable.length)
+console.log('dmptable.length :' + dmptable.length)
+outputLog('finish fillDmp2dArr')
+for (let i = 0; i < dmptable.length; ++i) {
+    outputLog(dmptable[i]);
+    console.log(dmptable[i]);
+}
+
+//meti ダメ
+// 32 行OK
+//4列　OK
+// var min = '{"workflowIdentifier": "basic","contentSize": "1GB","datasetStructure": "with_code","useDocker": "YES","schema": "meti","dmpType": "New","agreementTitle": "The Data Management Plan","agreementDate": "2021-09-20","submitDate": "2021-10-01","corporateName": "The Corporate","researches": [{"index": 1,"title": "The Research Data","description": "This is description.","manager": "John Doe","dataType": "My Data","releaseLevel": 4,"concealReason": "nothing","concealPeriod": "hogehoe","acquirer": "John Lab","acquireMethod": "by download link","remarks": "hogehoe"},{"index": 2,"title": "The Research Data2","description": "This is description.","manager": "Jumpei Kuwata","dataType": "My Data","releaseLevel": 4,"concealReason": "nothing","concealPeriod": "hogehoe","acquirer": "IVIS Lab","acquireMethod": "by download link","remarks": "hogehoe"}]}'
+// outputLog('テスト METI')
+// var min_data = JSON.parse(min);
+// var rowNum = getRowNum(min_data) //行数
+// outputLog('rowNum :' + rowNum)
+// console.log('rowNum :' + rowNum)
+// var colNum = getColNum(min_data) //列数
+// outputLog('colNum :' + colNum)
+// console.log('colNum :' + colNum)
+// var dmpData2dArr_1 = createDmp2dArr(rowNum, colNum)
+// outputLog('dmpData2dArr.length :' + dmpData2dArr_1.length)
+// for (let i = 0; i < dmpData2dArr_1.length; ++i) {
+//     outputLog(dmpData2dArr_1[i]);
+// }
+// dmptable = fillDmp2dArr(dmpData2dArr_1, min_data, 0, 0)
+// outputLog('dmptable.length :' + dmptable.length)
+// console.log('dmptable.length :' + dmptable.length)
+// outputLog('finish fillDmp2dArr')
+// for (let i = 0; i < dmptable.length; ++i) {
+//     outputLog(dmptable[i]);
+//     console.log(dmptable[i]);
+// }
+
+// jst
+// 44行 NG
+// 5列 NG
+// NG
+// var min = '{"workflowIdentifier": "basic","contentSize": "1GB","datasetStructure": "with_code","useDocker": "YES","schema": "jst","createDate": "2021/07/21","amedNumber": "0000","project": {"fiscalYear": 2021,"title": "The Project","problemName": "hogehoge","representative": {"belongTo": "NII","post": "hogehoge","name": "John Doe"}},"forPublication": {"hasUsed": false,"unwriteReason": "This is just content when \'hasUsed\' is true"},"researches": [{"title": "The Title","type": ["ヒト個人（研究参加者及びヒト試料由来のデータ）"],"description": "hogehoge","releasePolicy": "hogehoge","concealReason": "hogehoge","hasOfferPolicy": false,"policyName": "This is just content when \'hasOfferPolicy\' is true","repositoryType": "hogehoge","repositoryName": "hogehoge","dataAmount": "hogehoge","dataSchema": "Excel","processingPolicy": "hogehoge","isRegistered": false,"registeredInfo": "hogehoge"}],"researchers": {"numberOfPeople": 1,"manager": {"isConcurrent": false,"personal": {"belongTo": "NII","post": "hogehoge","name": "Bill Doe"}},"staff": [{"belongTo": "NII","post": "hogehoge","name": "Mary Doe","e-Rad": "0000","canPublished": false,"postType": "Professor","financialResource": "AMED","employmentStatus": "full-time","roles": "data curation","remarks": "hogehoge"}]}}'
+// outputLog('テスト JST')
+// var min_data = JSON.parse(min);
+// var rowNum = getRowNum(min_data) //行数
+// outputLog('rowNum :' + rowNum)
+// console.log('rowNum :' + rowNum);
+// var colNum = getColNum(min_data) //列数
+// outputLog('colNum :' + colNum)
+// console.log('colNum :' + colNum);
+// var dmpData2dArr_1 = createDmp2dArr(rowNum, colNum)
+// outputLog('dmpData2dArr.length :' + dmpData2dArr_1.length)
+// for (let i = 0; i < dmpData2dArr_1.length; ++i) {
+//     outputLog(dmpData2dArr_1[i]);
+// }
+// dmptable = fillDmp2dArr(dmpData2dArr_1, min_data, 0, 0)
+// outputLog('dmptable.length :' + dmptable.length)
+// console.log('dmptable.length :' + dmptable.length);
+// outputLog('finish fillDmp2dArr')
+// for (let i = 0; i < dmptable.length; ++i) {
+//     console.log(dmptable[i]);
+//     outputLog(dmptable[i]);
+// }
+
+// moon
+// 29行
+// 3列
+// OK
+// var min = '{"workflowIdentifier": "basic","contentSize": "1GB","datasetStructure": "with_code","useDocker": "YES","schema": "moonshot","funder": "AMED","eRadProjectID": "hogehoge","projectName": "誰もが自在に活躍できるアバター共生社会の実現","dataNo": "hogehoge","dataTitle": "〇〇実証においてセンサより撮像したデータ及び関連データ","dataPublished": "2021-04-26","dataDescription": "〇〇実証においてセンサより撮像したデータであり、道路の画像データ","researchField": "ライフサイエンス (Life Science)","dataType": "dataset","fileSize": "<1GB","dataPolicy": "一定期間後に事業の実施上有益なものに対して有償又は無償で提供を開始。但しデータのクレジット標記を条件とする。なおサンプルデータを公開している。","accessRights": "公開 (open access)","availableDate": "2021-04-26","repositoryInformation": "〇〇大学学術機関リポジトリ","repositoryURL": "hogehoge","creatorName": "John Doe","eRadCreatorIdentifer": "hogehoge","hostingInstitution": "hogehoge","dataManager": "John Doe","eRadManagerIdentifer": "hogehoge","dataManagerContact": {"affiliation": "〇〇研究所〇〇部門〇〇課","TEL": "00-000-0000","eMail": "user@example.com"},"remarks": "hogehoge"}'
+// outputLog('テスト moon')
+// var min_data = JSON.parse(min);
+// var rowNum = getRowNum(min_data) //行数
+// console.log('rowNum :' + rowNum);
+// outputLog('rowNum :' + rowNum)
+// var colNum = getColNum(min_data) //列数
+// outputLog('colNum :' + colNum)
+// console.log('colNum :' + colNum);
+// var dmpData2dArr_1 = createDmp2dArr(rowNum, colNum)
+// outputLog('dmpData2dArr.length :' + dmpData2dArr_1.length)
+// for (let i = 0; i < dmpData2dArr_1.length; ++i) {
+//     outputLog(dmpData2dArr_1[i]);
+// }
+// dmptable = fillDmp2dArr(dmpData2dArr_1, min_data, 0, 0)
+// outputLog('dmptable.length :' + dmptable.length)
+// console.log('dmptable.length :' + dmptable.length)
+// outputLog('finish fillDmp2dArr')
+// for (let i = 0; i < dmptable.length; ++i) {
+//     outputLog(dmptable[i]);
+//     console.log(dmptable[i]);
+// }
