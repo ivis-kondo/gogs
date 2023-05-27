@@ -420,8 +420,9 @@ func runWeb(c *cli.Context) error {
 		m.Group("/repo", func() {
 			m.Get("/create", repo.Create)
 			m.Post("/create", bindIgnErr(form.CreateRepo{}), repo.CreatePost)
-			m.Get("/migrate", repo.Migrate)
-			m.Post("/migrate", bindIgnErr(form.MigrateRepo{}), repo.MigratePost)
+			// Note : Disabling the repository migration function by RCOS
+			// m.Get("/migrate", repo.Migrate)
+			// m.Post("/migrate", bindIgnErr(form.MigrateRepo{}), repo.MigratePost)
 			// Note : Disable Fork function route by RCOS
 			// m.Combo("/fork/:repoid").Get(repo.Fork).
 			// 	Post(bindIgnErr(form.CreateRepo{}), repo.ForkPost)
