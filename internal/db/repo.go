@@ -1033,6 +1033,7 @@ func prepareRepoCommit(repo *Repository, doer *User, tmpDir, repoPath string, op
 	// Image File
 	// Get Image file which used Reame.md
 	images := make([]string, 0)
+	// get the images in custom/conf/images
 	customPath := filepath.Join(conf.CustomDir(), "conf", "images")
 	if com.IsDir(customPath) {
 		customFiles, err := com.StatDir(customPath)
@@ -1046,7 +1047,7 @@ func prepareRepoCommit(repo *Repository, doer *User, tmpDir, repoPath string, op
 			}
 		}
 	}
-
+	// adds the images file to the repository
 	if len(images) > 0 {
 		for _, img := range images {
 			data, err = getRepoInitFile("images", img)
