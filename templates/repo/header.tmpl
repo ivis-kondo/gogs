@@ -18,7 +18,7 @@
 						{{if .IsFork}}<div class="fork-flag">{{$.i18n.Tr "repo.forked_from"}} <a href="{{.BaseRepo.Link}}">{{SubStr .BaseRepo.RelLink 1 -1}}</a></div>{{end}}
 					</div>
 
-					{{if not $.IsGuest}}
+					<!-- {{if not $.IsGuest}}
 						<div class="ui right">
 							{{template "repo/header_gin" $}}
 							<form class="display inline" action="{{$.RepoLink}}/action/{{if $.IsWatchingRepo}}un{{end}}watch?redirect_to={{$.Link}}" method="POST">
@@ -54,7 +54,7 @@
 								</div>
 							{{end}}
 						</div>
-					{{end}}
+					{{end}} -->
 				</div>
 			</div><!-- end column -->
 		</div><!-- end grid -->
