@@ -1038,7 +1038,7 @@ func prepareRepoCommit(repo *Repository, doer *User, tmpDir, repoPath string, op
 	if com.IsDir(customPath) {
 		customFiles, err := com.StatDir(customPath)
 		if err != nil {
-			log.Fatal("Failed to get custom %s files: %v", "images", err)
+			log.Error("Failed to get custom %s files: %v", "images", err)
 		}
 
 		for _, f := range customFiles {
