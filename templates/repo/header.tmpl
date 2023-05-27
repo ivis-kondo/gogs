@@ -21,6 +21,8 @@
 					{{if not $.IsGuest}}
 						<div class="ui right">
 							{{template "repo/header_gin" $}}
+							<!--This commented out code below is the form of the Watch, Star, and Fork registration and deregistration functions.
+Commented out because it is not supported as a DG feature as of 2023/05/27. fork feature may be needed in future development.-->
 							<!-- <form class="display inline" action="{{$.RepoLink}}/action/{{if $.IsWatchingRepo}}un{{end}}watch?redirect_to={{$.Link}}" method="POST">
 								{{$.CSRFTokenHTML}}
 								<div class="ui labeled button" tabindex="0">
