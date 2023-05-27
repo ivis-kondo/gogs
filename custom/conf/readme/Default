@@ -21,12 +21,12 @@
 
 3. maDMPの生成
 
-    ※ この操作以降、DMPを編集してもリサーチフローに取り込まれません。DMPの内容を変更したい場合はリポジトリの作成からやり直してください。<br>
+    ・この操作以降、DMPを編集してもリサーチフローに取り込まれません。DMPの内容を変更したい場合はリポジトリの作成からやり直してください。<br>
 
     DMPの作成が終わったら、画面右上に出てくる「Generate maDMP」ボタンをクリックしてください。クリックすると自動的にREADME.mdへと戻ります。<br>
     このとき、以下のファイルが生成されます。<br>
-        maDMP.ipynb : コンピュータが実行可能なDMP<br>
-        Dockerfile : 環境構成ファイル
+    - maDMP.ipynb : コンピュータが実行可能なDMP<br>
+    - Dockerfile : 環境構成ファイル
     作成したmaDMPは画面右上にある「View maDMP」から確認できます。
 
 4. 環境構成ファイルのカスタマイズ
@@ -49,8 +49,13 @@
     maDMPの生成後に画面右上に出てくる「launch binder」ボタンをクリックしてください。<br>
     ボタンを押下するとリサーチフローの実行環境の構築が開始されます。この処理には時間がかかります。<br>
     構築時にエラーになってしまった場合は、再度「lanch binder」ボタンを押下してください。<br>
-    ![./images/binder_launching.png]
+    <br>
+    ![](./images/binder_launching.png)<br>
+    <br>
     ログイン画面が表示された場合はGakuNin IdPアカウントでログインしてください。<br>
-    ![IdP選択](./images/login_IdP.png)
+    <br>
+    ![IdP選択](./images/login_IdP.png)<br>
+    <br>
     構築に成功すると自動的にmaDMP.ipynbが表示されます。<br>
+    <br>
     ![maDMP](./images/maDMP.png)
