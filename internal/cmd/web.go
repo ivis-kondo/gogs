@@ -422,8 +422,9 @@ func runWeb(c *cli.Context) error {
 			m.Post("/create", bindIgnErr(form.CreateRepo{}), repo.CreatePost)
 			m.Get("/migrate", repo.Migrate)
 			m.Post("/migrate", bindIgnErr(form.MigrateRepo{}), repo.MigratePost)
-			m.Combo("/fork/:repoid").Get(repo.Fork).
-				Post(bindIgnErr(form.CreateRepo{}), repo.ForkPost)
+			// Note : Disable Fork function route
+			// m.Combo("/fork/:repoid").Get(repo.Fork).
+			// 	Post(bindIgnErr(form.CreateRepo{}), repo.ForkPost)
 		}, reqSignIn)
 
 		m.Group("/:username/:reponame", func() {
@@ -629,7 +630,8 @@ func runWeb(c *cli.Context) error {
 				m.Get("/raw/*", repo.SingleDownload)
 				m.Get("/commits/*", repo.RefCommits)
 				m.Get("/commit/:sha([a-f0-9]{7,40})$", repo.Diff)
-				m.Get("/forks", repo.Forks)
+				// Disable Fork status display function route
+				// m.Get("/forks", repo.Forks)
 			}, repo.MustBeNotBare, context.RepoRef())
 			m.Get("/commit/:sha([a-f0-9]{7,40})\\.:ext(patch|diff)", repo.MustBeNotBare, repo.RawDiff)
 
