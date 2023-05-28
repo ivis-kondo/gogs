@@ -123,12 +123,12 @@ func CreatePost(c *context.Context, f form.CreateRepo) {
 	repo, err := db.CreateRepository(c.User, ctxUser, db.CreateRepoOptions{
 		Name:               f.RepoName,
 		Description:        f.Description,
-		Gitignores:         f.Gitignores,
-		License:            f.License,
-		Readme:             f.Readme,
+		Gitignores:         "",
+		License:            "",
+		Readme:             "Default",
 		IsPrivate:          f.Private || conf.Repository.ForcePrivate,
 		IsUnlisted:         f.Unlisted,
-		AutoInit:           f.AutoInit,
+		AutoInit:           true,
 		ProjectName:        f.ProjectName,
 		ProjectDescription: f.ProjectDescription,
 	})
