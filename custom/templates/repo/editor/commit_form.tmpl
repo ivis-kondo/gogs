@@ -20,7 +20,9 @@
 					</label>
 				</div>
 			</div>
-			<div class="field">
+			<!--Disable setting new branches when committing. By RCOS -->
+			<!-- However, since we may support it in the future, we will only comment it out. -->
+			<!-- <div class="field">
 				<div class="ui radio checkbox">
 					<input type="radio" class="js-quick-pull-choice-option" name="commit_choice" value="commit-to-new-branch" {{if eq .commit_choice "commit-to-new-branch"}}checked{{end}}>
 					<label>
@@ -29,13 +31,14 @@
 					</label>
 				</div>
 			</div>
+
 			<div class="quick-pull-branch-name {{if not (eq .commit_choice "commit-to-new-branch")}}hide{{end}}">
 				<div class="new-branch-name-input field {{if .Err_NewBranchName}}error{{end}}">
 					<i class="octicon octicon-git-branch" height="16" width="10"></i>
 					<input type="text" name="new_branch_name" value="{{.new_branch_name}}" class="input-contrast mr-2 js-quick-pull-new-branch-name" placeholder="{{.i18n.Tr "repo.editor.new_branch_name_desc"}}" {{if eq .commit_choice "commit-to-new-branch"}}required{{end}}>
 					<span class="text-muted js-quick-pull-normalization-info"></span>
 				</div>
-			</div>
+			</div> -->
 		</div>
 	</div>
 	<button type="submit" id="commit" class="ui green button">
