@@ -7,7 +7,6 @@
 							<!--a class="ui basic button" data-tooltip="Your repository does not fulfill all requirements for a DOI yet. Click to get instructions." data-position="bottom center" href="/G-Node/Info/wiki/DOI"><i class="octicon octicon-squirrel"></i> How to publish</!--a -->
 						<div style="display:flex;">
 							{{if $.HasDmpJson}}
-								<a class="ui basic button" href="{{$.RepoLink}}/_edit/{{EscapePound $.BranchName}}/dmp.json" data-position="bottom center"><i class="octicon octicon-file"></i>Edit DMP JSON</a>
 								{{ if $.HasMaDmp }}
 									<a class="ui basic button" href="{{$.RepoLink}}/src/{{EscapePound $.BranchName}}/maDMP.ipynb" data-position="bottom center"><i class="octicon octicon-file"></i>View maDMP</a>
 									<div class="ui labeled button" data-tooltip="Transition to the maDMP execution environment. Please click this after 'Generate maDMP'" data-position="bottom center">
@@ -18,6 +17,7 @@
 									</button>
                     				</div>
 								{{ else }}
+									<a class="ui basic button" href="{{$.RepoLink}}/_edit/{{EscapePound $.BranchName}}/dmp.json" data-position="bottom center"><i class="octicon octicon-file"></i>Edit DMP JSON</a>
 									<form method="post" name="generate_maDMP" action="{{$.RepoLink}}/madmp">
 										{{.CSRFTokenHTML}}
 										<a class="ui basic button" href= "javascript:generate_maDMP.submit()" data-position="bottom center"><i class="octicon octicon-file"></i>Generate maDMP</a>
