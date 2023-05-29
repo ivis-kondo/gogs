@@ -197,7 +197,10 @@ func runWeb(c *cli.Context) error {
 		}, ignSignIn)
 		m.Combo("/install", route.InstallInit).Get(route.Install).
 			Post(bindIgnErr(form.Install{}), route.InstallPost)
-		m.Get("/^:type(issues|pulls)$", reqSignIn, user.Issues)
+		// Disable routes to per-user pull request list by RCOS
+		// "/^:type(issues|pulls)$" to "/^:type(issues)$"
+		//m.Get("/^:type(issues|pulls)$", reqSignIn, user.Issues)
+		m.Get("/^:type(issues)$", reqSignIn, user.Issues)
 
 		// ***** START: User *****
 		m.Group("/user", func() {
@@ -381,7 +384,10 @@ func runWeb(c *cli.Context) error {
 
 			m.Group("/:org", func() {
 				m.Get("/dashboard", user.Dashboard)
-				m.Get("/^:type(issues|pulls)$", user.Issues)
+				// Disable routes to org pull request list by RCOS
+				// "/^:type(issues|pulls)$" to "/^:type(issues)$"
+				//m.Get("/^:type(issues|pulls)$", user.Issues)
+				m.Get("/^:type(issues)$", user.Issues)
 				m.Get("/members", org.Members)
 				m.Get("/members/action/:action", org.MembersAction)
 
@@ -443,7 +449,8 @@ func runWeb(c *cli.Context) error {
 					m.Post("/delete", repo.DeleteCollaboration)
 				})
 				m.Group("/branches", func() {
-					m.Get("", repo.SettingsBranches)
+					//Disable root to branch settings in repository settings by RCOS
+					//m.Get("", repo.SettingsBranches)
 					m.Post("/default_branch", repo.UpdateDefaultBranch)
 					m.Combo("/*").Get(repo.SettingsProtectedBranch).
 						Post(bindIgnErr(form.ProtectBranch{}), repo.SettingsProtectedBranchPost)
@@ -556,8 +563,9 @@ func runWeb(c *cli.Context) error {
 			// for PR in same repository. After select branch on the page, the URL contains redundant head user name.
 			// e.g. /org1/test-repo/compare/master...org1:develop
 			// which should be /org1/test-repo/compare/master...develop
-			m.Combo("/compare/*", repo.MustAllowPulls).Get(repo.CompareAndPullRequest).
-				Post(bindIgnErr(form.NewIssue{}), repo.CompareAndPullRequestPost)
+			// NOTE:Disable route to pull request screen by RCOS
+			// m.Combo("/compare/*", repo.MustAllowPulls).Get(repo.CompareAndPullRequest).
+			// 	Post(bindIgnErr(form.NewIssue{}), repo.CompareAndPullRequestPost)
 
 			m.Group("", func() {
 				m.Combo("/_edit/*").Get(repo.EditFile).
@@ -594,13 +602,15 @@ func runWeb(c *cli.Context) error {
 		m.Group("/:username/:reponame", func() {
 			m.Group("", func() {
 				m.Get("/releases", repo.MustBeNotBare, repo.Releases)
-				m.Get("/pulls", repo.RetrieveLabels, repo.Pulls)
+				// Disable route to pull request confirmation screen by RCOS
+				//m.Get("/pulls", repo.RetrieveLabels, repo.Pulls)
 				m.Get("/pulls/:index", repo.ViewPull)
 			}, context.RepoRef())
 
 			m.Group("/branches", func() {
-				m.Get("", repo.Branches)
-				m.Get("/all", repo.AllBranches)
+				//Disable route to branch list confirmation screen by RCOS
+				//m.Get("", repo.Branches)
+				//m.Get("/all", repo.AllBranches)
 				m.Post("/delete/*", reqSignIn, reqRepoWriter, repo.DeleteBranchPost)
 			}, repo.MustBeNotBare, func(c *context.Context) {
 				c.Data["PageIsViewFiles"] = true
