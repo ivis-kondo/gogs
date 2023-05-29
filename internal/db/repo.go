@@ -1032,18 +1032,38 @@ func prepareRepoCommit(repo *Repository, doer *User, tmpDir, repoPath string, op
 	// RCOS specific code
 	// Image File
 	// Get Image file which used Reame.md
-	data, err = getRepoInitFile("images", "user_custom_area.png")
-	if err != nil {
-		return fmt.Errorf("getRepoInitFile[%s]: %v", "user_custom_area.png", err)
-	}
+	images := make([]string, 0)
+	// get the images in custom/conf/images
+	customPath := filepath.Join(conf.CustomDir(), "conf", "images")
+	if com.IsDir(customPath) {
+		customFiles, err := com.StatDir(customPath)
+		if err != nil {
+			log.Error("Failed to get custom %s files: %v", "images", err)
+		}
 
-	if err = os.MkdirAll(tmpDir+"/images", os.ModePerm); err != nil {
-		return err
+		for _, f := range customFiles {
+			if !com.IsSliceContainsStr(images, f) {
+				images = append(images, f)
+			}
+		}
 	}
-	defer RemoveAllWithNotice("Delete repository for auto-initialization", tmpDir+"images")
+	// adds the images file to the repository
+	if len(images) > 0 {
+		for _, img := range images {
+			data, err = getRepoInitFile("images", img)
+			if err != nil {
+				return fmt.Errorf("getRepoInitFile[%s]: %v", img, err)
+			}
 
-	if err = ioutil.WriteFile(filepath.Join(tmpDir+"/images", "user_custom_area.png"), data, 0644); err != nil {
-		return fmt.Errorf("write Imagefile: %v", err)
+			if err = os.MkdirAll(tmpDir+"/images", os.ModePerm); err != nil {
+				return err
+			}
+			defer RemoveAllWithNotice("Delete repository for auto-initialization", tmpDir+"images")
+
+			if err = ioutil.WriteFile(filepath.Join(tmpDir+"/images", img), data, 0644); err != nil {
+				return fmt.Errorf("write Imagefile: %v", err)
+			}
+		}
 	}
 
 	// RCOS specific code

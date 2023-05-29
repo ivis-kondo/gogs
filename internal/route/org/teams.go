@@ -157,7 +157,7 @@ func NewTeamPost(c *context.Context, f form.CreateTeam) {
 	t := &db.Team{
 		OrgID:       c.Org.Organization.ID,
 		Name:        f.TeamName,
-		Description: f.Description,
+		Description: f.TeamDescription,
 		Authorize:   db.ParseAccessMode(f.Permission),
 	}
 	c.Data["Team"] = t
@@ -244,7 +244,7 @@ func EditTeamPost(c *context.Context, f form.CreateTeam) {
 			t.Authorize = auth
 		}
 	}
-	t.Description = f.Description
+	t.Description = f.TeamDescription
 	if err := db.UpdateTeam(t, isAuthChanged); err != nil {
 		c.Data["Err_TeamName"] = true
 		switch {

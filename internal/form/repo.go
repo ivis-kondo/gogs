@@ -32,8 +32,8 @@ type CreateRepo struct {
 	Gitignores         string
 	License            string
 	Readme             string
-	ProjectName        string `binding:"Required"`
-	ProjectDescription string
+	ProjectName        string `binding:"Required;MaxSize(255)"`
+	ProjectDescription string `binding:"MaxSize(255)"`
 }
 
 func (f *CreateRepo) Validate(ctx *macaron.Context, errs binding.Errors) binding.Errors {
@@ -431,8 +431,8 @@ func (f *DeleteRepoFile) IsNewBrnach() bool {
 Research Project From
 **/
 type ResearchProtect struct {
-	ProjectName        string
-	ProjectDescription string
+	ProjectName        string `binding:"Required;MaxSize(255)"`
+	ProjectDescription string `binding:"MaxSize(255)"`
 }
 
 func (f *ResearchProtect) Validate(ctx *macaron.Context, errs binding.Errors) binding.Errors {
