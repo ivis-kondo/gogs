@@ -23,25 +23,19 @@ func (f *AdminCrateUser) Validate(ctx *macaron.Context, errs binding.Errors) bin
 }
 
 type AdminEditUser struct {
-	LoginType            string `binding:"Required"`
-	LoginName            string
-	FirstName            string `xorm:"NOT NULL" gorm:"NOT NULL"`
-	LastName             string `xorm:"NOT NULL" gorm:"NOT NULL"`
-	AliasName            string
-	AffiliationId        int64
-	Email                string `binding:"Required;Email;MaxSize(254)"`
-	Telephone            string
-	Password             string `binding:"MaxSize(255)"`
-	ERadResearcherNumber string
-	PersonalURL          string
-	Website              string `binding:"MaxSize(50)"`
-	Location             string `binding:"MaxSize(50)"`
-	MaxRepoCreation      int
-	Active               bool
-	Admin                bool
-	AllowGitHook         bool
-	AllowImportLocal     bool
-	ProhibitLogin        bool
+	LoginType        string `binding:"Required"`
+	LoginName        string
+	FullName         string `binding:"MaxSize(100)"`
+	Email            string `binding:"Required;Email;MaxSize(254)"`
+	Password         string `binding:"MaxSize(255)"`
+	Website          string `binding:"MaxSize(50)"`
+	Location         string `binding:"MaxSize(50)"`
+	MaxRepoCreation  int
+	Active           bool
+	Admin            bool
+	AllowGitHook     bool
+	AllowImportLocal bool
+	ProhibitLogin    bool
 }
 
 func (f *AdminEditUser) Validate(ctx *macaron.Context, errs binding.Errors) binding.Errors {
