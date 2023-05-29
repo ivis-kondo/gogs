@@ -23,13 +23,13 @@
 			</div>
 		{{end}}
 		<div class="ui secondary menu">
-			{{if .PullRequestCtx.Allowed}}
+			<!-- {{if .PullRequestCtx.Allowed}}
 				<div class="fitted item" data-tooltip="Please note: annexed file content will not be part of a pull request">
 					<a href="{{.BaseRepo.Link}}/compare/{{EscapePound .BaseRepo.DefaultBranch}}...{{EscapePound .PullRequestCtx.HeadInfo}}">
 						<button class="ui green small button"><i class="octicon octicon-git-compare"></i></button>
 					</a>
 				</div>
-			{{end}}
+			{{end}} -->
 			{{template "repo/branch_dropdown" .}}
 			<div class="fitted item">
 				<div class="ui breadcrumb">
