@@ -52,7 +52,7 @@
 
     maDMPの生成後に画面右上に出てくる「launch binder」ボタンをクリックしてください。<br>
     ボタンを押下するとリサーチフローの実行環境の構築が開始されます。この処理には時間がかかります。<br>
-    構築時にエラーになってしまった場合は、再度「lanch binder」ボタンを押下してください。<br>
+    構築時にエラーになってしまった場合は、[ユーザーマニュアル](https://support.rdm.nii.ac.jp/usermanual/)からデータガバナンス機能のFAQをご覧ください。<br>
     <br>
     ![](./images/binder_launching.png)<br>
     <br>
