@@ -9,6 +9,7 @@
 			<!-- textarea name="commit_message" placeholder="{{.i18n.Tr "repo.editor.commit_message_desc"}}" rows="5">{{.commit_message}}</!-->
             <textarea id="commit_message" name="commit_message" placeholder="実施理由" rows="5">{{.commit_message}}</textarea>
 		</div>
+		<!--Extracted the input needed to commit to the default branch from the comment out.  -->
 		<input type="hidden" name="commit_choice" value="direct">
 		<!--Disable setting new branches when committing. By RCOS -->
 		<!-- However, since we may support it in the future, we will only comment it out. -->
