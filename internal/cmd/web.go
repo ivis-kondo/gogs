@@ -420,12 +420,10 @@ func runWeb(c *cli.Context) error {
 		m.Group("/repo", func() {
 			m.Get("/create", repo.Create)
 			m.Post("/create", bindIgnErr(form.CreateRepo{}), repo.CreatePost)
-			// Note : Disabling the repository migration function by RCOS
-			// m.Get("/migrate", repo.Migrate)
-			// m.Post("/migrate", bindIgnErr(form.MigrateRepo{}), repo.MigratePost)
-			// Note : Disable Fork function route by RCOS
-			// m.Combo("/fork/:repoid").Get(repo.Fork).
-			// 	Post(bindIgnErr(form.CreateRepo{}), repo.ForkPost)
+			m.Get("/migrate", repo.Migrate)
+			m.Post("/migrate", bindIgnErr(form.MigrateRepo{}), repo.MigratePost)
+			m.Combo("/fork/:repoid").Get(repo.Fork).
+				Post(bindIgnErr(form.CreateRepo{}), repo.ForkPost)
 		}, reqSignIn)
 
 		m.Group("/:username/:reponame", func() {
@@ -485,8 +483,8 @@ func runWeb(c *cli.Context) error {
 				c.Data["PageIsSettings"] = true
 			})
 		}, reqSignIn, context.RepoAssignment(), reqRepoAdmin, context.RepoRef())
-		// Disable root of watch and star function by RCOS
-		// m.Post("/:username/:reponame/action/:action", reqSignIn, context.RepoAssignment(), repo.Action)
+
+		m.Post("/:username/:reponame/action/:action", reqSignIn, context.RepoAssignment(), repo.Action)
 		m.Group("/:username/:reponame", func() {
 			m.Get("/issues", repo.RetrieveLabels, repo.Issues)
 			m.Get("/issues/:index", repo.ViewIssue)
@@ -631,8 +629,7 @@ func runWeb(c *cli.Context) error {
 				m.Get("/raw/*", repo.SingleDownload)
 				m.Get("/commits/*", repo.RefCommits)
 				m.Get("/commit/:sha([a-f0-9]{7,40})$", repo.Diff)
-				// Disable Fork status display function route by RCOS
-				// m.Get("/forks", repo.Forks)
+				m.Get("/forks", repo.Forks)
 			}, repo.MustBeNotBare, context.RepoRef())
 			m.Get("/commit/:sha([a-f0-9]{7,40})\\.:ext(patch|diff)", repo.MustBeNotBare, repo.RawDiff)
 
@@ -640,9 +637,8 @@ func runWeb(c *cli.Context) error {
 		}, ignSignIn, context.RepoAssignment())
 		m.Group("/:username/:reponame", func() {
 			m.Get("", context.ServeGoGet(), repo.Home)
-			// Disable root of watch and star function by RCOS
-			// m.Get("/stars", repo.Stars)
-			// m.Get("/watchers", repo.Watchers)
+			m.Get("/stars", repo.Stars)
+			m.Get("/watchers", repo.Watchers)
 		}, ignSignIn, context.RepoAssignment(), context.RepoRef())
 
 		// GIN specific code
