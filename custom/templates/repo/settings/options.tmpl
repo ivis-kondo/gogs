@@ -20,8 +20,7 @@
 						<div class="field {{if .Err_Description}}error{{end}}">
 							<label for="description">{{$.i18n.Tr "repo.repo_desc"}}</label>
 							<textarea class="autosize" id="description" name="description" rows="3">{{.Repository.Description}}</textarea>
-							<p class="help">{{.i18n.Tr "repo.settings.description_desc"}}</p>
-							<p class="help">{{.i18n.Tr "repo.settings.description_length"}}: <span id="descLength"></span></p>
+							<span class="help">{{.i18n.Tr "repo.settings.description_length"}}: <span id="descLength"></span></span>
 						</div>
 						<div class="field {{if .Err_Website}}error{{end}}">
 							<label for="website">{{.i18n.Tr "repo.settings.site"}}</label>

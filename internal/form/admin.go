@@ -25,10 +25,10 @@ func (f *AdminCrateUser) Validate(ctx *macaron.Context, errs binding.Errors) bin
 type AdminEditUser struct {
 	LoginType            string `binding:"Required"`
 	LoginName            string
-	FirstName            string `xorm:"NOT NULL" gorm:"NOT NULL"`
-	LastName             string `xorm:"NOT NULL" gorm:"NOT NULL"`
-	AliasName            string
-	AffiliationId        int64
+	FirstName            string `binding:"Required;MaxSize(100)"`
+	LastName             string `binding:"Required;MaxSize(100)"`
+	AliasName            string `binding:"MaxSize(255)"`
+	AffiliationId        int64  `binding:"Required"`
 	Email                string `binding:"Required;Email;MaxSize(254)"`
 	Telephone            string
 	Password             string `binding:"MaxSize(255)"`

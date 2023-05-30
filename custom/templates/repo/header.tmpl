@@ -21,7 +21,10 @@
 					{{if not $.IsGuest}}
 						<div class="ui right">
 							{{template "repo/header_gin" $}}
-							<form class="display inline" action="{{$.RepoLink}}/action/{{if $.IsWatchingRepo}}un{{end}}watch?redirect_to={{$.Link}}" method="POST">
+							<!--This commented out code below is the form of the Watch, Star, and Fork registration and deregistration functions.
+Commented out because it is not supported as a DG feature as of 2023/05/27. fork feature may be needed in future development.-->
+							<!-- Watch registration and deregistration functions-->
+							<!-- <form class="display inline" action="{{$.RepoLink}}/action/{{if $.IsWatchingRepo}}un{{end}}watch?redirect_to={{$.Link}}" method="POST">
 								{{$.CSRFTokenHTML}}
 								<div class="ui labeled button" tabindex="0">
 									<button class="ui basic button">
@@ -31,8 +34,9 @@
 										{{.NumWatches}}
 									</a>
 								</div>
-							</form>
-							<form class="display inline" action="{{$.RepoLink}}/action/{{if $.IsStaringRepo}}un{{end}}star?redirect_to={{$.Link}}" method="POST">
+							</form> -->
+							<!-- Star registration and deregistration functions-->
+							<!-- <form class="display inline" action="{{$.RepoLink}}/action/{{if $.IsStaringRepo}}un{{end}}star?redirect_to={{$.Link}}" method="POST">
 								{{$.CSRFTokenHTML}}
 								<div class="ui labeled button" tabindex="0">
 									<button class="ui basic button">
@@ -42,8 +46,9 @@
 										{{.NumStars}}
 									</a>
 								</div>
-							</form>
-							{{if .CanBeForked}}
+							</form> -->
+							<!-- Fork registration and deregistration functions-->
+							<!-- {{if .CanBeForked}}
 							<div class="ui labeled button" tabindex="0" data-tooltip="Please note: annexed file content will not be forked" data-position="bottom center">
 									<a class="ui basic button {{if eq .OwnerID $.LoggedUserID}}poping up{{end}}" href="{{AppSubURL}}/repo/fork/{{.ID}}">
 										<i class="octicon octicon-repo-forked"></i>{{$.i18n.Tr "repo.fork"}}
@@ -52,7 +57,7 @@
 										{{.NumForks}}
 									</a>
 								</div>
-							{{end}}
+							{{end}} -->
 						</div>
 					{{end}}
 				</div>

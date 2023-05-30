@@ -14,11 +14,13 @@
                         {{.CSRFTokenHTML}}
                         <div class="required field">
                             <label for="project_name">{{.i18n.Tr "project_name"}}</label>
-                            <input id="project_name" name="project_name" value="{{.project_name}}" autofocus required>
+                            <textarea required class="autosize" id="project_name" name="project_name" rows="2">{{.project_name}}</textarea>
+						    <span class="help">{{.i18n.Tr "available_length"}}: <span id="projectNameLength"></span></span>
                         </div>
                         <div class="field">
                             <label for="project_description">{{.i18n.Tr "project_description"}}</label>
                             <textarea class="autosize" id="project_description" name="project_description" rows="3">{{.project_description}}</textarea>
+                            <span class="help">{{.i18n.Tr "available_length"}}: <span id="projectDescLength"></span></span>
                         </div>
                         <div class="inline field">
                             <label></label>
