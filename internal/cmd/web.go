@@ -387,7 +387,8 @@ func runWeb(c *cli.Context) error {
 				// Disable routes to org pull request list by RCOS
 				// "/^:type(issues|pulls)$" to "/^:type(issues)$"
 				//m.Get("/^:type(issues|pulls)$", user.Issues)
-				m.Get("/^:type(issues)$", user.Issues)
+				// m.Get("/^:type(issues)$", user.Issues)
+				m.Get("/issues)", user.Issues)
 				m.Get("/members", org.Members)
 				m.Get("/members/action/:action", org.MembersAction)
 
@@ -642,9 +643,7 @@ func runWeb(c *cli.Context) error {
 				m.Get("/forks", repo.Forks)
 			}, repo.MustBeNotBare, context.RepoRef())
 			m.Get("/commit/:sha([a-f0-9]{7,40})\\.:ext(patch|diff)", repo.MustBeNotBare, repo.RawDiff)
-
-			// NOTE:Disable route to pull request screen by RCOS
-			//m.Get("/compare/:before([a-z0-9]{40})\\.\\.\\.:after([a-z0-9]{40})", repo.MustBeNotBare, context.RepoRef(), repo.CompareDiff)
+			m.Get("/compare/:before([a-z0-9]{40})\\.\\.\\.:after([a-z0-9]{40})", repo.MustBeNotBare, context.RepoRef(), repo.CompareDiff)
 		}, ignSignIn, context.RepoAssignment())
 		m.Group("/:username/:reponame", func() {
 			m.Get("", context.ServeGoGet(), repo.Home)
