@@ -564,8 +564,8 @@ func runWeb(c *cli.Context) error {
 			// e.g. /org1/test-repo/compare/master...org1:develop
 			// which should be /org1/test-repo/compare/master...develop
 			// NOTE:Disable route to pull request screen by RCOS
-			// m.Combo("/compare/*", repo.MustAllowPulls).Get(repo.CompareAndPullRequest).
-			// 	Post(bindIgnErr(form.NewIssue{}), repo.CompareAndPullRequestPost)
+			m.Combo("/compare/*", repo.MustAllowPulls).Get(repo.CompareAndPullRequest).
+				Post(bindIgnErr(form.NewIssue{}), repo.CompareAndPullRequestPost)
 
 			m.Group("", func() {
 				m.Combo("/_edit/*").Get(repo.EditFile).
@@ -643,6 +643,7 @@ func runWeb(c *cli.Context) error {
 			}, repo.MustBeNotBare, context.RepoRef())
 			m.Get("/commit/:sha([a-f0-9]{7,40})\\.:ext(patch|diff)", repo.MustBeNotBare, repo.RawDiff)
 
+			// NOTE:Disable route to pull request screen by RCOS
 			//m.Get("/compare/:before([a-z0-9]{40})\\.\\.\\.:after([a-z0-9]{40})", repo.MustBeNotBare, context.RepoRef(), repo.CompareDiff)
 		}, ignSignIn, context.RepoAssignment())
 		m.Group("/:username/:reponame", func() {
