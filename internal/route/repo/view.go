@@ -75,17 +75,19 @@ func renderDirectory(c *context.Context, treeLink string) {
 	if c.Data["HasDmpJson"].(bool) {
 		readDmpJson(c)
 	} else {
-		schemaUrl := getTemplateUrl() + "dmp/orgs"
+		if c.Repo.BranchName == c.Repo.Repository.DefaultBranch {
+			schemaUrl := getTemplateUrl() + "dmp/orgs"
 
-		var d dmpUtil
-		err := d.BidingDmpSchemaList(c, schemaUrl)
-		if err != nil && !c.IsInternalError() {
-			log.Warn("%v", err)
-			c.Flash.Warning(c.Tr("rcos.server.connect.failure"))
-		} else if err != nil && c.IsInternalError() {
-			log.Error(err.Error())
-			c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
-			return
+			var d dmpUtil
+			err := d.BidingDmpSchemaList(c, schemaUrl)
+			if err != nil && !c.IsInternalError() {
+				log.Warn("%v", err)
+				c.Flash.Warning(c.Tr("rcos.server.connect.failure"))
+			} else if err != nil && c.IsInternalError() {
+				log.Error(err.Error())
+				c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
+				return
+			}
 		}
 	}
 
@@ -347,6 +349,11 @@ func Home(c *context.Context) {
 	if err != nil {
 		c.NotFoundOrError(gitutil.NewError(err), "get tree entry")
 		return
+	}
+
+	// Only show button in repository header when view main branch
+	if c.Repo.BranchName == c.Repo.Repository.DefaultBranch {
+		c.Data["IsRcosButton"] = true
 	}
 
 	if entry.IsTree() {
