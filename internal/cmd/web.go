@@ -387,8 +387,7 @@ func runWeb(c *cli.Context) error {
 				// Disable routes to org pull request list by RCOS
 				// "/^:type(issues|pulls)$" to "/^:type(issues)$"
 				//m.Get("/^:type(issues|pulls)$", user.Issues)
-				// m.Get("/^:type(issues)$", user.Issues)
-				m.Get("/issues)", user.Issues)
+				m.Get("/^:type(issues)$", user.Issues)
 				m.Get("/members", org.Members)
 				m.Get("/members/action/:action", org.MembersAction)
 
