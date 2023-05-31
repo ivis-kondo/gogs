@@ -78,11 +78,12 @@ Commented out because it is not supported as a DG feature as of 2023/05/27. fork
 					<i class="octicon octicon-issue-opened"></i> {{.i18n.Tr "repo.issues"}} {{if not .Repository.EnableExternalTracker}}<span class="ui {{if not .Repository.NumOpenIssues}}gray{{else}}blue{{end}} small label">{{.Repository.NumOpenIssues}}{{end}}</span>
 				</a>
 			{{end}}
-			{{if and .Repository.AllowsPulls (not .IsGuest)}}
+			<!-- Hiding pull requests from the repository TOP tab menu by disabling the repository branch function.by RCOS -->
+			<!-- {{if and .Repository.AllowsPulls (not .IsGuest)}}
 				<a class="{{if .PageIsPullList}}active{{end}} item" href="{{.RepoLink}}/pulls">
 					<i class="octicon octicon-git-pull-request"></i> {{.i18n.Tr "repo.pulls"}} <span class="ui {{if not .Repository.NumOpenPulls}}gray{{else}}blue{{end}} small label">{{.Repository.NumOpenPulls}}</span>
 				</a>
-			{{end}}
+			{{end}} -->
 			{{if .Repository.EnableWiki}}
 				<a class="{{if .PageIsWiki}}active{{end}} item" href="{{.RepoLink}}/wiki">
 					<i class="octicon octicon-book"></i> {{.i18n.Tr "repo.wiki"}}

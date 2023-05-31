@@ -97,7 +97,8 @@
 								{{if .IsLogged}}
 									<a class="item{{if .PageIsDashboard}} active{{end}}" href="{{AppSubURL}}/">{{.i18n.Tr "dashboard"}}</a>
 									<a class="item{{if .PageIsIssues}} active{{end}}" href="{{AppSubURL}}/issues">{{.i18n.Tr "issues"}}</a>
-									<a class="item{{if .PageIsPulls}} active{{end}}" href="{{AppSubURL}}/pulls">{{.i18n.Tr "pull_requests"}}</a>
+									<!-- Hiding the pull request list screen by disabling the repository branch function by RCOS -->
+									<!-- <a class="item{{if .PageIsPulls}} active{{end}}" href="{{AppSubURL}}/pulls">{{.i18n.Tr "pull_requests"}}</a> -->
 								{{else}}
 									<a class="item{{if .PageIsHome}} active{{end}}" href="{{AppSubURL}}/">{{.i18n.Tr "home"}}</a>
 								{{end}}
@@ -122,7 +123,7 @@
 												<a class="item" href="{{AppSubURL}}/repo/create">
 													<i class="octicon octicon-plus"></i> {{.i18n.Tr "new_repo"}}
 												</a>
-												<!--Disabling the repository migration function-->
+												<!--Disabling the repository migration function by RCOS-->
 												<!-- <a class="item" href="{{AppSubURL}}/repo/migrate">
 													<i class="octicon octicon-repo-clone"></i> {{.i18n.Tr "new_migrate"}}
 												</a> -->
