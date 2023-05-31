@@ -688,6 +688,7 @@ func createDmp(c context.AbstructContext, f AbstructRepoUtil, d AbstructDmpUtil)
 	c.CallData()["IsJSON"] = true
 	c.CallData()["IsDmpJson"] = true
 	c.CallData()["IsNewFile"] = true
+	c.CallData()["IsRcosButton"] = true
 
 	c.CallData()["FileContent"] = combinedDmp
 	c.CallData()["ParentTreePath"] = path.Dir(c.GetRepo().GetTreePath())
