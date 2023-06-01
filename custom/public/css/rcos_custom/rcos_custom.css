@@ -58,3 +58,6 @@ This css is be adapted to template files in custom>templates
 	justify-content: center;
 
 }
+#branch_item > p{
+    padding: 8px 10px;
+}
