@@ -35,3 +35,17 @@ This css is be adapted to template files in custom>templates
 .repository .ui.header .ui.right select{
     height: 2.2em;
 }
+
+/*----------------
+    custom>templates>repo>home.tmpl
+------------------*/
+#branch_item {
+    background: transparent none!important;
+    color: rgba(0,0,0,.6)!important;
+    font-weight: 400;
+    border-radius: 0.28571429rem;
+    text-transform: none;
+    text-shadow: none!important;
+    -webkit-box-shadow: 0 0 0 1px rgba(34,36,38,.15) inset;
+    box-shadow: 0 0 0 1px rgba(34,36,38,.15) inset;
+}
