@@ -51,8 +51,10 @@ This css is be adapted to template files in custom>templates
     font-size: .92857143rem;
     font-family: "Helvetica Neue","Microsoft YaHei",Arial,Helvetica,sans-serif!important;
 
-    margin: 0 0.25em 0 0;
+    margin: 0 0.5em 0 0;
     padding: 0.78571429em 1.5em 0.78571429em;
 
     text-align: center;
+
+    height: 90;
 }
