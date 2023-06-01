@@ -35,7 +35,9 @@
 			{{end}} -->
 			<!-- Disable the branch pulldown feature. However, it will be restored in future development by RCOS -->
 			<!-- {{template "repo/branch_dropdown" .}} -->
-			<p>{{.i18n.Tr "rcos.branch.master"}}</p>
+			<div>
+				<p>{{.i18n.Tr "rcos.branch.master"}}</p>
+			</div>
 			<div class="fitted item">
 				<div class="ui breadcrumb">
 					<a class="section" href="{{.RepoLink}}/src/{{EscapePound .BranchName}}">{{EllipsisString .Repository.Name 15}}</a>
