@@ -54,9 +54,4 @@ This css is be adapted to template files in custom>templates
     margin: 0 0.5em 0 0;
     padding: 0.78571429em 1.5em 0.78571429em;
 
-    text-align: center;
-    display: flex;
-	justify-content: center;
-	align-items: center;
-    height: 90%;
 }
