@@ -357,11 +357,11 @@ func RepoAssignment(pages ...bool) macaron.Handler {
 		*/
 		// checking branche list has 'master' branch
 		hasMasterBranch := false
-		// for _, baranchName := range branches {
-		// 	if baranchName == "master" {
-		// 		hasMasterBranch = true
-		// 	}
-		// }
+		for _, baranchName := range branches {
+			if baranchName == "master" {
+				hasMasterBranch = true
+			}
+		}
 		if !hasMasterBranch {
 			// If the master branch cannot be retrieved, return a 404 screen
 			c.NotFoundWithErrMsg("Cannot find master branch. Please wait for 1~2 minutes and try accessing again.")
