@@ -603,7 +603,8 @@ func runWeb(c *cli.Context) error {
 
 		m.Group("/:username/:reponame", func() {
 			m.Group("", func() {
-				m.Get("/releases", repo.MustBeNotBare, repo.Releases)
+				// Disable route to repo release request confirmation screen by RCOS
+				// m.Get("/releases", repo.MustBeNotBare, repo.Releases)
 				// Disable route to pull request confirmation screen by RCOS
 				//m.Get("/pulls", repo.RetrieveLabels, repo.Pulls)
 				m.Get("/pulls/:index", repo.ViewPull)
