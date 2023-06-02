@@ -1,0 +1,3480 @@
+テスト JST
+key : workflowIdentifier
+CHANGE STRING row_num : 1
+key : contentSize
+key : datasetStructure
+CHANGE STRING row_num : 3
+key : useDocker
+CHANGE STRING row_num : 2
+CHANGE STRING row_num : 5
+CHANGE STRING row_num : 4
+key : createDate
+CHANGE STRING row_num : 6
+CHANGE STRING row_num : 7
+key : schema
+key : amedNumber
+key : project
+key : fiscalYear
+CHANGE STRING row_num : 1
+key : title
+CHANGE STRING row_num : 2
+key : problemName
+CHANGE STRING row_num : 3
+key : representative
+CHANGE STRING row_num : 1
+key : post
+key : belongTo
+CHANGE STRING row_num : 2
+CHANGE STRING row_num : 3
+key : name
+RETTURN row_num : 3
+CHANGE OBJECT row_num : 6
+CHANGE OBJECT row_num : 13
+key : forPublication
+RETTURN row_num : 6
+CHANGE STRING row_num : 1
+key : hasUsed
+key : unwriteReason
+CHANGE STRING row_num : 2
+CHANGE OBJECT row_num : 15
+RETTURN row_num : 2
+key : researches
+CHANGE STRING row_num : 1
+key : title
+key : type
+CHANGE STRING row_num : 1
+key : 0
+CHANGE STRING row_num : 2
+key : 1
+key : 2
+CHANGE STRING row_num : 3
+CHANGE STRING row_num : 4
+key : 3
+key : 4
+CHANGE STRING row_num : 5
+CHANGE STRING row_num : 6
+key : 6
+key : 5
+CHANGE STRING row_num : 7
+CHANGE STRING row_num : 8
+key : 7
+key : 8
+CHANGE STRING row_num : 9
+key : 9
+CHANGE STRING row_num : 10
+CHANGE STRING row_num : 11
+key : 11
+CHANGE STRING row_num : 12
+key : 13
+key : 12
+CHANGE STRING row_num : 13
+CHANGE STRING row_num : 14
+key : 10
+CHANGE STRING row_num : 15
+key : 15
+key : 14
+CHANGE STRING row_num : 16
+key : 16
+CHANGE STRING row_num : 17
+key : 17
+CHANGE STRING row_num : 18
+key : 18
+CHANGE STRING row_num : 19
+key : 19
+CHANGE STRING row_num : 20
+CHANGE STRING row_num : 21
+key : 20
+CHANGE STRING row_num : 22
+key : 21
+key : 22
+CHANGE STRING row_num : 23
+RETTURN row_num : 23
+CHANGE ARRY row_num : 24
+CHANGE STRING row_num : 25
+key : releasePolicy
+key : concealReason
+key : description
+CHANGE STRING row_num : 26
+key : hasOfferPolicy
+CHANGE STRING row_num : 27
+key : policyName
+CHANGE STRING row_num : 28
+key : repositoryType
+CHANGE STRING row_num : 29
+CHANGE STRING row_num : 30
+key : repositoryName
+CHANGE STRING row_num : 31
+CHANGE STRING row_num : 32
+key : dataAmount
+CHANGE STRING row_num : 33
+key : isRegistered
+key : processingPolicy
+key : dataSchema
+CHANGE STRING row_num : 35
+CHANGE STRING row_num : 36
+CHANGE STRING row_num : 34
+key : registeredInfo
+RETTURN row_num : 36
+CHANGE ARRY row_num : 51
+CHANGE STRING row_num : 1
+key : isConcurrent
+key : numberOfPeople
+key : researchers
+CHANGE STRING row_num : 1
+key : belongTo
+key : manager
+CHANGE STRING row_num : 1
+key : personal
+key : post
+CHANGE STRING row_num : 2
+CHANGE STRING row_num : 3
+RETTURN row_num : 3
+CHANGE OBJECT row_num : 4
+key : name
+RETTURN row_num : 4
+CHANGE OBJECT row_num : 5
+CHANGE STRING row_num : 1
+key : belongTo
+key : staff
+CHANGE STRING row_num : 2
+key : name
+CHANGE STRING row_num : 3
+key : e-Rad
+key : post
+CHANGE STRING row_num : 4
+key : canPublished
+CHANGE STRING row_num : 6
+key : postType
+CHANGE STRING row_num : 7
+key : financialResource
+CHANGE STRING row_num : 5
+key : employmentStatus
+CHANGE STRING row_num : 9
+key : roles
+key : remarks
+CHANGE STRING row_num : 10
+RETTURN row_num : 10
+CHANGE STRING row_num : 8
+CHANGE OBJECT row_num : 66
+RETTURN row_num : 15
+CHANGE ARRY row_num : 15
+RETTURN row_num : 66
+colNum :6
+rowNum :66
+テスト JST
+rowNum :66
+colNum :6
+テスト JST
+rowNum :44
+colNum :6
+テスト JST
+colNum :6
+テスト JST
+colNum :6
+テスト JST
+colNum :6
+テスト JST
+colNum :6
+colNum :6
+テスト JST
+テスト JST
+colNum :6
+テスト JST
+colNum :6
+テスト JST
+colNum :5
+テスト JST
+colNum :5
+テスト JST
+colNum :5
+テスト JST
+rowNum :44
+colNum :5
+テスト AMED
+rowNum :38
+colNum :5
+テスト METI
+colNum :4
+rowNum :32
+テスト JST
+テスト moon
+colNum :5
+rowNum :44
+rowNum :29
+colNum :3
+テスト JST
+rowNum :44
+dmpData2dArr.length :44
+,,,,
+colNum :5
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+fillDmp2dArr start
+raw_index :0
+,,,,
+key_1 :workflowIdentifier
+col_index :0
+value type :string
+record_num :1
+endPoint :1
+value :basic
+raw_index :0
+dmp2DArr[0][0] = workflowIdentifier
+dmp2DArr[0][1] = basic
+dmp2DArr[i] :workflowIdentifier,,,,
+dmp2DArr[i] :workflowIdentifier,basic,,,
+changed raw_index :1
+key_1 :contentSize
+value type :string
+record_num :1
+value :1GB
+raw_index :1
+dmp2DArr[1][0] = contentSize
+endPoint :2
+dmp2DArr[i] :contentSize,,,,
+dmp2DArr[i] :contentSize,1GB,,,
+dmp2DArr[1][1] = 1GB
+key_1 :datasetStructure
+value :with_code
+changed raw_index :2
+value type :string
+record_num :1
+raw_index :2
+dmp2DArr[2][0] = datasetStructure
+dmp2DArr[2][1] = with_code
+dmp2DArr[i] :datasetStructure,,,,
+dmp2DArr[i] :datasetStructure,with_code,,,
+endPoint :3
+changed raw_index :3
+key_1 :useDocker
+value type :string
+record_num :1
+value :YES
+raw_index :3
+dmp2DArr[3][0] = useDocker
+endPoint :4
+dmp2DArr[i] :useDocker,,,,
+dmp2DArr[i] :useDocker,YES,,,
+changed raw_index :4
+dmp2DArr[3][1] = YES
+value :jst
+key_1 :schema
+value type :string
+record_num :1
+endPoint :5
+raw_index :4
+dmp2DArr[i] :schema,,,,
+dmp2DArr[4][0] = schema
+dmp2DArr[4][1] = jst
+dmp2DArr[i] :schema,jst,,,
+changed raw_index :5
+value :2021/07/21
+key_1 :createDate
+value type :string
+record_num :1
+dmp2DArr[5][0] = createDate
+raw_index :5
+endPoint :6
+dmp2DArr[i] :createDate,,,,
+dmp2DArr[i] :createDate,2021/07/21,,,
+dmp2DArr[5][1] = 2021/07/21
+changed raw_index :6
+key_1 :amedNumber
+value type :string
+record_num :1
+value :0000
+raw_index :6
+dmp2DArr[6][0] = amedNumber
+dmp2DArr[i] :amedNumber,,,,
+dmp2DArr[6][1] = 0000
+endPoint :7
+dmp2DArr[i] :amedNumber,0000,,,
+changed raw_index :7
+value :[object Object]
+value type :object
+key_1 :project
+raw_index :7
+record_num :6
+dmp2DArr[7][0] = project
+endPoint :13
+fillDmp2dArr start
+raw_index :7
+dmp2DArr[i] :project,,,,
+col_index :1
+key_1 :fiscalYear
+value :2021
+value type :number
+raw_index :7
+record_num :1
+endPoint :8
+dmp2DArr[7][1] = fiscalYear
+dmp2DArr[i] :project,fiscalYear,,,
+dmp2DArr[7][2] = 2021
+dmp2DArr[i] :project,fiscalYear,2021,,
+changed raw_index :8
+key_1 :title
+value :The Project
+value type :string
+raw_index :8
+record_num :1
+dmp2DArr[8][1] = title
+dmp2DArr[i] :,title,,,
+dmp2DArr[8][2] = The Project
+dmp2DArr[i] :,title,The Project,,
+endPoint :9
+changed raw_index :9
+key_1 :problemName
+value type :string
+value :hogehoge
+raw_index :9
+record_num :1
+dmp2DArr[9][1] = problemName
+endPoint :10
+dmp2DArr[i] :,problemName,,,
+dmp2DArr[i] :,problemName,hogehoge,,
+changed raw_index :10
+dmp2DArr[9][2] = hogehoge
+value :[object Object]
+value type :object
+key_1 :representative
+record_num :3
+raw_index :10
+dmp2DArr[10][1] = representative
+dmp2DArr[i] :,representative,,,
+fillDmp2dArr start
+raw_index :10
+col_index :2
+key_1 :belongTo
+value :NII
+endPoint :13
+value type :string
+record_num :1
+endPoint :11
+raw_index :10
+dmp2DArr[10][2] = belongTo
+dmp2DArr[i] :,representative,belongTo,,
+dmp2DArr[i] :,representative,belongTo,NII,
+dmp2DArr[10][3] = NII
+changed raw_index :11
+key_1 :post
+value :hogehoge
+value type :string
+record_num :1
+endPoint :12
+raw_index :11
+dmp2DArr[11][2] = post
+dmp2DArr[i] :,,post,,
+dmp2DArr[11][3] = hogehoge
+dmp2DArr[i] :,,post,hogehoge,
+changed raw_index :12
+value :John Doe
+key_1 :name
+value type :string
+raw_index :12
+record_num :1
+endPoint :13
+dmp2DArr[12][2] = name
+dmp2DArr[12][3] = John Doe
+dmp2DArr[i] :,,name,,
+dmp2DArr[i] :,,name,John Doe,
+workflowIdentifier,basic,,,
+changed raw_index :13
+dmp2DArr.length :44
+datasetStructure,with_code,,,
+contentSize,1GB,,,
+useDocker,YES,,,
+createDate,2021/07/21,,,
+schema,jst,,,
+amedNumber,0000,,,
+project,fiscalYear,2021,,
+,title,The Project,,
+,problemName,hogehoge,,
+,representative,belongTo,NII,
+,,post,hogehoge,
+,,name,John Doe,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+changed raw_index :13
+workflowIdentifier,basic,,,
+contentSize,1GB,,,
+dmp2DArr.length :44
+datasetStructure,with_code,,,
+schema,jst,,,
+createDate,2021/07/21,,,
+project,fiscalYear,2021,,
+useDocker,YES,,,
+amedNumber,0000,,,
+,title,The Project,,
+,representative,belongTo,NII,
+,,post,hogehoge,
+,problemName,hogehoge,,
+,,name,John Doe,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+changed raw_index :13
+,,,,
+value :[object Object]
+key_1 :forPublication
+record_num :2
+value type :object
+raw_index :13
+dmp2DArr[13][0] = forPublication
+fillDmp2dArr start
+raw_index :13
+dmp2DArr[i] :forPublication,,,,
+value :false
+col_index :1
+value type :boolean
+endPoint :15
+key_1 :hasUsed
+record_num :1
+endPoint :14
+raw_index :13
+dmp2DArr[i] :forPublication,hasUsed,,,
+dmp2DArr[13][1] = hasUsed
+dmp2DArr[i] :forPublication,hasUsed,false,,
+changed raw_index :14
+dmp2DArr[13][2] = false
+value :This is just content when 'hasUsed' is true
+key_1 :unwriteReason
+value type :string
+raw_index :14
+endPoint :15
+record_num :1
+dmp2DArr[i] :,unwriteReason,,,
+dmp2DArr[14][2] = This is just content when 'hasUsed' is true
+dmp2DArr[14][1] = unwriteReason
+dmp2DArr[i] :,unwriteReason,This is just content when 'hasUsed' is true,,
+changed raw_index :15
+workflowIdentifier,basic,,,
+dmp2DArr.length :44
+datasetStructure,with_code,,,
+schema,jst,,,
+contentSize,1GB,,,
+createDate,2021/07/21,,,
+amedNumber,0000,,,
+project,fiscalYear,2021,,
+,title,The Project,,
+,problemName,hogehoge,,
+,representative,belongTo,NII,
+useDocker,YES,,,
+forPublication,hasUsed,false,,
+,,post,hogehoge,
+,unwriteReason,This is just content when 'hasUsed' is true,,
+,,,,
+,,name,John Doe,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+changed raw_index :15
+,,,,
+key_1 :researches
+value :[object Object]
+raw_index :15
+record_num :14
+value type :object
+dmp2DArr[15][0] = researches
+dmp2DArr[i] :researches,,,,
+Is Array!!!!!
+endPoint :29
+value.length :1
+value :[object Object]
+value :[{"title":"The Title","type":["ヒト個人（研究参加者及びヒト試料由来のデータ）"],"description":"hogehoge","releasePolicy":"hogehoge","concealReason":"hogehoge","hasOfferPolicy":false,"policyName":"This is just content when 'hasOfferPolicy' is true","repositoryType":"hogehoge","repositoryName":"hogehoge","dataAmount":"hogehoge","dataSchema":"Excel","processingPolicy":"hogehoge","isRegistered":false,"registeredInfo":"hogehoge"}]
+arr_data :[object Object]
+value.length :1
+nested_i :0
+arr_data_record_num :14
+arr_data :{"title":"The Title","type":["ヒト個人（研究参加者及びヒト試料由来のデータ）"],"description":"hogehoge","releasePolicy":"hogehoge","concealReason":"hogehoge","hasOfferPolicy":false,"policyName":"This is just content when 'hasOfferPolicy' is true","repositoryType":"hogehoge","repositoryName":"hogehoge","dataAmount":"hogehoge","dataSchema":"Excel","processingPolicy":"hogehoge","isRegistered":false,"registeredInfo":"hogehoge"}
+fillDmp2dArr start
+dmp2DArr[15][1] = 0
+col_index :2
+raw_index :15
+value :The Title
+value type :string
+record_num :1
+key_1 :title
+raw_index :15
+dmp2DArr[15][2] = title
+dmp2DArr[i] :researches,0,title,,
+endPoint :16
+dmp2DArr[15][3] = The Title
+dmp2DArr[i] :researches,0,title,The Title,
+key_1 :type
+changed raw_index :16
+value :ヒト個人（研究参加者及びヒト試料由来のデータ）
+record_num :1
+value type :object
+endPoint :17
+raw_index :16
+dmp2DArr[i] :,,type,,
+dmp2DArr[16][3] = ヒト個人（研究参加者及びヒト試料由来のデータ）
+dmp2DArr[i] :,,type,ヒト個人（研究参加者及びヒト試料由来のデータ）,
+changed raw_index :17
+dmp2DArr[16][2] = type
+key_1 :description
+value type :string
+record_num :1
+value :hogehoge
+dmp2DArr[17][2] = description
+raw_index :17
+dmp2DArr[i] :,,description,,
+dmp2DArr[i] :,,description,hogehoge,
+endPoint :18
+dmp2DArr[17][3] = hogehoge
+key_1 :releasePolicy
+changed raw_index :18
+value type :string
+record_num :1
+value :hogehoge
+raw_index :18
+dmp2DArr[18][2] = releasePolicy
+dmp2DArr[18][3] = hogehoge
+dmp2DArr[i] :,,releasePolicy,,
+endPoint :19
+changed raw_index :19
+dmp2DArr[i] :,,releasePolicy,hogehoge,
+key_1 :concealReason
+value type :string
+record_num :1
+value :hogehoge
+dmp2DArr[19][2] = concealReason
+raw_index :19
+dmp2DArr[i] :,,concealReason,,
+endPoint :20
+dmp2DArr[19][3] = hogehoge
+dmp2DArr[i] :,,concealReason,hogehoge,
+key_1 :hasOfferPolicy
+value :false
+value type :boolean
+changed raw_index :20
+raw_index :20
+record_num :1
+dmp2DArr[i] :,,hasOfferPolicy,,
+dmp2DArr[20][2] = hasOfferPolicy
+endPoint :21
+dmp2DArr[i] :,,hasOfferPolicy,false,
+dmp2DArr[20][3] = false
+value :This is just content when 'hasOfferPolicy' is true
+changed raw_index :21
+value type :string
+key_1 :policyName
+record_num :1
+raw_index :21
+dmp2DArr[21][3] = This is just content when 'hasOfferPolicy' is true
+endPoint :22
+dmp2DArr[i] :,,policyName,,
+dmp2DArr[21][2] = policyName
+dmp2DArr[i] :,,policyName,This is just content when 'hasOfferPolicy' is true,
+key_1 :repositoryType
+value :hogehoge
+changed raw_index :22
+raw_index :22
+value type :string
+dmp2DArr[22][2] = repositoryType
+dmp2DArr[i] :,,repositoryType,,
+endPoint :23
+record_num :1
+dmp2DArr[22][3] = hogehoge
+dmp2DArr[i] :,,repositoryType,hogehoge,
+changed raw_index :23
+value type :string
+key_1 :repositoryName
+record_num :1
+value :hogehoge
+endPoint :24
+raw_index :23
+dmp2DArr[23][2] = repositoryName
+dmp2DArr[i] :,,repositoryName,,
+dmp2DArr[i] :,,repositoryName,hogehoge,
+changed raw_index :24
+dmp2DArr[23][3] = hogehoge
+key_1 :dataAmount
+value :hogehoge
+value type :string
+raw_index :24
+endPoint :25
+record_num :1
+dmp2DArr[24][2] = dataAmount
+dmp2DArr[i] :,,dataAmount,,
+dmp2DArr[i] :,,dataAmount,hogehoge,
+changed raw_index :25
+dmp2DArr[24][3] = hogehoge
+key_1 :dataSchema
+value :Excel
+record_num :1
+value type :string
+endPoint :26
+raw_index :25
+dmp2DArr[25][2] = dataSchema
+dmp2DArr[i] :,,dataSchema,,
+dmp2DArr[i] :,,dataSchema,Excel,
+key_1 :processingPolicy
+dmp2DArr[25][3] = Excel
+value type :string
+changed raw_index :26
+record_num :1
+value :hogehoge
+endPoint :27
+dmp2DArr[26][2] = processingPolicy
+dmp2DArr[i] :,,processingPolicy,,
+dmp2DArr[26][3] = hogehoge
+raw_index :26
+dmp2DArr[i] :,,processingPolicy,hogehoge,
+changed raw_index :27
+value :false
+key_1 :isRegistered
+value type :boolean
+raw_index :27
+dmp2DArr[27][2] = isRegistered
+endPoint :28
+record_num :1
+dmp2DArr[i] :,,isRegistered,,
+dmp2DArr[i] :,,isRegistered,false,
+dmp2DArr[27][3] = false
+changed raw_index :28
+key_1 :registeredInfo
+value :hogehoge
+value type :string
+endPoint :29
+record_num :1
+raw_index :28
+dmp2DArr[i] :,,registeredInfo,,
+dmp2DArr[i] :,,registeredInfo,hogehoge,
+dmp2DArr[28][2] = registeredInfo
+changed raw_index :29
+dmp2DArr[28][3] = hogehoge
+workflowIdentifier,basic,,,
+contentSize,1GB,,,
+dmp2DArr.length :44
+useDocker,YES,,,
+datasetStructure,with_code,,,
+createDate,2021/07/21,,,
+project,fiscalYear,2021,,
+amedNumber,0000,,,
+,title,The Project,,
+,representative,belongTo,NII,
+schema,jst,,,
+,,post,hogehoge,
+,problemName,hogehoge,,
+forPublication,hasUsed,false,,
+,,name,John Doe,
+,unwriteReason,This is just content when 'hasUsed' is true,,
+,,type,ヒト個人（研究参加者及びヒト試料由来のデータ）,
+researches,0,title,The Title,
+,,description,hogehoge,
+,,concealReason,hogehoge,
+,,hasOfferPolicy,false,
+,,releasePolicy,hogehoge,
+,,policyName,This is just content when 'hasOfferPolicy' is true,
+,,repositoryName,hogehoge,
+,,repositoryType,hogehoge,
+,,dataAmount,hogehoge,
+,,processingPolicy,hogehoge,
+,,registeredInfo,hogehoge,
+,,dataSchema,Excel,
+,,isRegistered,false,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+changed raw_index :29
+value :[object Object]
+key_1 :researchers
+,,,,
+value type :object
+record_num :15
+endPoint :44
+dmp2DArr[29][0] = researchers
+fillDmp2dArr start
+dmp2DArr[i] :researchers,,,,
+raw_index :29
+raw_index :29
+key_1 :numberOfPeople
+value :1
+col_index :1
+endPoint :30
+value type :number
+raw_index :29
+dmp2DArr[29][1] = numberOfPeople
+dmp2DArr[i] :researchers,numberOfPeople,,,
+dmp2DArr[i] :researchers,numberOfPeople,1,,
+dmp2DArr[29][2] = 1
+changed raw_index :30
+record_num :1
+key_1 :manager
+value :[object Object]
+raw_index :30
+value type :object
+record_num :4
+dmp2DArr[30][1] = manager
+fillDmp2dArr start
+dmp2DArr[i] :,manager,,,
+endPoint :34
+raw_index :30
+key_1 :isConcurrent
+col_index :2
+value type :boolean
+record_num :1
+value :false
+raw_index :30
+dmp2DArr[30][2] = isConcurrent
+endPoint :31
+dmp2DArr[i] :,manager,isConcurrent,,
+dmp2DArr[i] :,manager,isConcurrent,false,
+changed raw_index :31
+dmp2DArr[30][3] = false
+key_1 :personal
+value :[object Object]
+record_num :3
+value type :object
+raw_index :31
+endPoint :34
+dmp2DArr[31][2] = personal
+raw_index :31
+dmp2DArr[i] :,,personal,,
+key_1 :belongTo
+fillDmp2dArr start
+value type :string
+col_index :3
+value :NII
+record_num :1
+dmp2DArr[31][3] = belongTo
+dmp2DArr[i] :,,personal,belongTo,
+raw_index :31
+dmp2DArr[31][4] = NII
+dmp2DArr[i] :,,personal,belongTo,NII
+changed raw_index :32
+key_1 :post
+endPoint :32
+value :hogehoge
+value type :string
+raw_index :32
+record_num :1
+dmp2DArr[i] :,,,post,
+dmp2DArr[32][3] = post
+dmp2DArr[32][4] = hogehoge
+key_1 :name
+changed raw_index :33
+dmp2DArr[i] :,,,post,hogehoge
+endPoint :33
+value :Bill Doe
+value type :string
+record_num :1
+endPoint :34
+raw_index :33
+dmp2DArr[33][3] = name
+dmp2DArr[33][4] = Bill Doe
+dmp2DArr[i] :,,,name,Bill Doe
+changed raw_index :34
+workflowIdentifier,basic,,,
+dmp2DArr.length :44
+dmp2DArr[i] :,,,name,
+datasetStructure,with_code,,,
+useDocker,YES,,,
+contentSize,1GB,,,
+createDate,2021/07/21,,,
+amedNumber,0000,,,
+schema,jst,,,
+project,fiscalYear,2021,,
+,representative,belongTo,NII,
+,title,The Project,,
+,problemName,hogehoge,,
+,,name,John Doe,
+forPublication,hasUsed,false,,
+,unwriteReason,This is just content when 'hasUsed' is true,,
+,,type,ヒト個人（研究参加者及びヒト試料由来のデータ）,
+,,post,hogehoge,
+,,description,hogehoge,
+,,releasePolicy,hogehoge,
+researches,0,title,The Title,
+,,concealReason,hogehoge,
+,,policyName,This is just content when 'hasOfferPolicy' is true,
+,,hasOfferPolicy,false,
+,,repositoryType,hogehoge,
+,,dataAmount,hogehoge,
+,,repositoryName,hogehoge,
+,,dataSchema,Excel,
+,,isRegistered,false,
+,,registeredInfo,hogehoge,
+,,processingPolicy,hogehoge,
+researchers,numberOfPeople,1,,
+,,personal,belongTo,NII
+,manager,isConcurrent,false,
+,,,post,hogehoge
+,,,,
+,,,name,Bill Doe
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+changed raw_index :34
+dmp2DArr.length :44
+workflowIdentifier,basic,,,
+datasetStructure,with_code,,,
+,,,,
+contentSize,1GB,,,
+useDocker,YES,,,
+amedNumber,0000,,,
+createDate,2021/07/21,,,
+project,fiscalYear,2021,,
+schema,jst,,,
+,problemName,hogehoge,,
+,representative,belongTo,NII,
+,,post,hogehoge,
+,title,The Project,,
+forPublication,hasUsed,false,,
+,unwriteReason,This is just content when 'hasUsed' is true,,
+,,type,ヒト個人（研究参加者及びヒト試料由来のデータ）,
+,,name,John Doe,
+researches,0,title,The Title,
+,,description,hogehoge,
+,,concealReason,hogehoge,
+,,releasePolicy,hogehoge,
+,,policyName,This is just content when 'hasOfferPolicy' is true,
+,,hasOfferPolicy,false,
+,,repositoryType,hogehoge,
+,,dataAmount,hogehoge,
+,,repositoryName,hogehoge,
+,,processingPolicy,hogehoge,
+,,isRegistered,false,
+,,registeredInfo,hogehoge,
+researchers,numberOfPeople,1,,
+,manager,isConcurrent,false,
+,,dataSchema,Excel,
+,,personal,belongTo,NII
+,,,name,Bill Doe
+,,,,
+,,,post,hogehoge
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+changed raw_index :34
+,,,,
+key_1 :staff
+value :[object Object]
+,,,,
+value type :object
+record_num :10
+dmp2DArr[34][1] = staff
+dmp2DArr[i] :,staff,,,
+endPoint :44
+raw_index :34
+value.length :1
+value :[object Object]
+Is Array!!!!!
+value :[{"belongTo":"NII","post":"hogehoge","name":"Mary Doe","e-Rad":"0000","canPublished":false,"postType":"Professor","financialResource":"AMED","employmentStatus":"full-time","roles":"data curation","remarks":"hogehoge"}]
+value.length :1
+nested_i :0
+arr_data :[object Object]
+arr_data :{"belongTo":"NII","post":"hogehoge","name":"Mary Doe","e-Rad":"0000","canPublished":false,"postType":"Professor","financialResource":"AMED","employmentStatus":"full-time","roles":"data curation","remarks":"hogehoge"}
+fillDmp2dArr start
+arr_data_record_num :10
+dmp2DArr[34][2] = 0
+col_index :3
+raw_index :34
+record_num :1
+key_1 :belongTo
+value type :string
+raw_index :34
+endPoint :35
+dmp2DArr[i] :,staff,0,belongTo,
+dmp2DArr[34][3] = belongTo
+dmp2DArr[34][4] = NII
+dmp2DArr[i] :,staff,0,belongTo,NII
+value :NII
+changed raw_index :35
+key_1 :post
+value :hogehoge
+value type :string
+endPoint :36
+record_num :1
+dmp2DArr[35][3] = post
+raw_index :35
+dmp2DArr[i] :,,,post,
+dmp2DArr[i] :,,,post,hogehoge
+changed raw_index :36
+dmp2DArr[35][4] = hogehoge
+record_num :1
+value type :string
+value :Mary Doe
+endPoint :37
+raw_index :36
+dmp2DArr[36][3] = name
+dmp2DArr[i] :,,,name,
+dmp2DArr[36][4] = Mary Doe
+key_1 :name
+dmp2DArr[i] :,,,name,Mary Doe
+key_1 :e-Rad
+changed raw_index :37
+value type :string
+raw_index :37
+value :0000
+record_num :1
+dmp2DArr[37][3] = e-Rad
+dmp2DArr[i] :,,,e-Rad,
+dmp2DArr[37][4] = 0000
+endPoint :38
+dmp2DArr[i] :,,,e-Rad,0000
+changed raw_index :38
+value :false
+key_1 :canPublished
+value type :boolean
+raw_index :38
+endPoint :39
+record_num :1
+dmp2DArr[i] :,,,canPublished,
+dmp2DArr[38][3] = canPublished
+dmp2DArr[38][4] = false
+dmp2DArr[i] :,,,canPublished,false
+key_1 :postType
+value :Professor
+value type :string
+changed raw_index :39
+endPoint :40
+record_num :1
+raw_index :39
+dmp2DArr[i] :,,,postType,
+dmp2DArr[i] :,,,postType,Professor
+dmp2DArr[39][4] = Professor
+dmp2DArr[39][3] = postType
+changed raw_index :40
+key_1 :financialResource
+value :AMED
+value type :string
+raw_index :40
+dmp2DArr[40][3] = financialResource
+dmp2DArr[i] :,,,financialResource,
+endPoint :41
+dmp2DArr[i] :,,,financialResource,AMED
+record_num :1
+dmp2DArr[40][4] = AMED
+value :full-time
+changed raw_index :41
+key_1 :employmentStatus
+value type :string
+raw_index :41
+record_num :1
+dmp2DArr[41][3] = employmentStatus
+dmp2DArr[i] :,,,employmentStatus,
+endPoint :42
+dmp2DArr[i] :,,,employmentStatus,full-time
+dmp2DArr[41][4] = full-time
+key_1 :roles
+changed raw_index :42
+value :data curation
+value type :string
+record_num :1
+endPoint :43
+raw_index :42
+dmp2DArr[42][3] = roles
+dmp2DArr[42][4] = data curation
+dmp2DArr[i] :,,,roles,data curation
+key_1 :remarks
+dmp2DArr[i] :,,,roles,
+value :hogehoge
+value type :string
+raw_index :43
+changed raw_index :43
+endPoint :44
+dmp2DArr[i] :,,,remarks,
+dmp2DArr[43][3] = remarks
+dmp2DArr[43][4] = hogehoge
+record_num :1
+changed raw_index :44
+workflowIdentifier,basic,,,
+datasetStructure,with_code,,,
+dmp2DArr[i] :,,,remarks,hogehoge
+schema,jst,,,
+dmp2DArr.length :44
+contentSize,1GB,,,
+useDocker,YES,,,
+createDate,2021/07/21,,,
+amedNumber,0000,,,
+,title,The Project,,
+project,fiscalYear,2021,,
+,representative,belongTo,NII,
+,,name,John Doe,
+,problemName,hogehoge,,
+forPublication,hasUsed,false,,
+,unwriteReason,This is just content when 'hasUsed' is true,,
+,,description,hogehoge,
+researches,0,title,The Title,
+,,type,ヒト個人（研究参加者及びヒト試料由来のデータ）,
+,,post,hogehoge,
+,,concealReason,hogehoge,
+,,releasePolicy,hogehoge,
+,,repositoryName,hogehoge,
+,,policyName,This is just content when 'hasOfferPolicy' is true,
+,,dataAmount,hogehoge,
+,,hasOfferPolicy,false,
+,,dataSchema,Excel,
+,,repositoryType,hogehoge,
+,,processingPolicy,hogehoge,
+,,isRegistered,false,
+,,registeredInfo,hogehoge,
+researchers,numberOfPeople,1,,
+,,,post,hogehoge
+,,personal,belongTo,NII
+,manager,isConcurrent,false,
+,,,name,Bill Doe
+,staff,0,belongTo,NII
+,,,name,Mary Doe
+,,,post,hogehoge
+,,,e-Rad,0000
+,,,postType,Professor
+,,,employmentStatus,full-time
+,,,canPublished,false
+,,,financialResource,AMED
+,,,remarks,hogehoge
+,,,roles,data curation
+changed raw_index :44
+workflowIdentifier,basic,,,
+datasetStructure,with_code,,,
+createDate,2021/07/21,,,
+contentSize,1GB,,,
+dmp2DArr.length :44
+amedNumber,0000,,,
+useDocker,YES,,,
+project,fiscalYear,2021,,
+,title,The Project,,
+,problemName,hogehoge,,
+,representative,belongTo,NII,
+schema,jst,,,
+,,post,hogehoge,
+forPublication,hasUsed,false,,
+,unwriteReason,This is just content when 'hasUsed' is true,,
+researches,0,title,The Title,
+,,type,ヒト個人（研究参加者及びヒト試料由来のデータ）,
+,,description,hogehoge,
+,,name,John Doe,
+,,releasePolicy,hogehoge,
+,,concealReason,hogehoge,
+,,policyName,This is just content when 'hasOfferPolicy' is true,
+,,hasOfferPolicy,false,
+,,repositoryType,hogehoge,
+,,repositoryName,hogehoge,
+,,dataAmount,hogehoge,
+,,processingPolicy,hogehoge,
+,,dataSchema,Excel,
+,,isRegistered,false,
+,,registeredInfo,hogehoge,
+researchers,numberOfPeople,1,,
+,manager,isConcurrent,false,
+,,,post,hogehoge
+,,personal,belongTo,NII
+,staff,0,belongTo,NII
+,,,post,hogehoge
+,,,name,Bill Doe
+,,,e-Rad,0000
+,,,name,Mary Doe
+,,,canPublished,false
+,,,financialResource,AMED
+,,,postType,Professor
+,,,employmentStatus,full-time
+,,,roles,data curation
+changed raw_index :44
+,,,remarks,hogehoge
+workflowIdentifier,basic,,,
+dmp2DArr.length :44
+datasetStructure,with_code,,,
+contentSize,1GB,,,
+schema,jst,,,
+useDocker,YES,,,
+createDate,2021/07/21,,,
+project,fiscalYear,2021,,
+,title,The Project,,
+,representative,belongTo,NII,
+,,post,hogehoge,
+amedNumber,0000,,,
+,problemName,hogehoge,,
+forPublication,hasUsed,false,,
+,unwriteReason,This is just content when 'hasUsed' is true,,
+,,type,ヒト個人（研究参加者及びヒト試料由来のデータ）,
+,,name,John Doe,
+researches,0,title,The Title,
+,,description,hogehoge,
+,,releasePolicy,hogehoge,
+,,policyName,This is just content when 'hasOfferPolicy' is true,
+,,hasOfferPolicy,false,
+,,concealReason,hogehoge,
+,,repositoryName,hogehoge,
+,,repositoryType,hogehoge,
+,,dataAmount,hogehoge,
+,,dataSchema,Excel,
+,,isRegistered,false,
+,,processingPolicy,hogehoge,
+researchers,numberOfPeople,1,,
+,manager,isConcurrent,false,
+,,personal,belongTo,NII
+,,registeredInfo,hogehoge,
+,,,name,Bill Doe
+,,,post,hogehoge
+,staff,0,belongTo,NII
+,,,name,Mary Doe
+,,,e-Rad,0000
+,,,post,hogehoge
+,,,postType,Professor
+,,,financialResource,AMED
+,,,employmentStatus,full-time
+,,,canPublished,false
+,,,roles,data curation
+finish fillDmp2dArr
+dmptable.length :44
+workflowIdentifier,basic,,,
+,,,remarks,hogehoge
+datasetStructure,with_code,,,
+contentSize,1GB,,,
+schema,jst,,,
+useDocker,YES,,,
+createDate,2021/07/21,,,
+project,fiscalYear,2021,,
+amedNumber,0000,,,
+,title,The Project,,
+,problemName,hogehoge,,
+,representative,belongTo,NII,
+,,name,John Doe,
+forPublication,hasUsed,false,,
+,,post,hogehoge,
+,unwriteReason,This is just content when 'hasUsed' is true,,
+researches,0,title,The Title,
+,,type,ヒト個人（研究参加者及びヒト試料由来のデータ）,
+,,concealReason,hogehoge,
+,,releasePolicy,hogehoge,
+,,description,hogehoge,
+,,policyName,This is just content when 'hasOfferPolicy' is true,
+,,hasOfferPolicy,false,
+,,repositoryName,hogehoge,
+,,repositoryType,hogehoge,
+,,dataSchema,Excel,
+,,dataAmount,hogehoge,
+,,processingPolicy,hogehoge,
+,,isRegistered,false,
+,,registeredInfo,hogehoge,
+researchers,numberOfPeople,1,,
+,manager,isConcurrent,false,
+,,,post,hogehoge
+,,personal,belongTo,NII
+,,,name,Bill Doe
+,staff,0,belongTo,NII
+,,,name,Mary Doe
+,,,post,hogehoge
+,,,canPublished,false
+,,,postType,Professor
+,,,financialResource,AMED
+,,,employmentStatus,full-time
+,,,roles,data curation
+,,,e-Rad,0000
+,,,remarks,hogehoge
+テスト moon
+rowNum :29
+dmpData2dArr.length :29
+colNum :3
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+fillDmp2dArr start
+raw_index :0
+key_1 :workflowIdentifier
+col_index :0
+value type :string
+record_num :1
+raw_index :0
+endPoint :1
+value :basic
+dmp2DArr[i] :workflowIdentifier,,
+dmp2DArr[0][1] = basic
+dmp2DArr[i] :workflowIdentifier,basic,
+changed raw_index :1
+key_1 :contentSize
+value :1GB
+value type :string
+dmp2DArr[0][0] = workflowIdentifier
+record_num :1
+endPoint :2
+dmp2DArr[1][0] = contentSize
+raw_index :1
+dmp2DArr[1][1] = 1GB
+dmp2DArr[i] :contentSize,1GB,
+dmp2DArr[i] :contentSize,,
+changed raw_index :2
+key_1 :datasetStructure
+value type :string
+value :with_code
+record_num :1
+endPoint :3
+raw_index :2
+dmp2DArr[2][0] = datasetStructure
+dmp2DArr[2][1] = with_code
+dmp2DArr[i] :datasetStructure,with_code,
+changed raw_index :3
+dmp2DArr[i] :datasetStructure,,
+key_1 :useDocker
+value :YES
+value type :string
+raw_index :3
+record_num :1
+dmp2DArr[3][0] = useDocker
+dmp2DArr[i] :useDocker,,
+endPoint :4
+dmp2DArr[3][1] = YES
+dmp2DArr[i] :useDocker,YES,
+changed raw_index :4
+value type :string
+value :moonshot
+key_1 :schema
+record_num :1
+endPoint :5
+raw_index :4
+dmp2DArr[4][0] = schema
+dmp2DArr[i] :schema,,
+dmp2DArr[4][1] = moonshot
+dmp2DArr[i] :schema,moonshot,
+changed raw_index :5
+value :AMED
+value type :string
+key_1 :funder
+record_num :1
+dmp2DArr[5][0] = funder
+endPoint :6
+raw_index :5
+dmp2DArr[i] :funder,,
+dmp2DArr[i] :funder,AMED,
+changed raw_index :6
+dmp2DArr[5][1] = AMED
+value type :string
+record_num :1
+key_1 :eRadProjectID
+value :hogehoge
+endPoint :7
+raw_index :6
+dmp2DArr[6][0] = eRadProjectID
+dmp2DArr[6][1] = hogehoge
+dmp2DArr[i] :eRadProjectID,,
+dmp2DArr[i] :eRadProjectID,hogehoge,
+key_1 :projectName
+changed raw_index :7
+value :誰もが自在に活躍できるアバター共生社会の実現
+record_num :1
+value type :string
+raw_index :7
+dmp2DArr[7][0] = projectName
+dmp2DArr[i] :projectName,,
+endPoint :8
+dmp2DArr[i] :projectName,誰もが自在に活躍できるアバター共生社会の実現,
+dmp2DArr[7][1] = 誰もが自在に活躍できるアバター共生社会の実現
+changed raw_index :8
+key_1 :dataNo
+value type :string
+value :hogehoge
+raw_index :8
+record_num :1
+endPoint :9
+dmp2DArr[8][0] = dataNo
+dmp2DArr[8][1] = hogehoge
+dmp2DArr[i] :dataNo,,
+dmp2DArr[i] :dataNo,hogehoge,
+value :〇〇実証においてセンサより撮像したデータ及び関連データ
+changed raw_index :9
+value type :string
+key_1 :dataTitle
+record_num :1
+endPoint :10
+dmp2DArr[9][0] = dataTitle
+dmp2DArr[i] :dataTitle,,
+dmp2DArr[9][1] = 〇〇実証においてセンサより撮像したデータ及び関連データ
+dmp2DArr[i] :dataTitle,〇〇実証においてセンサより撮像したデータ及び関連データ,
+changed raw_index :10
+raw_index :9
+key_1 :dataPublished
+value :2021-04-26
+value type :string
+endPoint :11
+record_num :1
+raw_index :10
+dmp2DArr[10][0] = dataPublished
+dmp2DArr[10][1] = 2021-04-26
+dmp2DArr[i] :dataPublished,,
+dmp2DArr[i] :dataPublished,2021-04-26,
+value :〇〇実証においてセンサより撮像したデータであり、道路の画像データ
+key_1 :dataDescription
+changed raw_index :11
+record_num :1
+raw_index :11
+value type :string
+dmp2DArr[11][0] = dataDescription
+dmp2DArr[i] :dataDescription,,
+endPoint :12
+dmp2DArr[i] :dataDescription,〇〇実証においてセンサより撮像したデータであり、道路の画像データ,
+dmp2DArr[11][1] = 〇〇実証においてセンサより撮像したデータであり、道路の画像データ
+key_1 :researchField
+value :ライフサイエンス (Life Science)
+value type :string
+changed raw_index :12
+record_num :1
+endPoint :13
+raw_index :12
+dmp2DArr[12][0] = researchField
+dmp2DArr[i] :researchField,,
+dmp2DArr[12][1] = ライフサイエンス (Life Science)
+dmp2DArr[i] :researchField,ライフサイエンス (Life Science),
+key_1 :dataType
+changed raw_index :13
+value :dataset
+value type :string
+record_num :1
+endPoint :14
+raw_index :13
+dmp2DArr[13][1] = dataset
+dmp2DArr[13][0] = dataType
+dmp2DArr[i] :dataType,,
+dmp2DArr[i] :dataType,dataset,
+changed raw_index :14
+key_1 :fileSize
+value type :string
+value :<1GB
+record_num :1
+raw_index :14
+dmp2DArr[14][0] = fileSize
+endPoint :15
+dmp2DArr[i] :fileSize,,
+dmp2DArr[i] :fileSize,<1GB,
+dmp2DArr[14][1] = <1GB
+key_1 :dataPolicy
+value :一定期間後に事業の実施上有益なものに対して有償又は無償で提供を開始。但しデータのクレジット標記を条件とする。なおサンプルデータを公開している。
+changed raw_index :15
+record_num :1
+value type :string
+endPoint :16
+raw_index :15
+dmp2DArr[15][0] = dataPolicy
+dmp2DArr[15][1] = 一定期間後に事業の実施上有益なものに対して有償又は無償で提供を開始。但しデータのクレジット標記を条件とする。なおサンプルデータを公開している。
+changed raw_index :16
+dmp2DArr[i] :dataPolicy,,
+dmp2DArr[i] :dataPolicy,一定期間後に事業の実施上有益なものに対して有償又は無償で提供を開始。但しデータのクレジット標記を条件とする。なおサンプルデータを公開している。,
+value :公開 (open access)
+value type :string
+key_1 :accessRights
+raw_index :16
+endPoint :17
+record_num :1
+dmp2DArr[16][0] = accessRights
+dmp2DArr[16][1] = 公開 (open access)
+dmp2DArr[i] :accessRights,公開 (open access),
+key_1 :availableDate
+changed raw_index :17
+dmp2DArr[i] :accessRights,,
+value type :string
+record_num :1
+value :2021-04-26
+endPoint :18
+raw_index :17
+dmp2DArr[17][0] = availableDate
+dmp2DArr[i] :availableDate,,
+dmp2DArr[i] :availableDate,2021-04-26,
+changed raw_index :18
+key_1 :repositoryInformation
+value :〇〇大学学術機関リポジトリ
+value type :string
+dmp2DArr[17][1] = 2021-04-26
+raw_index :18
+endPoint :19
+record_num :1
+dmp2DArr[18][0] = repositoryInformation
+dmp2DArr[18][1] = 〇〇大学学術機関リポジトリ
+dmp2DArr[i] :repositoryInformation,〇〇大学学術機関リポジトリ,
+key_1 :repositoryURL
+changed raw_index :19
+dmp2DArr[i] :repositoryInformation,,
+value type :string
+record_num :1
+value :hogehoge
+endPoint :20
+raw_index :19
+dmp2DArr[19][0] = repositoryURL
+dmp2DArr[i] :repositoryURL,,
+dmp2DArr[i] :repositoryURL,hogehoge,
+key_1 :creatorName
+dmp2DArr[19][1] = hogehoge
+value :John Doe
+changed raw_index :20
+record_num :1
+value type :string
+endPoint :21
+raw_index :20
+dmp2DArr[20][0] = creatorName
+dmp2DArr[i] :creatorName,,
+dmp2DArr[i] :creatorName,John Doe,
+dmp2DArr[20][1] = John Doe
+key_1 :eRadCreatorIdentifer
+value type :string
+changed raw_index :21
+raw_index :21
+value :hogehoge
+dmp2DArr[21][0] = eRadCreatorIdentifer
+record_num :1
+dmp2DArr[i] :eRadCreatorIdentifer,,
+dmp2DArr[21][1] = hogehoge
+dmp2DArr[i] :eRadCreatorIdentifer,hogehoge,
+endPoint :22
+key_1 :hostingInstitution
+changed raw_index :22
+value :hogehoge
+value type :string
+raw_index :22
+endPoint :23
+record_num :1
+dmp2DArr[22][0] = hostingInstitution
+dmp2DArr[i] :hostingInstitution,hogehoge,
+dmp2DArr[i] :hostingInstitution,,
+dmp2DArr[22][1] = hogehoge
+key_1 :dataManager
+changed raw_index :23
+record_num :1
+value :John Doe
+endPoint :24
+raw_index :23
+value type :string
+dmp2DArr[23][0] = dataManager
+dmp2DArr[23][1] = John Doe
+dmp2DArr[i] :dataManager,John Doe,
+changed raw_index :24
+dmp2DArr[i] :dataManager,,
+key_1 :eRadManagerIdentifer
+value type :string
+record_num :1
+value :hogehoge
+dmp2DArr[24][0] = eRadManagerIdentifer
+raw_index :24
+dmp2DArr[i] :eRadManagerIdentifer,,
+endPoint :25
+dmp2DArr[24][1] = hogehoge
+dmp2DArr[i] :eRadManagerIdentifer,hogehoge,
+value :[object Object]
+key_1 :dataManagerContact
+value type :object
+changed raw_index :25
+record_num :3
+raw_index :25
+endPoint :28
+dmp2DArr[25][0] = dataManagerContact
+fillDmp2dArr start
+dmp2DArr[i] :dataManagerContact,,
+col_index :1
+raw_index :25
+value type :string
+value :〇〇研究所〇〇部門〇〇課
+record_num :1
+key_1 :affiliation
+endPoint :26
+raw_index :25
+dmp2DArr[i] :dataManagerContact,affiliation,
+dmp2DArr[i] :dataManagerContact,affiliation,〇〇研究所〇〇部門〇〇課
+dmp2DArr[25][1] = affiliation
+dmp2DArr[25][2] = 〇〇研究所〇〇部門〇〇課
+key_1 :TEL
+changed raw_index :26
+value type :string
+value :00-000-0000
+raw_index :26
+record_num :1
+dmp2DArr[i] :,TEL,
+dmp2DArr[26][1] = TEL
+dmp2DArr[26][2] = 00-000-0000
+dmp2DArr[i] :,TEL,00-000-0000
+key_1 :eMail
+changed raw_index :27
+value :user@example.com
+value type :string
+raw_index :27
+endPoint :27
+record_num :1
+dmp2DArr[27][1] = eMail
+dmp2DArr[i] :,eMail,
+dmp2DArr[27][2] = user@example.com
+dmp2DArr[i] :,eMail,user@example.com
+endPoint :28
+changed raw_index :28
+workflowIdentifier,basic,
+dmp2DArr.length :29
+datasetStructure,with_code,
+contentSize,1GB,
+funder,AMED,
+schema,moonshot,
+projectName,誰もが自在に活躍できるアバター共生社会の実現,
+eRadProjectID,hogehoge,
+dataTitle,〇〇実証においてセンサより撮像したデータ及び関連データ,
+useDocker,YES,
+dataNo,hogehoge,
+dataPublished,2021-04-26,
+dataDescription,〇〇実証においてセンサより撮像したデータであり、道路の画像データ,
+dataType,dataset,
+researchField,ライフサイエンス (Life Science),
+dataPolicy,一定期間後に事業の実施上有益なものに対して有償又は無償で提供を開始。但しデータのクレジット標記を条件とする。なおサンプルデータを公開している。,
+accessRights,公開 (open access),
+repositoryInformation,〇〇大学学術機関リポジトリ,
+fileSize,<1GB,
+availableDate,2021-04-26,
+eRadCreatorIdentifer,hogehoge,
+creatorName,John Doe,
+repositoryURL,hogehoge,
+hostingInstitution,hogehoge,
+eRadManagerIdentifer,hogehoge,
+dataManagerContact,affiliation,〇〇研究所〇〇部門〇〇課
+dataManager,John Doe,
+,TEL,00-000-0000
+,eMail,user@example.com
+key_1 :remarks
+changed raw_index :28
+value :hogehoge
+value type :string
+record_num :1
+raw_index :28
+endPoint :29
+dmp2DArr[28][0] = remarks
+dmp2DArr[i] :remarks,,
+dmp2DArr[28][1] = hogehoge
+dmp2DArr[i] :remarks,hogehoge,
+dmp2DArr.length :29
+,,
+changed raw_index :29
+workflowIdentifier,basic,
+contentSize,1GB,
+datasetStructure,with_code,
+useDocker,YES,
+schema,moonshot,
+eRadProjectID,hogehoge,
+projectName,誰もが自在に活躍できるアバター共生社会の実現,
+dataNo,hogehoge,
+funder,AMED,
+dataPublished,2021-04-26,
+dataTitle,〇〇実証においてセンサより撮像したデータ及び関連データ,
+dataDescription,〇〇実証においてセンサより撮像したデータであり、道路の画像データ,
+researchField,ライフサイエンス (Life Science),
+dataPolicy,一定期間後に事業の実施上有益なものに対して有償又は無償で提供を開始。但しデータのクレジット標記を条件とする。なおサンプルデータを公開している。,
+dataType,dataset,
+accessRights,公開 (open access),
+fileSize,<1GB,
+availableDate,2021-04-26,
+repositoryInformation,〇〇大学学術機関リポジトリ,
+creatorName,John Doe,
+repositoryURL,hogehoge,
+hostingInstitution,hogehoge,
+eRadCreatorIdentifer,hogehoge,
+eRadManagerIdentifer,hogehoge,
+dataManagerContact,affiliation,〇〇研究所〇〇部門〇〇課
+,TEL,00-000-0000
+dataManager,John Doe,
+,eMail,user@example.com
+dmptable.length :29
+remarks,hogehoge,
+finish fillDmp2dArr
+workflowIdentifier,basic,
+datasetStructure,with_code,
+contentSize,1GB,
+useDocker,YES,
+schema,moonshot,
+eRadProjectID,hogehoge,
+projectName,誰もが自在に活躍できるアバター共生社会の実現,
+funder,AMED,
+dataNo,hogehoge,
+dataTitle,〇〇実証においてセンサより撮像したデータ及び関連データ,
+dataDescription,〇〇実証においてセンサより撮像したデータであり、道路の画像データ,
+dataPublished,2021-04-26,
+researchField,ライフサイエンス (Life Science),
+dataType,dataset,
+dataPolicy,一定期間後に事業の実施上有益なものに対して有償又は無償で提供を開始。但しデータのクレジット標記を条件とする。なおサンプルデータを公開している。,
+accessRights,公開 (open access),
+fileSize,<1GB,
+availableDate,2021-04-26,
+repositoryURL,hogehoge,
+repositoryInformation,〇〇大学学術機関リポジトリ,
+hostingInstitution,hogehoge,
+eRadCreatorIdentifer,hogehoge,
+creatorName,John Doe,
+eRadManagerIdentifer,hogehoge,
+dataManagerContact,affiliation,〇〇研究所〇〇部門〇〇課
+,eMail,user@example.com
+dataManager,John Doe,
+remarks,hogehoge,
+,TEL,00-000-0000
+テスト AMED
+dmpData2dArr.length :38
+rowNum :38
+colNum :5
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+fillDmp2dArr start
+col_index :0
+raw_index :0
+value :basic
+key_1 :workflowIdentifier
+raw_index :0
+value type :string
+endPoint :1
+record_num :1
+dmp2DArr[0][0] = workflowIdentifier
+dmp2DArr[i] :workflowIdentifier,basic,,,
+dmp2DArr[i] :workflowIdentifier,,,,
+dmp2DArr[0][1] = basic
+key_1 :contentSize
+changed raw_index :1
+value type :string
+value :1GB
+record_num :1
+dmp2DArr[1][0] = contentSize
+raw_index :1
+dmp2DArr[i] :contentSize,,,,
+dmp2DArr[1][1] = 1GB
+dmp2DArr[i] :contentSize,1GB,,,
+endPoint :2
+key_1 :datasetStructure
+changed raw_index :2
+value type :string
+record_num :1
+value :with_code
+endPoint :3
+raw_index :2
+dmp2DArr[2][0] = datasetStructure
+dmp2DArr[i] :datasetStructure,,,,
+dmp2DArr[2][1] = with_code
+dmp2DArr[i] :datasetStructure,with_code,,,
+changed raw_index :3
+key_1 :useDocker
+value type :string
+record_num :1
+raw_index :3
+value :YES
+endPoint :4
+dmp2DArr[3][0] = useDocker
+dmp2DArr[3][1] = YES
+changed raw_index :4
+dmp2DArr[i] :useDocker,YES,,,
+dmp2DArr[i] :useDocker,,,,
+key_1 :schema
+value type :string
+record_num :1
+value :amed
+dmp2DArr[i] :schema,,,,
+raw_index :4
+endPoint :5
+dmp2DArr[4][1] = amed
+dmp2DArr[i] :schema,amed,,,
+changed raw_index :5
+dmp2DArr[4][0] = schema
+value :2021/07/21
+value type :string
+key_1 :createDate
+raw_index :5
+record_num :1
+dmp2DArr[5][0] = createDate
+endPoint :6
+dmp2DArr[5][1] = 2021/07/21
+dmp2DArr[i] :createDate,2021/07/21,,,
+dmp2DArr[i] :createDate,,,,
+changed raw_index :6
+key_1 :project
+value :[object Object]
+value type :object
+record_num :6
+raw_index :6
+endPoint :12
+dmp2DArr[6][0] = project
+raw_index :6
+fillDmp2dArr start
+key_1 :fiscalYear
+dmp2DArr[i] :project,,,,
+col_index :1
+record_num :1
+endPoint :7
+value type :number
+value :2021
+raw_index :6
+dmp2DArr[6][1] = fiscalYear
+dmp2DArr[6][2] = 2021
+dmp2DArr[i] :project,fiscalYear,,,
+dmp2DArr[i] :project,fiscalYear,2021,,
+changed raw_index :7
+value :The Project
+key_1 :title
+value type :string
+record_num :1
+endPoint :8
+raw_index :7
+dmp2DArr[i] :,title,,,
+dmp2DArr[7][2] = The Project
+dmp2DArr[i] :,title,The Project,,
+dmp2DArr[7][1] = title
+key_1 :problemName
+changed raw_index :8
+record_num :1
+value :hogeho
+value type :string
+dmp2DArr[8][1] = problemName
+raw_index :8
+endPoint :9
+dmp2DArr[i] :,problemName,,,
+dmp2DArr[i] :,problemName,hogeho,,
+dmp2DArr[8][2] = hogeho
+key_1 :representative
+value :[object Object]
+changed raw_index :9
+value type :object
+raw_index :9
+record_num :3
+endPoint :12
+dmp2DArr[9][1] = representative
+raw_index :9
+dmp2DArr[i] :,representative,,,
+fillDmp2dArr start
+key_1 :belongTo
+value :NII
+col_index :2
+value type :string
+raw_index :9
+record_num :1
+dmp2DArr[9][2] = belongTo
+dmp2DArr[i] :,representative,belongTo,,
+dmp2DArr[i] :,representative,belongTo,NII,
+endPoint :10
+dmp2DArr[9][3] = NII
+changed raw_index :10
+value type :string
+value :hogeho
+record_num :1
+raw_index :10
+endPoint :11
+key_1 :post
+dmp2DArr[10][2] = post
+dmp2DArr[10][3] = hogeho
+dmp2DArr[i] :,,post,hogeho,
+dmp2DArr[i] :,,post,,
+key_1 :name
+changed raw_index :11
+value type :string
+value :John Doe
+raw_index :11
+record_num :1
+dmp2DArr[11][2] = name
+dmp2DArr[i] :,,name,,
+endPoint :12
+dmp2DArr[11][3] = John Doe
+dmp2DArr[i] :,,name,John Doe,
+dmp2DArr.length :38
+workflowIdentifier,basic,,,
+contentSize,1GB,,,
+changed raw_index :12
+datasetStructure,with_code,,,
+useDocker,YES,,,
+createDate,2021/07/21,,,
+project,fiscalYear,2021,,
+,title,The Project,,
+,problemName,hogeho,,
+schema,amed,,,
+,representative,belongTo,NII,
+,,name,John Doe,
+,,post,hogeho,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+dmp2DArr.length :38
+changed raw_index :12
+workflowIdentifier,basic,,,
+contentSize,1GB,,,
+,,,,
+datasetStructure,with_code,,,
+schema,amed,,,
+createDate,2021/07/21,,,
+project,fiscalYear,2021,,
+,problemName,hogeho,,
+useDocker,YES,,,
+,title,The Project,,
+,representative,belongTo,NII,
+,,name,John Doe,
+,,post,hogeho,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+changed raw_index :12
+value :[object Object]
+key_1 :required
+,,,,
+value type :object
+endPoint :14
+record_num :2
+dmp2DArr[12][0] = required
+dmp2DArr[i] :required,,,,
+fillDmp2dArr start
+col_index :1
+raw_index :12
+key_1 :hasRegistNecessity
+value :false
+raw_index :12
+raw_index :12
+value type :boolean
+record_num :1
+dmp2DArr[12][1] = hasRegistNecessity
+dmp2DArr[i] :required,hasRegistNecessity,,,
+endPoint :13
+dmp2DArr[12][2] = false
+dmp2DArr[i] :required,hasRegistNecessity,false,,
+key_1 :noRegistReason
+value :hogeho
+changed raw_index :13
+record_num :1
+raw_index :13
+value type :string
+dmp2DArr[13][1] = noRegistReason
+endPoint :14
+dmp2DArr[i] :,noRegistReason,,,
+dmp2DArr[13][2] = hogeho
+dmp2DArr[i] :,noRegistReason,hogeho,,
+workflowIdentifier,basic,,,
+dmp2DArr.length :38
+changed raw_index :14
+datasetStructure,with_code,,,
+useDocker,YES,,,
+contentSize,1GB,,,
+project,fiscalYear,2021,,
+createDate,2021/07/21,,,
+,title,The Project,,
+,problemName,hogeho,,
+schema,amed,,,
+,representative,belongTo,NII,
+,,post,hogeho,
+,,name,John Doe,
+required,hasRegistNecessity,false,,
+,noRegistReason,hogeho,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+key_1 :researches
+changed raw_index :14
+value :[object Object]
+value type :object
+raw_index :14
+endPoint :21
+record_num :7
+dmp2DArr[14][0] = researches
+fillDmp2dArr start
+dmp2DArr[i] :researches,,,,
+raw_index :14
+key_1 :description
+col_index :1
+value :hogeho
+value type :string
+record_num :1
+endPoint :15
+raw_index :14
+dmp2DArr[14][1] = description
+dmp2DArr[i] :researches,description,,,
+dmp2DArr[i] :researches,description,hogeho,,
+dmp2DArr[14][2] = hogeho
+changed raw_index :15
+value :[object Object]
+key_1 :data
+value type :object
+record_num :6
+raw_index :15
+dmp2DArr[15][1] = data
+dmp2DArr[i] :,data,,,
+endPoint :21
+Is Array!!!!!
+value.length :1
+value :[{"title":"The Data","releasePolicy":"hogeho","concealReason":"hogeho","repositoryType":"hogeho","repositoryName":"hogeho","dataAmount":"hogeho"}]
+value.length :1
+value :[object Object]
+nested_i :0
+arr_data :{"title":"The Data","releasePolicy":"hogeho","concealReason":"hogeho","repositoryType":"hogeho","repositoryName":"hogeho","dataAmount":"hogeho"}
+arr_data_record_num :6
+arr_data :[object Object]
+fillDmp2dArr start
+dmp2DArr[15][2] = 0
+key_1 :title
+raw_index :15
+col_index :3
+value :The Data
+value type :string
+record_num :1
+raw_index :15
+endPoint :16
+dmp2DArr[15][3] = title
+dmp2DArr[15][4] = The Data
+dmp2DArr[i] :,data,0,title,
+dmp2DArr[i] :,data,0,title,The Data
+changed raw_index :16
+key_1 :releasePolicy
+value :hogeho
+value type :string
+raw_index :16
+endPoint :17
+dmp2DArr[16][3] = releasePolicy
+dmp2DArr[i] :,,,releasePolicy,
+record_num :1
+dmp2DArr[16][4] = hogeho
+dmp2DArr[i] :,,,releasePolicy,hogeho
+changed raw_index :17
+key_1 :concealReason
+value :hogeho
+value type :string
+record_num :1
+endPoint :18
+raw_index :17
+dmp2DArr[17][3] = concealReason
+dmp2DArr[i] :,,,concealReason,
+changed raw_index :18
+dmp2DArr[17][4] = hogeho
+key_1 :repositoryType
+dmp2DArr[i] :,,,concealReason,hogeho
+record_num :1
+value type :string
+raw_index :18
+endPoint :19
+value :hogeho
+dmp2DArr[i] :,,,repositoryType,
+dmp2DArr[18][3] = repositoryType
+key_1 :repositoryName
+dmp2DArr[i] :,,,repositoryType,hogeho
+changed raw_index :19
+dmp2DArr[18][4] = hogeho
+value type :string
+record_num :1
+endPoint :20
+value :hogeho
+dmp2DArr[19][3] = repositoryName
+dmp2DArr[i] :,,,repositoryName,
+dmp2DArr[19][4] = hogeho
+dmp2DArr[i] :,,,repositoryName,hogeho
+raw_index :19
+changed raw_index :20
+key_1 :dataAmount
+value type :string
+record_num :1
+endPoint :21
+raw_index :20
+dmp2DArr[i] :,,,dataAmount,
+dmp2DArr[20][3] = dataAmount
+dmp2DArr[20][4] = hogeho
+dmp2DArr[i] :,,,dataAmount,hogeho
+value :hogeho
+changed raw_index :21
+dmp2DArr.length :38
+contentSize,1GB,,,
+datasetStructure,with_code,,,
+workflowIdentifier,basic,,,
+useDocker,YES,,,
+createDate,2021/07/21,,,
+,title,The Project,,
+project,fiscalYear,2021,,
+,representative,belongTo,NII,
+,,post,hogeho,
+,problemName,hogeho,,
+,noRegistReason,hogeho,,
+schema,amed,,,
+,,name,John Doe,
+researches,description,hogeho,,
+,data,0,title,The Data
+required,hasRegistNecessity,false,,
+,,,releasePolicy,hogeho
+,,,repositoryType,hogeho
+,,,repositoryName,hogeho
+,,,dataAmount,hogeho
+,,,concealReason,hogeho
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+changed raw_index :21
+workflowIdentifier,basic,,,
+,,,,
+dmp2DArr.length :38
+datasetStructure,with_code,,,
+schema,amed,,,
+contentSize,1GB,,,
+createDate,2021/07/21,,,
+project,fiscalYear,2021,,
+useDocker,YES,,,
+,title,The Project,,
+,representative,belongTo,NII,
+,problemName,hogeho,,
+required,hasRegistNecessity,false,,
+,,name,John Doe,
+,noRegistReason,hogeho,,
+researches,description,hogeho,,
+,,post,hogeho,
+,data,0,title,The Data
+,,,repositoryType,hogeho
+,,,releasePolicy,hogeho
+,,,repositoryName,hogeho
+,,,dataAmount,hogeho
+,,,concealReason,hogeho
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+changed raw_index :21
+,,,,
+key_1 :forPublication
+value :[object Object]
+raw_index :21
+value type :object
+record_num :2
+dmp2DArr[21][0] = forPublication
+endPoint :23
+dmp2DArr[i] :forPublication,,,,
+raw_index :21
+col_index :1
+fillDmp2dArr start
+key_1 :hasOfferPolicy
+record_num :1
+value type :boolean
+endPoint :22
+raw_index :21
+dmp2DArr[21][1] = hasOfferPolicy
+dmp2DArr[i] :forPublication,hasOfferPolicy,,,
+dmp2DArr[i] :forPublication,hasOfferPolicy,false,,
+dmp2DArr[21][2] = false
+changed raw_index :22
+key_1 :policyName
+value :false
+value :This is just content when 'hasOfferPolicy' is true
+value type :string
+raw_index :22
+endPoint :23
+record_num :1
+dmp2DArr[22][1] = policyName
+dmp2DArr[22][2] = This is just content when 'hasOfferPolicy' is true
+dmp2DArr[i] :,policyName,This is just content when 'hasOfferPolicy' is true,,
+dmp2DArr[i] :,policyName,,,
+dmp2DArr.length :38
+changed raw_index :23
+workflowIdentifier,basic,,,
+datasetStructure,with_code,,,
+contentSize,1GB,,,
+schema,amed,,,
+useDocker,YES,,,
+createDate,2021/07/21,,,
+project,fiscalYear,2021,,
+,problemName,hogeho,,
+,title,The Project,,
+,representative,belongTo,NII,
+required,hasRegistNecessity,false,,
+,noRegistReason,hogeho,,
+,,name,John Doe,
+researches,description,hogeho,,
+,data,0,title,The Data
+,,post,hogeho,
+,,,concealReason,hogeho
+,,,repositoryType,hogeho
+,,,repositoryName,hogeho
+,,,dataAmount,hogeho
+,,,releasePolicy,hogeho
+forPublication,hasOfferPolicy,false,,
+,policyName,This is just content when 'hasOfferPolicy' is true,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+changed raw_index :23
+,,,,
+key_1 :researchers
+value :[object Object]
+,,,,
+value type :object
+record_num :15
+endPoint :38
+dmp2DArr[23][0] = researchers
+raw_index :23
+dmp2DArr[i] :researchers,,,,
+raw_index :23
+fillDmp2dArr start
+col_index :1
+key_1 :numberOfPeople
+value type :number
+value :1
+record_num :1
+raw_index :23
+dmp2DArr[23][1] = numberOfPeople
+endPoint :24
+dmp2DArr[i] :researchers,numberOfPeople,,,
+dmp2DArr[i] :researchers,numberOfPeople,1,,
+changed raw_index :24
+key_1 :manager
+dmp2DArr[23][2] = 1
+value :[object Object]
+value type :object
+raw_index :24
+record_num :4
+dmp2DArr[i] :,manager,,,
+dmp2DArr[24][1] = manager
+endPoint :28
+fillDmp2dArr start
+raw_index :24
+key_1 :isConcurrent
+value type :boolean
+col_index :2
+record_num :1
+value :false
+raw_index :24
+dmp2DArr[24][2] = isConcurrent
+dmp2DArr[24][3] = false
+dmp2DArr[i] :,manager,isConcurrent,,
+endPoint :25
+dmp2DArr[i] :,manager,isConcurrent,false,
+changed raw_index :25
+value :[object Object]
+key_1 :personal
+value type :object
+raw_index :25
+endPoint :28
+record_num :3
+dmp2DArr[25][2] = personal
+dmp2DArr[i] :,,personal,,
+raw_index :25
+fillDmp2dArr start
+value :NII
+col_index :3
+value type :string
+key_1 :belongTo
+raw_index :25
+dmp2DArr[25][3] = belongTo
+record_num :1
+dmp2DArr[i] :,,personal,belongTo,
+dmp2DArr[25][4] = NII
+dmp2DArr[i] :,,personal,belongTo,NII
+endPoint :26
+changed raw_index :26
+value :hogeho
+value type :string
+record_num :1
+raw_index :26
+endPoint :27
+dmp2DArr[26][3] = post
+dmp2DArr[i] :,,,post,
+key_1 :post
+dmp2DArr[26][4] = hogeho
+dmp2DArr[i] :,,,post,hogeho
+key_1 :name
+changed raw_index :27
+record_num :1
+value :Bill Doe
+value type :string
+dmp2DArr[27][3] = name
+endPoint :28
+raw_index :27
+dmp2DArr[i] :,,,name,
+dmp2DArr[i] :,,,name,Bill Doe
+changed raw_index :28
+dmp2DArr[27][4] = Bill Doe
+workflowIdentifier,basic,,,
+contentSize,1GB,,,
+dmp2DArr.length :38
+datasetStructure,with_code,,,
+useDocker,YES,,,
+createDate,2021/07/21,,,
+project,fiscalYear,2021,,
+schema,amed,,,
+,title,The Project,,
+,problemName,hogeho,,
+,,post,hogeho,
+,representative,belongTo,NII,
+required,hasRegistNecessity,false,,
+,,name,John Doe,
+,noRegistReason,hogeho,,
+researches,description,hogeho,,
+,data,0,title,The Data
+,,,concealReason,hogeho
+,,,repositoryType,hogeho
+,,,releasePolicy,hogeho
+,,,repositoryName,hogeho
+forPublication,hasOfferPolicy,false,,
+,,,dataAmount,hogeho
+,policyName,This is just content when 'hasOfferPolicy' is true,,
+researchers,numberOfPeople,1,,
+,,personal,belongTo,NII
+,manager,isConcurrent,false,
+,,,post,hogeho
+,,,name,Bill Doe
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+changed raw_index :28
+,,,,
+dmp2DArr.length :38
+workflowIdentifier,basic,,,
+datasetStructure,with_code,,,
+useDocker,YES,,,
+contentSize,1GB,,,
+createDate,2021/07/21,,,
+project,fiscalYear,2021,,
+,title,The Project,,
+,problemName,hogeho,,
+,,post,hogeho,
+schema,amed,,,
+,representative,belongTo,NII,
+required,hasRegistNecessity,false,,
+,,name,John Doe,
+researches,description,hogeho,,
+,data,0,title,The Data
+,noRegistReason,hogeho,,
+,,,releasePolicy,hogeho
+,,,repositoryType,hogeho
+,,,concealReason,hogeho
+,,,repositoryName,hogeho
+forPublication,hasOfferPolicy,false,,
+,policyName,This is just content when 'hasOfferPolicy' is true,,
+researchers,numberOfPeople,1,,
+,,,dataAmount,hogeho
+,manager,isConcurrent,false,
+,,personal,belongTo,NII
+,,,post,hogeho
+,,,name,Bill Doe
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+changed raw_index :28
+value :[object Object]
+key_1 :staff
+value type :object
+,,,,
+record_num :10
+endPoint :38
+raw_index :28
+dmp2DArr[i] :,staff,,,
+dmp2DArr[28][1] = staff
+Is Array!!!!!
+value :[object Object]
+value :[{"belongTo":"NII","post":"hogeho","name":"Mary Doe","e-Rad":"0000","canPublished":false,"postType":"Professor","financialResource":"AMED","employmentStatus":"full-time","roles":"data curation","remarks":"hogeho"}]
+nested_i :0
+value.length :1
+arr_data :{"belongTo":"NII","post":"hogeho","name":"Mary Doe","e-Rad":"0000","canPublished":false,"postType":"Professor","financialResource":"AMED","employmentStatus":"full-time","roles":"data curation","remarks":"hogeho"}
+value.length :1
+arr_data :[object Object]
+arr_data_record_num :10
+fillDmp2dArr start
+dmp2DArr[28][2] = 0
+key_1 :belongTo
+raw_index :28
+value :NII
+col_index :3
+value type :string
+record_num :1
+raw_index :28
+dmp2DArr[28][3] = belongTo
+dmp2DArr[i] :,staff,0,belongTo,
+dmp2DArr[28][4] = NII
+dmp2DArr[i] :,staff,0,belongTo,NII
+endPoint :29
+changed raw_index :29
+value :hogeho
+value type :string
+record_num :1
+key_1 :post
+raw_index :29
+dmp2DArr[29][3] = post
+endPoint :30
+dmp2DArr[i] :,,,post,
+dmp2DArr[29][4] = hogeho
+dmp2DArr[i] :,,,post,hogeho
+changed raw_index :30
+value :Mary Doe
+value type :string
+key_1 :name
+record_num :1
+raw_index :30
+dmp2DArr[30][3] = name
+dmp2DArr[i] :,,,name,
+dmp2DArr[30][4] = Mary Doe
+dmp2DArr[i] :,,,name,Mary Doe
+changed raw_index :31
+endPoint :31
+value :0000
+key_1 :e-Rad
+record_num :1
+value type :string
+endPoint :32
+raw_index :31
+dmp2DArr[31][3] = e-Rad
+dmp2DArr[i] :,,,e-Rad,
+dmp2DArr[i] :,,,e-Rad,0000
+dmp2DArr[31][4] = 0000
+changed raw_index :32
+key_1 :canPublished
+value :false
+value type :boolean
+dmp2DArr[32][3] = canPublished
+record_num :1
+endPoint :33
+raw_index :32
+dmp2DArr[i] :,,,canPublished,
+dmp2DArr[i] :,,,canPublished,false
+dmp2DArr[32][4] = false
+changed raw_index :33
+value :Professor
+value type :string
+key_1 :postType
+record_num :1
+raw_index :33
+dmp2DArr[33][3] = postType
+dmp2DArr[i] :,,,postType,
+dmp2DArr[33][4] = Professor
+endPoint :34
+changed raw_index :34
+dmp2DArr[i] :,,,postType,Professor
+key_1 :financialResource
+value type :string
+value :AMED
+record_num :1
+raw_index :34
+dmp2DArr[34][3] = financialResource
+dmp2DArr[34][4] = AMED
+dmp2DArr[i] :,,,financialResource,
+dmp2DArr[i] :,,,financialResource,AMED
+changed raw_index :35
+key_1 :employmentStatus
+value :full-time
+endPoint :35
+value type :string
+raw_index :35
+record_num :1
+dmp2DArr[35][3] = employmentStatus
+endPoint :36
+dmp2DArr[i] :,,,employmentStatus,
+dmp2DArr[i] :,,,employmentStatus,full-time
+dmp2DArr[35][4] = full-time
+key_1 :roles
+changed raw_index :36
+value type :string
+record_num :1
+value :data curation
+raw_index :36
+endPoint :37
+dmp2DArr[36][3] = roles
+dmp2DArr[36][4] = data curation
+dmp2DArr[i] :,,,roles,data curation
+dmp2DArr[i] :,,,roles,
+changed raw_index :37
+value :hogeho
+key_1 :remarks
+value type :string
+raw_index :37
+record_num :1
+dmp2DArr[37][3] = remarks
+dmp2DArr[i] :,,,remarks,
+endPoint :38
+dmp2DArr[i] :,,,remarks,hogeho
+dmp2DArr[37][4] = hogeho
+changed raw_index :38
+workflowIdentifier,basic,,,
+contentSize,1GB,,,
+dmp2DArr.length :38
+datasetStructure,with_code,,,
+useDocker,YES,,,
+createDate,2021/07/21,,,
+project,fiscalYear,2021,,
+schema,amed,,,
+,title,The Project,,
+,representative,belongTo,NII,
+,,post,hogeho,
+,problemName,hogeho,,
+required,hasRegistNecessity,false,,
+,,name,John Doe,
+,noRegistReason,hogeho,,
+,data,0,title,The Data
+researches,description,hogeho,,
+,,,repositoryName,hogeho
+,,,releasePolicy,hogeho
+,,,repositoryType,hogeho
+,,,concealReason,hogeho
+,,,dataAmount,hogeho
+forPublication,hasOfferPolicy,false,,
+,policyName,This is just content when 'hasOfferPolicy' is true,,
+researchers,numberOfPeople,1,,
+,,personal,belongTo,NII
+,manager,isConcurrent,false,
+,,,post,hogeho
+,staff,0,belongTo,NII
+,,,post,hogeho
+,,,name,Mary Doe
+,,,name,Bill Doe
+,,,e-Rad,0000
+,,,canPublished,false
+,,,financialResource,AMED
+,,,employmentStatus,full-time
+,,,postType,Professor
+,,,roles,data curation
+,,,remarks,hogeho
+changed raw_index :38
+dmp2DArr.length :38
+contentSize,1GB,,,
+datasetStructure,with_code,,,
+workflowIdentifier,basic,,,
+schema,amed,,,
+useDocker,YES,,,
+createDate,2021/07/21,,,
+,problemName,hogeho,,
+project,fiscalYear,2021,,
+,,post,hogeho,
+,title,The Project,,
+,representative,belongTo,NII,
+,noRegistReason,hogeho,,
+required,hasRegistNecessity,false,,
+researches,description,hogeho,,
+,,name,John Doe,
+,,,concealReason,hogeho
+,data,0,title,The Data
+,,,releasePolicy,hogeho
+,,,repositoryName,hogeho
+,,,repositoryType,hogeho
+forPublication,hasOfferPolicy,false,,
+,policyName,This is just content when 'hasOfferPolicy' is true,,
+researchers,numberOfPeople,1,,
+,,,dataAmount,hogeho
+,manager,isConcurrent,false,
+,,personal,belongTo,NII
+,,,post,hogeho
+,staff,0,belongTo,NII
+,,,post,hogeho
+,,,name,Bill Doe
+,,,name,Mary Doe
+,,,canPublished,false
+,,,e-Rad,0000
+,,,postType,Professor
+,,,employmentStatus,full-time
+,,,remarks,hogeho
+,,,financialResource,AMED
+dmp2DArr.length :38
+,,,roles,data curation
+workflowIdentifier,basic,,,
+contentSize,1GB,,,
+changed raw_index :38
+datasetStructure,with_code,,,
+useDocker,YES,,,
+createDate,2021/07/21,,,
+project,fiscalYear,2021,,
+,title,The Project,,
+,problemName,hogeho,,
+,representative,belongTo,NII,
+,,post,hogeho,
+,,name,John Doe,
+required,hasRegistNecessity,false,,
+,noRegistReason,hogeho,,
+researches,description,hogeho,,
+,data,0,title,The Data
+,,,releasePolicy,hogeho
+schema,amed,,,
+,,,concealReason,hogeho
+,,,repositoryType,hogeho
+forPublication,hasOfferPolicy,false,,
+,,,repositoryName,hogeho
+,,,dataAmount,hogeho
+,policyName,This is just content when 'hasOfferPolicy' is true,,
+researchers,numberOfPeople,1,,
+,,personal,belongTo,NII
+,manager,isConcurrent,false,
+,,,post,hogeho
+,,,name,Bill Doe
+,staff,0,belongTo,NII
+,,,post,hogeho
+,,,name,Mary Doe
+,,,canPublished,false
+,,,e-Rad,0000
+,,,financialResource,AMED
+,,,roles,data curation
+,,,postType,Professor
+,,,employmentStatus,full-time
+dmptable.length :38
+workflowIdentifier,basic,,,
+finish fillDmp2dArr
+,,,remarks,hogeho
+datasetStructure,with_code,,,
+contentSize,1GB,,,
+schema,amed,,,
+useDocker,YES,,,
+createDate,2021/07/21,,,
+project,fiscalYear,2021,,
+,title,The Project,,
+,problemName,hogeho,,
+,representative,belongTo,NII,
+,,post,hogeho,
+,,name,John Doe,
+required,hasRegistNecessity,false,,
+,data,0,title,The Data
+,noRegistReason,hogeho,,
+researches,description,hogeho,,
+,,,concealReason,hogeho
+,,,repositoryType,hogeho
+,,,repositoryName,hogeho
+,,,releasePolicy,hogeho
+,,,dataAmount,hogeho
+forPublication,hasOfferPolicy,false,,
+,policyName,This is just content when 'hasOfferPolicy' is true,,
+researchers,numberOfPeople,1,,
+,,personal,belongTo,NII
+,manager,isConcurrent,false,
+,,,name,Bill Doe
+,staff,0,belongTo,NII
+,,,post,hogeho
+,,,name,Mary Doe
+,,,e-Rad,0000
+,,,post,hogeho
+,,,canPublished,false
+,,,financialResource,AMED
+,,,employmentStatus,full-time
+,,,roles,data curation
+,,,postType,Professor
+,,,remarks,hogeho
+テスト METI
+rowNum :32
+colNum :4
+dmpData2dArr.length :32
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+dmptable.length :32
+workflowIdentifier,basic,,
+finish fillDmp2dArr
+contentSize,1GB,,
+datasetStructure,with_code,,
+useDocker,YES,,
+schema,meti,,
+agreementTitle,The Data Management Plan,,
+agreementDate,2021-09-20,,
+submitDate,2021-10-01,,
+corporateName,The Corporate,,
+researches,0,index,1
+,,title,The Research Data
+,,description,This is description.
+,,dataType,My Data
+dmpType,New,,
+,,manager,John Doe
+,,releaseLevel,4
+,,concealReason,nothing
+,,acquirer,John Lab
+,,acquireMethod,by download link
+,,remarks,hogehoe
+,,concealPeriod,hogehoe
+,,title,The Research Data2
+,,description,This is description.
+,,manager,Jumpei Kuwata
+,,dataType,My Data
+,,concealReason,nothing
+,,releaseLevel,4
+,,concealPeriod,hogehoe
+,1,index,2
+,,acquireMethod,by download link
+,,remarks,hogehoe
+,,acquirer,IVIS Lab
+テスト JST
+rowNum :44
+,,,,
+colNum :5
+dmpData2dArr.length :44
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+dmptable.length :44
+,,,,
+,,,,
+workflowIdentifier,basic,,,
+datasetStructure,with_code,,,
+finish fillDmp2dArr
+useDocker,YES,,,
+contentSize,1GB,,,
+schema,jst,,,
+createDate,2021/07/21,,,
+project,fiscalYear,2021,,
+,title,The Project,,
+,problemName,hogehoge,,
+amedNumber,0000,,,
+,representative,belongTo,NII,
+,,post,hogehoge,
+forPublication,hasUsed,false,,
+,,name,John Doe,
+,unwriteReason,This is just content when 'hasUsed' is true,,
+,,type,ヒト個人（研究参加者及びヒト試料由来のデータ）,
+researches,0,title,The Title,
+,,description,hogehoge,
+,,releasePolicy,hogehoge,
+,,concealReason,hogehoge,
+,,policyName,This is just content when 'hasOfferPolicy' is true,
+,,hasOfferPolicy,false,
+,,repositoryType,hogehoge,
+,,dataAmount,hogehoge,
+,,repositoryName,hogehoge,
+,,processingPolicy,hogehoge,
+,,dataSchema,Excel,
+,,isRegistered,false,
+researchers,numberOfPeople,1,,
+,manager,isConcurrent,false,
+,,registeredInfo,hogehoge,
+,,personal,belongTo,NII
+,,,post,hogehoge
+,staff,0,belongTo,NII
+,,,post,hogehoge
+,,,name,Bill Doe
+,,,name,Mary Doe
+,,,e-Rad,0000
+,,,canPublished,false
+,,,financialResource,AMED
+,,,employmentStatus,full-time
+,,,roles,data curation
+,,,postType,Professor
+,,,remarks,hogehoge
+テスト JST
+rowNum :45
+dmpData2dArr.length :45
+colNum :5
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+dmptable.length :45
+finish fillDmp2dArr
+workflowIdentifier,basic,,,
+,,,,
+datasetStructure,with_code,,,
+contentSize,1GB,,,
+schema,jst,,,
+useDocker,YES,,,
+amedNumber,0000,,,
+project,fiscalYear,2021,,
+,title,The Project,,
+createDate,2021/07/21,,,
+,problemName,hogehoge,,
+,representative,belongTo,NII,
+,,post,hogehoge,
+,,name,John Doe,
+forPublication,hasUsed,false,,
+,unwriteReason,This is just content when 'hasUsed' is true,,
+,,type,0,0,ヒ
+,,,1,0,h
+,,description,hogehoge,1,o
+,,releasePolicy,hogehoge,2,g
+researches,0,title,The Title,
+,,hasOfferPolicy,false,5,研
+,,policyName,This is just content when 'hasOfferPolicy' is true,6,究
+,,repositoryType,hogehoge,7,参
+,,repositoryName,hogehoge,8,加
+,,dataAmount,hogehoge,9,者
+,,dataSchema,Excel,10,及
+,,concealReason,hogehoge,3,e
+,,processingPolicy,hogehoge,11,び
+,,registeredInfo,hogehoge,13,ト
+researchers,numberOfPeople,1,,14,試
+,manager,isConcurrent,false,15,料
+,,isRegistered,false,12,ヒ
+,,,post,hogehoge,来
+,,,name,Bill Doe,の
+,staff,0,belongTo,NII,デ
+,,,post,hogehoge,ー
+,,,name,Mary Doe,タ
+,,,e-Rad,0000,）
+,,,canPublished,false
+,,,postType,Professor
+,,,financialResource,AMED
+,,personal,belongTo,NII,由
+,,,employmentStatus,full-time
+,,,remarks,hogehoge
+,,,roles,data curation
+テスト JST
+colNum :5
+rowNum :45
+dmpData2dArr.length :45
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+dmptable.length :45
+finish fillDmp2dArr
+workflowIdentifier,basic,,,
+,,,,
+datasetStructure,with_code,,,
+useDocker,YES,,,
+schema,jst,,,
+createDate,2021/07/21,,,
+amedNumber,0000,,,
+project,fiscalYear,2021,,
+,title,The Project,,
+,problemName,hogehoge,,
+,representative,belongTo,NII,
+,,post,hogehoge,
+contentSize,1GB,,,
+forPublication,hasUsed,false,,
+,,name,John Doe,
+,unwriteReason,This is just content when 'hasUsed' is true,,
+,,type,0,ヒト個人（研究参加者及びヒト試料由来のデータ）
+,,type,0,ヒト個人（研究参加者及びヒト試料由来のデータ）
+,,releasePolicy,hogehoge,
+,,description,hogehoge,hoge
+,,concealReason,hogehoge,
+,,policyName,This is just content when 'hasOfferPolicy' is true,
+,,hasOfferPolicy,false,
+,,repositoryType,hogehoge,
+,,repositoryName,hogehoge,
+,,dataAmount,hogehoge,
+,,dataSchema,Excel,
+,,processingPolicy,hogehoge,
+,,isRegistered,false,
+,,registeredInfo,hogehoge,
+researchers,numberOfPeople,1,,
+,manager,isConcurrent,false,
+researches,0,title,The Title,
+,,,post,hogehoge
+,,,name,Bill Doe
+,staff,0,belongTo,NII
+,,,post,hogehoge
+,,,e-Rad,0000
+,,,name,Mary Doe
+,,,canPublished,false
+,,,postType,Professor
+,,,financialResource,AMED
+,,,employmentStatus,full-time
+,,,roles,data curation
+,,,remarks,hogehoge
+,,personal,belongTo,NII
+テスト JST
+rowNum :45
+colNum :5
+dmpData2dArr.length :45
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+dmptable.length :45
+finish fillDmp2dArr
+workflowIdentifier,basic,,,
+,,,,
+contentSize,1GB,,,
+datasetStructure,with_code,,,
+useDocker,YES,,,
+createDate,2021/07/21,,,
+schema,jst,,,
+amedNumber,0000,,,
+project,fiscalYear,2021,,
+,title,The Project,,
+,problemName,hogehoge,,
+,representative,belongTo,NII,
+,,post,hogehoge,
+forPublication,hasUsed,false,,
+,unwriteReason,This is just content when 'hasUsed' is true,,
+researches,0,title,The Title,
+,,name,John Doe,
+,,type,0,ヒト個人（研究参加者及びヒト試料由来のデータ）
+,,type,0,ヒト個人（研究参加者及びヒト試料由来のデータ）
+,,description,hogehoge,hoge
+,,releasePolicy,hogehoge,
+,,concealReason,hogehoge,
+,,policyName,This is just content when 'hasOfferPolicy' is true,
+,,repositoryType,hogehoge,
+,,repositoryName,hogehoge,
+,,dataAmount,hogehoge,
+,,dataSchema,Excel,
+,,processingPolicy,hogehoge,
+,,isRegistered,false,
+,,registeredInfo,hogehoge,
+researchers,numberOfPeople,1,,
+,manager,isConcurrent,false,
+,,,post,hogehoge
+,,,name,Bill Doe
+,staff,0,belongTo,NII
+,,,post,hogehoge
+,,personal,belongTo,NII
+,,,e-Rad,0000
+,,,canPublished,false
+,,,postType,Professor
+,,,financialResource,AMED
+,,,employmentStatus,full-time
+,,,roles,data curation
+,,,remarks,hogehoge
+,,hasOfferPolicy,false,
+,,,name,Mary Doe
+テスト JST
+rowNum :45
+dmpData2dArr.length :45
+,,,,
+,,,,
+colNum :5
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+dmptable.length :45
+workflowIdentifier,basic,,,
+contentSize,1GB,,,
+finish fillDmp2dArr
+datasetStructure,with_code,,,
+schema,jst,,,
+useDocker,YES,,,
+createDate,2021/07/21,,,
+project,fiscalYear,2021,,
+,title,The Project,,
+amedNumber,0000,,,
+,problemName,hogehoge,,
+,representative,belongTo,NII,
+,,post,hogehoge,
+forPublication,hasUsed,false,,
+,unwriteReason,This is just content when 'hasUsed' is true,,
+researches,0,title,The Title,
+,,type,0,ヒト個人（研究参加者及びヒト試料由来のデータ）
+,,name,John Doe,
+,,type,0,ヒト個人（研究参加者及びヒト試料由来のデータ）
+,,description,hogehoge,hoge_type
+,,concealReason,hogehoge,
+,,hasOfferPolicy,false,
+,,releasePolicy,hogehoge,
+,,policyName,This is just content when 'hasOfferPolicy' is true,
+,,repositoryType,hogehoge,
+,,repositoryName,hogehoge,
+,,dataAmount,hogehoge,
+,,processingPolicy,hogehoge,
+,,dataSchema,Excel,
+,,isRegistered,false,
+,,registeredInfo,hogehoge,
+researchers,numberOfPeople,1,,
+,manager,isConcurrent,false,
+,,,post,hogehoge
+,,personal,belongTo,NII
+,,,name,Bill Doe
+,staff,0,belongTo,NII
+,,,post,hogehoge
+,,,e-Rad,0000
+,,,name,Mary Doe
+,,,postType,Professor
+,,,financialResource,AMED
+,,,employmentStatus,full-time
+,,,roles,data curation
+,,,remarks,hogehoge
+,,,canPublished,false
+テスト JST
+colNum :5
+rowNum :45
+dmpData2dArr.length :45
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+dmptable.length :45
+,,,,
+finish fillDmp2dArr
+workflowIdentifier,basic,,,
+datasetStructure,with_code,,,
+contentSize,1GB,,,
+useDocker,YES,,,
+schema,jst,,,
+createDate,2021/07/21,,,
+project,fiscalYear,2021,,
+,problemName,hogehoge,,
+amedNumber,0000,,,
+,title,The Project,,
+,representative,belongTo,NII,
+,,name,John Doe,
+forPublication,hasUsed,false,,
+,unwriteReason,This is just content when 'hasUsed' is true,,
+,,post,hogehoge,
+researches,0,title,The Title,
+,,type,0,ヒト個人（研究参加者及びヒト試料由来のデータ）
+,,type,0,ヒト個人（研究参加者及びヒト試料由来のデータ）
+,,description,hogehoge,hoge_type
+,,releasePolicy,hogehoge,
+,,hasOfferPolicy,false,
+,,concealReason,hogehoge,
+,,policyName,This is just content when 'hasOfferPolicy' is true,
+,,repositoryType,hogehoge,
+,,repositoryName,hogehoge,
+,,dataAmount,hogehoge,
+,,dataSchema,Excel,
+,,processingPolicy,hogehoge,
+,,registeredInfo,hogehoge,
+researchers,numberOfPeople,1,,
+,manager,isConcurrent,false,
+,,isRegistered,false,
+,,personal,belongTo,NII
+,,,post,hogehoge
+,staff,0,belongTo,NII
+,,,post,hogehoge
+,,,name,Mary Doe
+,,,name,Bill Doe
+,,,e-Rad,0000
+,,,canPublished,false
+,,,financialResource,AMED
+,,,employmentStatus,full-time
+,,,postType,Professor
+,,,roles,data curation
+,,,remarks,hogehoge
