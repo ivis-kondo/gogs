@@ -156,6 +156,23 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 		return
 	}
 
+	//===================================================ここから
+	fmt.Printf("dmp:%v\n", dmp)
+	fmt.Printf("decodedMaDmp:%v\n", decodedMaDmp)
+
+	// dmp.jsonに"fields"プロパティがある想定
+	property := []string{"workflowIdentifier", "contentSize", "datasetStructure", "useDocker"}
+	/* maDMPへ埋め込む情報を追加する際は
+	上記リストに追加すること
+	e.g.
+	hasGrdm
+	*/
+	selected := make(map[string]interface{})
+	for _, v := range property {
+		selected[v] = dmp.(map[string]interface{})[v]
+	}
+	//===================================================ここまで
+
 	// dmp.jsonに"fields"プロパティがある想定
 	selectedField := dmp.(map[string]interface{})["workflowIdentifier"]
 	selectedDataSize := dmp.(map[string]interface{})["contentSize"]
@@ -166,6 +183,24 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 	e.g.
 	hasGrdm := dmp.(map[string]interface{})["hasGrdm"]
 	*/
+
+	//===================================================ここから
+	// Check if the value is entered
+	var message string
+	for k, v := range selected {
+		if len(v.(string)) == 0 {
+			if len(message) == 0 {
+				message = k
+			} else {
+				message = message + "," + k
+			}
+		}
+	}
+	if len(message) > 0 {
+		failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: DMP has no values for ["+message+"]")
+		return
+	}
+	//===================================================ここまで
 
 	pathToMaDmp := "maDMP.ipynb"
 	err = c.GetRepo().GetDbRepo().UpdateRepoFile(c.GetUser(), db.UpdateRepoFileOptions{
