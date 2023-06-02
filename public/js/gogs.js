@@ -1644,6 +1644,35 @@ $(document).ready(function() {
     autosize($("#description"));
     showMessageMaxLength(512, "description", "descLength");
   }
+  if ($("#project_name.autosize").length > 0) {
+    autosize($("#project_name"));
+    showMessageMaxLength(255, "project_name", "projectNameLength");
+  }
+  if ($("#project_description.autosize").length > 0) {
+    autosize($("#project_description"));
+    showMessageMaxLength(255, "project_description", "projectDescLength");
+  }
+  if ($("#commit_message.autosize").length > 0) {
+    autosize($("#commit_message"));
+    showMessageMaxLength(100, "commit_message", "commitMessageLength");
+  }
+  if ($("#content.autosize").length > 0) {
+    autosize($("#content"));
+    showMessageMaxLength(3000, "content", "contentLength");
+  }
+  if ($("#team_description.autosize").length > 0) {
+    autosize($("#team_description"));
+    showMessageMaxLength(255, "team_description", "teamDescLength");
+  }
+  if ($("#org_description.autosize").length > 0) {
+    autosize($("#org_description"));
+    showMessageMaxLength(255, "org_description", "orgDescLength");
+  }
+  if ($("#commit_description.autosize").length > 0) {
+    autosize($("#commit_description"));
+    showMessageMaxLength(100, "commit_description", "commitDescLength");
+  }
+
 
   // AJAX load buttons
   $(".ajax-load-button").click(function() {

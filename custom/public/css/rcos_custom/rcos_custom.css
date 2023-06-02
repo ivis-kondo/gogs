@@ -30,5 +30,31 @@ This css is be adapted to template files in custom>templates
 }
 
 /*----------------
-    repo>crete.tmpl
+    repo>header_gin.tmpl
 ------------------*/
+.repository .ui.header .ui.right select{
+    height: 2.2em;
+}
+
+/*----------------
+    custom>templates>repo>home.tmpl
+------------------*/
+#branch_item {
+    background: transparent none!important;
+    color: rgba(0,0,0,.6)!important;
+    font-weight: 400;
+    border-radius: 0.28571429rem;
+    text-transform: none;
+    text-shadow: none!important;
+    -webkit-box-shadow: 0 0 0 1px rgba(34,36,38,.15) inset;
+    box-shadow: 0 0 0 1px rgba(34,36,38,.15) inset;
+    font-size: .92857143rem;
+    font-family: "Helvetica Neue","Microsoft YaHei",Arial,Helvetica,sans-serif!important;
+    align-items: center;
+    margin: auto 0.5em auto 0;
+    padding: 0.78571429em 1.5em 0.78571429em;
+    height: 30px;
+    display: flex;
+	justify-content: center;
+
+}
