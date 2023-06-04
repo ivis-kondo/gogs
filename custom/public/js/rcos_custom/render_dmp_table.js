@@ -62,16 +62,16 @@ function CreateTableFromJSON(tbodyEle, dmp) {
         }
         tbodyEle.appendChild(tr)
     }
-
-
-
+    return colNum
 }
 
 $(document).ready(function () {
     let tbodyEle = document.getElementById("dmp");
     let items = JSON.parse($('#items').val());
     (document.getElementById("title")).innerHTML = "dmp.json (" + items.schema + ")";
-    CreateTableFromJSON(tbodyEle, items)
+    let colNum = CreateTableFromJSON(tbodyEle, items)
+    let dmpHeaderRight = document.getElementById("dmp_header_right");
+    dmpHeaderRight.colSpan = colNum-1;
 });
 
 function outputLog(msg) {
