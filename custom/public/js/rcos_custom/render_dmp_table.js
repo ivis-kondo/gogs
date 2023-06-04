@@ -56,8 +56,9 @@ function CreateTableFromJSON(tbodyEle, dmp) {
                 if (rowspanNum >1) {
                     td.rowSpan = rowspanNum
                 }
+                tr.appendChild(td)
             }
-            tr.appendChild(td)
+
         }
         tbodyEle.appendChild(tr)
     }
