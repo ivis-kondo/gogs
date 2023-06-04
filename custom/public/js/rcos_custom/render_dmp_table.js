@@ -56,6 +56,7 @@ function CreateTableFromJSON(tbodyEle, dmp) {
                 if (rowspanNum >1) {
                     td.rowSpan = rowspanNum
                 }
+                td.classList.add("dmp_unit_data")
                 tr.appendChild(td)
             }
 
@@ -73,15 +74,6 @@ $(document).ready(function () {
     let dmpHeaderRight = document.getElementById("dmp_header_right");
     dmpHeaderRight.colSpan = colNum-1;
 });
-
-function outputLog(msg) {
-    const fs = require("fs");
-    log_msg = String(msg) + '\n'
-    fs.appendFile("./log.txt",log_msg, (err) => {
-        if (err) throw err;
-        // console.log('正常に書き込みが完了しました');
-      });
-}
 
 function IsArrayObject(data)  {
     return Array.isArray(data)

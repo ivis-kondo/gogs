@@ -58,3 +58,10 @@ This css is be adapted to template files in custom>templates
 	justify-content: center;
 
 }
+
+/*----------------
+    DMP Unit Data
+------------------*/
+.dmp_unit_data {
+    word-wrap: break-word;
+}
