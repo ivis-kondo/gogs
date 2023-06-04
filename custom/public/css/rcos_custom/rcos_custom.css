@@ -66,6 +66,6 @@ This css is be adapted to template files in custom>templates
     word-wrap: break-word;
 }
 
-.ui.table[class*="single line dmp"] {
+.ui.table[class*="single line table dmp"] {
     white-space: normal;
 }
