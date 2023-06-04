@@ -1,36 +1,6 @@
 // createTable is RCOS specific code.
 // This generates a table to check the information of the DMP
 // created by the user and displays it on the screen.
-// function createTable(element, items) {
-//     for (const item in items) {
-//         let tr = document.createElement("tr");
-
-//         // add key
-//         let field = document.createElement("td");
-//         field.innerHTML = item
-//         tr.appendChild(field);
-
-//         // add value
-//         if (typeof items[item] === "object") {
-//             createTable(tr, items[item])
-//         } else {
-//             let value = document.createElement("td");
-//             value.innerHTML = items[item]
-//             tr.appendChild(value);
-//         }
-//         element.appendChild(tr);
-//     }
-// }
-
-
-
-// $(document).ready(function () {
-//     let tableEle = document.getElementById("dmp");
-//     let items = JSON.parse($('#items').val());
-//     (document.getElementById("title")).innerHTML = "dmp.json (" + items.schema + ")";
-//     createTable(tableEle, items)
-// });
-
 function CreateTableFromJSON(tbodyEle, dmp) {
     let rowNum = getRowNum(dmp) //行数
     let colNum = getColNum(dmp) //列数
@@ -184,10 +154,6 @@ function createRowspanOrColspan2DArr(rowNum, colNum) {
             }
             rowspanOrColspan2DArr.push(rowspanArrChild)
         }
-    // outputLog('rowspanOrColspan2DArr.length :' + rowspanOrColspan2DArr.length)
-    // for (let i = 0; i < rowspanOrColspan2DArr.length; ++i) {
-    //     outputLog(rowspanOrColspan2DArr[i]);
-    // }
     return rowspanOrColspan2DArr
 }
 
@@ -209,23 +175,15 @@ function isEmptyInNextCol(arr, index){
 
 function fillColspan2DArr(dmpDataTable, rowNum, colNum) {
     let colspan2DArr =createRowspanOrColspan2DArr(rowNum, colNum)
-
     for (let i=0; i < rowNum; i++) {
-        //console.log('i : ' + i)
         let rowDmpData = dmpDataTable[i]
-        //console.log('rowDmpData : ' + rowDmpData)
         for (let j = 0; j < colNum; j++) {
-            //console.log('j : ' + j)
             if (rowDmpData[j]==""){
                 continue
             }else{
-                // console.log('isEmptyInNextCol : ' + isEmptyInNextCol(rowDmpData, j))
                 if (isEmptyInNextCol(rowDmpData, j)){
                     let colspanNum = colNum - j
-                    //console.log('colspanNum = ' + colNum + ' - ', j, '+1')
-                    //console.log('colspanNum : ' + colspanNum)
                     colspan2DArr[i][j] = colspanNum
-                    //console.log('colspan2DArr[' + i+']['+j+'] = ' + colspanNum)
                     break
                 }else{
                     continue
@@ -298,7 +256,6 @@ function getRowNum(data) {
     //get creating row num
     let row_num = 0
     for (const key in data) {
-        //console.log("key : " + key)
         let value = data[key]
         if (IsArrayObject(value)) {
             // is array
@@ -306,23 +263,18 @@ function getRowNum(data) {
                 let arr_val = value[i]
                 if  (IsObject(arr_val)) {
                     row_num = row_num + getRowNum(value[i])
-                    //console.log("CHANGE OBJECT-ARRY row_num : " + row_num)
                 }else{
                     row_num = row_num + 1
-                   // console.log("CHANGE STRING-ARRY row_num : " + row_num)
                 }
             }
         } else if (IsObject(value)) {
             // is json object
             row_num = row_num + getRowNum(value)
-            //console.log("CHANGE OBJECT row_num : " + row_num)
         } else {
             // is str, num, bool...
             row_num = row_num + 1
-            //console.log("CHANGE STRING row_num : " + row_num)
         }
     }
-    //console.log("RETTURN row_num : " + row_num)
     return row_num
 }
 
@@ -339,227 +291,25 @@ function getNestedNum(data, pre_nested_num) {
         //console.log("key : " + key)
         let value = data[key]
         if (IsArrayObject(value)) {
-            //console.log("is array")
-            //console.log("value.length : " + value.length)
             // is array
             for (let i = 0; i < value.length; ++i) {
                 let arr_val = value[i]
-                //console.log("arr_val : " + arr_val)
                 if (IsObject(arr_val)){
                     arr_tmp = getNestedNum(arr_val, pre_nested_num+1) + 1
-                    //console.log("COMPARE [ arr_tmp : " + arr_tmp + " now nested_num : " +nested_num + "]")
                     if (arr_tmp > nested_num) {
                         nested_num = arr_tmp
-                        //console.log("CHANGE nested_num ARRAY : " + nested_num)
                     }
                 }
             }
         } else if (IsObject(value)) {
             // is json object
             tmp = getNestedNum(value, pre_nested_num+1)
-            //console.log("COMPARE [ tmp : " + tmp + " now nested_num : " +nested_num + "]")
             if (tmp > nested_num) {
                 nested_num = tmp
-                //console.log("CHANGE nested_num OBJECT : " + nested_num)
             }
         } else {
             // is str, num, bool...
         }
     }
-    //console.log("RETURN nested_num : " + nested_num)
     return nested_num
 }
-
-
-
-
-
-
-// outputLog('テスト')
-// var amed_data = JSON.parse(amed);
-// let rowNum = getRowNum(amed_data) //行数
-// outputLog('rowNum :' + rowNum)
-// let colNum = getColNum(amed_data) //列数
-// outputLog('colNum :' + colNum)
-// let dmpData2dArr = createDmp2dArr(rowNum, colNum)
-// outputLog('dmpData2dArr.length :' + dmpData2dArr.length)
-// for (let i = 0; i < dmpData2dArr.length; ++i) {
-//     outputLog(dmpData2dArr[i]);
-// }
-// fillDmp2dArr(dmpData2dArr, amed_data, 0, 0)
-
-
-// var min = '{ "workflowIdentifier": "basic","project": {"fiscalYear": 2021,"title": "The Project","problemName": "aaaa","representative": {"belongTo": "NII","post": "aaaaaa","name": "John Doe"}}}'
-// outputLog('テスト')
-// var min_data = JSON.parse(min);
-// let rowNum = getRowNum(min_data) //行数
-// outputLog('rowNum :' + rowNum)
-// let colNum = getColNum(min_data) //列数
-// outputLog('colNum :' + colNum)
-// let dmpData2dArr_1 = createDmp2dArr(rowNum, colNum)
-// outputLog('dmpData2dArr.length :' + dmpData2dArr_1.length)
-// for (let i = 0; i < dmpData2dArr_1.length; ++i) {
-//     outputLog(dmpData2dArr_1[i]);
-// }
-// dmptable = fillDmp2dArr(dmpData2dArr_1, min_data, 0, 0)
-// outputLog('finish fillDmp2dArr')
-// for (let i = 0; i < dmptable.length; ++i) {
-//     outputLog(dmptable[i]);
-// }
-
-// var min = '{ "workflowIdentifier": "basic","project": {"fiscalYear": 2021,"title": "The Project","problemName": "","representative": {"belongTo": "NII","post": "a","name": "John Doe"}}, "researches": {"description": "a","data": [{"title": "The Data","releasePolicy": "a","concealReason": "a","repositoryType": "a","repositoryName": "a","dataAmount": "a"}]}}'
-
-// amed
-// rowNum :38　行　OK
-// colNum :5　列　OK
-// OK
-// var min = '{"workflowIdentifier": "basic","contentSize": "1GB","datasetStructure": "with_code","useDocker": "YES","schema": "amed","createDate": "2021/07/21","project": {"fiscalYear": 2021,"title": "The Project","problemName": "hogeho","representative": {"belongTo": "NII","post": "hogeho","name": "John Doe"}},"required": {"hasRegistNecessity": false,"noRegistReason": "hogeho"},"researches": {"description": "hogeho","data": [{"title": "The Data","releasePolicy": "hogeho","concealReason": "hogeho","repositoryType": "hogeho","repositoryName": "hogeho","dataAmount": "hogeho"}]},"forPublication": {"hasOfferPolicy": false,"policyName": "This is just content when \'hasOfferPolicy\' is true"},"researchers": {"numberOfPeople": 1,"manager": {"isConcurrent": false,"personal": {"belongTo": "NII","post": "hogeho","name": "Bill Doe"}},"staff": [{"belongTo": "NII","post": "hogeho","name": "Mary Doe","e-Rad": "0000","canPublished": false,"postType": "Professor","financialResource": "AMED","employmentStatus": "full-time","roles": "data curation","remarks": "hogeho"}]}}'
-// outputLog('テスト AMED')
-// var min_data = JSON.parse(min);
-// var rowNum = getRowNum(min_data) //行数
-// outputLog('rowNum :' + rowNum)
-// console.log('rowNum :' + rowNum)
-// var colNum = getColNum(min_data) //列数
-// outputLog('colNum :' + colNum)
-// console.log('colNum :' + colNum)
-// var dmpData2dArr_1 = createDmp2dArr(rowNum, colNum)
-// outputLog('dmpData2dArr.length :' + dmpData2dArr_1.length)
-// for (let i = 0; i < dmpData2dArr_1.length; ++i) {
-//     outputLog(dmpData2dArr_1[i]);
-// }
-// dmptable = fillDmp2dArr(dmpData2dArr_1, min_data, 0, 0)
-// outputLog('dmptable.length :' + dmptable.length)
-// console.log('dmptable.length :' + dmptable.length)
-// outputLog('finish fillDmp2dArr')
-// for (let i = 0; i < dmptable.length; ++i) {
-//     outputLog(dmptable[i]);
-//     console.log(dmptable[i]);
-// }
-// let colspanTable = fillColspan2DArr(dmptable, rowNum, colNum)
-// for (let i = 0; i < colspanTable.length; ++i) {
-//     outputLog(colspanTable[i]);
-//     console.log(colspanTable[i]);
-// }
-// let rawspanTable = fillRowspan2DArr(dmptable, colspanTable, rowNum, colNum)
-// console.log("rawspanTable");
-// for (let i = 0; i < rawspanTable.length; ++i) {
-//     outputLog(rawspanTable[i]);
-//     console.log(rawspanTable[i]);
-// }
-
-//meti ダメ
-// 32 行OK
-// 4列　OK
-// tabel OK
-// var min = '{"workflowIdentifier": "basic","contentSize": "1GB","datasetStructure": "with_code","useDocker": "YES","schema": "meti","dmpType": "New","agreementTitle": "The Data Management Plan","agreementDate": "2021-09-20","submitDate": "2021-10-01","corporateName": "The Corporate","researches": [{"index": 1,"title": "The Research Data","description": "This is description.","manager": "John Doe","dataType": "My Data","releaseLevel": 4,"concealReason": "nothing","concealPeriod": "hogehoe","acquirer": "John Lab","acquireMethod": "by download link","remarks": "hogehoe"},{"index": 2,"title": "The Research Data2","description": "This is description.","manager": "Jumpei Kuwata","dataType": "My Data","releaseLevel": 4,"concealReason": "nothing","concealPeriod": "hogehoe","acquirer": "IVIS Lab","acquireMethod": "by download link","remarks": "hogehoe"}]}'
-// outputLog('テスト METI')
-// var min_data = JSON.parse(min);
-// var rowNum = getRowNum(min_data) //行数 OK
-// outputLog('rowNum :' + rowNum)
-// console.log('rowNum :' + rowNum)
-// var colNum = getColNum(min_data) //列数 OK
-// outputLog('colNum :' + colNum)
-// console.log('colNum :' + colNum)
-// var dmpData2dArr_1 = createDmp2dArr(rowNum, colNum)
-// outputLog('dmpData2dArr.length :' + dmpData2dArr_1.length)
-// console.log('dmpData2dArr.length :' + dmpData2dArr_1.length)
-// for (let i = 0; i < dmpData2dArr_1.length; ++i) {
-//     outputLog(dmpData2dArr_1[i]);
-//     console.log('dmpData2dArr_1[i].length :' + dmpData2dArr_1[i].length)
-// } //OK
-// dmptable = fillDmp2dArr(dmpData2dArr_1, min_data, 0, 0)
-// outputLog('dmptable.length :' + dmptable.length)
-// console.log('dmptable.length :' + dmptable.length)
-// outputLog('finish fillDmp2dArr')
-// for (let i = 0; i < dmptable.length; ++i) {
-//     outputLog(dmptable[i]);
-//     console.log(dmptable[i]);
-// }
-// let colspanTable = fillColspan2DArr(dmptable, rowNum, colNum)
-// console.log("colspanTable");
-// for (let i = 0; i < colspanTable.length; ++i) {
-//     outputLog(colspanTable[i]);
-//     console.log(colspanTable[i]);
-// }
-// let rawspanTable = fillRowspan2DArr(dmptable, colspanTable, rowNum, colNum)
-// console.log("rawspanTable");
-// for (let i = 0; i < rawspanTable.length; ++i) {
-//     outputLog(rawspanTable[i]);
-//     console.log(rawspanTable[i]);
-// }
-
-// jst
-// 44行 OK
-// 5列 OK
-// table OK
-// var min = '{"workflowIdentifier": "basic","contentSize": "1GB","datasetStructure": "with_code","useDocker": "YES","schema": "jst","createDate": "2021/07/21","amedNumber": "0000","project": {"fiscalYear": 2021,"title": "The Project","problemName": "hogehoge","representative": {"belongTo": "NII","post": "hogehoge","name": "John Doe"}},"forPublication": {"hasUsed": false,"unwriteReason": "This is just content when \'hasUsed\' is true"},"researches": [{"title": "The Title","type": ["hogehoge_type_1"],"description": "hogehoge","releasePolicy": "hogehoge","concealReason": "hogehoge","hasOfferPolicy": false,"policyName": "This is just content when \'hasOfferPolicy\' is true","repositoryType": "hogehoge","repositoryName": "hogehoge","dataAmount": "hogehoge","dataSchema": "Excel","processingPolicy": "hogehoge","isRegistered": false,"registeredInfo": "hogehoge"},{"title": "The Title_hogehoge_2","type": ["hogehoge_type_1"],"description": "hogehoge","releasePolicy": "hogehoge","concealReason": "hogehoge","hasOfferPolicy": false,"policyName": "This is just content when \'hasOfferPolicy\' is true","repositoryType": "hogehoge","repositoryName": "hogehoge","dataAmount": "hogehoge","dataSchema": "Excel","processingPolicy": "hogehoge","isRegistered": false,"registeredInfo": "hogehoge"}],"researchers": {"numberOfPeople": 1,"manager": {"isConcurrent": false,"personal": {"belongTo": "NII","post": "hogehoge","name": "Bill Doe"}},"staff": [{"belongTo": "NII","post": "hogehoge","name": "Mary Doe","e-Rad": "0000","canPublished": false,"postType": "Professor","financialResource": "AMED","employmentStatus": "full-time","roles": "data curation","remarks": "hogehoge"},{"belongTo": "NII","post": "hogehoge_post_2","name": "Mary Doe","e-Rad": "0000","canPublished": false,"postType": "Professor","financialResource": "AMED","employmentStatus": "full-time","roles": "data curation","remarks": "hogehoge"}]}}'
-// outputLog('テスト JST')
-// var min_data = JSON.parse(min);
-// var rowNum = getRowNum(min_data) //行数
-// outputLog('rowNum :' + rowNum)
-// console.log('rowNum :' + rowNum);
-// var colNum = getColNum(min_data) //列数
-// outputLog('colNum :' + colNum)
-// console.log('colNum :' + colNum);
-// var dmpData2dArr_1 = createDmp2dArr(rowNum, colNum)
-// outputLog('dmpData2dArr.length :' + dmpData2dArr_1.length)
-// for (let i = 0; i < dmpData2dArr_1.length; ++i) {
-//     outputLog(dmpData2dArr_1[i]);
-// }
-// dmptable = fillDmp2dArr(dmpData2dArr_1, min_data, 0, 0)
-// outputLog('dmptable.length :' + dmptable.length)
-// console.log('dmptable.length :' + dmptable.length);
-// outputLog('finish fillDmp2dArr')
-// for (let i = 0; i < dmptable.length; ++i) {
-//     console.log(dmptable[i]);
-//     outputLog(dmptable[i]);
-// }
-// let colspanTable = fillColspan2DArr(dmptable, rowNum, colNum)
-// for (let i = 0; i < colspanTable.length; ++i) {
-//     outputLog(colspanTable[i]);
-//     console.log(colspanTable[i]);
-// }
-// let rawspanTable = fillRowspan2DArr(dmptable, colspanTable, rowNum, colNum)
-// console.log("rawspanTable");
-// for (let i = 0; i < rawspanTable.length; ++i) {
-//     outputLog(rawspanTable[i]);
-//     console.log(rawspanTable[i]);
-// }
-
-// moon
-// 29行
-// 3列
-// OK
-// var min = '{"workflowIdentifier": "basic","contentSize": "1GB","datasetStructure": "with_code","useDocker": "YES","schema": "moonshot","funder": "AMED","eRadProjectID": "hogehoge","projectName": "誰もが自在に活躍できるアバター共生社会の実現","dataNo": "hogehoge","dataTitle": "〇〇実証においてセンサより撮像したデータ及び関連データ","dataPublished": "2021-04-26","dataDescription": "〇〇実証においてセンサより撮像したデータであり、道路の画像データ","researchField": "ライフサイエンス (Life Science)","dataType": "dataset","fileSize": "<1GB","dataPolicy": "一定期間後に事業の実施上有益なものに対して有償又は無償で提供を開始。但しデータのクレジット標記を条件とする。なおサンプルデータを公開している。","accessRights": "公開 (open access)","availableDate": "2021-04-26","repositoryInformation": "〇〇大学学術機関リポジトリ","repositoryURL": "hogehoge","creatorName": "John Doe","eRadCreatorIdentifer": "hogehoge","hostingInstitution": "hogehoge","dataManager": "John Doe","eRadManagerIdentifer": "hogehoge","dataManagerContact": {"affiliation": "〇〇研究所〇〇部門〇〇課","TEL": "00-000-0000","eMail": "user@example.com"},"remarks": "hogehoge"}'
-// outputLog('テスト moon')
-// var min_data = JSON.parse(min);
-// var rowNum = getRowNum(min_data) //行数
-// console.log('rowNum :' + rowNum);
-// outputLog('rowNum :' + rowNum)
-// var colNum = getColNum(min_data) //列数
-// outputLog('colNum :' + colNum)
-// console.log('colNum :' + colNum);
-// var dmpData2dArr_1 = createDmp2dArr(rowNum, colNum)
-// outputLog('dmpData2dArr.length :' + dmpData2dArr_1.length)
-// for (let i = 0; i < dmpData2dArr_1.length; ++i) {
-//     outputLog(dmpData2dArr_1[i]);
-// }
-// dmptable = fillDmp2dArr(dmpData2dArr_1, min_data, 0, 0)
-// outputLog('dmptable.length :' + dmptable.length)
-// console.log('dmptable.length :' + dmptable.length)
-// outputLog('finish fillDmp2dArr')
-// for (let i = 0; i < dmptable.length; ++i) {
-//     outputLog(dmptable[i]);
-//     console.log(dmptable[i]);
-// }
-// let colspanTable = fillColspan2DArr(dmptable, rowNum, colNum)
-// for (let i = 0; i < colspanTable.length; ++i) {
-//     outputLog(colspanTable[i]);
-//     console.log(colspanTable[i]);
-// }
-// let rawspanTable = fillRowspan2DArr(dmptable, colspanTable, rowNum, colNum)
-// console.log("rawspanTable");
-// for (let i = 0; i < rawspanTable.length; ++i) {
-//     outputLog(rawspanTable[i]);
-//     console.log(rawspanTable[i]);
-// }
