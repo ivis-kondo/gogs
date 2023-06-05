@@ -539,11 +539,13 @@ func getWebContentURL(ctx *context.Context, key string) error {
 		src_download_url.Scheme = u.Scheme
 		src_download_url.Host = u.Host
 		src_download_url.Path = strings.Replace(u.Path, strings.Split(u.Path, "/")[3], "src", 1)
-		ctx.Data["WebContentUrl"] = src_download_url.String()
+		decodeURL, _ := url.QueryUnescape(src_download_url.String())
+		ctx.Data["WebContentUrl"] = decodeURL
 		ctx.Data["IsOtherRepositoryContent"] = true
 	} else {
 		// S3などGIN-fork以外のインターネット上に実データがある場合
-		ctx.Data["WebContentUrl"] = string(download_url)
+		decodeURL, _ := url.QueryUnescape(string(download_url))
+		ctx.Data["WebContentUrl"] = decodeURL
 		ctx.Data["IsWebContent"] = true
 	}
 	return err
