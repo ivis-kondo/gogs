@@ -58,3 +58,14 @@ This css is be adapted to template files in custom>templates
 	justify-content: center;
 
 }
+
+/*----------------
+    DMP Unit Data
+------------------*/
+.ui.fixed.table .dmp_unit_data {
+    word-wrap: break-word;
+}
+
+.ui.table[class*="single line table dmp"] {
+    white-space: normal;
+}
