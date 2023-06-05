@@ -123,7 +123,7 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 	decodedMaDmp, err = f.DecodeBlobContent(src)
 	if err != nil {
 		log.Error("maDMP blob could not be decorded: %v", err)
-		failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed")
+		failedGenereteMaDmp(c, "Sorry, failed generate maDMP: fetching template failed")
 		return
 	}
 
@@ -136,14 +136,14 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 	if err != nil || entry == nil {
 		log.Error("dmp.json blob could not be retrieved: %v", err)
 
-		failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: DMP could not read")
+		failedGenereteMaDmp(c, "Sorry, failed generate maDMP: DMP could not read")
 		return
 	}
 	buf, err := entry.Bytes()
 	if err != nil {
 		log.Error("dmp.json data could not be read: %v", err)
 
-		failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: DMP could not read")
+		failedGenereteMaDmp(c, "Sorry, failed generate maDMP: DMP could not read")
 		return
 	}
 
@@ -152,7 +152,7 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 	if err != nil {
 		log.Error("Unmarshal DMP info: %v", err)
 
-		failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: DMP could not read")
+		failedGenereteMaDmp(c, "Sorry, failed generate maDMP: DMP could not read")
 		return
 	}
 
@@ -164,23 +164,20 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 	, hasGrdm
 	*/
 	selected := make(map[string]interface{})
+	var message string
 	for _, v := range property {
 		selected[v] = dmp.(map[string]interface{})[v]
-	}
-
-	// Check if the value is entered
-	var message string
-	for k, v := range selected {
-		if len(v.(string)) == 0 {
+		// Check if the value is entered
+		if len(selected[v].(string)) == 0 {
 			if len(message) == 0 {
-				message = k
+				message = v
 			} else {
-				message = message + ", " + k
+				message = message + ", " + v
 			}
 		}
 	}
 	if len(message) > 0 {
-		failedDmp(c, "Sorry, faild gerate maDMP: DMP has no values for [ "+message+" ]")
+		failedDmp(c, "Sorry, failed generate maDMP: DMP has no values for [ "+message+" ]")
 		return
 	}
 
@@ -208,7 +205,7 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 	if err != nil {
 		log.Error("failed generating maDMP: %v", err)
 
-		failedGenereteMaDmp(c, "Faild gerate maDMP: Already exist")
+		failedGenereteMaDmp(c, "failed generate maDMP: Already exist")
 		return
 	}
 
@@ -337,14 +334,14 @@ func fetchDockerfile(c context.AbstructContext) {
 	src, err := f.FetchContentsOnGithub(c, dockerfileUrl)
 	if err != nil {
 		log.Error("Dockerfile could not be fetched: %v", err)
-		failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed(Dockerfile)")
+		failedGenereteMaDmp(c, "Sorry, failed generate maDMP: fetching template failed(Dockerfile)")
 		return
 	}
 
 	decodedDockerfile, err := f.DecodeBlobContent(src)
 	if err != nil {
 		log.Error("Dockerfile could not be decorded: %v", err)
-		failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed(Dockerfile)")
+		failedGenereteMaDmp(c, "Sorry, failed generate maDMP: fetching template failed(Dockerfile)")
 		return
 	}
 
@@ -377,7 +374,7 @@ func fetchEmviromentfile(c context.AbstructContext) {
 		src, err := f.FetchContentsOnGithub(c, path)
 		if err != nil {
 			log.Error("%s could not be fetched: %v", Emviromentfile[i], err)
-			failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed(Emviromentfile)")
+			failedGenereteMaDmp(c, "Sorry, failed generate maDMP: fetching template failed(Emviromentfile)")
 			return
 		}
 
@@ -385,7 +382,7 @@ func fetchEmviromentfile(c context.AbstructContext) {
 		if err != nil {
 			log.Error("%s could not be decorded: %v", Emviromentfile[i], err)
 
-			failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed(Emviromentfile)")
+			failedGenereteMaDmp(c, "Sorry, failed generate maDMP: fetching template failed(Emviromentfile)")
 			return
 		}
 
@@ -419,7 +416,7 @@ func fetchImagefile(c context.AbstructContext) {
 		src, err := f.FetchContentsOnGithub(c, path)
 		if err != nil {
 			log.Error("%s could not be fetched: %v", ImageFile[i], err)
-			failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed(ImageFile)")
+			failedGenereteMaDmp(c, "Sorry, failed generate maDMP: fetching template failed(ImageFile)")
 			return
 		}
 
@@ -427,7 +424,7 @@ func fetchImagefile(c context.AbstructContext) {
 		if err != nil {
 			log.Error("%s could not be decorded: %v", ImageFile[i], err)
 
-			failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed(ImageFile)")
+			failedGenereteMaDmp(c, "Sorry, failed generate maDMP: fetching template failed(ImageFile)")
 			return
 		}
 
