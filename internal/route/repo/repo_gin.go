@@ -123,7 +123,7 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 	decodedMaDmp, err = f.DecodeBlobContent(src)
 	if err != nil {
 		log.Error("maDMP blob could not be decorded: %v", err)
-		failedGenereteMaDmp(c, "Sorry, failed generate maDMP: fetching template failed")
+		failedGenereteMaDmp(c, c.Tr("madmp.error.fetch"))
 		return
 	}
 
@@ -136,14 +136,14 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 	if err != nil || entry == nil {
 		log.Error("dmp.json blob could not be retrieved: %v", err)
 
-		failedGenereteMaDmp(c, "Sorry, failed generate maDMP: DMP could not read")
+		failedGenereteMaDmp(c, c.Tr("rcos.madmp.error.read"))
 		return
 	}
 	buf, err := entry.Bytes()
 	if err != nil {
 		log.Error("dmp.json data could not be read: %v", err)
 
-		failedGenereteMaDmp(c, "Sorry, failed generate maDMP: DMP could not read")
+		failedGenereteMaDmp(c, c.Tr("rcos.madmp.error.read"))
 		return
 	}
 
@@ -152,7 +152,7 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 	if err != nil {
 		log.Error("Unmarshal DMP info: %v", err)
 
-		failedGenereteMaDmp(c, "Sorry, failed generate maDMP: DMP could not read")
+		failedGenereteMaDmp(c, c.Tr("rcos.madmp.error.read"))
 		return
 	}
 
@@ -164,20 +164,20 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 	, hasGrdm
 	*/
 	selected := make(map[string]interface{})
-	var message string
+	var errProperty string
 	for _, v := range property {
 		selected[v] = dmp.(map[string]interface{})[v]
 		// Check if the value is entered
 		if len(selected[v].(string)) == 0 {
-			if len(message) == 0 {
-				message = v
+			if len(errProperty) == 0 {
+				errProperty = v
 			} else {
-				message = message + ", " + v
+				errProperty = errProperty + ", " + v
 			}
 		}
 	}
-	if len(message) > 0 {
-		failedDmp(c, "Sorry, failed generate maDMP: DMP has no values for [ "+message+" ]")
+	if len(errProperty) > 0 {
+		failedDmp(c, c.Tr("rcos.dmp.error", errProperty))
 		return
 	}
 
@@ -204,8 +204,7 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 	})
 	if err != nil {
 		log.Error("failed generating maDMP: %v", err)
-
-		failedGenereteMaDmp(c, "failed generate maDMP: Already exist")
+		failedGenereteMaDmp(c, c.Tr("rcos.madmp.error.exist"))
 		return
 	}
 
@@ -221,7 +220,7 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 	/* 共通で使用する imageファイルを取得する */
 	fetchImagefile(c)
 
-	c.GetFlash().Success("maDMP generated!")
+	c.GetFlash().Success(c.Tr("rcos.madmp.success"))
 	c.Redirect(c.GetRepo().GetRepoLink())
 }
 
