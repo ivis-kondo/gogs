@@ -123,7 +123,7 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 	decodedMaDmp, err = f.DecodeBlobContent(src)
 	if err != nil {
 		log.Error("maDMP blob could not be decorded: %v", err)
-		failedGenereteMaDmp(c, c.Tr("madmp.error.fetch"))
+		failedGenereteMaDmp(c, c.Tr("rcos.madmp.error.fetch"))
 		return
 	}
 
