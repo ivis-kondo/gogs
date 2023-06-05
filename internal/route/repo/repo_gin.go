@@ -530,6 +530,8 @@ func getWebContentURL(ctx *context.Context, key string) error {
 		log.Trace("[DEBUG LOG] c_url : %s", c_url)
 		encodedURL := url.QueryEscape(src_download_url.String())
 		log.Trace("[DEBUG LOG] encodedURL : %s", encodedURL)
+		decodeURL, _ := url.QueryUnescape(src_download_url.String())
+		log.Trace("[DEBUG LOG] decodeURL : %s", decodeURL)
 		ctx.Data["WebContentUrl"] = src_download_url.String()
 		ctx.Data["IsOtherRepositoryContent"] = true
 	} else {
