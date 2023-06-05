@@ -135,15 +135,15 @@ func CreatePost(c *context.Context, f form.CreateRepo) {
 	
 	repo, err := db.CreateRepository(c.User, ctxUser, db.CreateRepoOptions{
 		Name:               f.RepoName,
-		Description:        f.Description,
+		Description:        strings.ReplaceAll(f.Description, "\r\n", "\n"),
 		Gitignores:         "",
 		License:            "",
 		Readme:             "Default",
 		IsPrivate:          f.Private || conf.Repository.ForcePrivate,
 		IsUnlisted:         f.Unlisted,
 		AutoInit:           true,
-		ProjectName:        f.ProjectName,
-		ProjectDescription: f.ProjectDescription,
+		ProjectName:        strings.ReplaceAll(f.ProjectName, "\r\n", "\n"),
+		ProjectDescription: strings.ReplaceAll(f.ProjectDescription, "\r\n", "\n"),
 	})
 	if err == nil {
 		log.Trace("Repository created [%d]: %s/%s", repo.ID, ctxUser.Name, repo.Name)

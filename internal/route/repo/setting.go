@@ -82,7 +82,7 @@ func SettingsPost(c *context.Context, f form.RepoSetting) {
 		repo.Name = newRepoName
 		repo.LowerName = strings.ToLower(newRepoName)
 
-		repo.Description = f.Description
+		repo.Description = strings.ReplaceAll(f.Description, "\r\n", "\n")
 		repo.Website = f.Website
 
 		// Visibility of forked repository is forced sync with base repository.
@@ -760,8 +760,8 @@ func SettingsProtectePost(c *context.Context, f form.ResearchProtect) {
 		return
 	}
 
-	repo.ProtectName = f.ProjectName
-	repo.ProjectDescription = f.ProjectDescription
+	repo.ProtectName = strings.ReplaceAll(f.ProjectName, "\r\n", "\n")
+	repo.ProjectDescription = strings.ReplaceAll(f.ProjectDescription, "\r\n", "\n")
 
 	if err := db.UpdateRepository(repo, false); err != nil {
 		c.Error(err, "update repository")
