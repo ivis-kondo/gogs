@@ -15,7 +15,7 @@
 // ../../../templates/admin/user/edit.tmpl (5.459kB)
 // ../../../templates/admin/user/list.tmpl (1.879kB)
 // ../../../templates/admin/user/new.tmpl (2.811kB)
-// ../../../templates/base/alert.tmpl (457B)
+// ../../../templates/base/alert.tmpl (551B)
 // ../../../templates/base/delete_modal_actions.tmpl (261B)
 // ../../../templates/base/footer.tmpl (2.132kB)
 // ../../../templates/base/footer_gin_brand.tmpl (1.101kB)
@@ -534,7 +534,7 @@ func adminUserNewTmpl() (*asset, error) {
 	return a, nil
 }
 
-var _baseAlertTmpl = "\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x94\xcf\xb1\x0a\xc2\x30\x14\x85\xe1\x39\x79\x8a\xd0\x07\x68\xc1\x39\x66\x53\x14\xec\x54\xc1\x39\xb4\x69\xbc\x50\x93\x92\xdb\xd6\x21\xde\x77\x77\x50\xa8\x48\xaa\x74\x3e\xfc\x7c\x9c\x18\xa1\x15\xf9\xbe\xd3\x78\xcd\x77\x21\xf8\x50\xa2\x25\xe2\x4c\x36\x30\x89\xba\xd3\x88\xdb\x6c\x04\xe1\x8c\xd5\x03\x4c\x46\xdc\x0c\xa2\xb6\x26\x53\x9c\x31\xd9\xab\x18\xbf\x5a\xf1\x10\xd5\x10\x36\x87\x73\x79\x22\x92\x45\xaf\x38\x93\x45\x03\x93\xe2\x31\x1a\xd7\x10\xf1\x4f\xf1\xa2\x83\x03\x67\xd3\xe6\xfd\x35\x2e\x92\x73\xbc\x0e\xad\xc6\xba\x36\x88\x69\xb4\xf7\x08\x3f\x8f\xce\xf5\x3a\xf5\xe8\x5a\x9f\x26\xc1\xb5\x7e\x91\x7b\x67\xff\xad\x67\x00\x00\x00\xff\xff\xec\xcc\x9c\xbb\xc9\x01\x00\x00"
+var _baseAlertTmpl = "\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x94\xd1\xc1\x6a\x84\x30\x10\x06\xe0\x73\xf2\x14\xc1\x07\x50\xe8\x51\xd2\xdc\x5a\x5a\xa8\x27\x0b\x3d\x07\x8d\xe9\x80\x4d\x42\x46\xed\x21\x9b\x77\x5f\x50\x59\x97\xdd\xb8\x8b\xd7\xcc\xfc\x7c\x19\xfe\x10\xa0\x63\xf9\x7b\x2f\xf1\x37\x7f\xf3\xde\xfa\x0a\x75\x8c\x94\xf0\x16\x26\xd6\xf4\x12\xf1\x35\x1b\x81\x19\xa5\xe5\x00\x93\x62\x7f\x0a\x51\x6a\x95\x09\x4a\x08\x77\x22\x84\x9b\x2c\x3b\xb1\x7a\xf0\x2f\x1f\xdf\xd5\x57\x8c\xbc\x70\x82\x12\x5e\xb4\x30\x09\x1a\x82\x32\x6d\x8c\xf4\x5a\xfc\x91\xde\x80\xd1\x69\xf3\x7f\x19\xee\x92\x5b\xf8\x18\x5a\x8f\x4d\xa3\x10\xd3\xa8\xb3\x08\x0f\x0f\xdd\xd2\xc7\xd4\x4f\xd3\xd9\x34\x09\xa6\xb3\xbb\xdc\x1a\x7b\x6e\x51\xee\xc4\x5c\x42\x79\xd7\xc9\x9a\xe0\x4e\xac\x9f\x2f\x13\xd7\x6c\x4b\xf3\xe4\xb2\xb2\xbc\x9f\x03\x00\x00\xff\xff\xc3\x44\x51\x4e\x27\x02\x00\x00"
 
 func baseAlertTmplBytes() ([]byte, error) {
 	return bindataRead(
@@ -549,8 +549,8 @@ func baseAlertTmpl() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "base/alert.tmpl", size: 457, mode: os.FileMode(0644), modTime: time.Unix(1681812881, 0)}
-	a := &asset{bytes: bytes, info: info, digest: [32]uint8{0x2e, 0x82, 0xf9, 0x6, 0xef, 0x1b, 0x73, 0x38, 0xd, 0x6f, 0x4f, 0xd, 0x27, 0xc, 0xdc, 0xba, 0x5e, 0x77, 0x96, 0xf, 0x1e, 0xcd, 0x1, 0x5f, 0x62, 0x71, 0x2d, 0x8f, 0xb2, 0x9d, 0xe4, 0x96}}
+	info := bindataFileInfo{name: "base/alert.tmpl", size: 551, mode: os.FileMode(0644), modTime: time.Unix(1685930924, 0)}
+	a := &asset{bytes: bytes, info: info, digest: [32]uint8{0xbe, 0x88, 0x5a, 0x65, 0xce, 0xe3, 0x8, 0x4d, 0x28, 0xbd, 0x5a, 0x55, 0x13, 0xc7, 0xe6, 0xda, 0x54, 0x24, 0xed, 0x89, 0x4e, 0x83, 0xa, 0x1d, 0x9e, 0x35, 0x69, 0xed, 0x6a, 0xe1, 0x5b, 0xdb}}
 	return a, nil
 }
 
@@ -2509,7 +2509,7 @@ func repoSettingsOptionsTmpl() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "repo/settings/options.tmpl", size: 19197, mode: os.FileMode(0644), modTime: time.Unix(1685354166, 0)}
+	info := bindataFileInfo{name: "repo/settings/options.tmpl", size: 19197, mode: os.FileMode(0644), modTime: time.Unix(1685693370, 0)}
 	a := &asset{bytes: bytes, info: info, digest: [32]uint8{0x42, 0x10, 0xbe, 0x16, 0x66, 0xdf, 0x62, 0x90, 0x7c, 0x92, 0x66, 0x84, 0xc, 0xc6, 0x67, 0x12, 0xdc, 0x57, 0xdb, 0xe3, 0xbf, 0xfb, 0x2, 0xf9, 0x53, 0x9e, 0x80, 0xe7, 0x4d, 0x6, 0x1b, 0xcb}}
 	return a, nil
 }
@@ -3129,7 +3129,7 @@ func userDashboardDashboardTmpl() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "user/dashboard/dashboard.tmpl", size: 5176, mode: os.FileMode(0644), modTime: time.Unix(1685521439, 0)}
+	info := bindataFileInfo{name: "user/dashboard/dashboard.tmpl", size: 5176, mode: os.FileMode(0644), modTime: time.Unix(1685693370, 0)}
 	a := &asset{bytes: bytes, info: info, digest: [32]uint8{0xa8, 0xbd, 0xf8, 0x18, 0x14, 0x3f, 0x18, 0x58, 0x7, 0xc7, 0x27, 0xb8, 0xa5, 0x4d, 0x13, 0x53, 0xdb, 0x23, 0x54, 0x36, 0x3f, 0x77, 0xf5, 0x63, 0x11, 0x65, 0x2e, 0x47, 0x3d, 0x8a, 0x8a, 0xf2}}
 	return a, nil
 }

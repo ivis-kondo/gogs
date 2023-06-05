@@ -242,8 +242,9 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 	/* 共通で使用する imageファイルを取得する */
 	fetchImagefile(c)
 
-	c.GetFlash().Success("maDMP generated!")
-	c.Redirect(c.GetRepo().GetRepoLink())
+	//c.GetFlash().Success("maDMP generated!")
+	//c.Redirect(c.GetRepo().GetRepoLink())
+	successGenereteMaDmp(c, "maDMP generated!")
 }
 
 type AbstructRepoUtil interface {
@@ -332,11 +333,18 @@ func (f repoUtil) decodeBlobContent(blobInfo []byte) (string, error) {
 	return string(decodedBlobContent), nil
 }
 
+func successGenereteMaDmp(c context.AbstructContext, msg string) {
+	c.GetFlash().SuccessMsg = msg
+	c.CallData()["Flash"] = c.GetFlash()
+	c.Redirect(c.GetRepo().GetRepoLink())
+}
+
 // failedGenerateMaDmp is RCOS specific code.
 // This is a function used by GenerateMaDmp to emit an error message
 // on UI when maDMP generation fails.
 func failedGenereteMaDmp(c context.AbstructContext, msg string) {
 	c.GetFlash().Error(msg)
+	c.CallData()["Flash"] = c.GetFlash()
 	c.Redirect(c.GetRepo().GetRepoLink())
 }
 
