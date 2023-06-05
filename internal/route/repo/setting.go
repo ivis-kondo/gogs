@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"strings"
 	"time"
+	"unicode"
 
 	"github.com/gogs/git-module"
 	"github.com/unknwon/com"
@@ -745,6 +746,19 @@ func SettingsProtectePost(c *context.Context, f form.ResearchProtect) {
 	c.Data["PageIsSettingsProject"] = true
 
 	repo := c.Repo.Repository
+
+	// velidate Research Project Name
+	projectname_has_char := false
+	for _, char := range f.ProjectName {
+		if unicode.IsLetter(char) || unicode.Is(unicode.Hiragana, char) || unicode.Is(unicode.Katakana, char) || unicode.Is(unicode.Han, char) {
+			projectname_has_char = true
+		}
+
+	}
+	if projectname_has_char == false{
+		c.RenderWithErr(c.Tr("form.projectname_has_no_char"), SETTINGS_PROJECT, &f)
+		return
+	}
 
 	repo.ProtectName = f.ProjectName
 	repo.ProjectDescription = f.ProjectDescription
