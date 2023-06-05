@@ -525,6 +525,7 @@ func getWebContentURL(ctx *context.Context, key string) error {
 		src_download_url.Path = strings.Replace(u.Path, strings.Split(u.Path, "/")[3], "src", 1)
 		log.Trace("[DEBUG LOG] u.Path : %s", u.Path)
 		log.Trace("[DEBUG LOG] strings.Replace(u.Path, strings.Split(u.Path, \"/\")[3], \"src\", 1) : %s", strings.Replace(u.Path, strings.Split(u.Path, "/")[3], "src", 1))
+		log.Trace("[DEBUG LOG] src_download_url.String() : %s", src_download_url.String())
 		ctx.Data["WebContentUrl"] = src_download_url.String()
 		ctx.Data["IsOtherRepositoryContent"] = true
 	} else {
