@@ -526,7 +526,8 @@ func getWebContentURL(ctx *context.Context, key string) error {
 		ctx.Data["IsOtherRepositoryContent"] = true
 	} else {
 		// S3などGIN-fork以外のインターネット上に実データがある場合
-		ctx.Data["WebContentUrl"] = string(download_url)
+		decodeURL, _ := url.QueryUnescape(string(download_url))
+		ctx.Data["WebContentUrl"] = decodeURL
 		ctx.Data["IsWebContent"] = true
 	}
 	return err
