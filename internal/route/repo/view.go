@@ -383,11 +383,9 @@ func Home(c *context.Context) {
 			c.Data["ParentPath"] = "/" + paths[len(paths)-2]
 		}
 	}
-	log.Trace(".Flash_before%v", c.Data["Flash"])
 	if c.Data["Flash"] == nil {
 		c.Data["Flash"] = c.Flash
 	}
-	log.Trace(".Flash_after%v", c.Data["Flash"])
 	c.Data["Paths"] = paths
 	c.Data["TreeLink"] = treeLink
 	c.Data["TreeNames"] = treeNames

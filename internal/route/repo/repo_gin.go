@@ -156,22 +156,17 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 		return
 	}
 
-	//===================================================ここから
-	fmt.Printf("dmp:%v\n", dmp)
-	fmt.Printf("decodedMaDmp:%v\n", decodedMaDmp)
-
 	// dmp.jsonに"fields"プロパティがある想定
 	property := []string{"workflowIdentifier", "contentSize", "datasetStructure", "useDocker"}
 	/* maDMPへ埋め込む情報を追加する際は
 	上記リストに追加すること
 	e.g.
-	hasGrdm
+	, hasGrdm
 	*/
 	selected := make(map[string]interface{})
 	for _, v := range property {
 		selected[v] = dmp.(map[string]interface{})[v]
 	}
-	//===================================================ここまで
 
 	// dmp.jsonに"fields"プロパティがある想定
 	selectedField := dmp.(map[string]interface{})["workflowIdentifier"]
@@ -184,7 +179,6 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 	hasGrdm := dmp.(map[string]interface{})["hasGrdm"]
 	*/
 
-	//===================================================ここから
 	// Check if the value is entered
 	var message string
 	for k, v := range selected {
@@ -200,7 +194,6 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 		failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: DMP has no values for ["+message+"]")
 		return
 	}
-	//===================================================ここまで
 
 	pathToMaDmp := "maDMP.ipynb"
 	err = c.GetRepo().GetDbRepo().UpdateRepoFile(c.GetUser(), db.UpdateRepoFileOptions{
@@ -242,9 +235,8 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 	/* 共通で使用する imageファイルを取得する */
 	fetchImagefile(c)
 
-	//c.GetFlash().Success("maDMP generated!")
-	//c.Redirect(c.GetRepo().GetRepoLink())
-	successGenereteMaDmp(c, "maDMP generated!")
+	c.GetFlash().Success("maDMP generated!")
+	c.Redirect(c.GetRepo().GetRepoLink())
 }
 
 type AbstructRepoUtil interface {
@@ -333,18 +325,11 @@ func (f repoUtil) decodeBlobContent(blobInfo []byte) (string, error) {
 	return string(decodedBlobContent), nil
 }
 
-func successGenereteMaDmp(c context.AbstructContext, msg string) {
-	c.GetFlash().SuccessMsg = msg
-	c.CallData()["Flash"] = c.GetFlash()
-	c.Redirect(c.GetRepo().GetRepoLink())
-}
-
 // failedGenerateMaDmp is RCOS specific code.
 // This is a function used by GenerateMaDmp to emit an error message
 // on UI when maDMP generation fails.
 func failedGenereteMaDmp(c context.AbstructContext, msg string) {
 	c.GetFlash().Error(msg)
-	c.CallData()["Flash"] = c.GetFlash()
 	c.Redirect(c.GetRepo().GetRepoLink())
 }
 

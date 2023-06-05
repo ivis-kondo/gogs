@@ -704,9 +704,6 @@ func createDmp(c context.AbstructContext, f AbstructRepoUtil, d AbstructDmpUtil)
 	c.CallData()["PreviewableFileModes"] = strings.Join(conf.Repository.Editor.PreviewableFileModes, ",")
 	c.CallData()["EditorconfigURLPrefix"] = fmt.Sprintf("%s/api/v1/repos/%s/editorconfig/", conf.Server.Subpath, c.GetRepo().GetDbRepo().FullName())
 
-	log.Trace("schema: %v", c.CallData()["Schema"])
-	log.Trace("filecontent: %v", c.CallData()["FileContent"])
-
 	c.Success(tmplEditorEdit)
 }
 
