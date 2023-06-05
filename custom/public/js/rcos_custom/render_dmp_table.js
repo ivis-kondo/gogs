@@ -1,4 +1,4 @@
-// createTable is RCOS specific code.
+// CreateTableFromJSON is RCOS specific code.
 // This generates a table to check the information of the DMP
 // created by the user and displays it on the screen.
 function CreateTableFromJSON(tbodyEle, dmp) {
