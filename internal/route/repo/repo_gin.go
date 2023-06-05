@@ -168,17 +168,6 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 		selected[v] = dmp.(map[string]interface{})[v]
 	}
 
-	// dmp.jsonに"fields"プロパティがある想定
-	selectedField := dmp.(map[string]interface{})["workflowIdentifier"]
-	selectedDataSize := dmp.(map[string]interface{})["contentSize"]
-	selectedDatasetStructure := dmp.(map[string]interface{})["datasetStructure"]
-	selectedUseDocker := dmp.(map[string]interface{})["useDocker"]
-	/* maDMPへ埋め込む情報を追加する際は
-	ここに追記のこと
-	e.g.
-	hasGrdm := dmp.(map[string]interface{})["hasGrdm"]
-	*/
-
 	// Check if the value is entered
 	var message string
 	for k, v := range selected {
@@ -186,12 +175,12 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 			if len(message) == 0 {
 				message = k
 			} else {
-				message = message + "," + k
+				message = message + ", " + k
 			}
 		}
 	}
 	if len(message) > 0 {
-		failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: DMP has no values for ["+message+"]")
+		failedDmp(c, "Sorry, faild gerate maDMP: DMP has no values for [ "+message+" ]")
 		return
 	}
 
@@ -204,15 +193,15 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 		NewTreeName:  pathToMaDmp,
 		Message:      "[GIN] Generate maDMP",
 		Content: fmt.Sprintf(
-			decodedMaDmp,  // この行が埋め込み先: maDMP
-			selectedField, // ここより以下は埋め込む値: DMP情報
-			selectedDataSize,
-			selectedDatasetStructure,
-			selectedUseDocker,
+			decodedMaDmp,                   // この行が埋め込み先: maDMP
+			selected["workflowIdentifier"], // ここより以下は埋め込む値: DMP情報
+			selected["contentSize"],
+			selected["datasetStructure"],
+			selected["useDocker"],
 			/* maDMPへ埋め込む情報を追加する際は
 			ここに追記のこと
 			e.g.
-			hasGrdm, */
+			selected["hasGrdm"] */
 		),
 		IsNewFile: true,
 	})
@@ -224,7 +213,7 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 	}
 
 	/* Dockerfileか、binderフォルダを取得する。 */
-	if selectedUseDocker == "YES" {
+	if selected["useDocker"] == "YES" {
 		/* dockerファイルを取得する */
 		fetchDockerfile(c)
 	} else {
@@ -331,6 +320,11 @@ func (f repoUtil) decodeBlobContent(blobInfo []byte) (string, error) {
 func failedGenereteMaDmp(c context.AbstructContext, msg string) {
 	c.GetFlash().Error(msg)
 	c.Redirect(c.GetRepo().GetRepoLink())
+}
+
+func failedDmp(c context.AbstructContext, msg string) {
+	c.GetFlash().Error(msg)
+	c.Redirect(c.GetRepo().GetRepoLink() + "/_edit/" + c.GetRepo().GetBranchName() + "/dmp.json")
 }
 
 // fetchDockerfile is RCOS specific code.
