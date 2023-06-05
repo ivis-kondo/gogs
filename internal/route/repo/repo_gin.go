@@ -532,7 +532,7 @@ func getWebContentURL(ctx *context.Context, key string) error {
 		log.Trace("[DEBUG LOG] encodedURL : %s", encodedURL)
 		decodeURL, _ := url.QueryUnescape(src_download_url.String())
 		log.Trace("[DEBUG LOG] decodeURL : %s", decodeURL)
-		ctx.Data["WebContentUrl"] = src_download_url.String()
+		ctx.Data["WebContentUrl"] = decodeURL
 		ctx.Data["IsOtherRepositoryContent"] = true
 	} else {
 		// S3などGIN-fork以外のインターネット上に実データがある場合
