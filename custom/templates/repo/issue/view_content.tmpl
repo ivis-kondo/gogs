@@ -212,8 +212,8 @@
 										<div class="commit description field">
 											<div class="ui top">
 												<p>{{$.i18n.Tr "repo.pulls.commit_description"}}:</p>
-												<textarea class="autosize" id="commit_description" name="commit_description" tabindex="4" rows="3"></textarea>
-                                                <span class="help">{{.i18n.Tr "available_length"}}: <span id="commitDescLength"></span></span>
+												<textarea maxlength="100" class="autosize" id="commit_description" name="commit_description" tabindex="4" rows="3"></textarea>
+                                                <span class="help">{{.i18n.Tr "available_length"}}: <span>100</span></span>
 											</div>
 										</div>
 										<button class="ui green button">

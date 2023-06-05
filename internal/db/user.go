@@ -752,7 +752,7 @@ func updateUser(e Engine, u *User) error {
 
 	u.LowerName = strings.ToLower(u.Name)
 	u.Website = tool.TruncateString(u.Website, 255)
-	u.Description = tool.TruncateString(u.Description, 255)
+	//u.Description = tool.TruncateString(u.Description, 255)
 
 	_, err := e.ID(u.ID).AllCols().Update(u)
 	return err

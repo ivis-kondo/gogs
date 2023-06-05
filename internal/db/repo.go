@@ -1489,12 +1489,14 @@ func GetNonMirrorRepositories() ([]*Repository, error) {
 func updateRepository(e Engine, repo *Repository, visibilityChanged bool) (err error) {
 	repo.LowerName = strings.ToLower(repo.Name)
 
+	/*
 	if len(repo.Description) > 512 {
 		repo.Description = repo.Description[:512]
 	}
 	if len(repo.Website) > 255 {
 		repo.Website = repo.Website[:255]
 	}
+	*/
 
 	if _, err = e.ID(repo.ID).AllCols().Update(repo); err != nil {
 		return fmt.Errorf("update: %v", err)

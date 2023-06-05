@@ -46,8 +46,8 @@
 				</div>
 				<div class="field">
 					<label>{{.i18n.Tr "repo.release.content"}}</label>
-                    <textarea class="autosize" id="content" name="content">{{.content}}</textarea>
-			        <span class="help">{{.i18n.Tr "available_length"}}: <span id="contentLength"></span></span>
+                    <textarea maxlength="3000" class="autosize" id="content" name="content">{{.content}}</textarea>
+			        <span class="help">{{.i18n.Tr "available_length"}}: <span>3000</span></span>
 				</div>
 				<div class="field">
 					{{if .attachments}}

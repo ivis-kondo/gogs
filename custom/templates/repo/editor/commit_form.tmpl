@@ -6,8 +6,8 @@
 			<input name="commit_summary" value="{{if .PageIsDelete}}{{.i18n.Tr "repo.editor.delete" .TreePath}}{{else if .PageIsUpload}}{{.i18n.Tr "repo.editor.upload_files_to_dir"}}{{else if and .IsNewFile .IsDmpJson}}{{.i18n.Tr "repo.editor.add_dmp"}}{{else if .IsNewFile}}{{.i18n.Tr "repo.editor.add_tmpl"}}{{else}}{{.i18n.Tr "repo.editor.update" .TreePath}}{{end}}" autofocus>
 		</div>
 		<div class="field">
-			<textarea class="autosize" id="commit_message" name="commit_message" placeholder="{{.i18n.Tr "repo.editor.commit_message_desc"}}" rows="5">{{.commit_message}}</textarea>
-			<span class="help">{{.i18n.Tr "available_length"}}: <span id="commitMessageLength"></span></span>
+			<textarea maxlength="100" class="autosize" id="commit_message" name="commit_message" placeholder="{{.i18n.Tr "repo.editor.commit_message_desc"}}" rows="5">{{.commit_message}}</textarea>
+			<span class="help">{{.i18n.Tr "available_length"}}: <span>100</span></span>
 		</div>
 		<!--Extracted the input needed to commit to the default branch from the comment out.  -->
 		<input type="hidden" name="commit_choice" value="direct">

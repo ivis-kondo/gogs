@@ -1639,6 +1639,7 @@ $(document).ready(function() {
     );
   });
 
+  /*
   // Autosize
   if ($("#description.autosize").length > 0) {
     autosize($("#description"));
@@ -1672,6 +1673,8 @@ $(document).ready(function() {
     autosize($("#commit_description"));
     showMessageMaxLength(100, "commit_description", "commitDescLength");
   }
+  */
+  
 
 
   // AJAX load buttons
@@ -1903,26 +1906,44 @@ function getByteLen(normalVal) {
   return byteLen;
 }
 
+/*
 function showMessageMaxLength(maxLen, textElemId, counterId) {
+
   var $msg = $("#" + textElemId);
   $("#" + counterId).html(maxLen - getByteLen($msg.val()));
-
+  console.log("TEST")
+  var $msg = $(this);
+  var text = $msg.val();
+  console.log(text)
+  if (text === "\n" || text === "\r" || text === "\r\n") { // 入力が改行だけの場合
+    return false;
+  }
+  
   var onMessageKey = function(e) {
+    console.log("TEST")
     var $msg = $(this);
     var text = $msg.val();
-    var len = getByteLen(text);
-    var remainder = maxLen - len;
-
+    //var len = getByteLen(text);
+    //var remainder = maxLen - len;
+    console.log($text)
+    if (text === "\n" || text === "\r" || text === "\r\n") { // 入力が改行だけの場合
+      return false;
+    }
+    
     if (len >= maxLen) {
       $msg.val($msg.val().substr(0, maxLen));
       remainder = 0;
     }
+    
 
-    $("#" + counterId).html(remainder);
+    $("#" + counterId).html(maxLen);
+    
   };
+  
 
-  $msg.keyup(onMessageKey).keydown(onMessageKey);
+  //$msg.keyup(onMessageKey).keydown(onMessageKey);
 }
+*/
 
 // GIN specific code
 function OdmlEditor() {
