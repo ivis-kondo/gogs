@@ -82,7 +82,7 @@ func renderDirectory(c *context.Context, treeLink string) {
 			err := d.BidingDmpSchemaList(c, schemaUrl)
 			if err != nil && !c.IsInternalError() {
 				log.Warn("%v", err)
-				c.Flash.Warning(c.Tr("rcos.server.connect.failure"))
+				c.Flash.Warning(c.Tr("rcos.server.connect.failure"), true)
 			} else if err != nil && c.IsInternalError() {
 				log.Error(err.Error())
 				c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
@@ -383,9 +383,7 @@ func Home(c *context.Context) {
 			c.Data["ParentPath"] = "/" + paths[len(paths)-2]
 		}
 	}
-	if c.Data["Flash"] == nil {
-		c.Data["Flash"] = c.Flash
-	}
+
 	c.Data["Paths"] = paths
 	c.Data["TreeLink"] = treeLink
 	c.Data["TreeNames"] = treeNames
