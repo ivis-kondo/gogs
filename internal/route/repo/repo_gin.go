@@ -123,7 +123,7 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 	decodedMaDmp, err = f.DecodeBlobContent(src)
 	if err != nil {
 		log.Error("maDMP blob could not be decorded: %v", err)
-		failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed")
+		failedGenereteMaDmp(c, c.Tr("rcos.madmp.error.fetch"))
 		return
 	}
 
@@ -136,14 +136,14 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 	if err != nil || entry == nil {
 		log.Error("dmp.json blob could not be retrieved: %v", err)
 
-		failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: DMP could not read")
+		failedGenereteMaDmp(c, c.Tr("rcos.madmp.error.read"))
 		return
 	}
 	buf, err := entry.Bytes()
 	if err != nil {
 		log.Error("dmp.json data could not be read: %v", err)
 
-		failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: DMP could not read")
+		failedGenereteMaDmp(c, c.Tr("rcos.madmp.error.read"))
 		return
 	}
 
@@ -152,20 +152,34 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 	if err != nil {
 		log.Error("Unmarshal DMP info: %v", err)
 
-		failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: DMP could not read")
+		failedGenereteMaDmp(c, c.Tr("rcos.madmp.error.read"))
 		return
 	}
 
 	// dmp.jsonに"fields"プロパティがある想定
-	selectedField := dmp.(map[string]interface{})["workflowIdentifier"]
-	selectedDataSize := dmp.(map[string]interface{})["contentSize"]
-	selectedDatasetStructure := dmp.(map[string]interface{})["datasetStructure"]
-	selectedUseDocker := dmp.(map[string]interface{})["useDocker"]
+	property := []string{"workflowIdentifier", "contentSize", "datasetStructure", "useDocker"}
 	/* maDMPへ埋め込む情報を追加する際は
-	ここに追記のこと
+	上記リストに追加すること
 	e.g.
-	hasGrdm := dmp.(map[string]interface{})["hasGrdm"]
+	, hasGrdm
 	*/
+	selected := make(map[string]interface{})
+	var errProperty string
+	for _, v := range property {
+		selected[v] = dmp.(map[string]interface{})[v]
+		// Check if the value is entered
+		if len(selected[v].(string)) == 0 {
+			if len(errProperty) == 0 {
+				errProperty = v
+			} else {
+				errProperty = errProperty + ", " + v
+			}
+		}
+	}
+	if len(errProperty) > 0 {
+		failedDmp(c, c.Tr("rcos.dmp.error", errProperty))
+		return
+	}
 
 	pathToMaDmp := "maDMP.ipynb"
 	err = c.GetRepo().GetDbRepo().UpdateRepoFile(c.GetUser(), db.UpdateRepoFileOptions{
@@ -176,27 +190,26 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 		NewTreeName:  pathToMaDmp,
 		Message:      "[GIN] Generate maDMP",
 		Content: fmt.Sprintf(
-			decodedMaDmp,  // この行が埋め込み先: maDMP
-			selectedField, // ここより以下は埋め込む値: DMP情報
-			selectedDataSize,
-			selectedDatasetStructure,
-			selectedUseDocker,
+			decodedMaDmp,                   // この行が埋め込み先: maDMP
+			selected["workflowIdentifier"], // ここより以下は埋め込む値: DMP情報
+			selected["contentSize"],
+			selected["datasetStructure"],
+			selected["useDocker"],
 			/* maDMPへ埋め込む情報を追加する際は
 			ここに追記のこと
 			e.g.
-			hasGrdm, */
+			selected["hasGrdm"] */
 		),
 		IsNewFile: true,
 	})
 	if err != nil {
 		log.Error("failed generating maDMP: %v", err)
-
-		failedGenereteMaDmp(c, "Faild gerate maDMP: Already exist")
+		failedGenereteMaDmp(c, c.Tr("rcos.madmp.error.exist"))
 		return
 	}
 
 	/* Dockerfileか、binderフォルダを取得する。 */
-	if selectedUseDocker == "YES" {
+	if selected["useDocker"] == "YES" {
 		/* dockerファイルを取得する */
 		fetchDockerfile(c)
 	} else {
@@ -207,7 +220,7 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 	/* 共通で使用する imageファイルを取得する */
 	fetchImagefile(c)
 
-	c.GetFlash().Success("maDMP generated!")
+	c.GetFlash().Success(c.Tr("rcos.madmp.success"))
 	c.Redirect(c.GetRepo().GetRepoLink())
 }
 
@@ -305,6 +318,11 @@ func failedGenereteMaDmp(c context.AbstructContext, msg string) {
 	c.Redirect(c.GetRepo().GetRepoLink())
 }
 
+func failedDmp(c context.AbstructContext, msg string) {
+	c.GetFlash().Error(msg)
+	c.Redirect(c.GetRepo().GetRepoLink() + "/_edit/" + c.GetRepo().GetBranchName() + "/dmp.json")
+}
+
 // fetchDockerfile is RCOS specific code.
 // This fetches the Dockerfile used when launching Binderhub.
 func fetchDockerfile(c context.AbstructContext) {
@@ -315,14 +333,14 @@ func fetchDockerfile(c context.AbstructContext) {
 	src, err := f.FetchContentsOnGithub(c, dockerfileUrl)
 	if err != nil {
 		log.Error("Dockerfile could not be fetched: %v", err)
-		failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed(Dockerfile)")
+		failedGenereteMaDmp(c, "Sorry, failed generate maDMP: fetching template failed(Dockerfile)")
 		return
 	}
 
 	decodedDockerfile, err := f.DecodeBlobContent(src)
 	if err != nil {
 		log.Error("Dockerfile could not be decorded: %v", err)
-		failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed(Dockerfile)")
+		failedGenereteMaDmp(c, "Sorry, failed generate maDMP: fetching template failed(Dockerfile)")
 		return
 	}
 
@@ -355,7 +373,7 @@ func fetchEmviromentfile(c context.AbstructContext) {
 		src, err := f.FetchContentsOnGithub(c, path)
 		if err != nil {
 			log.Error("%s could not be fetched: %v", Emviromentfile[i], err)
-			failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed(Emviromentfile)")
+			failedGenereteMaDmp(c, "Sorry, failed generate maDMP: fetching template failed(Emviromentfile)")
 			return
 		}
 
@@ -363,7 +381,7 @@ func fetchEmviromentfile(c context.AbstructContext) {
 		if err != nil {
 			log.Error("%s could not be decorded: %v", Emviromentfile[i], err)
 
-			failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed(Emviromentfile)")
+			failedGenereteMaDmp(c, "Sorry, failed generate maDMP: fetching template failed(Emviromentfile)")
 			return
 		}
 
@@ -397,7 +415,7 @@ func fetchImagefile(c context.AbstructContext) {
 		src, err := f.FetchContentsOnGithub(c, path)
 		if err != nil {
 			log.Error("%s could not be fetched: %v", ImageFile[i], err)
-			failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed(ImageFile)")
+			failedGenereteMaDmp(c, "Sorry, failed generate maDMP: fetching template failed(ImageFile)")
 			return
 		}
 
@@ -405,7 +423,7 @@ func fetchImagefile(c context.AbstructContext) {
 		if err != nil {
 			log.Error("%s could not be decorded: %v", ImageFile[i], err)
 
-			failedGenereteMaDmp(c, "Sorry, faild gerate maDMP: fetching template failed(ImageFile)")
+			failedGenereteMaDmp(c, "Sorry, failed generate maDMP: fetching template failed(ImageFile)")
 			return
 		}
 
