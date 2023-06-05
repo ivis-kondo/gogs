@@ -514,8 +514,6 @@ func getWebContentURL(ctx *context.Context, key string) error {
 	location = location[start+len("web: "):]
 	end := strings.Index(string(location), "\n")
 	download_url := location[:end]
-	log.Trace("[DEBUG LOG] download_url : %s", download_url)
-	log.Trace("[DEBUG LOG] string(download_url) : %s", string(download_url))
 	u, _ := url.Parse(string(download_url))
 	if u.Hostname() == conf.Server.Domain {
 		// GIN-forkの実データがaddurlされている場合は、実データファイルの閲覧画面をリンクする
@@ -523,20 +521,11 @@ func getWebContentURL(ctx *context.Context, key string) error {
 		src_download_url.Scheme = u.Scheme
 		src_download_url.Host = u.Host
 		src_download_url.Path = strings.Replace(u.Path, strings.Split(u.Path, "/")[3], "src", 1)
-		log.Trace("[DEBUG LOG] u.Path : %s", u.Path)
-		log.Trace("[DEBUG LOG] strings.Replace(u.Path, strings.Split(u.Path, \"/\")[3], \"src\", 1) : %s", strings.Replace(u.Path, strings.Split(u.Path, "/")[3], "src", 1))
-		log.Trace("[DEBUG LOG] src_download_url.String() : %s", src_download_url.String())
-		c_url, _ := url.Parse(src_download_url.String())
-		log.Trace("[DEBUG LOG] c_url : %s", c_url)
-		encodedURL := url.QueryEscape(src_download_url.String())
-		log.Trace("[DEBUG LOG] encodedURL : %s", encodedURL)
 		decodeURL, _ := url.QueryUnescape(src_download_url.String())
-		log.Trace("[DEBUG LOG] decodeURL : %s", decodeURL)
 		ctx.Data["WebContentUrl"] = decodeURL
 		ctx.Data["IsOtherRepositoryContent"] = true
 	} else {
 		// S3などGIN-fork以外のインターネット上に実データがある場合
-		log.Trace("[DEBUG LOG] S3 string(download_url) : %s", string(download_url))
 		ctx.Data["WebContentUrl"] = string(download_url)
 		ctx.Data["IsWebContent"] = true
 	}
