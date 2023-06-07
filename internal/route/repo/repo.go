@@ -10,6 +10,7 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
+	"unicode"
 
 	"github.com/unknwon/com"
 	log "unknwon.dev/clog/v2"
@@ -119,17 +120,30 @@ func CreatePost(c *context.Context, f form.CreateRepo) {
 		return
 	}
 
+	// velidate Research Project Name
+	projectname_has_char := false
+	for _, char := range f.ProjectName {
+		if unicode.IsLetter(char) || unicode.Is(unicode.Hiragana, char) || unicode.Is(unicode.Katakana, char) || unicode.Is(unicode.Han, char) {
+			projectname_has_char = true
+		}
+
+	}
+	if projectname_has_char == false{
+		c.RenderWithErr(c.Tr("form.projectname_has_no_char"), CREATE, &f)
+		return
+	}
+	
 	repo, err := db.CreateRepository(c.User, ctxUser, db.CreateRepoOptions{
 		Name:               f.RepoName,
-		Description:        f.Description,
+		Description:        strings.ReplaceAll(f.Description, "\r\n", "\n"),
 		Gitignores:         "",
 		License:            "",
 		Readme:             "Default",
 		IsPrivate:          f.Private || conf.Repository.ForcePrivate,
 		IsUnlisted:         f.Unlisted,
 		AutoInit:           true,
-		ProjectName:        f.ProjectName,
-		ProjectDescription: f.ProjectDescription,
+		ProjectName:        strings.ReplaceAll(f.ProjectName, "\r\n", "\n"),
+		ProjectDescription: strings.ReplaceAll(f.ProjectDescription, "\r\n", "\n"),
 	})
 	if err == nil {
 		log.Trace("Repository created [%d]: %s/%s", repo.ID, ctxUser.Name, repo.Name)

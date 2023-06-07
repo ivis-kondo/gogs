@@ -20,8 +20,8 @@
 					</div>
 					<div class="field {{if .Err_Description}}error{{end}}">
 						<label for="team_description">{{.i18n.Tr "org.team_desc"}}</label>
-                        <textarea class="autosize" id="team_description" name="team_description" rows="3">{{.Team.Description}}</textarea>
-			            <span class="help">{{.i18n.Tr "available_length"}}: <span id="teamDescLength"></span></span>
+                        <textarea maxlength="255" class="autosize" id="team_description" name="team_description" rows="3">{{.Team.Description}}</textarea>
+			            <span class="help">{{.i18n.Tr "available_length"}}: <span>255</span></span>
 					</div>
 					{{if not (eq .Team.LowerName "owners")}}
 						<div class="grouped field">

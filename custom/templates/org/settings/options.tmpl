@@ -22,8 +22,8 @@
 						</div>
 						<div class="field {{if .Err_Description}}error{{end}}">
 							<label for="org_description">{{$.i18n.Tr "org.org_desc"}}</label>
-                            <textarea class="autosize" id="org_description" name="org_description" rows="3">{{.Org.Description}}</textarea>
-			                <span class="help">{{.i18n.Tr "available_length"}}: <span id="orgDescLength"></span></span>
+                            <textarea maxlength="255" class="autosize" id="org_description" name="org_description" rows="3">{{.Org.Description}}</textarea>
+			                <span class="help">{{.i18n.Tr "available_length"}}: <span>255</span></span>
 						</div>
 						<div class="field {{if .Err_Website}}error{{end}}">
 							<label for="website">{{.i18n.Tr "org.settings.website"}}</label>
