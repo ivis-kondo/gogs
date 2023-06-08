@@ -336,9 +336,11 @@ func UpdateTeam(t *Team, authChanged bool) (err error) {
 		return errors.New("empty team name")
 	}
 
+	/*
 	if len(t.Description) > 255 {
 		t.Description = t.Description[:255]
 	}
+	*/
 
 	sess := x.NewSession()
 	defer sess.Close()

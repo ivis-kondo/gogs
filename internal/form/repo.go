@@ -27,12 +27,12 @@ type CreateRepo struct {
 	RepoName           string `binding:"Required;AlphaDashDot;MaxSize(100)"`
 	Private            bool
 	Unlisted           bool
-	Description        string `binding:"MaxSize(512)"`
+	Description        string
 	AutoInit           bool
 	Gitignores         string
 	License            string
 	Readme             string
-	ProjectName        string `binding:"Required"`
+	ProjectName        string
 	ProjectDescription string
 }
 
@@ -90,7 +90,7 @@ func (f MigrateRepo) ParseRemoteAddr(user *db.User) (string, error) {
 
 type RepoSetting struct {
 	RepoName      string `binding:"Required;AlphaDashDot;MaxSize(100)"`
-	Description   string `binding:"MaxSize(512)"`
+	Description   string
 	Website       string `binding:"Url;MaxSize(100)"`
 	Branch        string
 	Interval      int
@@ -431,7 +431,7 @@ func (f *DeleteRepoFile) IsNewBrnach() bool {
 Research Project From
 **/
 type ResearchProtect struct {
-	ProjectName        string
+	ProjectName        string `binding:"Required"`
 	ProjectDescription string
 }
 

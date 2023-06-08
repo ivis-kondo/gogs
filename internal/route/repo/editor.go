@@ -115,10 +115,8 @@ func editFile(c *context.Context, isNewFile bool) {
 		} else {
 			c.Data["FileContent"] = content
 		}
-		c.Data["commit_summary"] = "実施事項: " + blob.Name() + "を編集"
 	} else {
 		treeNames = append(treeNames, "") // Append empty string to allow user name the new file.
-		c.Data["commit_summary"] = "実施事項: ファイルを新規作成"
 	}
 
 	c.Data["ParentTreePath"] = path.Dir(c.Repo.TreePath)
@@ -360,11 +358,9 @@ func DeleteFile(c *context.Context) {
 		c.NotFound()
 		return
 	}
-	blob := entry.Blob()
 
 	c.Data["BranchLink"] = c.Repo.RepoLink + "/src/" + c.Repo.BranchName
 	c.Data["TreePath"] = c.Repo.TreePath
-	c.Data["commit_summary"] = "実施事項: " + blob.Name() + "を削除"
 	c.Data["commit_message"] = ""
 	c.Data["commit_choice"] = "direct"
 	c.Data["new_branch_name"] = ""
@@ -452,7 +448,6 @@ func UploadFile(c *context.Context) {
 	c.Data["TreeNames"] = treeNames
 	c.Data["TreePaths"] = treePaths
 	c.Data["BranchLink"] = c.Repo.RepoLink + "/src/" + c.Repo.BranchName
-	c.Data["commit_summary"] = "実施事項: ファイルをアップロード"
 	c.Data["commit_message"] = ""
 	c.Data["commit_choice"] = "direct"
 	c.Data["new_branch_name"] = ""
@@ -523,7 +518,7 @@ func UploadFilePost(c *context.Context, f form.UploadRepoFile) {
 
 	message := strings.TrimSpace(f.CommitSummary)
 	if len(message) == 0 {
-		message = c.Tr("repo.editor.upload_files_to_dir", f.TreePath)
+		message = c.Tr("repo.editor.upload_files_to_dir")
 	}
 
 	f.CommitMessage = strings.TrimSpace(f.CommitMessage)
@@ -693,13 +688,13 @@ func createDmp(c context.AbstructContext, f AbstructRepoUtil, d AbstructDmpUtil)
 	c.CallData()["IsJSON"] = true
 	c.CallData()["IsDmpJson"] = true
 	c.CallData()["IsNewFile"] = true
+	c.CallData()["IsRcosButton"] = true
 
 	c.CallData()["FileContent"] = combinedDmp
 	c.CallData()["ParentTreePath"] = path.Dir(c.GetRepo().GetTreePath())
 	c.CallData()["TreeNames"] = treeNames
 	c.CallData()["TreePaths"] = treePaths
 	c.CallData()["BranchLink"] = c.GetRepo().GetRepoLink() + "/src/" + c.GetRepo().GetBranchName()
-	c.CallData()["commit_summary"] = "実施事項: dmp.jsonを新規作成"
 	c.CallData()["commit_message"] = ""
 	c.CallData()["commit_choice"] = "direct"
 	c.CallData()["new_branch_name"] = ""

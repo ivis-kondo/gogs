@@ -7,6 +7,7 @@ package org
 import (
 	"net/http"
 	"path"
+	"strings"
 
 	"github.com/unknwon/com"
 	log "unknwon.dev/clog/v2"
@@ -157,7 +158,7 @@ func NewTeamPost(c *context.Context, f form.CreateTeam) {
 	t := &db.Team{
 		OrgID:       c.Org.Organization.ID,
 		Name:        f.TeamName,
-		Description: f.Description,
+		Description: strings.ReplaceAll(f.TeamDescription, "\r\n", "\n"),
 		Authorize:   db.ParseAccessMode(f.Permission),
 	}
 	c.Data["Team"] = t
@@ -244,7 +245,7 @@ func EditTeamPost(c *context.Context, f form.CreateTeam) {
 			t.Authorize = auth
 		}
 	}
-	t.Description = f.Description
+	t.Description = strings.ReplaceAll(f.TeamDescription, "\r\n", "\n")
 	if err := db.UpdateTeam(t, isAuthChanged); err != nil {
 		c.Data["Err_TeamName"] = true
 		switch {

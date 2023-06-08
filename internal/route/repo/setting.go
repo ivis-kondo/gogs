@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"strings"
 	"time"
+	"unicode"
 
 	"github.com/gogs/git-module"
 	"github.com/unknwon/com"
@@ -40,14 +41,12 @@ const (
 func Settings(c *context.Context) {
 	c.Title("repo.settings")
 	c.PageIs("SettingsOptions")
-	c.RequireAutosize()
 	c.Success(SETTINGS_OPTIONS)
 }
 
 func SettingsPost(c *context.Context, f form.RepoSetting) {
 	c.Title("repo.settings")
 	c.PageIs("SettingsOptions")
-	c.RequireAutosize()
 
 	repo := c.Repo.Repository
 
@@ -83,7 +82,7 @@ func SettingsPost(c *context.Context, f form.RepoSetting) {
 		repo.Name = newRepoName
 		repo.LowerName = strings.ToLower(newRepoName)
 
-		repo.Description = f.Description
+		repo.Description = strings.ReplaceAll(f.Description, "\r\n", "\n")
 		repo.Website = f.Website
 
 		// Visibility of forked repository is forced sync with base repository.
@@ -748,8 +747,21 @@ func SettingsProtectePost(c *context.Context, f form.ResearchProtect) {
 
 	repo := c.Repo.Repository
 
-	repo.ProtectName = f.ProjectName
-	repo.ProjectDescription = f.ProjectDescription
+	// velidate Research Project Name
+	projectname_has_char := false
+	for _, char := range f.ProjectName {
+		if unicode.IsLetter(char) || unicode.Is(unicode.Hiragana, char) || unicode.Is(unicode.Katakana, char) || unicode.Is(unicode.Han, char) {
+			projectname_has_char = true
+		}
+
+	}
+	if projectname_has_char == false{
+		c.RenderWithErr(c.Tr("form.projectname_has_no_char"), SETTINGS_PROJECT, &f)
+		return
+	}
+
+	repo.ProtectName = strings.ReplaceAll(f.ProjectName, "\r\n", "\n")
+	repo.ProjectDescription = strings.ReplaceAll(f.ProjectDescription, "\r\n", "\n")
 
 	if err := db.UpdateRepository(repo, false); err != nil {
 		c.Error(err, "update repository")

@@ -59,62 +59,10 @@
 					</div>
 					<div class="inline field {{if .Err_Description}}error{{end}}">
 						<label for="description">{{.i18n.Tr "repo.repo_desc"}}</label>
-						<textarea class="autosize" id="description" name="description" rows="3">{{.description}}</textarea>
-						<span class="help">{{.i18n.Tr "repo.repo_description_helper" | Safe}}</span>
-						<span class="help">{{.i18n.Tr "repo.repo_description_length"}}: <span id="descLength"></span></span>
+						<textarea maxlength="512" class="autosize" id="description" name="description" rows="3">{{.description}}</textarea>
+						<span class="help">{{.i18n.Tr "repo.repo_description_length"}}: <span>512</span></span>
 					</div>
 
-					<div class="ui divider"></div>
-
-					<div class="inline field">
-						<label><h3>Initial files</h3></label>
-					</div>
-					<div class="inline field" data-tooltip={{.i18n.Tr "repo.repo_gitignore_tooltip"}}>
-						<label>.gitignore</label>
-						<a target="_blank" href="https://git-scm.com/docs/gitignore"><span class="octicon octicon-question"></span></a>
-						<div class="ui multiple search normal selection dropdown">
-							<input type="hidden" name="gitignores" value="{{.gitignores}}">
-							<div class="default text">{{.i18n.Tr "repo.repo_gitignore_helper"}}</div>
-							<div class="menu">
-								{{range .Gitignores}}
-									<div class="item" data-value="{{.}}">{{.}}</div>
-								{{end}}
-							</div>
-						</div>
-					</div>
-					<div class="inline field" data-tooltip={{.i18n.Tr "repo.license_tooltip"}}>
-						<label>{{.i18n.Tr "repo.license"}}</label>
-						<a target="_blank" href="/G-Node/Info/wiki/Licensing"><span class="octicon octicon-question"></span></a>
-						<div class="ui search selection dropdown">
-							<input type="hidden" name="license" value="{{index .Licenses 0}}">
-							<div class="default text">{{.i18n.Tr "repo.license_helper"}}</div>
-							<div class="menu">
-								{{range .Licenses}}
-									<div class="item" data-value="{{.}}">{{.}}</div>
-								{{end}}
-								<div class="item" data-value="">None</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="inline field" data-tooltip={{.i18n.Tr "repo.readme_tooltip"}}>
-						<label>{{.i18n.Tr "repo.readme"}}</label>
-						<div class="ui selection dropdown">
-							<input type="hidden" name="readme" value="{{.readme}}">
-							<div class="default text">{{.i18n.Tr "repo.readme_helper"}}</div>
-							<div class="menu">
-								{{range .Readmes}}
-									<div class="item" data-value="{{.}}">{{.}}</div>
-								{{end}}
-							</div>
-						</div>
-					</div>
-					<div class="inline field">
-						<div class="ui checkbox" id="auto-init">
-							<input class="hidden" name="auto_init" type="checkbox" tabindex="0" {{if .auto_init}}checked{{end}}>
-							<label>{{.i18n.Tr "repo.auto_init"}}</label>
-						</div>
-					</div>
 					<!-- RCOS Code -->
 					<div class="ui divider"></div>
 					<div class="inline field">
@@ -123,11 +71,13 @@
 
 					<div class="inline required field">
 						<label for="project_name">{{.i18n.Tr "project_name"}}</label>
-						<input id="project_name" name="project_name" value="{{.project_name}}" autofocus required>
+						<textarea maxlength="255" required class="autosize" id="project_name" name="project_name" rows="2">{{.project_name}}</textarea>
+						<span class="help">{{.i18n.Tr "available_length"}}: <span>255</span></span>
 					</div>
 					<div class="inline field">
 						<label for="project_description">{{.i18n.Tr "project_description"}}</label>
-						<textarea class="autosize" id="project_description" name="project_description" rows="3">{{.project_description}}</textarea>
+						<textarea maxlength="255" class="autosize" id="project_description" name="project_description" rows="3">{{.project_description}}</textarea>
+						<span class="help">{{.i18n.Tr "available_length"}}: <span>255</span></span>
 					</div>
 					<!-- RCOS Code end-->
 

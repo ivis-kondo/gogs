@@ -1639,12 +1639,6 @@ $(document).ready(function() {
     );
   });
 
-  // Autosize
-  if ($("#description.autosize").length > 0) {
-    autosize($("#description"));
-    showMessageMaxLength(512, "description", "descLength");
-  }
-
   // AJAX load buttons
   $(".ajax-load-button").click(function() {
     var $this = $(this);
@@ -1872,27 +1866,6 @@ function getByteLen(normalVal) {
         : Number.NaN;
   }
   return byteLen;
-}
-
-function showMessageMaxLength(maxLen, textElemId, counterId) {
-  var $msg = $("#" + textElemId);
-  $("#" + counterId).html(maxLen - getByteLen($msg.val()));
-
-  var onMessageKey = function(e) {
-    var $msg = $(this);
-    var text = $msg.val();
-    var len = getByteLen(text);
-    var remainder = maxLen - len;
-
-    if (len >= maxLen) {
-      $msg.val($msg.val().substr(0, maxLen));
-      remainder = 0;
-    }
-
-    $("#" + counterId).html(remainder);
-  };
-
-  $msg.keyup(onMessageKey).keydown(onMessageKey);
 }
 
 // GIN specific code
