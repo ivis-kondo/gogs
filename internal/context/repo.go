@@ -350,8 +350,28 @@ func RepoAssignment(pages ...bool) macaron.Handler {
 			c.Error(err, "get branches")
 			return
 		}
-		c.Data["Branches"] = branches
-		c.Data["BrancheCount"] = len(branches)
+		/**
+		As of 2023/06/01, Gin-fork supports only master branch. This has led to the hiding of the branch pulldown feature in the repository top UI. The following code is a modification for this purpose. The commented out code will be left as it is expected to be recovered in future development when branching is supported.
+
+		START
+		*/
+		// checking branche list has 'master' branch
+		hasMasterBranch := false
+		for _, baranchName := range branches {
+			if baranchName == "master" {
+				hasMasterBranch = true
+			}
+		}
+		if !hasMasterBranch {
+			// If the master branch cannot be retrieved, return a 404 screen
+			c.NotFoundWithErrMsg("Cannot find master branch. Please wait for 1~2 minutes and try accessing again.")
+			return
+		}
+		// c.Data["Branches"] = branches
+		// c.Data["BrancheCount"] = len(branches)
+		/**
+		END
+		*/
 
 		// If not branch selected, try default one.
 		// If default branch doesn't exists, fall back to some other branch.

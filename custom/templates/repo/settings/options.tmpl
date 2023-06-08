@@ -19,9 +19,8 @@
 						</div>
 						<div class="field {{if .Err_Description}}error{{end}}">
 							<label for="description">{{$.i18n.Tr "repo.repo_desc"}}</label>
-							<textarea class="autosize" id="description" name="description" rows="3">{{.Repository.Description}}</textarea>
-							<span class="help">{{.i18n.Tr "repo.settings.description_desc" | Safe}}</span><br>
-							<span class="help">{{.i18n.Tr "repo.settings.description_length"}}: <span id="descLength"></span></span>
+							<textarea maxlength="512" class="autosize" id="description" name="description" rows="3">{{.Repository.Description}}</textarea>
+							<span class="help">{{.i18n.Tr "repo.settings.description_length"}}: <span>512</span></span>
 						</div>
 						<div class="field {{if .Err_Website}}error{{end}}">
 							<label for="website">{{.i18n.Tr "repo.settings.site"}}</label>
@@ -213,9 +212,9 @@
 								</div>
 							</div>
 						</div>
-
+						<!-- Hiding the pull request settings field on the repository settings screen by disabling the repository branching feature. by RCOS -->
 						<!-- Pull Requests -->
-						{{if .Repository.CanEnablePulls}}
+						<!-- {{if .Repository.CanEnablePulls}}
 							<div class="inline field">
 								<label>{{.i18n.Tr "repo.pulls"}}</label>
 								<div class="ui checkbox">
@@ -237,7 +236,7 @@
 									</div>
 								</div>
 							</div>
-						{{end}}
+						{{end}} -->
 
 						<div class="field">
 							<button class="ui green button">{{$.i18n.Tr "repo.settings.update_settings"}}</button>
