@@ -1,0 +1,63 @@
+{{template "base/head" .}}
+<div class="home">
+	<div class="ui stackable middle very relaxed page grid">
+		<div class="sixteen wide center aligned centered column">
+			<div class="logo">
+				<img src="{{AppSubURL}}/img/favicon.png" />
+			</div>
+			<div class="hero">
+				<h1 class="ui icon header title">
+					GIN
+				</h1>
+				<h2>Modern Research Data Management for Neuroscience</h2>
+				<div class="ginsubtitle">...distributed version control, flavoured for science</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="ui stackable middle very relaxed page grid">
+		<div class="eight wide center column">
+			<h1 class="hero ui icon header">
+				<i class="octicon octicon-device-desktop"></i> Manage your research data
+			</h1>
+			<p class="large">
+				Upload your data to private repositories.<br>
+				Synchronise across devices.<br>
+				Securely access your data from anywhere.
+			</p>
+		</div>
+		<div class="eight wide center column">
+			<h1 class="hero ui icon header">
+				<i class="octicon octicon-mortar-board"></i> Share your data
+			</h1>
+			<p class="large">
+				Collaborate with colleagues.<br>
+				Make your data public.<br>
+				Make your data citable with the GIN DOI service.
+			</p>
+		</div>
+	</div>
+	<div class="ui stackable middle very relaxed page grid">
+		<div class="eight wide center column">
+			<h1 class="hero ui icon header">
+				<i class="octicon octicon-list-ordered"></i> Version your data
+			</h1>
+			<p class="large">
+				Uploaded files are automatically versioned.<br>
+				Retrieve any previously uploaded version of a file.<br>
+				Never lose file history.
+			</p>
+		</div>
+		<div class="eight wide center column">
+			<h1 class="hero ui icon header">
+				<i class="octicon octicon-code"></i> Open Source
+			</h1>
+			<p class="large">
+				Based on open source projects such as <a href="https://git-scm.com/">Git</a>,
+				<a href="https://git-annex.branchable.com/">git-annex</a>, and <a href="https://github.com/gogits/gogs">Gogs</a>.
+				You can even set it up in your lab!
+			</p>
+		</div>
+	</div>
+</div>
+	{{template "base/footer" .}}
