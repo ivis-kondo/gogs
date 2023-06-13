@@ -8,7 +8,7 @@
             <div class="ui container">
                 <div class="ui center links item brand footertext">
                     {{if .PageIsAdmin}}<span>{{.i18n.Tr "version"}}: {{AppVer}}</span>{{end}}
-                    <div class="ui language bottom floating slide up dropdown link item" data-tooltip="Non-English translations may be incomplete">
+                    /* <div class="ui language bottom floating slide up dropdown link item" data-tooltip="Non-English translations may be incomplete">
                         <i class="world icon"></i>
                         <div class="text">{{.LangName}}</div>
                         <div class="menu">
@@ -16,7 +16,7 @@
                                 <a class="item {{if eq $.Lang .Lang}}active selected{{end}}" href="{{if eq $.Lang .Lang}}#{{else}}{{$.Link}}?lang={{.Lang}}{{end}}">{{.Name}}</a>
                             {{end}}
                         </div>
-                    </div>
+                    </div> */
                 </div>
             </div>
         </footer>
