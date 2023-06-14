@@ -13,6 +13,7 @@ func filterUnlistedRepos(repos []*db.Repository) []*db.Repository {
 	return showRep
 }
 
+// 自分の所有しているリポジトリのみ表示する
 func filterRepos(userID int64, repos []*db.Repository) []*db.Repository {
 	var showRep []*db.Repository
 	for _, repo := range repos {
