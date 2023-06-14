@@ -53,7 +53,6 @@ func Home(c *context.Context) {
 }
 
 func ExploreRepos(c *context.Context) {
-	fmt.Println("ExploreRepos")
 	c.Data["Title"] = c.Tr("explore")
 	c.Data["PageIsExplore"] = true
 	c.Data["PageIsExploreRepositories"] = true
@@ -299,7 +298,6 @@ func RenderUserSearch(c *context.Context, opts *UserSearchOptions) {
 }
 
 func ExploreUsers(c *context.Context) {
-	fmt.Println("ExploreUsers")
 	c.Data["Title"] = c.Tr("explore")
 	c.Data["PageIsExplore"] = true
 	c.Data["PageIsExploreUsers"] = true
@@ -324,7 +322,6 @@ func ExploreUsers(c *context.Context) {
 }
 
 func ExploreOrganizations(c *context.Context) {
-	fmt.Println("ExploreOrganizations")
 	c.Data["Title"] = c.Tr("explore")
 	c.Data["PageIsExplore"] = true
 	c.Data["PageIsExploreOrganizations"] = true
