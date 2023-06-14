@@ -231,14 +231,14 @@ func runWeb(c *cli.Context) error {
 			m.Combo("/ssh").Get(user.SettingsSSHKeys).
 				Post(bindIgnErr(form.AddSSHKey{}), user.SettingsSSHKeysPost)
 			m.Post("/ssh/delete", user.DeleteSSHKey)
-			// m.Group("/security", func() {
-			// 	m.Get("", user.SettingsSecurity)
-			// 	m.Combo("/two_factor_enable").Get(user.SettingsTwoFactorEnable).
-			// 		Post(user.SettingsTwoFactorEnablePost)
-			// 	m.Combo("/two_factor_recovery_codes").Get(user.SettingsTwoFactorRecoveryCodes).
-			// 		Post(user.SettingsTwoFactorRecoveryCodesPost)
-			// 	m.Post("/two_factor_disable", user.SettingsTwoFactorDisable)
-			// })
+			m.Group("/security", func() {
+				m.Get("", user.SettingsSecurity)
+				m.Combo("/two_factor_enable").Get(user.SettingsTwoFactorEnable).
+					Post(user.SettingsTwoFactorEnablePost)
+				m.Combo("/two_factor_recovery_codes").Get(user.SettingsTwoFactorRecoveryCodes).
+					Post(user.SettingsTwoFactorRecoveryCodesPost)
+				m.Post("/two_factor_disable", user.SettingsTwoFactorDisable)
+			})
 			m.Group("/repositories", func() {
 				m.Get("", user.SettingsRepos)
 				m.Post("/leave", user.SettingsLeaveRepo)
