@@ -53,6 +53,7 @@ func Home(c *context.Context) {
 }
 
 func ExploreRepos(c *context.Context) {
+	fmt.Println("ExploreRepos")
 	c.Data["Title"] = c.Tr("explore")
 	c.Data["PageIsExplore"] = true
 	c.Data["PageIsExploreRepositories"] = true
@@ -88,8 +89,9 @@ func ExploreRepos(c *context.Context) {
 		c.Error(err, "load attributes")
 		return
 	}
-	c.Data["Repos"] = filterUnlistedRepos(repos)
-
+	// use new filter
+	// c.Data["Repos"] = filterUnlistedRepos(repos)
+	c.Data["Repos"] = filterRepos(c.UserID(), repos)
 	c.Success(EXPLORE_REPOS)
 }
 
@@ -297,6 +299,7 @@ func RenderUserSearch(c *context.Context, opts *UserSearchOptions) {
 }
 
 func ExploreUsers(c *context.Context) {
+	fmt.Println("ExploreUsers")
 	c.Data["Title"] = c.Tr("explore")
 	c.Data["PageIsExplore"] = true
 	c.Data["PageIsExploreUsers"] = true
@@ -308,7 +311,9 @@ func ExploreUsers(c *context.Context) {
 		c.Data["IsUserFA"] = (c.User.Type >= db.UserFA)
 	}
 
-	RenderUserSearch(c, &UserSearchOptions{
+	// use new search
+	// RenderUserSearch(c, &UserSearchOptions{
+	ModifiedRenderUserSearch(c, &UserSearchOptions{
 		Type:     db.UserIndividual,
 		Counter:  db.CountUsers,
 		Ranger:   db.ListUsers,
@@ -319,6 +324,7 @@ func ExploreUsers(c *context.Context) {
 }
 
 func ExploreOrganizations(c *context.Context) {
+	fmt.Println("ExploreOrganizations")
 	c.Data["Title"] = c.Tr("explore")
 	c.Data["PageIsExplore"] = true
 	c.Data["PageIsExploreOrganizations"] = true
@@ -330,7 +336,9 @@ func ExploreOrganizations(c *context.Context) {
 		c.Data["IsUserFA"] = (c.User.Type >= db.UserFA)
 	}
 
-	RenderUserSearch(c, &UserSearchOptions{
+	// use new search
+	// RenderUserSearch(c, &UserSearchOptions{
+	ModifiedRenderUserSearch(c, &UserSearchOptions{
 		Type:     db.UserOrganization,
 		Counter:  db.CountOrganizations,
 		Ranger:   db.Organizations,
@@ -343,4 +351,47 @@ func ExploreOrganizations(c *context.Context) {
 func NotFound(c *macaron.Context, l i18n.Locale) {
 	c.Data["Title"] = l.Tr("status.page_not_found")
 	c.HTML(http.StatusNotFound, fmt.Sprintf("status/%d", http.StatusNotFound))
+}
+
+func ModifiedRenderUserSearch(c *context.Context, opts *UserSearchOptions) {
+	page := c.QueryInt("page")
+	if page <= 1 {
+		page = 1
+	}
+
+	var (
+		users []*db.User
+		count int64
+		err   error
+	)
+
+	keyword := c.Query("q")
+	if len(keyword) == 0 {
+		users, err = opts.Ranger(page, opts.PageSize)
+		if err != nil {
+			c.Error(err, "ranger")
+			return
+		}
+		count = opts.Counter()
+	} else {
+		users, count, err = db.SearchUserByName(&db.SearchUserOptions{
+			Keyword:  keyword,
+			Type:     opts.Type,
+			OrderBy:  opts.OrderBy,
+			Page:     page,
+			PageSize: opts.PageSize,
+		})
+		if err != nil {
+			c.Error(err, "search user by name")
+			return
+		}
+	}
+	c.Data["Keyword"] = keyword
+	c.Data["Total"] = count
+	c.Data["Page"] = paginater.New(int(count), opts.PageSize, page, 5)
+	// use new filter
+	// c.Data["Users"] = users
+	c.Data["Users"] = filterUsers(c.UserID(), users)
+
+	c.Success(opts.TplName)
 }
