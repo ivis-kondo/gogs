@@ -451,7 +451,7 @@ func runWeb(c *cli.Context) error {
 					m.Post("/delete", repo.DeleteCollaboration)
 				})
 				m.Group("/branches", func() {
-					//Disable root to branch settings in repository settings by RCOS
+					//Disable route to branch settings in repository settings by RCOS
 					//m.Get("", repo.SettingsBranches)
 					m.Post("/default_branch", repo.UpdateDefaultBranch)
 					m.Combo("/*").Get(repo.SettingsProtectedBranch).
@@ -467,20 +467,21 @@ func runWeb(c *cli.Context) error {
 					m.Post("", bindIgnErr(form.ResearchProtect{}), repo.SettingsProtectePost)
 				})
 
-				m.Group("/hooks", func() {
-					webhookRoutes()
+				// Disable route to hooks settings in repository settings by RCOS
+				// m.Group("/hooks", func() {
+				// 	webhookRoutes()
 
-					m.Group("/:id", func() {
-						m.Post("/test", repo.TestWebhook)
-						m.Post("/redelivery", repo.RedeliveryWebhook)
-					})
+				// 	m.Group("/:id", func() {
+				// 		m.Post("/test", repo.TestWebhook)
+				// 		m.Post("/redelivery", repo.RedeliveryWebhook)
+				// 	})
 
-					m.Group("/git", func() {
-						m.Get("", repo.SettingsGitHooks)
-						m.Combo("/:name").Get(repo.SettingsGitHooksEdit).
-							Post(repo.SettingsGitHooksEditPost)
-					}, context.GitHookService())
-				})
+				// 	m.Group("/git", func() {
+				// 		m.Get("", repo.SettingsGitHooks)
+				// 		m.Combo("/:name").Get(repo.SettingsGitHooksEdit).
+				// 			Post(repo.SettingsGitHooksEditPost)
+				// 	}, context.GitHookService())
+				// })
 
 				m.Group("/keys", func() {
 					m.Combo("").Get(repo.SettingsDeployKeys).
