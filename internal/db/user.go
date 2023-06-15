@@ -1181,8 +1181,7 @@ func ModifiedSearchUserByName(opts *SearchUserOptions) (users []*User, _ int64, 
 
 	// 自分が所属する組織に所属するユーザー
 	q333 := builder.Select("org_id").From("org_user").Where(builder.Eq{"uid": opts.UserID})
-	q33 := builder.Select("org_id").From("user").Where(builder.In("id", q333))
-	q3 := builder.Select("uid").From("org_user").Where(builder.In("org_id", q33))
+	q3 := builder.Select("uid").From("org_user").Where(builder.In("org_id", q333))
 
 	sess := x.Where(builder.In("user.id", q3)).Or(builder.In("user.id", q2)).Or(builder.In("user.id", q1)).Or(builder.Eq{"user.id": opts.UserID})
 
