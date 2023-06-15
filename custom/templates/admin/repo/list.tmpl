@@ -19,8 +19,8 @@
 								<th>{{.i18n.Tr "admin.repos.owner"}}</th>
 								<th>{{.i18n.Tr "admin.repos.name"}}</th>
 								<th>{{.i18n.Tr "admin.repos.private"}}</th>
-								<th>{{.i18n.Tr "admin.repos.watches"}}</th>
-								<th>{{.i18n.Tr "admin.repos.stars"}}</th>
+								<!--<th>{{.i18n.Tr "admin.repos.watches"}}</th>
+								<th>{{.i18n.Tr "admin.repos.stars"}}</th>-->
 								<th>{{.i18n.Tr "admin.repos.issues"}}</th>
 								<th>{{.i18n.Tr "admin.repos.size"}}</th>
 								<th>{{.i18n.Tr "admin.users.created"}}</th>
@@ -34,8 +34,8 @@
 									<td><a href="{{AppSubURL}}/{{.Owner.Name}}">{{.Owner.Name}}</a></td>
 									<td><a href="{{AppSubURL}}/{{.Owner.Name}}/{{.Name}}">{{.Name}}</a></td>
 									<td><i class="fa fa{{if .IsPrivate}}-check{{end}}-square-o"></i></td>
-									<td>{{.NumWatches}}</td>
-									<td>{{.NumStars}}</td>
+									<!--<td>{{.NumWatches}}</td>
+									<td>{{.NumStars}}</td>-->
 									<td>{{.NumIssues}}</td>
 									<td>{{.Size | FileSize}}</td>
 									<td><span title="{{DateFmtLong .Created}}">{{DateFmtShort .Created}}</span></td>
