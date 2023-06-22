@@ -5,6 +5,7 @@
 package repo
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 	"path"
@@ -12,6 +13,7 @@ import (
 	"strings"
 	"unicode"
 
+	"github.com/pkg/errors"
 	"github.com/unknwon/com"
 	log "unknwon.dev/clog/v2"
 
@@ -27,6 +29,7 @@ import (
 const (
 	CREATE  = "repo/create"
 	MIGRATE = "repo/migrate"
+	LAUNCH  = "repo/launch"
 )
 
 func MustBeNotBare(c *context.Context) {
@@ -128,11 +131,11 @@ func CreatePost(c *context.Context, f form.CreateRepo) {
 		}
 
 	}
-	if projectname_has_char == false{
+	if projectname_has_char == false {
 		c.RenderWithErr(c.Tr("form.projectname_has_no_char"), CREATE, &f)
 		return
 	}
-	
+
 	repo, err := db.CreateRepository(c.User, ctxUser, db.CreateRepoOptions{
 		Name:               f.RepoName,
 		Description:        strings.ReplaceAll(f.Description, "\r\n", "\n"),
@@ -357,4 +360,44 @@ func Download(c *context.Context) {
 	}
 
 	c.ServeFile(archivePath, c.Repo.Repository.Name+"-"+refName+ext)
+}
+
+func Launch(c *context.Context) {
+	c.Title("launch binder")
+	c.Success(LAUNCH)
+}
+
+func LaunchPost(c *context.Context, f form.Pass) {
+	c.Title("launch")
+	loginSources, err := db.LoginSources.List(db.ListLoginSourceOpts{OnlyActivated: true})
+	if err != nil {
+		c.Error(err, "list activated login sources")
+		return
+	}
+	c.Data["LoginSources"] = loginSources
+
+	if c.HasError() {
+		c.RenderWithErr(c.Tr("form.username_password_incorrect"), HOME, &f)
+		return
+	}
+	_, err = db.Users.Authenticate(c.User.Name, f.Password, 0)
+	if err != nil {
+		switch errors.Cause(err).(type) {
+		case db.ErrUserNotExist:
+			c.FormErr("Password")
+			c.RenderWithErr(c.Tr("form.enterred_invalid_password"), LAUNCH, &f)
+
+			// c.Redirect(c.GetRepo().GetRepoLink() + "/launch")
+		case db.ErrLoginSourceMismatch:
+			c.FormErr("LoginSource")
+			// c.RenderWithErr(c.Tr("form.auth_source_mismatch"), "/ivis-futagami", &f)
+			c.Redirect(c.GetRepo().GetRepoLink() + "/launch")
+		default:
+			c.Error(err, "authenticate user")
+		}
+		return
+	}
+	repoName := fmt.Sprintf("https://%s:%s@it1.dg.nii.ac.jp/%s/%s.git", c.User.Name, f.Password, c.Repo.Owner.Name, c.Repo.Repository.Name)
+	repoName = strings.NewReplacer("%", "%25", "#", "%23", " ", "%20", "?", "%3F", "/", "%2F").Replace(repoName)
+	c.RawRedirect("https://binder.cs.rcos.nii.ac.jp/v2/git/" + repoName + "/master?filepath=maDMP.ipynb")
 }

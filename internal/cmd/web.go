@@ -495,6 +495,10 @@ func runWeb(c *cli.Context) error {
 				c.Data["PageIsSettings"] = true
 			})
 		}, reqSignIn, context.RepoAssignment(), reqRepoAdmin, context.RepoRef())
+		m.Group("/:username/:reponame", func() {
+			m.Get("/launch", repo.Launch)
+			m.Post("/launch", bindIgnErr(form.Pass{}), repo.LaunchPost)
+		}, reqSignIn, context.RepoAssignment(), reqRepoWriter, context.RepoRef())
 		// Disable root of watch and star function by RCOS
 		// m.Post("/:username/:reponame/action/:action", reqSignIn, context.RepoAssignment(), repo.Action)
 		m.Group("/:username/:reponame", func() {

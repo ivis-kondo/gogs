@@ -1,0 +1,35 @@
+{{template "base/head" .}}
+
+<div class="repository">
+	{{template "repo/header" .}}
+	<div class="ui container">
+		
+		<div class="ui grid">
+			
+			<!-- {{template "user/settings/navbar" .}} -->
+			{{template "base/alert" .}}
+			<div class="twelve wide column content">
+				{{template "base/alert" .}}
+				<h4 class="ui top attached header">
+					実行環境を構築
+				</h4>
+				<div class="ui attached segment">
+					<form class="ui form" action="{{.Link}}" method="post">
+						{{.CSRFTokenHTML}}
+						<div>
+							ユーザー名: {{.LoggedUser.Name}}
+						</div>
+						<div class="required field {{if .Err_Password}}error{{end}}">
+							<form action="/{{.Repository.Owner.Name}}/{{.Repository.Name}}/launch" method="post" id = "Auth1">
+								<label for="password">パスワード</label><br>
+								<input type="password" name="password" maxlength="255" value="" placeholder="パスワードを入力" required>
+								<button class="ui green button" id="submit-button" type="submit">実行環境を構築する</button>
+							</form>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{{template "base/footer" .}}
