@@ -23,8 +23,8 @@
 				{{if $.IsAdmin}}
 					<form class="display inline" action="{{$.RepoLink}}{{.HomeLink}}/action/unfollow?redirect_to={{$.Link}}" method="POST">
 						{{$.CSRFTokenHTML}}
-						<input type="hidden" name="user_id" value="{{.ID}}">
-						<button class="ui red small button">{{$.i18n.Tr "repo.unwatch"}}</button>
+						<!-- <input type="hidden" name="user_id" value="{{.ID}}"> -->
+						<button class="ui red small button">{{$.i18n.Tr "user.followers"}}</button>
 					</form>
 				{{end}}
 			</li>
