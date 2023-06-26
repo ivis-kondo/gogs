@@ -655,7 +655,7 @@ func runWeb(c *cli.Context) error {
 			m.Get("", context.ServeGoGet(), repo.Home)
 			// Disable root of watch and star function by RCOS
 			// m.Get("/stars", repo.Stars)
-			// m.Get("/watchers", repo.Watchers)
+			m.Get("/watchers", repo.Watchers)
 		}, ignSignIn, context.RepoAssignment(), context.RepoRef())
 
 		// GIN specific code
