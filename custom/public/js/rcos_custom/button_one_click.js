@@ -1,11 +1,12 @@
 var dblClickFlag = null;
 
-function ThroughDblClick() {
-    // ダブルクリック（連続ポスト）の制御
+function PreventionDbClick() {
     if (dblClickFlag == null) {
         dblClickFlag = 1;
+        console.log('PreventionDbClick() True');
         return true;
     } else {
+        console.log('PreventionDbClick() Flase');
         return false;
     }
 }
