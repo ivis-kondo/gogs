@@ -128,11 +128,11 @@ func CreatePost(c *context.Context, f form.CreateRepo) {
 		}
 
 	}
-	if projectname_has_char == false{
+	if projectname_has_char == false {
 		c.RenderWithErr(c.Tr("form.projectname_has_no_char"), CREATE, &f)
 		return
 	}
-	
+	log.Trace("[DEBUG RCOS] Before CreateRepository()")
 	repo, err := db.CreateRepository(c.User, ctxUser, db.CreateRepoOptions{
 		Name:               f.RepoName,
 		Description:        strings.ReplaceAll(f.Description, "\r\n", "\n"),
@@ -145,17 +145,19 @@ func CreatePost(c *context.Context, f form.CreateRepo) {
 		ProjectName:        strings.ReplaceAll(f.ProjectName, "\r\n", "\n"),
 		ProjectDescription: strings.ReplaceAll(f.ProjectDescription, "\r\n", "\n"),
 	})
+	log.Trace("[DEBUG RCOS] Before Redirect()")
 	if err == nil {
 		log.Trace("Repository created [%d]: %s/%s", repo.ID, ctxUser.Name, repo.Name)
 		c.Redirect(conf.Server.Subpath + "/" + ctxUser.Name + "/" + repo.Name)
 		return
 	}
-
+	log.Trace("[DEBUG RCOS] Before DeleteRepository()")
 	if repo != nil {
 		if errDelete := db.DeleteRepository(ctxUser.ID, repo.ID); errDelete != nil {
 			log.Error("DeleteRepository: %v", errDelete)
 		}
 	}
+	log.Trace("[DEBUG RCOS] Before handleCreateError()")
 
 	handleCreateError(c, ctxUser, err, "CreatePost", CREATE, &f)
 }
