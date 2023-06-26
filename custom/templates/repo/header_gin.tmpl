@@ -19,7 +19,7 @@
 										</div>
 									{{ else }}
 										<a class="ui basic button" href="{{$.RepoLink}}/_edit/{{EscapePound $.BranchName}}/dmp.json" data-position="bottom center"><i class="octicon octicon-file"></i>Edit DMP JSON</a>
-										<form method="post" name="generate_maDMP" action="{{$.RepoLink}}/madmp">
+										<form method="post" name="generate_maDMP" action="{{$.RepoLink}}/madmp" onSubmit="return PreventionDbClick();">
 											{{.CSRFTokenHTML}}
 											<a class="ui basic button" href= "javascript:generate_maDMP.submit()" data-position="bottom center"><i class="octicon octicon-file"></i>Generate maDMP</a>
 										</form>

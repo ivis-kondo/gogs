@@ -103,6 +103,7 @@ func GenerateMaDmp(c context.AbstructContext) {
 // This generates maDMP(machine actionable DMP) based on
 // DMP information created by the user in the repository.
 func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
+	log.Trace("[DEBUG RCOS LOG] generateMaDmp()")
 	// GitHubテンプレートNotebookを取得
 	// refs: 1. https://zenn.dev/snowcait/scraps/3d51d8f7841f0c
 	//       2. https://qiita.com/taizo/items/c397dbfed7215969b0a5
