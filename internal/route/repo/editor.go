@@ -145,6 +145,7 @@ func NewFile(c *context.Context) {
 }
 
 func editFilePost(c *context.Context, f form.EditRepoFile, isNewFile bool) {
+	log.Trace("[DEBUG RCOS LOG] editFilePost()")
 	c.PageIs("Edit")
 	c.RequireHighlightJS()
 	c.RequireSimpleMDE()
