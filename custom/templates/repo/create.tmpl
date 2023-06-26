@@ -2,20 +2,7 @@
 <div class="repository new repo">
 	<div class="ui middle very relaxed page grid">
 		<div class="column">
-			<script>
-				var dblClickFlag = null;
-
-				function ThroughDblClick() {
-					// ダブルクリック（連続ポスト）の制御
-					if (dblClickFlag == null) {
-						dblClickFlag = 1;
-						return true;
-					} else {
-						return false;
-					}
-				}
-				</script>
-			<form class="ui form" action="{{.Link}}" method="post" onSubmit="return ThroughDblClick();">
+			<form class="ui form" action="{{.Link}}" method="post">
 				{{.CSRFTokenHTML}}
 				<h3 class="ui top attached header">
 					{{.i18n.Tr "new_repo"}}
@@ -91,7 +78,14 @@
 
 					<div class="inline field">
 						<label></label>
-						<button class="ui green button">
+						<script>
+							function DisableButton(b)
+							{
+							   b.disabled = true;
+							   b.form.submit();
+							}
+						 </script>
+						<button class="ui green button" onclick="DisableButton(this);">
 							{{.i18n.Tr "repo.create_repo"}}
 						</button>
 						<a class="ui button" href="{{AppSubURL}}/">{{.i18n.Tr "cancel"}}</a>
