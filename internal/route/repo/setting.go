@@ -45,6 +45,7 @@ func Settings(c *context.Context) {
 }
 
 func SettingsPost(c *context.Context, f form.RepoSetting) {
+	log.Trace("[DEBUG RCOS LOG] SettingsPost()")
 	c.Title("repo.settings")
 	c.PageIs("SettingsOptions")
 
@@ -247,6 +248,7 @@ func SettingsPost(c *context.Context, f form.RepoSetting) {
 		c.Redirect(conf.Server.Subpath + "/" + newOwner + "/" + repo.Name)
 
 	case "delete":
+		log.Trace("[DEBUG RCOS LOG] SettingsPost() to delete")
 		if !c.Repo.IsOwner() {
 			c.NotFound()
 			return
@@ -755,7 +757,7 @@ func SettingsProtectePost(c *context.Context, f form.ResearchProtect) {
 		}
 
 	}
-	if projectname_has_char == false{
+	if projectname_has_char == false {
 		c.RenderWithErr(c.Tr("form.projectname_has_no_char"), SETTINGS_PROJECT, &f)
 		return
 	}
