@@ -132,6 +132,7 @@ func CreatePost(c *context.Context, f form.CreateRepo) {
 		c.RenderWithErr(c.Tr("form.projectname_has_no_char"), CREATE, &f)
 		return
 	}
+
 	repo, err := db.CreateRepository(c.User, ctxUser, db.CreateRepoOptions{
 		Name:               f.RepoName,
 		Description:        strings.ReplaceAll(f.Description, "\r\n", "\n"),
