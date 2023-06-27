@@ -1,0 +1,76 @@
+{{template "base/head" .}}
+<div class="repository">
+	{{template "repo/header" .}}
+	<div class="ui container">
+        {{if .Repository}}
+        <label>研究実行環境 </label>
+            <div class="ui unstackable attached table segment">
+                <table class="ui table">
+                    <thead>
+                        <tr>
+                            <th>リポジトリ名</th>
+                            <th>環境名</th>
+                            <th>作成日</th>
+                            <th>更新日</th>
+                            <th>移動ボタン</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{ $n := len .JupyterContainer}}
+                        {{range $i, $v := .JupyterContainer}}
+                        {{if eq $v.ExperimentPackage ""}}
+                        <tr>
+                            <td>{{index $.repoNames $i}}</td>
+                            <td>{{$v.ServerName}}</td>
+                            <td>{{$v.Created}}</td>
+                            <td>{{$v.Updated}}</td>
+                            {{if not $v.IsDelete}}
+                            <td><input type="button" value="移動" onClick="window.open({{$v.Url}},'_blank','noreferrer')"> </td>
+                            {{else}} 
+                                <td></td>
+                            {{end}}
+                        </tr>
+                        {{end}}
+                        {{end}}
+                    </tbody>
+                </table>
+            <div>
+            {{if .displayRelaunch}}
+            <label>実験実行環境 <input type="button" value="再構築" onClick="window.open('/{{.Repository.Owner.Name}}/{{.Repository.Name}}/launch/experiment','_blank','noreferrer')"></label>
+            {{end}}
+            <div class="ui unstackable attached table segment">
+                <table class="ui table">
+                    <thead>
+                        <tr>
+                            <th>実験パッケージ名</th>
+                            <th>環境名</th>
+                            <th>作成日</th>
+                            <th>更新日</th>
+                            <th>移動ボタン</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{ $n := len .JupyterContainer}}
+                        {{range $i, $v := .JupyterContainer}}
+                        {{if ne $v.ExperimentPackage ""}}
+                        <tr>
+                            <td>{{$v.ExperimentPackage}}</td>
+                            <td>{{$v.ServerName}}</td>
+                            <td>{{$v.Created}}</td>
+                            <td>{{$v.Updated}}</td>
+                            {{if not $v.IsDelete}}
+                            <td><input type="button" value="移動" onClick="window.open({{$v.Url}},'_blank','noreferrer')"> </td>
+                            {{else}} 
+                            <td></td>
+                            <td></td>
+                            {{end}}
+                        </tr>
+                        {{end}}
+                        {{end}}
+                    </tbody>
+                </table>
+            </div>
+        {{end}}
+    </div>
+</div>
+{{template "base/footer" .}}

@@ -17,6 +17,7 @@ import (
 	"github.com/NII-DG/gogs/internal/db"
 	"github.com/NII-DG/gogs/internal/form"
 	"github.com/NII-DG/gogs/internal/route/api/v1/admin"
+	"github.com/NII-DG/gogs/internal/route/api/v1/container"
 	"github.com/NII-DG/gogs/internal/route/api/v1/metadata"
 	"github.com/NII-DG/gogs/internal/route/api/v1/misc"
 	"github.com/NII-DG/gogs/internal/route/api/v1/org"
@@ -247,7 +248,7 @@ func RegisterRoutes(m *macaron.Macaron) {
 
 		m.Group("/repos", func() {
 			m.Get("/search", repo.Search)
-
+			m.Get("/search/user", repo.SearchByIDAndUserID)
 			m.Get("/:username/:reponame", repoAssignment(), repo.Get)
 			m.Get("/:username/:reponame/releases", repoAssignment(), repo.Releases)
 			m.Get("/suggest/:query", search.Suggest) // GIN specific code
@@ -426,6 +427,12 @@ func RegisterRoutes(m *macaron.Macaron) {
 				}, orgAssignment(false, true))
 			})
 		}, reqAdmin())
+
+		m.Group("/container", func() {
+			m.Post("", bind(db.ContainerOptions{}), container.AddJupyterContainer)
+			m.Patch("", bind(db.ContainerOptions{}), container.UpdateJupyterContainer)
+			m.Delete("", container.DeleteJupyterContainer)
+		}, reqToken())
 
 		// When request route is no defined route, return 404
 		m.Any("/*", func(c *context.Context) {

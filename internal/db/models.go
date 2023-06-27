@@ -57,7 +57,7 @@ func init() {
 		new(Mirror), new(Release), new(Webhook), new(HookTask),
 		new(ProtectBranch), new(ProtectBranchWhitelist),
 		new(Team), new(OrgUser), new(TeamUser), new(TeamRepo),
-		new(Notice), new(EmailAddress), new(Affiliation))
+		new(Notice), new(EmailAddress), new(Affiliation), new(JupyterContainer))
 
 	gonicNames := []string{"SSL"}
 	for _, name := range gonicNames {

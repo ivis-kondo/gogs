@@ -362,12 +362,19 @@ func Download(c *context.Context) {
 	c.ServeFile(archivePath, c.Repo.Repository.Name+"-"+refName+ext)
 }
 
-func Launch(c *context.Context) {
+func LaunchResearch(c *context.Context) {
 	c.Title("launch binder")
+	c.Data["is_ex"] = false
 	c.Success(LAUNCH)
 }
 
-func LaunchPost(c *context.Context, f form.Pass) {
+func LaunchExperiment(c *context.Context) {
+	c.Title("launch binder")
+	c.Data["is_ex"] = true
+	c.Success(LAUNCH)
+}
+
+func LaunchResearchPost(c *context.Context, f form.Pass) {
 	c.Title("launch")
 	loginSources, err := db.LoginSources.List(db.ListLoginSourceOpts{OnlyActivated: true})
 	if err != nil {
@@ -387,17 +394,48 @@ func LaunchPost(c *context.Context, f form.Pass) {
 			c.FormErr("Password")
 			c.RenderWithErr(c.Tr("form.enterred_invalid_password"), LAUNCH, &f)
 
-			// c.Redirect(c.GetRepo().GetRepoLink() + "/launch")
 		case db.ErrLoginSourceMismatch:
 			c.FormErr("LoginSource")
-			// c.RenderWithErr(c.Tr("form.auth_source_mismatch"), "/ivis-futagami", &f)
-			c.Redirect(c.GetRepo().GetRepoLink() + "/launch")
+			c.Redirect(c.GetRepo().GetRepoLink() + "/launch/research")
 		default:
 			c.Error(err, "authenticate user")
 		}
 		return
 	}
-	repoName := fmt.Sprintf("https://%s:%s@it1.dg.nii.ac.jp/%s/%s.git", c.User.Name, f.Password, c.Repo.Owner.Name, c.Repo.Repository.Name)
+	repoName := fmt.Sprintf("%s://%s:%s@%s/%s/%s.git", c.Data["scheme"], c.User.Name, f.Password, c.Data["host"], c.Repo.Owner.Name, c.Repo.Repository.Name)
 	repoName = strings.NewReplacer("%", "%25", "#", "%23", " ", "%20", "?", "%3F", "/", "%2F").Replace(repoName)
 	c.RawRedirect("https://binder.cs.rcos.nii.ac.jp/v2/git/" + repoName + "/master?filepath=maDMP.ipynb")
+}
+
+func LaunchExperimentPost(c *context.Context, f form.Pass) {
+	c.Title("launch")
+	loginSources, err := db.LoginSources.List(db.ListLoginSourceOpts{OnlyActivated: true})
+	if err != nil {
+		c.Error(err, "list activated login sources")
+		return
+	}
+	c.Data["LoginSources"] = loginSources
+
+	if c.HasError() {
+		c.RenderWithErr(c.Tr("form.username_password_incorrect"), HOME, &f)
+		return
+	}
+	_, err = db.Users.Authenticate(c.User.Name, f.Password, 0)
+	if err != nil {
+		switch errors.Cause(err).(type) {
+		case db.ErrUserNotExist:
+			c.FormErr("Password")
+			c.RenderWithErr(c.Tr("form.enterred_invalid_password"), LAUNCH, &f)
+
+		case db.ErrLoginSourceMismatch:
+			c.FormErr("LoginSource")
+			c.Redirect(c.GetRepo().GetRepoLink() + "/launch/research")
+		default:
+			c.Error(err, "authenticate user")
+		}
+		return
+	}
+	repoName := fmt.Sprintf("%s://%s:%s@%s/%s/%s.git", c.Data["scheme"], c.User.Name, f.Password, c.Data["host"], c.Repo.Owner.Name, c.Repo.Repository.Name)
+	repoName = strings.NewReplacer("%", "%25", "#", "%23", " ", "%20", "?", "%3F", "/", "%2F").Replace(repoName)
+	c.RawRedirect("https://binder.cs.rcos.nii.ac.jp/v2/git/" + repoName + "/HEAD?filepath=WORKFLOWS/experiment.ipynb")
 }

@@ -496,8 +496,10 @@ func runWeb(c *cli.Context) error {
 			})
 		}, reqSignIn, context.RepoAssignment(), reqRepoAdmin, context.RepoRef())
 		m.Group("/:username/:reponame", func() {
-			m.Get("/launch", repo.Launch)
-			m.Post("/launch", bindIgnErr(form.Pass{}), repo.LaunchPost)
+			m.Get("/launch/research", repo.LaunchResearch)
+			m.Post("/launch/research", bindIgnErr(form.Pass{}), repo.LaunchResearchPost)
+			m.Get("/launch/experiment", repo.LaunchExperiment)
+			m.Post("/launch/experiment", bindIgnErr(form.Pass{}), repo.LaunchExperimentPost)
 		}, reqSignIn, context.RepoAssignment(), reqRepoWriter, context.RepoRef())
 		// Disable root of watch and star function by RCOS
 		// m.Post("/:username/:reponame/action/:action", reqSignIn, context.RepoAssignment(), repo.Action)
@@ -669,6 +671,12 @@ func runWeb(c *cli.Context) error {
 			m.Get("/config", repo.GitConfig)
 			m.Get("/annex/objects/:hashdira/:hashdirb/:key/:keyfile", repo.AnnexGetKey)
 			m.Head("/annex/objects/:hashdira/:hashdirb/:key/:keyfile", repo.AnnexGetKey)
+		}, ignSignIn, context.RepoAssignment())
+
+		m.Group("/:username/:reponame", func() {
+			m.Group("/container", func() {
+				m.Get("", repo.ViewContainer)
+			})
 		}, ignSignIn, context.RepoAssignment())
 		// ***** END: Repository *****
 

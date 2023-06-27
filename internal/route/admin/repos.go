@@ -80,6 +80,11 @@ func DeleteRepo(c *context.Context) {
 	}
 	log.Trace("Repository deleted: %s/%s", repo.MustOwner().Name, repo.Name)
 
+	if err := db.DeleteJupyterContainer(&db.JupyterContainer{RepoID: repo.ID}); err != nil {
+		c.Error(err, "delete jupyter container")
+		return
+	}
+
 	c.Flash.Success(c.Tr("repo.settings.deletion_success"))
 	c.JSONSuccess(map[string]interface{}{
 		"redirect": conf.Server.Subpath + "/admin/repos?page=" + c.Query("page"),

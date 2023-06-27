@@ -332,6 +332,8 @@ func RepoAssignment(pages ...bool) macaron.Handler {
 		u, _ := url.Parse(conf.Server.ExternalURL)
 		ginURL := fmt.Sprintf("%s://%s", u.Scheme, u.Host)
 		c.Data["ginURL"] = url.QueryEscape(ginURL)
+		c.Data["scheme"] = u.Scheme
+		c.Data["host"] = u.Host
 
 		if c.IsLogged {
 			c.Data["IsWatchingRepo"] = db.IsWatching(c.User.ID, repo.ID)

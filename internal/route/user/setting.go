@@ -719,6 +719,10 @@ func SettingsDelete(c *context.Context) {
 				c.Errorf(err, "delete user")
 			}
 		} else {
+			if err := db.DeleteJupyterContainer(&db.JupyterContainer{UserID: c.UserID()}); err != nil {
+				c.Error(err, "delete jupyter container")
+				return
+			}
 			log.Trace("Account deleted: %s", c.User.Name)
 			c.Redirect(conf.Server.Subpath + "/")
 		}

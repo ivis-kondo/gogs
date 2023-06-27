@@ -7,7 +7,6 @@
 		<div class="ui grid">
 			
 			<!-- {{template "user/settings/navbar" .}} -->
-			{{template "base/alert" .}}
 			<div class="twelve wide column content">
 				{{template "base/alert" .}}
 				<h4 class="ui top attached header">
@@ -20,11 +19,19 @@
 							ユーザー名: {{.LoggedUser.Name}}
 						</div>
 						<div class="required field {{if .Err_Password}}error{{end}}">
-							<form action="/{{.Repository.Owner.Name}}/{{.Repository.Name}}/launch" method="post" id = "Auth1">
+							{{if .is_ex}}
+							<form action="/{{.Repository.Owner.Name}}/{{.Repository.Name}}/launch/experiment" method="post" id = "Auth1">
 								<label for="password">パスワード</label><br>
 								<input type="password" name="password" maxlength="255" value="" placeholder="パスワードを入力" required>
 								<button class="ui green button" id="submit-button" type="submit">実行環境を構築する</button>
 							</form>
+							{{else}}
+							<form action="/{{.Repository.Owner.Name}}/{{.Repository.Name}}/launch/research" method="post" id = "Auth1">
+								<label for="password">パスワード</label><br>
+								<input type="password" name="password" maxlength="255" value="" placeholder="パスワードを入力" required>
+								<button class="ui green button" id="submit-button" type="submit">実行環境を構築する</button>
+							</form>
+							{{end}}
 						</div>
 					</form>
 				</div>
