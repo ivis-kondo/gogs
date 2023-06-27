@@ -149,6 +149,7 @@ func CreatePost(c *context.Context, f form.CreateRepo) {
 		c.Redirect(conf.Server.Subpath + "/" + ctxUser.Name + "/" + repo.Name)
 		return
 	}
+
 	if repo != nil {
 		if errDelete := db.DeleteRepository(ctxUser.ID, repo.ID); errDelete != nil {
 			log.Error("DeleteRepository: %v", errDelete)
