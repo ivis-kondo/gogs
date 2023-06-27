@@ -311,7 +311,6 @@ func SignUp(c *context.Context) {
 }
 
 func SignUpPost(c *context.Context, cpt *captcha.Captcha, f form.Register) {
-	log.Info("[DEBUG RCOS LOG] user SignUpPost()")
 	c.Title("sign_up")
 
 	c.Data["EnableCaptcha"] = conf.Auth.EnableRegistrationCaptcha

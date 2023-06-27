@@ -1009,7 +1009,6 @@ func InitializeLabels(c *context.Context, f form.InitializeLabels) {
 }
 
 func NewLabel(c *context.Context, f form.CreateLabel) {
-	log.Info("[DEBUG RCOS LOG] labels NewLabel()")
 	c.Data["Title"] = c.Tr("repo.labels")
 	c.Data["PageIsLabels"] = true
 
@@ -1117,7 +1116,6 @@ func NewMilestone(c *context.Context) {
 }
 
 func NewMilestonePost(c *context.Context, f form.CreateMilestone) {
-	log.Info("[DEBUG RCOS LOG] milestones NewMilestonePost()")
 	c.Data["Title"] = c.Tr("repo.milestones.new")
 	c.Data["PageIsIssueList"] = true
 	c.Data["PageIsMilestones"] = true

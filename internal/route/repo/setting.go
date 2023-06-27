@@ -45,7 +45,6 @@ func Settings(c *context.Context) {
 }
 
 func SettingsPost(c *context.Context, f form.RepoSetting) {
-	log.Info("[DEBUG RCOS LOG] repo SettingsPost()")
 	c.Title("repo.settings")
 	c.PageIs("SettingsOptions")
 
@@ -53,7 +52,6 @@ func SettingsPost(c *context.Context, f form.RepoSetting) {
 
 	switch c.Query("action") {
 	case "update":
-		log.Info("[DEBUG RCOS LOG] repo SettingsPost() to update")
 		if c.HasError() {
 			c.Success(SETTINGS_OPTIONS)
 			return
@@ -210,7 +208,6 @@ func SettingsPost(c *context.Context, f form.RepoSetting) {
 		c.Redirect(conf.Server.Subpath + "/" + c.Repo.Owner.Name + "/" + repo.Name)
 
 	case "transfer":
-		log.Info("[DEBUG RCOS LOG] repo SettingsPost() to transfer")
 		if !c.Repo.IsOwner() {
 			c.NotFound()
 			return
@@ -250,7 +247,6 @@ func SettingsPost(c *context.Context, f form.RepoSetting) {
 		c.Redirect(conf.Server.Subpath + "/" + newOwner + "/" + repo.Name)
 
 	case "delete":
-		log.Info("[DEBUG RCOS LOG] repo SettingsPost() to delete")
 		if !c.Repo.IsOwner() {
 			c.NotFound()
 			return
