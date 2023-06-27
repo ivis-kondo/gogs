@@ -28,6 +28,7 @@ func Settings(c *context.Context) {
 }
 
 func SettingsPost(c *context.Context, f form.UpdateOrgSetting) {
+	log.Info("[DEBUG RCOS LOG] org SettingsPost()")
 	c.Title("org.settings")
 	c.Data["PageIsSettingsOptions"] = true
 

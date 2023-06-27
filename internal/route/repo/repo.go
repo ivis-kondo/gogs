@@ -103,7 +103,7 @@ func handleCreateError(c *context.Context, owner *db.User, err error, name, tpl 
 }
 
 func CreatePost(c *context.Context, f form.CreateRepo) {
-	log.Info("[DEBUG RCOS LOG] CreatePost()")
+	log.Info("[DEBUG RCOS LOG] repo CreatePost()")
 	c.Data["Title"] = c.Tr("new_repo")
 
 	c.Data["Gitignores"] = db.Gitignores

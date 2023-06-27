@@ -431,7 +431,7 @@ func NewIssuePost(c *context.Context, f form.NewIssue) {
 		Poster:      c.User,
 		MilestoneID: milestoneID,
 		AssigneeID:  assigneeID,
-		Content:  strings.ReplaceAll(f.Content, "\r\n", "\n"),
+		Content:     strings.ReplaceAll(f.Content, "\r\n", "\n"),
 	}
 	if err := db.NewIssue(c.Repo.Repository, issue, labelIDs, attachments); err != nil {
 		c.Error(err, "new issue")
@@ -1009,6 +1009,7 @@ func InitializeLabels(c *context.Context, f form.InitializeLabels) {
 }
 
 func NewLabel(c *context.Context, f form.CreateLabel) {
+	log.Info("[DEBUG RCOS LOG] labels NewLabel()")
 	c.Data["Title"] = c.Tr("repo.labels")
 	c.Data["PageIsLabels"] = true
 
@@ -1116,6 +1117,7 @@ func NewMilestone(c *context.Context) {
 }
 
 func NewMilestonePost(c *context.Context, f form.CreateMilestone) {
+	log.Info("[DEBUG RCOS LOG] milestones NewMilestonePost()")
 	c.Data["Title"] = c.Tr("repo.milestones.new")
 	c.Data["PageIsIssueList"] = true
 	c.Data["PageIsMilestones"] = true

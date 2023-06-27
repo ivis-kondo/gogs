@@ -15,6 +15,7 @@ import (
 	"github.com/NII-DG/gogs/internal/form"
 	"github.com/NII-DG/gogs/internal/gitutil"
 	"github.com/NII-DG/gogs/internal/markup"
+	log "unknwon.dev/clog/v2"
 )
 
 const (
@@ -193,6 +194,7 @@ func NewWiki(c *context.Context) {
 }
 
 func NewWikiPost(c *context.Context, f form.NewWiki) {
+	log.Info("[DEBUG RCOS LOG] wiki NewWikiPost()")
 	c.Data["Title"] = c.Tr("repo.wiki.new_page")
 	c.Data["PageIsWiki"] = true
 	c.Data["RequireSimpleMDE"] = true

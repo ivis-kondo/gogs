@@ -71,6 +71,7 @@ func Settings(c *context.Context) {
 }
 
 func SettingsPost(c *context.Context, f form.UpdateProfile) {
+	log.Info("[DEBUG RCOS LOG] user SettingsPost()")
 	c.Title("settings.profile")
 	c.PageIs("SettingsProfile")
 	c.Data["origin_name"] = c.User.Name

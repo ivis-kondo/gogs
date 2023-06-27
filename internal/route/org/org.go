@@ -22,6 +22,7 @@ func Create(c *context.Context) {
 }
 
 func CreatePost(c *context.Context, f form.CreateOrg) {
+	log.Info("[DEBUG RCOS LOG] org CreatePost()")
 	c.Title("new_org")
 
 	if c.HasError() {
