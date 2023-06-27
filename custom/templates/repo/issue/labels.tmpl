@@ -11,7 +11,7 @@
 			{{end}}
 		</div>
 		<div class="ui new-label segment hide">
-			<form class="ui form" action="{{$.RepoLink}}/labels/new" method="post">
+			<form class="ui form" action="{{$.RepoLink}}/labels/new" method="post" onSubmit="return PreventionDbClick();">
 				{{.CSRFTokenHTML}}
 				<div class="ui grid">
 					<div class="five wide column">
