@@ -363,15 +363,27 @@ func Download(c *context.Context) {
 }
 
 func LaunchResearch(c *context.Context) {
-	c.Title("launch binder")
-	c.Data["is_ex"] = false
-	c.Success(LAUNCH)
+	if c.Repo.Repository.IsPrivate {
+		c.Title("launch binder")
+		c.Data["is_ex"] = false
+		c.Success(LAUNCH)
+	} else {
+		url := fmt.Sprintf("%s://%s/%s/%s", c.Data["scheme"], c.Data["host"], c.Repo.Owner.Name, c.Repo.Repository.Name)
+		url = strings.NewReplacer("%", "%25", "#", "%23", " ", "%20", "?", "%3F", "/", "%2F").Replace(url)
+		c.RawRedirect("https://binder.cs.rcos.nii.ac.jp/v2/git/" + url + ".git/master?filepath=maDMP.ipynb")
+	}
 }
 
 func LaunchExperiment(c *context.Context) {
-	c.Title("launch binder")
-	c.Data["is_ex"] = true
-	c.Success(LAUNCH)
+	if c.Repo.Repository.IsPrivate {
+		c.Title("launch binder")
+		c.Data["is_ex"] = true
+		c.Success(LAUNCH)
+	} else {
+		url := fmt.Sprintf("%s://%s/%s/%s", c.Data["scheme"], c.Data["host"], c.Repo.Owner.Name, c.Repo.Repository.Name)
+		url = strings.NewReplacer("%", "%25", "#", "%23", " ", "%20", "?", "%3F", "/", "%2F").Replace(url)
+		c.RawRedirect("https://binder.cs.rcos.nii.ac.jp/v2/git/" + url + ".git/HEAD?filepath=WORKFLOWS/EX-WORKFLOWS/util/required_rebuild_container.ipynb")
+	}
 }
 
 func LaunchResearchPost(c *context.Context, f form.Pass) {
