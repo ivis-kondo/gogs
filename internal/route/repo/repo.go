@@ -449,5 +449,5 @@ func LaunchExperimentPost(c *context.Context, f form.Pass) {
 	}
 	repoName := fmt.Sprintf("%s://%s:%s@%s/%s/%s.git", c.Data["scheme"], c.User.Name, f.Password, c.Data["host"], c.Repo.Owner.Name, c.Repo.Repository.Name)
 	repoName = strings.NewReplacer("%", "%25", "#", "%23", " ", "%20", "?", "%3F", "/", "%2F").Replace(repoName)
-	c.RawRedirect("https://binder.cs.rcos.nii.ac.jp/v2/git/" + repoName + "/HEAD?filepath=WORKFLOWS/experiment.ipynb")
+	c.RawRedirect("https://binder.cs.rcos.nii.ac.jp/v2/git/" + repoName + "/HEAD?filepath=WORKFLOWS/EX-WORKFLOWS/util/required_rebuild_container.ipynb")
 }

@@ -78,21 +78,3 @@ func DeleteJupyterContainer(c *context.APIContext) {
 		})
 	}
 }
-
-func GetJupyterContainer(c *context.APIContext) {
-
-	repos, err := db.GetJupyterContainer()
-
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, map[string]interface{}{
-			"ok":    false,
-			"error": err.Error(),
-		})
-		return
-	} else {
-		c.JSONSuccess(map[string]interface{}{
-			"ok":   true,
-			"data": repos,
-		})
-	}
-}

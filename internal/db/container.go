@@ -119,9 +119,3 @@ func DeleteJupyterContainer(container *JupyterContainer) (err error) {
 
 	return sess.Commit()
 }
-
-// デバッグ用
-func GetJupyterContainer() ([]*JupyterContainer, error) {
-	containers := make([]*JupyterContainer, 0)
-	return containers, x.Find(&containers)
-}

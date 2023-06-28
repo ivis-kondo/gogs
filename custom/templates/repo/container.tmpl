@@ -34,7 +34,7 @@
                         {{end}}
                     </tbody>
                 </table>
-            <div>
+            </div>
             <label>実験実行環境 <input type="button" value="再構築" onClick="window.open('/{{.Repository.Owner.Name}}/{{.Repository.Name}}/launch/experiment','_blank','noreferrer')"></label>
             <div class="ui unstackable attached table segment">
                 <table class="ui table">
@@ -59,7 +59,6 @@
                             {{if not $v.IsDelete}}
                             <td><input type="button" value="移動" onClick="window.open({{$v.Url}},'_blank','noreferrer')"> </td>
                             {{else}} 
-                            <td></td>
                             <td></td>
                             {{end}}
                         </tr>
