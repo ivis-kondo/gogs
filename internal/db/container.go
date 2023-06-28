@@ -71,7 +71,7 @@ func AddJupyterContainer(container *JupyterContainer) (err error) {
 
 func GetJupyterContainerByRepoIDAndUserID(RepoID int64, UserID int64) ([]*JupyterContainer, error) {
 	containers := make([]*JupyterContainer, 0)
-	return containers, x.Where("user_id=?", UserID).And("repo_id=?", RepoID).Find(&containers)
+	return containers, x.Where("repo_id=?", RepoID).And("user_id=?", UserID).Find(&containers)
 }
 
 func UpdateJupyterContainer(container *JupyterContainer) (err error) {

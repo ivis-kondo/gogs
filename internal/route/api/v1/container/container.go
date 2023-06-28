@@ -14,10 +14,11 @@ import (
 func AddJupyterContainer(c *context.APIContext, opts db.ContainerOptions) {
 
 	container := &db.JupyterContainer{
-		UserID:     opts.UserID,
-		RepoID:     opts.RepoID,
-		ServerName: opts.ServerName,
-		Url:        opts.Url,
+		UserID:            opts.UserID,
+		RepoID:            opts.RepoID,
+		ExperimentPackage: opts.ExperimentPackage,
+		ServerName:        opts.ServerName,
+		Url:               opts.Url,
 	}
 
 	err := db.AddJupyterContainer(container)
@@ -42,6 +43,7 @@ func UpdateJupyterContainer(c *context.APIContext, opts db.ContainerOptions) {
 		RepoID:            opts.RepoID,
 		ExperimentPackage: opts.ExperimentPackage,
 		ServerName:        opts.ServerName,
+		Url:               opts.Url,
 	})
 
 	if err != nil {
