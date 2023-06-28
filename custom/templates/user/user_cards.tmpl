@@ -9,7 +9,6 @@
 					<img class="avatar" src="{{.RelAvatarLink}}"/>
 				</a>
 				<h3 class="name"><a href="{{.HomeLink}}">{{.DisplayName}}</a></h3>
-
 				<div class="meta">
 					{{if .Website}}
 						<span class="octicon octicon-link"></span> <a href="{{.Website}}" target="_blank" rel="noopener noreferrer">{{.Website}}</a>
@@ -19,13 +18,6 @@
 						<span class="octicon octicon-clock"></span> {{$.i18n.Tr "user.join_on"}} {{DateFmtShort .Created}}
 					{{end}}
 				</div>
-
-				{{if $.IsAdmin}}
-					<form class="display inline" action="{{$.RepoLink}}{{.HomeLink}}/action/unfollow?redirect_to={{$.Link}}" method="POST">
-						{{$.CSRFTokenHTML}}
-						<button class="ui red small button">{{$.i18n.Tr "user.unfollow"}}</button>
-					</form>
-				{{end}}
 			</li>
 		{{end}}
 	</ul>
