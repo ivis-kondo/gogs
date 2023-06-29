@@ -26,6 +26,7 @@ import (
 	"github.com/NII-DG/gogs/internal/email"
 	"github.com/NII-DG/gogs/internal/form"
 	"github.com/NII-DG/gogs/internal/tool"
+	"github.com/NII-DG/gogs/internal/utils"
 	"github.com/NII-DG/gogs/internal/utils/regex"
 )
 
@@ -139,10 +140,8 @@ func SettingsPost(c *context.Context, f form.UpdateProfile) {
 		return
 	}
 
-	// get first name and last name without space
-	firstNameWithoutSpace, lastNameWithoutSpace := f.RemoveSpaceinFirstAndLastName()
-	// check first name and last name
-	if len(firstNameWithoutSpace) <= 0 || len(lastNameWithoutSpace) <= 0 {
+	// Check if spaces are included.
+	if utils.ContainsSpace(f.FirstName) || utils.ContainsSpace(f.LastName) {
 		c.FormErr("Name")
 		c.RenderWithErr(c.Tr("form.must_not_only_spase"), SETTINGS_PROFILE, &f)
 		return
