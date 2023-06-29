@@ -123,6 +123,11 @@ type UpdateProfile struct {
 func (f *UpdateProfile) Validate(ctx *macaron.Context, errs binding.Errors) binding.Errors {
 	return validate(errs, ctx.Data, f, ctx.Locale)
 }
+func (f *UpdateProfile) RemoveSpaceinFirstAndLastName() (firstName, lastName string) {
+	firstName = utils.RemoveAllSpace(f.FirstName)
+	lastName = utils.RemoveAllSpace(f.LastName)
+	return firstName, lastName
+}
 
 const (
 	AVATAR_LOCAL  string = "local"

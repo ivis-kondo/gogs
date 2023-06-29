@@ -139,6 +139,15 @@ func SettingsPost(c *context.Context, f form.UpdateProfile) {
 		return
 	}
 
+	// get first name and last name without space
+	firstNameWithoutSpace, lastNameWithoutSpace := f.RemoveSpaceinFirstAndLastName()
+	// check first name and last name
+	if len(firstNameWithoutSpace) <= 0 || len(lastNameWithoutSpace) <= 0 {
+		c.FormErr("Name")
+		c.RenderWithErr(c.Tr("form.must_not_only_spase"), SIGNUP, &f)
+		return
+	}
+
 	c.User.FirstName = f.FirstName
 	c.User.LastName = f.LastName
 
