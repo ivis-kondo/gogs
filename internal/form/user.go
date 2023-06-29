@@ -84,10 +84,9 @@ func (f *Register) Validate(ctx *macaron.Context, errs binding.Errors) binding.E
 	return validate(errs, ctx.Data, f, ctx.Locale)
 }
 
-func (f *Register) RemoveSpaceinFirstAndLastName() (firstName, lastName string) {
-	firstName = utils.RemoveAllSpace(f.FirstName)
-	lastName = utils.RemoveAllSpace(f.LastName)
-	return firstName, lastName
+func (f *Register) RemoveSpaceinFirstAndLastName() {
+	f.FirstName = utils.RemoveAllSpace(f.FirstName)
+	f.LastName = utils.RemoveAllSpace(f.LastName)
 }
 
 type SignIn struct {
@@ -123,10 +122,9 @@ type UpdateProfile struct {
 func (f *UpdateProfile) Validate(ctx *macaron.Context, errs binding.Errors) binding.Errors {
 	return validate(errs, ctx.Data, f, ctx.Locale)
 }
-func (f *UpdateProfile) RemoveSpaceinFirstAndLastName() (firstName, lastName string) {
-	firstName = utils.RemoveAllSpace(f.FirstName)
-	lastName = utils.RemoveAllSpace(f.LastName)
-	return firstName, lastName
+func (f *UpdateProfile) RemoveSpaceinFirstAndLastName() {
+	f.FirstName = utils.RemoveAllSpace(f.FirstName)
+	f.LastName = utils.RemoveAllSpace(f.LastName)
 }
 
 const (

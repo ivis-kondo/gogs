@@ -365,9 +365,9 @@ func SignUpPost(c *context.Context, cpt *captcha.Captcha, f form.Register) {
 	}
 
 	// get first name and last name without space
-	firstNameWithoutSpace, lastNameWithoutSpace := f.RemoveSpaceinFirstAndLastName()
+	f.RemoveSpaceinFirstAndLastName()
 	// check first name and last name
-	if len(firstNameWithoutSpace) <= 0 || len(lastNameWithoutSpace) <= 0 {
+	if len(f.FirstName) <= 0 || len(f.LastName) <= 0 {
 		c.FormErr("Name")
 		c.RenderWithErr(c.Tr("form.must_not_only_spase"), SIGNUP, &f)
 		return
