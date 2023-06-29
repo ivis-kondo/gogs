@@ -7,6 +7,7 @@ package form
 import (
 	"mime/multipart"
 
+	"github.com/NII-DG/gogs/internal/utils"
 	"github.com/go-macaron/binding"
 	"gopkg.in/macaron.v1"
 )
@@ -73,7 +74,7 @@ type Register struct {
 	Retype               string //パスワードの再入力（必須）
 	FirstName            string `binding:"Required;MaxSize(100)"` // 氏名(名)
 	LastName             string `binding:"Required;MaxSize(100)"` // 氏名(姓)
-	AliasName            string `binding:"MaxSize(255)"`//氏名（別名）
+	AliasName            string `binding:"MaxSize(255)"`          //氏名（別名）
 	ERadResearcherNumber string //研究者e-Rad番号（任意）
 	PersonalURL          string `binding:"Url"`      //個人URL（任意）
 	AffiliationId        int64  `binding:"Required"` //所属組織ID（必須）
@@ -81,6 +82,12 @@ type Register struct {
 
 func (f *Register) Validate(ctx *macaron.Context, errs binding.Errors) binding.Errors {
 	return validate(errs, ctx.Data, f, ctx.Locale)
+}
+
+func (f *Register) RemoveSpaceinFirstAndLastName() (firstName, lastName string) {
+	firstName = utils.RemoveAllSpace(f.FirstName)
+	lastName = utils.RemoveAllSpace(f.LastName)
+	return firstName, lastName
 }
 
 type SignIn struct {
@@ -103,10 +110,10 @@ func (f *SignIn) Validate(ctx *macaron.Context, errs binding.Errors) binding.Err
 
 type UpdateProfile struct {
 	Name                 string `binding:"Required;AlphaDashDot;MaxSize(35)"` // ユーザー名（必須）
-	FirstName            string `binding:"Required;MaxSize(100)"` // 氏名(名)
-	LastName             string `binding:"Required;MaxSize(100)"` // 氏名(姓)
-	AliasName            string `binding:"MaxSize(255)"` //氏名（別名）
-	Email                string `binding:"Required;Email;MaxSize(254)"` //メールアドレス（必須）
+	FirstName            string `binding:"Required;MaxSize(100)"`             // 氏名(名)
+	LastName             string `binding:"Required;MaxSize(100)"`             // 氏名(姓)
+	AliasName            string `binding:"MaxSize(255)"`                      //氏名（別名）
+	Email                string `binding:"Required;Email;MaxSize(254)"`       //メールアドレス（必須）
 	Telephone            string //電話番号（任意）
 	ERadResearcherNumber string //研究者e-Rad番号（任意）
 	PersonalURL          string `binding:"Url"`      //個人URL（任意）

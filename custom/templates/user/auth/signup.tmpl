@@ -36,7 +36,7 @@
 						<label for="retype">{{.i18n.Tr "re_type"}}</label>
 						<input id="retype" name="retype" type="password" value="{{.retype}}" required>
 					</div>
-					<div class="required inline fields field">
+					<div class="required inline fields field {{if .Err_Name}}error{{end}}">
 						<label for="first_name">{{.i18n.Tr "first_name"}}</label>
 						<input id="first_name" name="first_name" value="{{.first_name}}" required>
 						<label for="last_name">{{.i18n.Tr "last_name"}}</label>
