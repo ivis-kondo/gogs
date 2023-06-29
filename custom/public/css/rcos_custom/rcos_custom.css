@@ -69,3 +69,14 @@ This css is be adapted to template files in custom>templates
 .ui.table[class*="single line table dmp"] {
     white-space: normal;
 }
+
+/*----------------
+    logout form
+------------------*/
+#logout-form {
+    padding: 0 !important;
+}
+
+div[data-form="#logout-form"] {
+    padding: .78571429em 1.14285714em!important;
+}
