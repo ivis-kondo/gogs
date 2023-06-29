@@ -11,7 +11,7 @@ const (
 
 func ViewContainer(c *context.Context) (err error) {
 	c.Data["PageIsContainer"] = true
-	res, err := db.GetJupyterContainerByRepoIDAndUserID(c.Repo.Repository.ID, c.UserID())
+	res, err := db.GetJupyterContainer(c.Repo.Repository.ID, c.UserID())
 
 	if err != nil {
 		return err

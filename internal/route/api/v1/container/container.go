@@ -59,11 +59,18 @@ func UpdateJupyterContainer(c *context.APIContext, opts db.ContainerOptions) {
 	}
 }
 
-func DeleteJupyterContainer(c *context.APIContext) {
-	ServerName := c.Query("server_name")
+func DeleteJupyterContainer(c *context.APIContext, opts db.ContainerOptions) {
+	if opts.UserID != c.UserID() {
+		c.JSON(http.StatusUnauthorized, map[string]interface{}{
+			"ok": false,
+		})
+		return
+	}
 
 	err := db.DeleteJupyterContainer(&db.JupyterContainer{
-		ServerName: ServerName,
+		ServerName: opts.ServerName,
+		UserID:     opts.UserID,
+		RepoID:     opts.RepoID,
 	})
 
 	if err != nil {

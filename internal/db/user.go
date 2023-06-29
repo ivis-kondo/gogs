@@ -891,6 +891,13 @@ func DeleteUser(u *User) (err error) {
 		return err
 	}
 
+	// delete jupyter container
+	sess.Cols("is_delete")
+	sess.And("user_id = ?", u.ID)
+	if _, err = sess.Update(JupyterContainer{IsDelete: true}); err != nil {
+		return err
+	}
+
 	if err = sess.Commit(); err != nil {
 		return err
 	}

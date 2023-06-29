@@ -296,10 +296,6 @@ func DeleteUser(c *context.Context) {
 		}
 		return
 	}
-	if err := db.DeleteJupyterContainer(&db.JupyterContainer{UserID: u.ID}); err != nil {
-		c.Error(err, "delete jupyter container")
-		return
-	}
 	log.Trace("Account deleted by admin (%s): %s", c.User.Name, u.Name)
 
 	c.Flash.Success(c.Tr("admin.users.deletion_success"))

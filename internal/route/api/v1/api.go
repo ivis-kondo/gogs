@@ -431,7 +431,7 @@ func RegisterRoutes(m *macaron.Macaron) {
 		m.Group("/container", func() {
 			m.Post("", bind(db.ContainerOptions{}), container.AddJupyterContainer)
 			m.Patch("", bind(db.ContainerOptions{}), container.UpdateJupyterContainer)
-			m.Delete("", container.DeleteJupyterContainer)
+			m.Delete("", bind(db.ContainerOptions{}), container.DeleteJupyterContainer)
 		}, reqToken())
 
 		// When request route is no defined route, return 404

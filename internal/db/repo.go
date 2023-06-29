@@ -1490,12 +1490,12 @@ func updateRepository(e Engine, repo *Repository, visibilityChanged bool) (err e
 	repo.LowerName = strings.ToLower(repo.Name)
 
 	/*
-	if len(repo.Description) > 512 {
-		repo.Description = repo.Description[:512]
-	}
-	if len(repo.Website) > 255 {
-		repo.Website = repo.Website[:255]
-	}
+		if len(repo.Description) > 512 {
+			repo.Description = repo.Description[:512]
+		}
+		if len(repo.Website) > 255 {
+			repo.Website = repo.Website[:255]
+		}
 	*/
 
 	if _, err = e.ID(repo.ID).AllCols().Update(repo); err != nil {
@@ -1597,6 +1597,12 @@ func DeleteRepository(ownerID, repoID int64) error {
 				return err
 			}
 		}
+	}
+
+	sess.Cols("is_delete")
+	sess.And("repo_id = ?", repoID)
+	if _, err = sess.Update(JupyterContainer{IsDelete: true}); err != nil {
+		return err
 	}
 
 	if err = deleteBeans(sess,
