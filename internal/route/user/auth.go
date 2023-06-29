@@ -19,6 +19,7 @@ import (
 	"github.com/NII-DG/gogs/internal/email"
 	"github.com/NII-DG/gogs/internal/form"
 	"github.com/NII-DG/gogs/internal/tool"
+	"github.com/NII-DG/gogs/internal/utils"
 	"github.com/NII-DG/gogs/internal/utils/regex"
 )
 
@@ -364,10 +365,8 @@ func SignUpPost(c *context.Context, cpt *captcha.Captcha, f form.Register) {
 		return
 	}
 
-	// get first name and last name without space
-	f.RemoveSpaceinFirstAndLastName()
-	// check first name and last name
-	if len(f.FirstName) <= 0 || len(f.LastName) <= 0 {
+	// Check if spaces are included.
+	if utils.ContainsSpace(f.FirstName) || utils.ContainsSpace(f.LastName) {
 		c.FormErr("Name")
 		c.RenderWithErr(c.Tr("form.must_not_only_spase"), SIGNUP, &f)
 		return

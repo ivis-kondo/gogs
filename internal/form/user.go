@@ -7,7 +7,6 @@ package form
 import (
 	"mime/multipart"
 
-	"github.com/NII-DG/gogs/internal/utils"
 	"github.com/go-macaron/binding"
 	"gopkg.in/macaron.v1"
 )
@@ -84,11 +83,6 @@ func (f *Register) Validate(ctx *macaron.Context, errs binding.Errors) binding.E
 	return validate(errs, ctx.Data, f, ctx.Locale)
 }
 
-func (f *Register) RemoveSpaceinFirstAndLastName() {
-	f.FirstName = utils.RemoveAllSpace(f.FirstName)
-	f.LastName = utils.RemoveAllSpace(f.LastName)
-}
-
 type SignIn struct {
 	UserName    string `binding:"Required;MaxSize(254)"`
 	Password    string `binding:"Required;MaxSize(255)"`
@@ -121,10 +115,6 @@ type UpdateProfile struct {
 
 func (f *UpdateProfile) Validate(ctx *macaron.Context, errs binding.Errors) binding.Errors {
 	return validate(errs, ctx.Data, f, ctx.Locale)
-}
-func (f *UpdateProfile) RemoveSpaceinFirstAndLastName() {
-	f.FirstName = utils.RemoveAllSpace(f.FirstName)
-	f.LastName = utils.RemoveAllSpace(f.LastName)
 }
 
 const (

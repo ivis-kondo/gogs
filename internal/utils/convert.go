@@ -2,7 +2,6 @@ package utils
 
 import (
 	"strconv"
-	"strings"
 	"unsafe"
 )
 
@@ -25,16 +24,4 @@ func NumericStringToInt(data string) (int, error) {
 
 func NumericIntToString(data int) string {
 	return strconv.Itoa(data)
-}
-
-func RemoveAllHalfWidthSpace(data string) string {
-	return strings.ReplaceAll(data, " ", "")
-}
-
-func RemoveAllFullWidthSpace(data string) string {
-	return strings.ReplaceAll(data, "　", "")
-}
-
-func RemoveAllSpace(data string) string {
-	return RemoveAllFullWidthSpace(RemoveAllHalfWidthSpace(data))
 }
