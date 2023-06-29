@@ -387,7 +387,7 @@ func LaunchExperiment(c *context.Context) {
 }
 
 func LaunchResearchPost(c *context.Context, f form.Pass) {
-	c.Title("launch")
+	c.Title("launch binder")
 	loginSources, err := db.LoginSources.List(db.ListLoginSourceOpts{OnlyActivated: true})
 	if err != nil {
 		c.Error(err, "list activated login sources")
@@ -420,7 +420,7 @@ func LaunchResearchPost(c *context.Context, f form.Pass) {
 }
 
 func LaunchExperimentPost(c *context.Context, f form.Pass) {
-	c.Title("launch")
+	c.Title("launch binder")
 	loginSources, err := db.LoginSources.List(db.ListLoginSourceOpts{OnlyActivated: true})
 	if err != nil {
 		c.Error(err, "list activated login sources")

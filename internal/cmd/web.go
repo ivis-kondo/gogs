@@ -500,6 +500,7 @@ func runWeb(c *cli.Context) error {
 			// Generate machine actionable DMP based on DMP information
 			m.Post("/madmp", repo.GenerateMaDmp)
 
+			// launch binder
 			m.Get("/launch/research", repo.LaunchResearch)
 			m.Post("/launch/research", bindIgnErr(form.Pass{}), repo.LaunchResearchPost)
 			m.Get("/launch/experiment", repo.LaunchExperiment)
