@@ -3,16 +3,18 @@
 	{{template "repo/header" .}}
 	<div class="ui container">
         {{if .Repository}}
-        <label>研究実行環境 </label>
+        <div class="twelve wide column content">
+            <h4 class="ui top attached header">研究実行環境</h4>
+
             <div class="ui unstackable attached table segment">
-                <table class="ui table">
+                <table class="ui unstackable very basic striped table">
                     <thead>
                         <tr>
-                            <th>リポジトリ名</th>
-                            <th>環境名</th>
-                            <th>作成日</th>
-                            <th>更新日</th>
-                            <th>移動ボタン</th>
+                            <th width="20%">リポジトリ名</th>
+                                <th width="30%">環境名</th>
+                                <th width="15%">作成日</th>
+                                <th width="15%">更新日</th>
+                                <th colspan="2">実行環境</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -25,9 +27,9 @@
                             <td>{{$v.Created}}</td>
                             <td>{{$v.Updated}}</td>
                             {{if not $v.IsDelete}}
-                            <td><input type="button" value="移動" onClick="window.open({{$v.Url}},'_blank','noreferrer')"> </td>
+                            <td><a href={{$v.Url}} target="_blank" rel="noopener" class="ui blue button">移動</a></td>
                             {{else}} 
-                                <td></td>
+                            <td></td>
                             {{end}}
                         </tr>
                         {{end}}
@@ -35,16 +37,18 @@
                     </tbody>
                 </table>
             </div>
-            <label>実験実行環境 <input type="button" value="再構築" onClick="window.open('/{{.Repository.Owner.Name}}/{{.Repository.Name}}/launch/experiment','_blank','noreferrer')"></label>
+            <h4 class="ui top attached header">実験実行環境　
+                <a href="/{{.Repository.Owner.Name}}/{{.Repository.Name}}/launch/experiment" class="ui blue button" target="_blank" rel="noopener">再構築</a>
+            </h4>
             <div class="ui unstackable attached table segment">
-                <table class="ui table">
+                <table class="ui unstackable very basic striped table">
                     <thead>
                         <tr>
-                            <th>実験パッケージ名</th>
-                            <th>環境名</th>
-                            <th>作成日</th>
-                            <th>更新日</th>
-                            <th>移動ボタン</th>
+                            <th width="20%">実験パッケージ名</th>
+                                <th width="30%">環境名</th>
+                                <th width="15%">作成日</th>
+                                <th width="15%">更新日</th>
+                                <th colspan="2">実行環境</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -57,7 +61,7 @@
                             <td>{{$v.Created}}</td>
                             <td>{{$v.Updated}}</td>
                             {{if not $v.IsDelete}}
-                            <td><input type="button" value="移動" onClick="window.open({{$v.Url}},'_blank','noreferrer')"> </td>
+                            <td><a target="_blank" rel="noopener" class="ui blue button" href={{$v.Url}}>移動</a></td>
                             {{else}} 
                             <td></td>
                             {{end}}
@@ -66,6 +70,7 @@
                         {{end}}
                     </tbody>
                 </table>
+            </div>
             </div>
         {{end}}
     </div>
