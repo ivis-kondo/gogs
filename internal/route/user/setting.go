@@ -91,7 +91,7 @@ func SettingsPost(c *context.Context, f form.UpdateProfile) {
 		// Check if username characters have been changed
 		if c.User.LowerName != strings.ToLower(f.Name) {
 			if err := db.ChangeUserName(c.User, f.Name); err != nil {
-				c.FormErr("Name")
+				c.FormErr("UserName")
 				var msg string
 				switch {
 				case db.IsErrUserAlreadyExist(err):
