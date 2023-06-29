@@ -144,7 +144,7 @@ func SettingsPost(c *context.Context, f form.UpdateProfile) {
 	// check first name and last name
 	if len(firstNameWithoutSpace) <= 0 || len(lastNameWithoutSpace) <= 0 {
 		c.FormErr("Name")
-		c.RenderWithErr(c.Tr("form.must_not_only_spase"), SIGNUP, &f)
+		c.RenderWithErr(c.Tr("form.must_not_only_spase"), SETTINGS_PROFILE, &f)
 		return
 	}
 
