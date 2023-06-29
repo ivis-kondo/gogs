@@ -19,6 +19,7 @@ import (
 	"github.com/NII-DG/gogs/internal/email"
 	"github.com/NII-DG/gogs/internal/form"
 	"github.com/NII-DG/gogs/internal/tool"
+	"github.com/NII-DG/gogs/internal/utils"
 	"github.com/NII-DG/gogs/internal/utils/regex"
 )
 
@@ -361,6 +362,13 @@ func SignUpPost(c *context.Context, cpt *captcha.Captcha, f form.Register) {
 	if len(f.ERadResearcherNumber) > 0 && !regex.CheckERadRearcherNumberFormat(f.ERadResearcherNumber) {
 		c.FormErr("ERad")
 		c.RenderWithErr(c.Tr("form.enterred_invalid_erad"), SIGNUP, &f)
+		return
+	}
+
+	// Check if spaces are included.
+	if utils.ContainsSpace(f.FirstName) || utils.ContainsSpace(f.LastName) {
+		c.FormErr("Name")
+		c.RenderWithErr(c.Tr("form.must_not_only_spase"), SIGNUP, &f)
 		return
 	}
 
