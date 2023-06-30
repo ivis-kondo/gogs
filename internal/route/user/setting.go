@@ -143,7 +143,7 @@ func SettingsPost(c *context.Context, f form.UpdateProfile) {
 	// Check if spaces are included.
 	if utils.ContainsSpace(f.FirstName) || utils.ContainsSpace(f.LastName) {
 		c.FormErr("Name")
-		c.RenderWithErr(c.Tr("form.must_not_only_spase"), SETTINGS_PROFILE, &f)
+		c.RenderWithErr(c.Tr("form.must_not_only_space"), SETTINGS_PROFILE, &f)
 		return
 	}
 

@@ -368,7 +368,7 @@ func SignUpPost(c *context.Context, cpt *captcha.Captcha, f form.Register) {
 	// Check if spaces are included.
 	if utils.ContainsSpace(f.FirstName) || utils.ContainsSpace(f.LastName) {
 		c.FormErr("Name")
-		c.RenderWithErr(c.Tr("form.must_not_only_spase"), SIGNUP, &f)
+		c.RenderWithErr(c.Tr("form.must_not_only_space"), SIGNUP, &f)
 		return
 	}
 
