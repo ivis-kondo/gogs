@@ -839,6 +839,7 @@ func deleteUser(e *xorm.Session, u *User) error {
 		&Action{UserID: u.ID},
 		&IssueUser{UID: u.ID},
 		&EmailAddress{UID: u.ID},
+		&JupyterContainer{UserID: u.ID},
 	); err != nil {
 		return fmt.Errorf("deleteBeans: %v", err)
 	}
@@ -888,13 +889,6 @@ func DeleteUser(u *User) (err error) {
 
 	if err = deleteUser(sess, u); err != nil {
 		// Note: don't wrapper error here.
-		return err
-	}
-
-	// delete jupyter container
-	sess.Cols("is_delete")
-	sess.And("user_id = ?", u.ID)
-	if _, err = sess.Update(JupyterContainer{IsDelete: true}); err != nil {
 		return err
 	}
 

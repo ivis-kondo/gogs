@@ -269,11 +269,6 @@ func SettingsPost(c *context.Context, f form.RepoSetting) {
 		}
 		log.Trace("Repository deleted: %s/%s", c.Repo.Owner.Name, repo.Name)
 
-		if err := db.DeleteJupyterContainer(&db.JupyterContainer{RepoID: repo.ID}); err != nil {
-			c.Error(err, "delete jupyter container")
-			return
-		}
-
 		c.Flash.Success(c.Tr("repo.settings.deletion_success"))
 		c.Redirect(c.Repo.Owner.DashboardLink())
 

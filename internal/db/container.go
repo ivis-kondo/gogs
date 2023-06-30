@@ -36,7 +36,6 @@ type JupyterContainer struct {
 func (j *JupyterContainer) BeforeInsert() {
 	j.CreatedUnix = time.Now().Unix()
 	j.UpdatedUnix = time.Now().Unix()
-
 }
 
 func (j *JupyterContainer) BeforeUpdate() {
@@ -86,36 +85,11 @@ func UpdateJupyterContainer(container *JupyterContainer) (err error) {
 	if !res {
 		return errors.New("container not found")
 	} else {
-		_, err = sess.ID(oldContainer.ID).Update(container)
+		oldContainer.IsDelete = container.IsDelete
+		_, err = sess.ID(oldContainer.ID).AllCols().Update(&oldContainer)
 		if err != nil {
 			return err
 		}
 	}
-	return sess.Commit()
-}
-
-func DeleteJupyterContainer(container *JupyterContainer) (err error) {
-	sess := x.NewSession()
-	defer sess.Close()
-	if err = sess.Begin(); err != nil {
-		return err
-	}
-
-	sess.Cols("is_delete")
-	if len(container.ServerName) > 0 {
-		sess.And("server_name = ?", container.ServerName)
-	}
-	if container.RepoID > 0 {
-		sess.And("repo_id = ?", container.RepoID)
-	}
-	if container.UserID > 0 {
-		sess.And("user_id = ?", container.UserID)
-	}
-
-	_, err = sess.Update(JupyterContainer{IsDelete: true})
-	if err != nil {
-		return err
-	}
-
 	return sess.Commit()
 }

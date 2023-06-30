@@ -71,9 +71,9 @@ func DeleteJupyterContainer(c *context.APIContext) {
 		return
 	}
 
-	err := db.DeleteJupyterContainer(&db.JupyterContainer{
+	err := db.UpdateJupyterContainer(&db.JupyterContainer{
 		ServerName: ServerName,
-		UserID:     UserID,
+		IsDelete:   true,
 	})
 
 	if err != nil {

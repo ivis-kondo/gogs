@@ -1599,13 +1599,6 @@ func DeleteRepository(ownerID, repoID int64) error {
 		}
 	}
 
-	// delete jupyter container
-	sess.Cols("is_delete")
-	sess.And("repo_id = ?", repoID)
-	if _, err = sess.Update(JupyterContainer{IsDelete: true}); err != nil {
-		return err
-	}
-
 	if err = deleteBeans(sess,
 		&Repository{ID: repoID},
 		&Access{RepoID: repo.ID},
@@ -1623,6 +1616,7 @@ func DeleteRepository(ownerID, repoID int64) error {
 		&Webhook{RepoID: repoID},
 		&HookTask{RepoID: repoID},
 		&LFSObject{RepoID: repoID},
+		&JupyterContainer{RepoID: repoID},
 	); err != nil {
 		return fmt.Errorf("deleteBeans: %v", err)
 	}
