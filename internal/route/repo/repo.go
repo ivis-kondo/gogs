@@ -368,7 +368,7 @@ func LaunchResearch(c *context.Context) {
 		c.Data["is_ex"] = false
 		c.Success(LAUNCH)
 	} else {
-		url := fmt.Sprintf("%s://%s/%s/%s", c.Data["scheme"], c.Data["host"], c.Repo.Owner.Name, c.Repo.Repository.Name)
+		url := fmt.Sprintf("%s://%s/%s/%s", c.Data["Scheme"], c.Data["Host"], c.Repo.Owner.Name, c.Repo.Repository.Name)
 		url = strings.NewReplacer("%", "%25", "#", "%23", " ", "%20", "?", "%3F", "/", "%2F").Replace(url)
 		c.RawRedirect("https://binder.cs.rcos.nii.ac.jp/v2/git/" + url + ".git/master?filepath=maDMP.ipynb")
 	}
@@ -380,7 +380,7 @@ func LaunchExperiment(c *context.Context) {
 		c.Data["is_ex"] = true
 		c.Success(LAUNCH)
 	} else {
-		url := fmt.Sprintf("%s://%s/%s/%s", c.Data["scheme"], c.Data["host"], c.Repo.Owner.Name, c.Repo.Repository.Name)
+		url := fmt.Sprintf("%s://%s/%s/%s", c.Data["Scheme"], c.Data["Host"], c.Repo.Owner.Name, c.Repo.Repository.Name)
 		url = strings.NewReplacer("%", "%25", "#", "%23", " ", "%20", "?", "%3F", "/", "%2F").Replace(url)
 		c.RawRedirect("https://binder.cs.rcos.nii.ac.jp/v2/git/" + url + ".git/HEAD?filepath=WORKFLOWS/EX-WORKFLOWS/util/required_rebuild_container.ipynb")
 	}
@@ -414,7 +414,7 @@ func LaunchResearchPost(c *context.Context, f form.Pass) {
 		}
 		return
 	}
-	repoName := fmt.Sprintf("%s://%s:%s@%s/%s/%s.git", c.Data["scheme"], c.User.Name, f.Password, c.Data["host"], c.Repo.Owner.Name, c.Repo.Repository.Name)
+	repoName := fmt.Sprintf("%s://%s:%s@%s/%s/%s.git", c.Data["Scheme"], c.User.Name, f.Password, c.Data["Host"], c.Repo.Owner.Name, c.Repo.Repository.Name)
 	repoName = strings.NewReplacer("%", "%25", "#", "%23", " ", "%20", "?", "%3F", "/", "%2F").Replace(repoName)
 	c.RawRedirect("https://binder.cs.rcos.nii.ac.jp/v2/git/" + repoName + "/master?filepath=maDMP.ipynb")
 }
@@ -447,7 +447,7 @@ func LaunchExperimentPost(c *context.Context, f form.Pass) {
 		}
 		return
 	}
-	repoName := fmt.Sprintf("%s://%s:%s@%s/%s/%s.git", c.Data["scheme"], c.User.Name, f.Password, c.Data["host"], c.Repo.Owner.Name, c.Repo.Repository.Name)
+	repoName := fmt.Sprintf("%s://%s:%s@%s/%s/%s.git", c.Data["Scheme"], c.User.Name, f.Password, c.Data["Host"], c.Repo.Owner.Name, c.Repo.Repository.Name)
 	repoName = strings.NewReplacer("%", "%25", "#", "%23", " ", "%20", "?", "%3F", "/", "%2F").Replace(repoName)
 	c.RawRedirect("https://binder.cs.rcos.nii.ac.jp/v2/git/" + repoName + "/HEAD?filepath=WORKFLOWS/EX-WORKFLOWS/util/required_rebuild_container.ipynb")
 }
