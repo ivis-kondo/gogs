@@ -13,6 +13,13 @@ import (
 
 func AddJupyterContainer(c *context.APIContext, opts db.ContainerOptions) {
 
+	if opts.UserID != c.UserID() {
+		c.JSON(http.StatusUnauthorized, map[string]interface{}{
+			"ok": false,
+		})
+		return
+	}
+
 	container := &db.JupyterContainer{
 		UserID:            opts.UserID,
 		RepoID:            opts.RepoID,
@@ -36,14 +43,21 @@ func AddJupyterContainer(c *context.APIContext, opts db.ContainerOptions) {
 	}
 }
 
-func UpdateJupyterContainer(c *context.APIContext, opts db.ContainerOptions) {
+func UpdateJupyterContainer(c *context.APIContext) {
+
+	ServerName := c.Query("server_name")
+	UserID := c.QueryInt64("user_id")
+
+	if UserID != c.UserID() {
+		c.JSON(http.StatusUnauthorized, map[string]interface{}{
+			"ok": false,
+		})
+		return
+	}
 
 	err := db.UpdateJupyterContainer(&db.JupyterContainer{
-		UserID:            opts.UserID,
-		RepoID:            opts.RepoID,
-		ExperimentPackage: opts.ExperimentPackage,
-		ServerName:        opts.ServerName,
-		Url:               opts.Url,
+		ServerName: ServerName,
+		UserID:     UserID,
 	})
 
 	if err != nil {
@@ -73,6 +87,7 @@ func DeleteJupyterContainer(c *context.APIContext) {
 
 	err := db.UpdateJupyterContainer(&db.JupyterContainer{
 		ServerName: ServerName,
+		UserID:     UserID,
 		IsDelete:   true,
 	})
 

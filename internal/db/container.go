@@ -70,7 +70,7 @@ func AddJupyterContainer(container *JupyterContainer) (err error) {
 
 func GetJupyterContainer(RepoID int64, UserID int64) ([]*JupyterContainer, error) {
 	containers := make([]*JupyterContainer, 0)
-	return containers, x.Where("repo_id=?", RepoID).And("user_id=?", UserID).Find(&containers)
+	return containers, x.Where("repo_id=?", RepoID).And("user_id=?", UserID).Desc("updated_unix").Find(&containers)
 }
 
 func UpdateJupyterContainer(container *JupyterContainer) (err error) {
@@ -80,7 +80,7 @@ func UpdateJupyterContainer(container *JupyterContainer) (err error) {
 		return err
 	}
 	var oldContainer JupyterContainer
-	res, err := sess.Where("server_name = ?", container.ServerName).Get(&oldContainer)
+	res, err := sess.Where("server_name = ?", container.ServerName).And("user_id = ?", container.UserID).Get(&oldContainer)
 
 	if !res {
 		return errors.New("container not found")
