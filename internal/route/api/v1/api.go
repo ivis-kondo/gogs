@@ -429,7 +429,7 @@ func RegisterRoutes(m *macaron.Macaron) {
 		}, reqAdmin())
 
 		m.Group("/container", func() {
-			m.Post("", bind(db.ContainerOptions{}), container.AddJupyterContainer)
+			m.Post("", bind(container.ContainerOptions{}), container.AddJupyterContainer)
 			m.Patch("", container.UpdateJupyterContainer)
 			m.Delete("", container.DeleteJupyterContainer)
 		}, reqToken())

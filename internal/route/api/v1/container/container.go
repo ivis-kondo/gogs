@@ -11,7 +11,15 @@ import (
 	"github.com/NII-DG/gogs/internal/db"
 )
 
-func AddJupyterContainer(c *context.APIContext, opts db.ContainerOptions) {
+type ContainerOptions struct {
+	RepoID            int64  `json:"repo_id" binding:"Required"`
+	UserID            int64  `json:"user_id" binding:"Required"`
+	ExperimentPackage string `json:"experiment_package" binding:"MaxSize(255)"`
+	ServerName        string `json:"server_name" binding:"Required;MaxSize(255)"`
+	Url               string `binding:"Url"`
+}
+
+func AddJupyterContainer(c *context.APIContext, opts ContainerOptions) {
 
 	if opts.UserID != c.UserID() {
 		c.JSON(http.StatusUnauthorized, map[string]interface{}{

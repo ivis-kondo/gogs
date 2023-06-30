@@ -11,14 +11,6 @@ import (
 	"xorm.io/xorm"
 )
 
-type ContainerOptions struct {
-	RepoID            int64  `json:"repo_id" binding:"Required"`
-	UserID            int64  `json:"user_id" binding:"Required"`
-	ExperimentPackage string `json:"experiment_package" binding:"MaxSize(255)"`
-	ServerName        string `json:"server_name" binding:"Required;MaxSize(255)"`
-	Url               string `binding:"Url"`
-}
-
 type JupyterContainer struct {
 	ID                int64
 	RepoID            int64  `xorm:"NOT NULL" gorm:"NOT NULL"`
