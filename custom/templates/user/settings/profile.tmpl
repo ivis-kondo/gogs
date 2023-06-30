@@ -10,9 +10,9 @@
 				</h4>
 				<div class="ui attached segment">
 					<p>{{.i18n.Tr "settings.profile_desc"}}</p>
-					<form class="ui form" action="{{.Link}}" method="post">
+					<form class="ui form" action="{{.Link}}" method="post" onSubmit="return PreventionDbClick();">
 						{{.CSRFTokenHTML}}
-						<div class="required field {{if .Err_Name}}error{{end}}">
+						<div class="required field {{if .Err_UserName}}error{{end}}">
 							<label for="username">{{.i18n.Tr "username"}}<span class="text red {{if eq .name .origin_name}}hide{{end}}" id="name-change-prompt"> {{.i18n.Tr "settings.change_username_prompt"}}</span></label>
 							<input id="username" name="name" value="{{.name}}" data-name="{{.origin_name}}" autofocus required {{if not .LoggedUser.IsLocal}}readonly{{end}}>
 							{{if not .LoggedUser.IsLocal}}
@@ -20,7 +20,7 @@
 							{{end}}
 						</div>
 						<!-- name form -->
-						<div class="required inline fields field">
+						<div class="required inline fields field {{if .Err_Name}}error{{end}}">
 							<label for="first_name">{{.i18n.Tr "first_name"}}</label>
 							<input id="first_name" name="first_name" value="{{.first_name}}" required>
 							<label for="last_name">{{.i18n.Tr "last_name"}}</label>

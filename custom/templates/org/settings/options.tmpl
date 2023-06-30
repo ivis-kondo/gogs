@@ -10,7 +10,7 @@
 					{{.i18n.Tr "org.settings.options"}}
 				</h4>
 				<div class="ui attached segment">
-					<form class="ui form" action="{{.Link}}" method="post">
+					<form class="ui form" action="{{.Link}}" method="post" onSubmit="return PreventionDbClick();">
 						{{.CSRFTokenHTML}}
 						<div class="required field {{if .Err_Name}}error{{end}}">
 							<label for="org_name">{{.i18n.Tr "org.org_name_holder"}}<span class="text red hide" id="org-name-change-prompt"> {{.i18n.Tr "org.settings.change_orgname_prompt"}}</span></label>
