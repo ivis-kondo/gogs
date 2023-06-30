@@ -16,21 +16,8 @@ func ViewContainer(c *context.Context) (err error) {
 	if err != nil {
 		return err
 	}
-	repoNames := make([]string, len(res))
-	for i, repo := range res {
-		rep, err2 := db.GetRepositoryByID(repo.RepoID)
-
-		if rep != nil {
-			repoNames[i] = rep.Name
-		}
-
-		if err2 != nil {
-			return err2
-		}
-	}
 
 	c.Data["JupyterContainer"] = res
-	c.Data["repoNames"] = repoNames
 	c.Success(VIEW_CONTAINER)
 	return
 }

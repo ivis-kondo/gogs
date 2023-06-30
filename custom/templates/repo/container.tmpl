@@ -21,7 +21,7 @@
                         {{range $i, $v := .JupyterContainer}}
                         {{if eq $v.ExperimentPackage ""}}
                         <tr>
-                            <td>{{index $.repoNames $i}}</td>
+                            <td>{{$.RepoName}}</td>
                             <td>{{$v.ServerName}}</td>
                             <td>{{$v.Created}}</td>
                             <td>{{$v.Updated}}</td>
