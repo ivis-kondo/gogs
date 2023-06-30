@@ -7,13 +7,13 @@
 			<div class="twelve wide column content">
 				{{template "base/alert" .}}
 				<h4 class="ui top attached header">
-					実行環境を構築
+					{{.i18n.Tr "rcos.launch_binder"}}
 				</h4>
 				<div class="ui attached segment">
 					<form class="ui form" action="{{.Link}}" method="post">
 						{{.CSRFTokenHTML}}
 						<div class="field">
-							非公開リポジトリの場合、実行環境構築のためにパスワードの入力が必要です。
+							{{.i18n.Tr "rcos.private_repo_info"}}
 						</div>
 						<label>
 							{{.i18n.Tr "username"}}: {{.LoggedUser.Name}}
@@ -21,19 +21,19 @@
 						<div class="field {{if .Err_Password}}error{{end}}">
 							{{if .is_ex}}
 							<form action="/{{.Repository.Owner.Name}}/{{.Repository.Name}}/launch/experiment" method="post" id = "Auth1">
-								<div class="required field">
+								<div class="required inline field">
 									<label for="password">{{.i18n.Tr "password"}}</label>
 									<input type="password" name="password" maxlength="255" required>
 								</div>
-								<button class="ui green button" id="submit-button" type="submit">実行環境を構築する</button>
+								<button class="ui green button" id="submit-button" type="submit">{{.i18n.Tr "rcos.launch_binder_button"}}</button>
 							</form>
 							{{else}}
 							<form action="/{{.Repository.Owner.Name}}/{{.Repository.Name}}/launch/research" method="post" id = "Auth1">
-								<div class="required field">
+								<div class="required inline field">
 									<label for="password">{{.i18n.Tr "password"}}</label>
 									<input type="password" name="password" maxlength="255" required>
 								</div>
-									<button class="ui green button" id="submit-button" type="submit">実行環境を構築する</button>
+									<button class="ui green button" id="submit-button" type="submit">{{.i18n.Tr "rcos.launch_binder_button"}}</button>
 							</form>
 							{{end}}
 						</div>
