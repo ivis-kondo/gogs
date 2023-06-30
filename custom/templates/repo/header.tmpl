@@ -89,9 +89,9 @@ Commented out because it is not supported as a DG feature as of 2023/05/27. fork
 					<i class="octicon octicon-book"></i> {{.i18n.Tr "repo.wiki"}}
 				</a>
 			{{end}}
-			{{if not $.IsGuest}}
+			{{if .IsRepositoryWriter}}
 			<a class="{{if .PageIsContainer}}active{{end}} item" href="{{.RepoLink}}/container">
-				実行環境一覧
+				{{.i18n.Tr "rcos.container.list"}}
 			</a>
 			{{end}}
 			{{if .IsRepositoryAdmin}}
