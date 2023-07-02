@@ -89,6 +89,11 @@ Commented out because it is not supported as a DG feature as of 2023/05/27. fork
 					<i class="octicon octicon-book"></i> {{.i18n.Tr "repo.wiki"}}
 				</a>
 			{{end}}
+			{{if .IsRepositoryWriter}}
+			<a class="{{if .PageIsContainer}}active{{end}} item" href="{{.RepoLink}}/container">
+				{{.i18n.Tr "rcos.container.list"}}
+			</a>
+			{{end}}
 			{{if .IsRepositoryAdmin}}
 				<div class="right menu">
 					<a class="{{if .PageIsSettings}}active{{end}} item" href="{{.RepoLink}}/settings">
