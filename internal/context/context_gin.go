@@ -108,6 +108,9 @@ func hasFileInRepo(c AbstructContext, filePath string) bool {
 	return err == nil
 }
 
+// hasFileInRepo is RCOS specific code.
+// This probably returns 'true' if a repository includes a file or directory with the name given as an argument.
+// Used by context.RepoAssignment.
 func hasTreeInRepo(c AbstructContext, filePath string) bool {
 	commit, err := c.GetRepo().GetGitRepo().BranchCommit(c.GetRepo().GetDbRepo().GetDefaultBranch())
 	if err != nil {
