@@ -108,6 +108,17 @@ func hasFileInRepo(c AbstructContext, filePath string) bool {
 	return err == nil
 }
 
+func hasTreeInRepo(c AbstructContext, filePath string) bool {
+	commit, err := c.GetRepo().GetGitRepo().BranchCommit(c.GetRepo().GetDbRepo().GetDefaultBranch())
+	if err != nil {
+		log.Trace("Couldn't get commit: %v", err)
+		return false
+	}
+	_, err = commit.TreeEntry(filePath)
+
+	return err == nil
+}
+
 // True if repository is not Private, is not registered, or is registered and
 // has changes (HEAD is not registered)
 func isDOIReady(c *Context) bool {
