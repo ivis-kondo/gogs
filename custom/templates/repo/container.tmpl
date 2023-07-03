@@ -4,8 +4,9 @@
 	<div class="ui container">
         {{if .Repository}}
         <div class="twelve wide column content">
-            <h4 class="ui top attached header">{{.i18n.Tr "rcos.container.research"}}</h4>
-
+            <h4 class="ui top attached header">{{.i18n.Tr "rcos.container.research"}}
+                <a href="/{{.Repository.Owner.Name}}/{{.Repository.Name}}/launch/research" class="ui blue button" target="_blank" rel="noopener"> {{$.i18n.Tr "rcos.container.rebuild"}} </a>
+            </h4>
             <div class="ui unstackable attached table segment">
                 <table class="ui unstackable very basic striped table">
                     <thead>
@@ -37,7 +38,9 @@
                 </table>
             </div>
             <h4 class="ui top attached header">{{.i18n.Tr "rcos.container.experiment"}}
+                {{if .HasExperiments}}
                 <a href="/{{.Repository.Owner.Name}}/{{.Repository.Name}}/launch/experiment" class="ui blue button" target="_blank" rel="noopener"> {{$.i18n.Tr "rcos.container.rebuild"}} </a>
+                {{end}}
             </h4>
             <div class="ui unstackable attached table segment">
                 <table class="ui unstackable very basic striped table">
