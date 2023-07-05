@@ -18,6 +18,8 @@ func ViewContainer(c *context.Context) (err error) {
 	}
 
 	c.Data["JupyterContainer"] = res
+	c.Data["HasWorkflows"] = context.HasTreeInRepo(c, "/WORKFLOWS")
+
 	c.Success(VIEW_CONTAINER)
 	return
 }

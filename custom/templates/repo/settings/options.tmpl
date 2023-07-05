@@ -22,15 +22,16 @@
 							<textarea maxlength="512" class="autosize" id="description" name="description" rows="3">{{.Repository.Description}}</textarea>
 							<span class="help">{{.i18n.Tr "repo.settings.description_length"}}: <span>512</span></span>
 						</div>
-						<div class="field {{if .Err_Website}}error{{end}}">
+						<!-- <div class="field {{if .Err_Website}}error{{end}}">
 							<label for="website">{{.i18n.Tr "repo.settings.site"}}</label>
 							<input id="website" name="website" type="url" value="{{.Repository.Website}}">
-						</div>
+						</div> -->
 
 						{{if not .Repository.IsFork}}
 							<div class="inline field">
-								<label>{{.i18n.Tr "repo.visibility"}}</label>
-								<div class="ui segment">
+								<!-- <label>{{.i18n.Tr "repo.visibility"}}</label> -->
+								<!-- <div class="ui segment"> -->
+								<div class="ui">
 									<div class="field">
 										<div class="ui checkbox" {{if .Repository.IsPrivate}}data-tooltip="{{.i18n.Tr "repo.license_warn"}}"{{end}}>
 											<input name="private" type="checkbox" {{if .Repository.IsPrivate}}checked{{end}}>

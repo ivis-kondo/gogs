@@ -497,6 +497,8 @@ func runWeb(c *cli.Context) error {
 		}, reqSignIn, context.RepoAssignment(), reqRepoAdmin, context.RepoRef())
 		m.Group("/:username/:reponame", func() {
 			// launch binder
+			m.Get("/launch/madmp", repo.LaunchMadmp)
+			m.Post("/launch/madmp", bindIgnErr(form.Pass{}), repo.LaunchMadmpPost)
 			m.Get("/launch/research", repo.LaunchResearch)
 			m.Post("/launch/research", bindIgnErr(form.Pass{}), repo.LaunchResearchPost)
 			m.Get("/launch/experiment", repo.LaunchExperiment)
