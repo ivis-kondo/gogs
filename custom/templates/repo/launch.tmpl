@@ -19,23 +19,13 @@
 							{{.i18n.Tr "username"}}: {{.LoggedUser.Name}}
 						</label>
 						<div class="field {{if .Err_Password}}error{{end}}">
-							{{if .is_ex}}
-							<form action="/{{.Repository.Owner.Name}}/{{.Repository.Name}}/launch/experiment" method="post" id = "Auth1">
+							<form action="/{{.Repository.Owner.Name}}/{{.Repository.Name}}/launch/{{.Dest}}" method="post" id = "Auth1">
 								<div class="required inline field">
 									<label for="password">{{.i18n.Tr "password"}}</label>
 									<input type="password" name="password" maxlength="255" required>
 								</div>
 								<button class="ui green button" id="submit-button" type="submit">{{.i18n.Tr "rcos.launch_binder_button"}}</button>
 							</form>
-							{{else}}
-							<form action="/{{.Repository.Owner.Name}}/{{.Repository.Name}}/launch/research" method="post" id = "Auth1">
-								<div class="required inline field">
-									<label for="password">{{.i18n.Tr "password"}}</label>
-									<input type="password" name="password" maxlength="255" required>
-								</div>
-									<button class="ui green button" id="submit-button" type="submit">{{.i18n.Tr "rcos.launch_binder_button"}}</button>
-							</form>
-							{{end}}
 						</div>
 					</form>
 				</div>
