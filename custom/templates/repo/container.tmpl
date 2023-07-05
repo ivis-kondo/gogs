@@ -2,12 +2,23 @@
 <div class="repository">
 	{{template "repo/header" .}}
 	<div class="ui container">
+	{{if .Flash}}
+		{{template "base/alert" .}}
+	{{end}}
 	{{if .Repository}}
-		{{if .HasWorkflows}}
+		{{if not .HasWorkflows}}
+			<div>
+				<a href="/{{.Repository.Owner.Name}}/{{.Repository.Name}}/launch/madmp" class="ui green button" target="_blank" rel="noopener"> {{$.i18n.Tr "rcos.container.madmp"}} </a>
+			</div>
+			<br>
+		{{end}}
 		<div class="twelve wide column content">
-			<h4 class="ui top attached header">{{.i18n.Tr "rcos.container.research"}}　
-				<a href="/{{.Repository.Owner.Name}}/{{.Repository.Name}}/launch/research" class="ui blue button" target="_blank" rel="noopener"> {{$.i18n.Tr "rcos.container.rebuild"}} </a>
-			</h4>
+			
+			<h4 class="ui top attached header"> <div><i class="i icon graduation cap"></i>{{.i18n.Tr "rcos.container.research"}}　
+				{{if .HasWorkflows}}
+					<a href="/{{.Repository.Owner.Name}}/{{.Repository.Name}}/launch/research" class="ui green button" target="_blank" rel="noopener"> {{$.i18n.Tr "rcos.container.rebuild"}} </a>
+				{{end}}
+			</div></h4>
 			<div class="ui unstackable attached table segment">
 				<table class="ui unstackable very basic striped table">
 					<thead>
@@ -38,11 +49,12 @@
 					</tbody>
 				</table>
 			</div>
-			<h4 class="ui top attached header">{{.i18n.Tr "rcos.container.experiment"}}　
-				{{if .HasExperiments}}
-				<a href="/{{.Repository.Owner.Name}}/{{.Repository.Name}}/launch/experiment" class="ui blue button" target="_blank" rel="noopener"> {{$.i18n.Tr "rcos.container.rebuild"}} </a>
-				{{end}}
-			</h4>
+			{{if .HasExperiments}}
+			
+			<h4 class="ui top attached header"><div>
+				<i class="i icon flask"></i>{{.i18n.Tr "rcos.container.experiment"}}　
+				<a href="/{{.Repository.Owner.Name}}/{{.Repository.Name}}/launch/experiment" class="ui green button" target="_blank" rel="noopener"> {{$.i18n.Tr "rcos.container.rebuild"}} </a>
+			</div> </h4>
 			<div class="ui unstackable attached table segment">
 				<table class="ui unstackable very basic striped table">
 					<thead>
@@ -73,10 +85,9 @@
 					</tbody>
 				</table>
 			</div>
+			{{end}}
 		</div>
-		{{else}}
-		<a href="/{{.Repository.Owner.Name}}/{{.Repository.Name}}/launch/madmp" class="ui blue button" target="_blank" rel="noopener"> {{$.i18n.Tr "rcos.container.madmp"}} </a>
-		{{end}}
+			
 	{{end}}
 	</div>
 </div>

@@ -221,7 +221,7 @@ func generateMaDmp(c context.AbstructContext, f AbstructRepoUtil) {
 	fetchImagefile(c)
 
 	c.GetFlash().Success(c.Tr("rcos.madmp.success"))
-	c.Redirect(c.GetRepo().GetRepoLink())
+	c.Redirect(c.GetRepo().GetRepoLink() + "/container")
 }
 
 type AbstructRepoUtil interface {

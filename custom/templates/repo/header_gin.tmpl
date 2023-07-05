@@ -10,13 +10,6 @@
 								{{if $.HasDmpJson }}
 									{{ if $.HasMaDmp }}
 										<a class="ui basic button" href="{{$.RepoLink}}/src/{{EscapePound $.BranchName}}/maDMP.ipynb" data-position="bottom center"><i class="octicon octicon-file"></i>View maDMP</a>
-										<div class="ui labeled button">
-											<button class="ui basic button" data-position="bottom center">
-												<a href="/{{.Repository.Owner.Name}}/{{.Repository.Name}}/container">
-													<img src="https://binder.cs.rcos.nii.ac.jp/badge_logo.svg">
-												</a>
-											</button>
-										</div>
 									{{ else }}
 										{{if $.IsRepositoryAdmin}}
 										<a class="ui basic button" href="{{$.RepoLink}}/_edit/{{EscapePound $.BranchName}}/dmp.json" data-position="bottom center"><i class="octicon octicon-file"></i>Edit DMP JSON</a>
