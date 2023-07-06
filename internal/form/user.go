@@ -167,3 +167,11 @@ type NewAccessToken struct {
 func (f *NewAccessToken) Validate(ctx *macaron.Context, errs binding.Errors) binding.Errors {
 	return validate(errs, ctx.Data, f, ctx.Locale)
 }
+
+type Pass struct {
+	Password string `binding:"Required;AlphaDash;MaxSize(255)"`
+}
+
+func (f *Pass) Validate(ctx *macaron.Context, errs binding.Errors) binding.Errors {
+	return validate(errs, ctx.Data, f, ctx.Locale)
+}
