@@ -399,8 +399,14 @@ func LaunchExperiment(c *context.Context) {
 }
 
 // when a repository is private, show password form
-func LaunchMadmpPost(c *context.Context, f form.Pass) {
+func LaunchPost(c *context.Context, f form.Pass) {
 	c.Title("launch binder")
+	dest := c.Params(":dest")
+
+	if c.HasError() {
+		c.RenderWithErr(c.Tr("rcos.private_pass_warn"), LAUNCH, &f)
+		return
+	}
 	loginSources, err := db.LoginSources.List(db.ListLoginSourceOpts{OnlyActivated: true})
 	if err != nil {
 		c.Error(err, "list activated login sources")
@@ -421,7 +427,7 @@ func LaunchMadmpPost(c *context.Context, f form.Pass) {
 
 		case db.ErrLoginSourceMismatch:
 			c.FormErr("LoginSource")
-			c.Redirect(c.GetRepo().GetRepoLink() + "/launch/madmp")
+			c.Redirect(c.GetRepo().GetRepoLink() + "/launch/" + dest)
 		default:
 			c.Error(err, "authenticate user")
 		}
@@ -429,73 +435,11 @@ func LaunchMadmpPost(c *context.Context, f form.Pass) {
 	}
 	repoName := fmt.Sprintf("%s://%s:%s@%s/%s/%s.git", c.Data["Scheme"], c.User.Name, f.Password, c.Data["Host"], c.Repo.Owner.Name, c.Repo.Repository.Name)
 	repoName = strings.NewReplacer("%", "%25", "#", "%23", " ", "%20", "?", "%3F", "/", "%2F").Replace(repoName)
-	c.RawRedirect("https://binder.cs.rcos.nii.ac.jp/v2/git/" + repoName + "/master?filepath=maDMP.ipynb")
-}
-
-// when a repository is private, show password form
-func LaunchResearchPost(c *context.Context, f form.Pass) {
-	c.Title("launch binder")
-	loginSources, err := db.LoginSources.List(db.ListLoginSourceOpts{OnlyActivated: true})
-	if err != nil {
-		c.Error(err, "list activated login sources")
-		return
+	if dest == "research" {
+		c.RawRedirect("https://binder.cs.rcos.nii.ac.jp/v2/git/" + repoName + "/master?filepath=WORKFLOWS/base_FLOW.ipynb")
+	} else if dest == "experiment" {
+		c.RawRedirect("https://binder.cs.rcos.nii.ac.jp/v2/git/" + repoName + "/HEAD?filepath=WORKFLOWS/EX-WORKFLOWS/util/required_rebuild_container.ipynb")
+	} else {
+		c.RawRedirect("https://binder.cs.rcos.nii.ac.jp/v2/git/" + repoName + "/master?filepath=maDMP.ipynb")
 	}
-	c.Data["LoginSources"] = loginSources
-
-	if c.HasError() {
-		c.RenderWithErr(c.Tr("form.username_password_incorrect"), HOME, &f)
-		return
-	}
-	_, err = db.Users.Authenticate(c.User.Name, f.Password, 0)
-	if err != nil {
-		switch errors.Cause(err).(type) {
-		case db.ErrUserNotExist:
-			c.FormErr("Password")
-			c.RenderWithErr(c.Tr("form.enterred_invalid_password"), LAUNCH, &f)
-
-		case db.ErrLoginSourceMismatch:
-			c.FormErr("LoginSource")
-			c.Redirect(c.GetRepo().GetRepoLink() + "/launch/research")
-		default:
-			c.Error(err, "authenticate user")
-		}
-		return
-	}
-	repoName := fmt.Sprintf("%s://%s:%s@%s/%s/%s.git", c.Data["Scheme"], c.User.Name, f.Password, c.Data["Host"], c.Repo.Owner.Name, c.Repo.Repository.Name)
-	repoName = strings.NewReplacer("%", "%25", "#", "%23", " ", "%20", "?", "%3F", "/", "%2F").Replace(repoName)
-	c.RawRedirect("https://binder.cs.rcos.nii.ac.jp/v2/git/" + repoName + "/master?filepath=WORKFLOWS/base_FLOW.ipynb")
-}
-
-// when a repository is private, show password form
-func LaunchExperimentPost(c *context.Context, f form.Pass) {
-	c.Title("launch binder")
-	loginSources, err := db.LoginSources.List(db.ListLoginSourceOpts{OnlyActivated: true})
-	if err != nil {
-		c.Error(err, "list activated login sources")
-		return
-	}
-	c.Data["LoginSources"] = loginSources
-
-	if c.HasError() {
-		c.RenderWithErr(c.Tr("form.username_password_incorrect"), HOME, &f)
-		return
-	}
-	_, err = db.Users.Authenticate(c.User.Name, f.Password, 0)
-	if err != nil {
-		switch errors.Cause(err).(type) {
-		case db.ErrUserNotExist:
-			c.FormErr("Password")
-			c.RenderWithErr(c.Tr("form.enterred_invalid_password"), LAUNCH, &f)
-
-		case db.ErrLoginSourceMismatch:
-			c.FormErr("LoginSource")
-			c.Redirect(c.GetRepo().GetRepoLink() + "/launch/experiment")
-		default:
-			c.Error(err, "authenticate user")
-		}
-		return
-	}
-	repoName := fmt.Sprintf("%s://%s:%s@%s/%s/%s.git", c.Data["Scheme"], c.User.Name, f.Password, c.Data["Host"], c.Repo.Owner.Name, c.Repo.Repository.Name)
-	repoName = strings.NewReplacer("%", "%25", "#", "%23", " ", "%20", "?", "%3F", "/", "%2F").Replace(repoName)
-	c.RawRedirect("https://binder.cs.rcos.nii.ac.jp/v2/git/" + repoName + "/HEAD?filepath=WORKFLOWS/EX-WORKFLOWS/util/required_rebuild_container.ipynb")
 }
