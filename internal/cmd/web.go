@@ -498,11 +498,9 @@ func runWeb(c *cli.Context) error {
 		m.Group("/:username/:reponame", func() {
 			// launch binder
 			m.Get("/launch/madmp", repo.LaunchMadmp)
-			m.Post("/launch/madmp", bindIgnErr(form.Pass{}), repo.LaunchMadmpPost)
 			m.Get("/launch/research", repo.LaunchResearch)
-			m.Post("/launch/research", bindIgnErr(form.Pass{}), repo.LaunchResearchPost)
 			m.Get("/launch/experiment", repo.LaunchExperiment)
-			m.Post("/launch/experiment", bindIgnErr(form.Pass{}), repo.LaunchExperimentPost)
+			m.Post("/launch/:dest", bindIgnErr(form.Pass{}), repo.LaunchPost)
 		}, reqSignIn, context.RepoAssignment(), reqRepoWriter, context.RepoRef())
 		// Disable root of watch and star function by RCOS
 		// m.Post("/:username/:reponame/action/:action", reqSignIn, context.RepoAssignment(), repo.Action)

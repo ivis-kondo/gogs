@@ -438,7 +438,3 @@ type ResearchProtect struct {
 func (f *ResearchProtect) Validate(ctx *macaron.Context, errs binding.Errors) binding.Errors {
 	return validate(errs, ctx.Data, f, ctx.Locale)
 }
-
-type Pass struct {
-	Password string `binding:"Required;MaxSize(255)"`
-}
