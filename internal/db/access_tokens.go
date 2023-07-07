@@ -181,9 +181,7 @@ func (db *accessTokens) Save(t *AccessToken) error {
 func DeleteOldAccessToken() {
 	log.Info("Start deleting expiring access token.")
 	unixNowTime := time.Now().Unix()
-
-	tokens := []AccessToken{}
-	result, err := x.Where("expire_unix < ?", unixNowTime).And("expire_unix > ?", 0).Delete(&tokens)
+	result, err := x.Where("expire_unix < ?", unixNowTime).And("expire_unix > ?", 0).Delete(new(AccessToken))
 	if err != nil {
 		log.Error("fail to delete old access tokens ")
 	}
