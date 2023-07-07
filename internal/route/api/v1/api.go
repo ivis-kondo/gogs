@@ -239,7 +239,7 @@ func RegisterRoutes(m *macaron.Macaron) {
 			m.Get("/issues", repo.ListUserIssues)
 
 			m.Group("/token", func() {
-				m.Post("/delete", bind(form.DeleteAccessTokenOption{}), user.DeleteAccessTokenSelf)
+				m.Delete("/delete", user.DeleteAccessTokenSelf)
 			})
 		}, reqToken())
 

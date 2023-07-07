@@ -11,8 +11,6 @@ import (
 
 	"github.com/NII-DG/gogs/internal/context"
 	"github.com/NII-DG/gogs/internal/db"
-	"github.com/NII-DG/gogs/internal/form"
-	log "unknwon.dev/clog/v2"
 )
 
 func ListAccessTokens(c *context.APIContext) {
@@ -43,10 +41,9 @@ func CreateAccessToken(c *context.APIContext, form api.CreateAccessTokenOption) 
 	c.JSON(http.StatusCreated, &api.AccessToken{Name: t.Name, Sha1: t.Sha1})
 }
 
-func DeleteAccessTokenSelf(c *context.APIContext, form form.DeleteAccessTokenOption) {
-	q_token := c.Query("token")
-	log.Trace("[RCOS DEBUG] q_token : %s", q_token)
-	err := db.AccessTokens.DeleteByToken(c.User.ID, form.Token)
+func DeleteAccessTokenSelf(c *context.APIContext) {
+	req_token := c.Query("token")
+	err := db.AccessTokens.DeleteByToken(c.User.ID, req_token)
 	if err != nil {
 		if db.IsErrAccessTokenAlreadyExist(err) {
 			c.ErrorStatus(http.StatusUnprocessableEntity, err)
