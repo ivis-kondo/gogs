@@ -24,6 +24,7 @@ import (
 	"github.com/NII-DG/gogs/internal/db"
 	"github.com/NII-DG/gogs/internal/form"
 	"github.com/NII-DG/gogs/internal/tool"
+	gen "github.com/NII-DG/gogs/internal/utils/generator"
 )
 
 const (
@@ -418,6 +419,7 @@ func LaunchPost(c *context.Context, f form.Pass) {
 		c.RenderWithErr(c.Tr("form.username_password_incorrect"), HOME, &f)
 		return
 	}
+	// User Auth
 	_, err = db.Users.Authenticate(c.User.Name, f.Password, 0)
 	if err != nil {
 		switch errors.Cause(err).(type) {
@@ -433,13 +435,43 @@ func LaunchPost(c *context.Context, f form.Pass) {
 		}
 		return
 	}
-	repoName := fmt.Sprintf("%s://%s:%s@%s/%s/%s.git", c.Data["Scheme"], c.User.Name, f.Password, c.Data["Host"], c.Repo.Owner.Name, c.Repo.Repository.Name)
+
+	// create new token for building jupyter container
+	randStr, err := gen.MakeRandomStrByAlphabetDigit(7)
+	if err != nil {
+		c.Error(err, "Failed to generate random string")
+	}
+	token_name := fmt.Sprintf("building-token-%s", randStr)
+	build_token, err := db.AccessTokens.Create(c.User.ID, token_name)
+
+	if err != nil {
+		if db.IsErrAccessTokenAlreadyExist(err) {
+			c.RenderWithErr(c.Tr("rocs.fial_preparing_for_build"), LAUNCH, &f)
+			return
+		} else {
+			c.Error(err, "new access token")
+			return
+		}
+	}
+	log.Trace("[RCOS DEBUG] build_token : %v", build_token)
+
+	// create redirect URL for building jupyter container using BinderHub powered by RCOS
+	repoName := fmt.Sprintf("%s://%s:%s@%s/%s/%s.git", c.Data["Scheme"], c.User.Name, build_token.Sha1, c.Data["Host"], c.Repo.Owner.Name, c.Repo.Repository.Name)
 	repoName = strings.NewReplacer("%", "%25", "#", "%23", " ", "%20", "?", "%3F", "/", "%2F").Replace(repoName)
+
+	binderUrl := "https://binder.cs.rcos.nii.ac.jp/v2/git"
+	branch := "master"
 	if dest == "research" {
-		c.RawRedirect("https://binder.cs.rcos.nii.ac.jp/v2/git/" + repoName + "/master?filepath=WORKFLOWS/base_FLOW.ipynb")
+		filepath := "WORKFLOWS/base_FLOW.ipynb"
+		redirectURL := fmt.Sprintf("%s/%s/%s?filepath=%s", binderUrl, repoName, branch, filepath)
+		c.RawRedirect(redirectURL)
 	} else if dest == "experiment" {
-		c.RawRedirect("https://binder.cs.rcos.nii.ac.jp/v2/git/" + repoName + "/HEAD?filepath=WORKFLOWS/EX-WORKFLOWS/util/required_rebuild_container.ipynb")
+		filepath := "WORKFLOWS/EX-WORKFLOWS/util/required_rebuild_container.ipynb"
+		redirectURL := fmt.Sprintf("%s/%s/%s?filepath=%s", binderUrl, repoName, branch, filepath)
+		c.RawRedirect(redirectURL)
 	} else {
-		c.RawRedirect("https://binder.cs.rcos.nii.ac.jp/v2/git/" + repoName + "/master?filepath=maDMP.ipynb")
+		filepath := "maDMP.ipynb"
+		redirectURL := fmt.Sprintf("%s/%s/%s?filepath=%s", binderUrl, repoName, branch, filepath)
+		c.RawRedirect(redirectURL)
 	}
 }
