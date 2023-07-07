@@ -22,7 +22,7 @@ type AccessTokensStore interface {
 	// Create creates a new access token and persist to database.
 	// It returns ErrAccessTokenAlreadyExist when an access token
 	// with same name already exists for the user.
-	Create(userID int64, name string) (*AccessToken, error)
+	Create(userID int64, name string, expire_minutes int64) (*AccessToken, error)
 	// DeleteByID deletes the access token by given ID.
 	// 🚨 SECURITY: The "userID" is required to prevent attacker
 	// deletes arbitrary access token that belongs to another user.
@@ -43,10 +43,11 @@ var AccessTokens AccessTokensStore
 
 // AccessToken is a personal access token.
 type AccessToken struct {
-	ID     int64
-	UserID int64 `xorm:"uid INDEX" gorm:"COLUMN:uid;INDEX"`
-	Name   string
-	Sha1   string `xorm:"UNIQUE VARCHAR(40)" gorm:"TYPE:VARCHAR(40);UNIQUE"`
+	ID         int64
+	UserID     int64 `xorm:"uid INDEX" gorm:"COLUMN:uid;INDEX"`
+	Name       string
+	Sha1       string `xorm:"UNIQUE VARCHAR(40)" gorm:"TYPE:VARCHAR(40);UNIQUE"`
+	ExpireUnix int64
 
 	Created           time.Time `xorm:"-" gorm:"-" json:"-"`
 	CreatedUnix       int64
@@ -96,7 +97,7 @@ func (err ErrAccessTokenAlreadyExist) Error() string {
 	return fmt.Sprintf("access token already exists: %v", err.args)
 }
 
-func (db *accessTokens) Create(userID int64, name string) (*AccessToken, error) {
+func (db *accessTokens) Create(userID int64, name string, expire_minutes int64) (*AccessToken, error) {
 	err := db.Where("uid = ? AND name = ?", userID, name).First(new(AccessToken)).Error
 	if err == nil {
 		return nil, ErrAccessTokenAlreadyExist{args: errutil.Args{"userID": userID, "name": name}}
@@ -104,10 +105,16 @@ func (db *accessTokens) Create(userID int64, name string) (*AccessToken, error) 
 		return nil, err
 	}
 
+	// set expire time
+	now := time.Now()
+	addedDateTime := now.Add(time.Minute * time.Duration(expire_minutes))
+	unixTime := addedDateTime.Unix()
+
 	token := &AccessToken{
-		UserID: userID,
-		Name:   name,
-		Sha1:   cryptoutil.SHA1(gouuid.NewV4().String()),
+		UserID:     userID,
+		Name:       name,
+		Sha1:       cryptoutil.SHA1(gouuid.NewV4().String()),
+		ExpireUnix: unixTime,
 	}
 	return token, db.DB.Create(token).Error
 }
