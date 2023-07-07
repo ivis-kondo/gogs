@@ -183,7 +183,7 @@ func DeleteOldAccessToken() {
 	unixNowTime := time.Now().Unix()
 
 	tokens := []AccessToken{}
-	result, err := x.Where("expire_unix < ?", unixNowTime).Delete(tokens)
+	result, err := x.Where("expire_unix < ? AND expire_unix > ?", unixNowTime, 0).Delete(tokens)
 	if err != nil {
 		log.Error("fail to delete old access tokens ")
 	}
