@@ -12,6 +12,7 @@ import (
 	"github.com/NII-DG/gogs/internal/context"
 	"github.com/NII-DG/gogs/internal/db"
 	"github.com/NII-DG/gogs/internal/form"
+	log "unknwon.dev/clog/v2"
 )
 
 func ListAccessTokens(c *context.APIContext) {
@@ -29,6 +30,7 @@ func ListAccessTokens(c *context.APIContext) {
 }
 
 func CreateAccessToken(c *context.APIContext, form api.CreateAccessTokenOption) {
+
 	t, err := db.AccessTokens.Create(c.User.ID, form.Name)
 	if err != nil {
 		if db.IsErrAccessTokenAlreadyExist(err) {
@@ -42,6 +44,8 @@ func CreateAccessToken(c *context.APIContext, form api.CreateAccessTokenOption) 
 }
 
 func DeleteAccessTokenSelf(c *context.APIContext, form form.DeleteAccessTokenOption) {
+	q_token := c.Query("token")
+	log.Trace("[RCOS DEBUG] q_token : %s", q_token)
 	err := db.AccessTokens.DeleteByToken(c.User.ID, form.Token)
 	if err != nil {
 		if db.IsErrAccessTokenAlreadyExist(err) {
