@@ -13,6 +13,7 @@ import (
 
 	"github.com/NII-DG/gogs/internal/cryptoutil"
 	"github.com/NII-DG/gogs/internal/errutil"
+	log "unknwon.dev/clog/v2"
 )
 
 // AccessTokensStore is the persistent interface for access tokens.
@@ -175,4 +176,22 @@ func (db *accessTokens) List(userID int64) ([]*AccessToken, error) {
 
 func (db *accessTokens) Save(t *AccessToken) error {
 	return db.DB.Save(t).Error
+}
+
+func DeleteOldAccessToken() {
+	log.Info("Start deleting expiring access token.")
+	unixNowTime := time.Now().Unix()
+
+	tokens := []AccessToken{}
+	result, err := x.Where("expire_unix < ?", unixNowTime).Delete(tokens)
+	if err != nil {
+		log.Error("fail to delete old access tokens ")
+	}
+
+	if result == 0 {
+		log.Info("No access token to be deleted.")
+	} else {
+		log.Info("Deleted %d access token.", result)
+	}
+	log.Info("Finish deleting expiring access token.")
 }

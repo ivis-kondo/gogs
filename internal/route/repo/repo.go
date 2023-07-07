@@ -443,7 +443,7 @@ func LaunchPost(c *context.Context, f form.Pass) {
 		c.Error(err, "Failed to generate random string")
 	}
 	token_name := fmt.Sprintf("%s-%s", const_utils.Get_BUILD_TOKEN(), randStr)
-	build_token, err := db.AccessTokens.Create(c.User.ID, token_name, 60)
+	build_token, err := db.AccessTokens.Create(c.User.ID, token_name, conf.DG.BuildAccessTokenExpireMinutes)
 
 	if err != nil {
 		if db.IsErrAccessTokenAlreadyExist(err) {
