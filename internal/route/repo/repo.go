@@ -24,6 +24,7 @@ import (
 	"github.com/NII-DG/gogs/internal/db"
 	"github.com/NII-DG/gogs/internal/form"
 	"github.com/NII-DG/gogs/internal/tool"
+	"github.com/NII-DG/gogs/internal/utils/const_utils"
 	gen "github.com/NII-DG/gogs/internal/utils/generator"
 )
 
@@ -441,7 +442,7 @@ func LaunchPost(c *context.Context, f form.Pass) {
 	if err != nil {
 		c.Error(err, "Failed to generate random string")
 	}
-	token_name := fmt.Sprintf("building-token-%s", randStr)
+	token_name := fmt.Sprintf("%s-%s", const_utils.Get_BUILD_TOKEN(), randStr)
 	build_token, err := db.AccessTokens.Create(c.User.ID, token_name)
 
 	if err != nil {
