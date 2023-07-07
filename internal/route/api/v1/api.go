@@ -18,6 +18,7 @@ import (
 	"github.com/NII-DG/gogs/internal/form"
 	"github.com/NII-DG/gogs/internal/route/api/v1/admin"
 	"github.com/NII-DG/gogs/internal/route/api/v1/container"
+	"github.com/NII-DG/gogs/internal/route/api/v1/gin"
 	"github.com/NII-DG/gogs/internal/route/api/v1/metadata"
 	"github.com/NII-DG/gogs/internal/route/api/v1/misc"
 	"github.com/NII-DG/gogs/internal/route/api/v1/org"
@@ -176,6 +177,8 @@ func RegisterRoutes(m *macaron.Macaron) {
 	m.Group("/v1", func() {
 		// Handle preflight OPTIONS request
 		m.Options("/*", func() {})
+
+		m.Get("/gin", gin.GetServerInfo)
 
 		// Miscellaneous
 		m.Post("/markdown", bind(api.MarkdownOption{}), misc.Markdown)
