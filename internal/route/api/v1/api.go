@@ -208,6 +208,7 @@ func RegisterRoutes(m *macaron.Macaron) {
 					m.Get("/:target", user.CheckFollowing)
 				})
 			})
+
 		}, reqToken())
 
 		m.Group("/user", func() {
@@ -236,6 +237,10 @@ func RegisterRoutes(m *macaron.Macaron) {
 			})
 
 			m.Get("/issues", repo.ListUserIssues)
+
+			m.Group("/token", func() {
+				m.Post("/delete", bind(form.DeleteAccessTokenOption{}), user.DeleteAccessTokenSelf)
+			})
 		}, reqToken())
 
 		// Repositories

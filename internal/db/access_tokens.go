@@ -27,6 +27,8 @@ type AccessTokensStore interface {
 	// 🚨 SECURITY: The "userID" is required to prevent attacker
 	// deletes arbitrary access token that belongs to another user.
 	DeleteByID(userID, id int64) error
+	// DeleteByToken deletes the access token by given Token(sha1).
+	DeleteByToken(userID int64, token string) error
 	// GetBySHA returns the access token with given SHA1.
 	// It returns ErrAccessTokenNotExist when not found.
 	GetBySHA(sha string) (*AccessToken, error)
@@ -112,6 +114,17 @@ func (db *accessTokens) Create(userID int64, name string) (*AccessToken, error) 
 
 func (db *accessTokens) DeleteByID(userID, id int64) error {
 	return db.Where("id = ? AND uid = ?", id, userID).Delete(new(AccessToken)).Error
+}
+
+func (db *accessTokens) DeleteByToken(userID int64, token string) error {
+	// check exist token
+	err := db.Where("uid = ? AND sha1 = ?", userID, token).First(new(AccessToken)).Error
+	if err != nil {
+		return ErrAccessTokenAlreadyExist{args: errutil.Args{"userID": userID}}
+	}
+
+	// delete access token
+	return db.Where("sha1 = ? AND uid = ?", token, userID).Delete(new(AccessToken)).Error
 }
 
 var _ errutil.NotFound = (*ErrAccessTokenNotExist)(nil)

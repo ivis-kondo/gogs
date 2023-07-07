@@ -11,6 +11,7 @@ import (
 
 	"github.com/NII-DG/gogs/internal/context"
 	"github.com/NII-DG/gogs/internal/db"
+	"github.com/NII-DG/gogs/internal/form"
 )
 
 func ListAccessTokens(c *context.APIContext) {
@@ -38,4 +39,21 @@ func CreateAccessToken(c *context.APIContext, form api.CreateAccessTokenOption) 
 		return
 	}
 	c.JSON(http.StatusCreated, &api.AccessToken{Name: t.Name, Sha1: t.Sha1})
+}
+
+func DeleteAccessTokenSelf(c *context.APIContext, form form.DeleteAccessTokenOption) {
+	err := db.AccessTokens.DeleteByToken(c.User.ID, form.Token)
+	if err != nil {
+		if db.IsErrAccessTokenAlreadyExist(err) {
+			c.ErrorStatus(http.StatusUnprocessableEntity, err)
+		} else {
+			c.Error(err, "delete access token")
+		}
+		return
+
+	}
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "delete access token",
+	})
+
 }
