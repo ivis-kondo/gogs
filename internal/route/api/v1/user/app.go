@@ -5,13 +5,17 @@
 package user
 
 import (
+	"fmt"
 	"net/http"
 
 	api "github.com/gogs/go-gogs-client"
 
+	"github.com/NII-DG/gogs/internal/conf"
 	"github.com/NII-DG/gogs/internal/context"
 	"github.com/NII-DG/gogs/internal/db"
 	"github.com/NII-DG/gogs/internal/form"
+	"github.com/NII-DG/gogs/internal/utils/const_utils"
+	gen "github.com/NII-DG/gogs/internal/utils/generator"
 )
 
 func ListAccessTokens(c *context.APIContext) {
@@ -58,4 +62,24 @@ func DeleteAccessTokenSelf(c *context.APIContext) {
 		"message": "delete access token",
 	})
 
+}
+
+func CreateAccessTokenForLaunch(c *context.APIContext) {
+	// create new token for building jupyter container
+	randStr, err := gen.MakeRandomStrByAlphabetDigit(7)
+	if err != nil {
+		c.Error(err, "Failed to generate random string")
+	}
+	token_name := fmt.Sprintf("%s-%s", const_utils.Get_BUILD_TOKEN(), randStr)
+
+	t, err := db.AccessTokens.Create(c.User.ID, token_name, conf.DG.BuildAccessTokenExpireMinutes)
+	if err != nil {
+		if db.IsErrAccessTokenAlreadyExist(err) {
+			c.ErrorStatus(http.StatusUnprocessableEntity, err)
+		} else {
+			c.Error(err, "new access token")
+		}
+		return
+	}
+	c.JSON(http.StatusCreated, &api.AccessToken{Name: t.Name, Sha1: t.Sha1})
 }

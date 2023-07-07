@@ -193,7 +193,7 @@ func RegisterRoutes(m *macaron.Macaron) {
 				m.Group("/tokens", func() {
 					m.Combo("").
 						Get(user.ListAccessTokens).
-						Post(bind(api.CreateAccessTokenOption{}), user.CreateAccessToken)
+						Post(bind(form.CreateAccessTokenOption{}), user.CreateAccessToken)
 				}, reqBasicAuth())
 			})
 		})
@@ -240,6 +240,7 @@ func RegisterRoutes(m *macaron.Macaron) {
 
 			m.Group("/token", func() {
 				m.Delete("/delete", user.DeleteAccessTokenSelf)
+				m.Post("/forlaunch", bind(form.CreateAccessTokenOption{}), user.CreateAccessTokenForLaunch)
 			})
 		}, reqToken())
 
