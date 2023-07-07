@@ -240,7 +240,7 @@ func RegisterRoutes(m *macaron.Macaron) {
 
 			m.Group("/token", func() {
 				m.Delete("/delete", user.DeleteAccessTokenSelf)
-				m.Post("/forlaunch", bind(form.CreateAccessTokenOption{}), user.CreateAccessTokenForLaunch)
+				m.Post("/forlaunch", user.CreateAccessTokenForLaunch)
 			})
 		}, reqToken())
 
