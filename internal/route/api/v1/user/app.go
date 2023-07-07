@@ -11,6 +11,7 @@ import (
 
 	"github.com/NII-DG/gogs/internal/context"
 	"github.com/NII-DG/gogs/internal/db"
+	"github.com/NII-DG/gogs/internal/form"
 )
 
 func ListAccessTokens(c *context.APIContext) {
@@ -27,9 +28,9 @@ func ListAccessTokens(c *context.APIContext) {
 	c.JSONSuccess(&apiTokens)
 }
 
-func CreateAccessToken(c *context.APIContext, form api.CreateAccessTokenOption) {
+func CreateAccessToken(c *context.APIContext, form form.CreateAccessTokenOption) {
 
-	t, err := db.AccessTokens.Create(c.User.ID, form.Name)
+	t, err := db.AccessTokens.Create(c.User.ID, form.Name, form.ExpireMinutes)
 	if err != nil {
 		if db.IsErrAccessTokenAlreadyExist(err) {
 			c.ErrorStatus(http.StatusUnprocessableEntity, err)

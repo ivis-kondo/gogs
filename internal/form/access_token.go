@@ -5,10 +5,11 @@ import (
 	"gopkg.in/macaron.v1"
 )
 
-type DeleteAccessTokenOption struct {
-	Token string `json:"token" binding:"Required"`
+type CreateAccessTokenOption struct {
+	Name          string `json:"name" binding:"Required"`
+	ExpireMinutes int64  `json:"expire_minutes"`
 }
 
-func (f *DeleteAccessTokenOption) Validate(ctx *macaron.Context, errs binding.Errors) binding.Errors {
+func (f *CreateAccessTokenOption) Validate(ctx *macaron.Context, errs binding.Errors) binding.Errors {
 	return validate(errs, ctx.Data, f, ctx.Locale)
 }

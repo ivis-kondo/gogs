@@ -673,7 +673,7 @@ func SettingsApplicationsPost(c *context.Context, f form.NewAccessToken) {
 		return
 	}
 
-	t, err := db.AccessTokens.Create(c.User.ID, f.Name)
+	t, err := db.AccessTokens.Create(c.User.ID, f.Name, 0)
 	if err != nil {
 		if db.IsErrAccessTokenAlreadyExist(err) {
 			c.Flash.Error(c.Tr("settings.token_name_exists"))

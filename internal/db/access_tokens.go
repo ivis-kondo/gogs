@@ -106,9 +106,12 @@ func (db *accessTokens) Create(userID int64, name string, expire_minutes int64) 
 	}
 
 	// set expire time
-	now := time.Now()
-	addedDateTime := now.Add(time.Minute * time.Duration(expire_minutes))
-	unixTime := addedDateTime.Unix()
+	var unixTime int64 = 0
+	if expire_minutes > 0 {
+		now := time.Now()
+		addedDateTime := now.Add(time.Minute * time.Duration(expire_minutes))
+		unixTime = addedDateTime.Unix()
+	}
 
 	token := &AccessToken{
 		UserID:     userID,
