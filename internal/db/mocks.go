@@ -15,7 +15,7 @@ import (
 var _ AccessTokensStore = (*MockAccessTokensStore)(nil)
 
 type MockAccessTokensStore struct {
-	MockCreate        func(userID int64, name string) (*AccessToken, error)
+	MockCreate        func(userID int64, name string, expire_minutes int64) (*AccessToken, error)
 	MockDeleteByID    func(userID, id int64) error
 	MockDeleteByToken func(userID int64, token string) error
 	MockGetBySHA      func(sha string) (*AccessToken, error)
@@ -23,8 +23,8 @@ type MockAccessTokensStore struct {
 	MockSave          func(t *AccessToken) error
 }
 
-func (m *MockAccessTokensStore) Create(userID int64, name string) (*AccessToken, error) {
-	return m.MockCreate(userID, name)
+func (m *MockAccessTokensStore) Create(userID int64, name string, expire_minutes int64) (*AccessToken, error) {
+	return m.MockCreate(userID, name, expire_minutes)
 }
 
 func (m *MockAccessTokensStore) DeleteByID(userID, id int64) error {
