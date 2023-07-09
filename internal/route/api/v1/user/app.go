@@ -7,6 +7,7 @@ package user
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
 	api "github.com/gogs/go-gogs-client"
 
@@ -27,7 +28,12 @@ func ListAccessTokens(c *context.APIContext) {
 
 	apiTokens := make([]*api.AccessToken, len(tokens))
 	for i := range tokens {
-		apiTokens[i] = &api.AccessToken{Name: tokens[i].Name, Sha1: tokens[i].Sha1}
+		token_name := tokens[i].Name
+		if strings.HasPrefix(token_name, const_utils.Get_BUILD_TOKEN()) {
+			continue
+		} else {
+			apiTokens[i] = &api.AccessToken{Name: tokens[i].Name, Sha1: tokens[i].Sha1}
+		}
 	}
 	c.JSONSuccess(&apiTokens)
 }
