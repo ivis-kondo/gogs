@@ -443,7 +443,6 @@ func LaunchPost(c *context.Context, f form.Pass) {
 		c.Error(err, "Failed to generate random string")
 	}
 	token_name := fmt.Sprintf("%s-%s", const_utils.Get_BUILD_TOKEN(), randStr)
-	log.Trace("[DEBUG RCOS] conf.DG.BuildAccessTokenExpireMinutes : %d", conf.DG.BuildAccessTokenExpireMinutes)
 	build_token, err := db.AccessTokens.Create(c.User.ID, token_name, conf.DG.BuildAccessTokenExpireMinutes)
 
 	if err != nil {
@@ -455,7 +454,6 @@ func LaunchPost(c *context.Context, f form.Pass) {
 			return
 		}
 	}
-	log.Trace("[RCOS DEBUG] build_token : %v", build_token)
 
 	// create redirect URL for building jupyter container using BinderHub powered by RCOS
 	repoName := fmt.Sprintf("%s://%s:%s@%s/%s/%s.git", c.Data["Scheme"], c.User.Name, build_token.Sha1, c.Data["Host"], c.Repo.Owner.Name, c.Repo.Repository.Name)
