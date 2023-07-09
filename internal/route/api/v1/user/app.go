@@ -25,15 +25,20 @@ func ListAccessTokens(c *context.APIContext) {
 		c.Error(err, "list access tokens")
 		return
 	}
-
-	apiTokens := make([]*api.AccessToken, len(tokens))
+	tokens_without_build_token := []*db.AccessToken{}
 	for i := range tokens {
 		token_name := tokens[i].Name
 		if strings.HasPrefix(token_name, const_utils.Get_BUILD_TOKEN()) {
 			continue
 		} else {
-			apiTokens[i] = &api.AccessToken{Name: tokens[i].Name, Sha1: tokens[i].Sha1}
+			tokens_without_build_token = append(tokens_without_build_token, tokens[i])
 		}
+	}
+
+	apiTokens := make([]*api.AccessToken, len(tokens_without_build_token))
+	for i := range tokens_without_build_token {
+		apiTokens[i] = &api.AccessToken{Name: tokens_without_build_token[i].Name, Sha1: tokens_without_build_token[i].Sha1}
+
 	}
 	c.JSONSuccess(&apiTokens)
 }
