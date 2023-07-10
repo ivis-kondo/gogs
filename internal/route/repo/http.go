@@ -140,10 +140,6 @@ func HTTPContexter() macaron.Handler {
 				}
 				return
 			}
-			if err = db.AccessTokens.Save(token); err != nil {
-				log.Error("Failed to update access token: %v", err)
-			}
-
 			authUser, err = db.Users.GetByID(token.UserID)
 			if err != nil {
 				// Once we found token, we're supposed to find its related user,
@@ -151,6 +147,14 @@ func HTTPContexter() macaron.Handler {
 				c.Status(http.StatusInternalServerError)
 				log.Error("Failed to get user [id: %d]: %v", token.UserID, err)
 				return
+			}
+			if authUsername != authUser.Name {
+				c.Status(http.StatusUnauthorized)
+				askCredentials(c, http.StatusUnauthorized, "")
+				return
+			}
+			if err = db.AccessTokens.Save(token); err != nil {
+				log.Error("Failed to update access token: %v", err)
 			}
 		} else if authUser.IsEnabledTwoFactor() {
 			askCredentials(c, http.StatusUnauthorized, `User with two-factor authentication enabled cannot perform HTTP/HTTPS operations via plain username and password
