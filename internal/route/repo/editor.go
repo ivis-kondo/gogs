@@ -345,6 +345,7 @@ func DiffPreviewPost(c *context.Context, f form.EditPreviewDiff) {
 }
 
 func DeleteFile(c *context.Context) {
+	log.Info("[DEBUG RCOS] ファイル削除処理開始")
 	c.PageIs("Delete")
 
 	entry, err := c.Repo.Commit.TreeEntry(c.Repo.TreePath)
