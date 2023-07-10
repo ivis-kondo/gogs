@@ -298,6 +298,11 @@ var (
 			Schedule   string
 			OlderThan  time.Duration
 		} `ini:"cron.repo_archive_cleanup"`
+		AccessTokenCleanup struct {
+			Enabled    bool
+			RunAtStart bool
+			Schedule   string
+		} `ini:"cron.access_token_cleanup"`
 	}
 
 	// Git settings
@@ -381,10 +386,11 @@ var (
 
 	// RCOS Specific Setting Struct
 	DG struct {
-		ApiToken                string `ini:"GIT_API_TOKEN"`
-		MaDMPTemplateRepoBranch string `ini:"MA_DMP_TEMPLATE_BRANCH"`
-		HealthFilePath          string `ini:"HEALTH_FILE_PATH"`
-		HealthFileName          string `ini:"HEALTH_FILE_NAME"`
+		ApiToken                      string `ini:"GIT_API_TOKEN"`
+		MaDMPTemplateRepoBranch       string `ini:"MA_DMP_TEMPLATE_BRANCH"`
+		HealthFilePath                string `ini:"HEALTH_FILE_PATH"`
+		HealthFileName                string `ini:"HEALTH_FILE_NAME"`
+		BuildAccessTokenExpireMinutes int64  `ini:"BUILD_ACCESS_TOKEN_EXPIRE_MINUTES"`
 	}
 )
 
