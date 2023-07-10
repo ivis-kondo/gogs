@@ -345,7 +345,6 @@ func DiffPreviewPost(c *context.Context, f form.EditPreviewDiff) {
 }
 
 func DeleteFile(c *context.Context) {
-	log.Info("[DEBUG RCOS] ファイル削除画面遷移")
 	c.PageIs("Delete")
 
 	entry, err := c.Repo.Commit.TreeEntry(c.Repo.TreePath)
@@ -369,7 +368,6 @@ func DeleteFile(c *context.Context) {
 }
 
 func DeleteFilePost(c *context.Context, f form.DeleteRepoFile) {
-	log.Info("[DEBUG RCOS] ファイル削除処理開始")
 	c.PageIs("Delete")
 	c.Data["BranchLink"] = c.Repo.RepoLink + "/src/" + c.Repo.BranchName
 
