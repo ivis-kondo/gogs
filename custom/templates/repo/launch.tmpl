@@ -1,0 +1,36 @@
+{{template "base/head" .}}
+
+<div class="repository">
+	{{template "repo/header" .}}
+	<div class="ui container">
+		<div class="ui grid">
+			<div class="twelve wide column content">
+				{{template "base/alert" .}}
+				<h4 class="ui top attached header">
+					{{.i18n.Tr "rcos.launch_binder"}}
+				</h4>
+				<div class="ui attached segment">
+					<form class="ui form" action="{{.Link}}" method="post">
+						{{.CSRFTokenHTML}}
+						<div class="field">
+							{{.i18n.Tr "rcos.private_repo_info"}}
+						</div>
+						<label>
+							{{.i18n.Tr "username"}}: {{.LoggedUser.Name}}
+						</label>
+						<div class="field {{if .Err_Password}}error{{end}}">
+							<form action="/{{.Repository.Owner.Name}}/{{.Repository.Name}}/launch/{{.Dest}}" method="post" id = "Auth1">
+								<div class="required inline field">
+									<label for="password">{{.i18n.Tr "password"}}</label>
+									<input type="password" name="password" maxlength="255" required>
+								</div>
+								<button class="ui green button" id="submit-button" type="submit">{{.i18n.Tr "rcos.launch_binder_button"}}</button>
+							</form>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{{template "base/footer" .}}

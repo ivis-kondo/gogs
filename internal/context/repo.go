@@ -332,6 +332,8 @@ func RepoAssignment(pages ...bool) macaron.Handler {
 		u, _ := url.Parse(conf.Server.ExternalURL)
 		ginURL := fmt.Sprintf("%s://%s", u.Scheme, u.Host)
 		c.Data["ginURL"] = url.QueryEscape(ginURL)
+		c.Data["Scheme"] = u.Scheme
+		c.Data["Host"] = u.Host
 
 		if c.IsLogged {
 			c.Data["IsWatchingRepo"] = db.IsWatching(c.User.ID, repo.ID)
@@ -394,6 +396,7 @@ func RepoAssignment(pages ...bool) macaron.Handler {
 		}
 
 		c.Data["HasMaDmp"] = hasFileInRepo(c, "/maDMP.ipynb")
+		c.Data["HasExperiments"] = HasTreeInRepo(c, "/experiments")
 
 		// if doi := getRepoDOI(c); doi != "" && libgin.IsRegisteredDOI(doi) {
 		// 	c.Data["DOI"] = doi

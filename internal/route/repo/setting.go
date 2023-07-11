@@ -755,7 +755,7 @@ func SettingsProtectePost(c *context.Context, f form.ResearchProtect) {
 		}
 
 	}
-	if projectname_has_char == false{
+	if projectname_has_char == false {
 		c.RenderWithErr(c.Tr("form.projectname_has_no_char"), SETTINGS_PROJECT, &f)
 		return
 	}

@@ -26,6 +26,7 @@ import (
 	"github.com/NII-DG/gogs/internal/email"
 	"github.com/NII-DG/gogs/internal/form"
 	"github.com/NII-DG/gogs/internal/tool"
+	"github.com/NII-DG/gogs/internal/utils"
 	"github.com/NII-DG/gogs/internal/utils/regex"
 )
 
@@ -91,7 +92,7 @@ func SettingsPost(c *context.Context, f form.UpdateProfile) {
 		// Check if username characters have been changed
 		if c.User.LowerName != strings.ToLower(f.Name) {
 			if err := db.ChangeUserName(c.User, f.Name); err != nil {
-				c.FormErr("Name")
+				c.FormErr("UserName")
 				var msg string
 				switch {
 				case db.IsErrUserAlreadyExist(err):
@@ -136,6 +137,13 @@ func SettingsPost(c *context.Context, f form.UpdateProfile) {
 	if len(f.ERadResearcherNumber) > 0 && !regex.CheckERadRearcherNumberFormat(f.ERadResearcherNumber) {
 		c.FormErr("ERad")
 		c.RenderWithErr(c.Tr("form.enterred_invalid_erad"), SETTINGS_PROFILE, &f)
+		return
+	}
+
+	// Check if spaces are included.
+	if utils.ContainsSpace(f.FirstName) || utils.ContainsSpace(f.LastName) {
+		c.FormErr("Name")
+		c.RenderWithErr(c.Tr("form.must_not_only_space"), SETTINGS_PROFILE, &f)
 		return
 	}
 
@@ -665,7 +673,7 @@ func SettingsApplicationsPost(c *context.Context, f form.NewAccessToken) {
 		return
 	}
 
-	t, err := db.AccessTokens.Create(c.User.ID, f.Name)
+	t, err := db.AccessTokens.Create(c.User.ID, f.Name, 0)
 	if err != nil {
 		if db.IsErrAccessTokenAlreadyExist(err) {
 			c.Flash.Error(c.Tr("settings.token_name_exists"))

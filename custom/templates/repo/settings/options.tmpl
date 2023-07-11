@@ -10,7 +10,7 @@
 					{{.i18n.Tr "repo.settings.basic_settings"}}
 				</div>
 				<div class="ui attached segment">
-					<form class="ui form" action="{{.Link}}" method="POST">
+					<form class="ui form" action="{{.Link}}" method="POST" onSubmit="return PreventionDbClick();">
 						{{.CSRFTokenHTML}}
 						<input type="hidden" name="action" value="update">
 						<div class="required field {{if .Err_RepoName}}error{{end}}">
@@ -22,15 +22,16 @@
 							<textarea maxlength="512" class="autosize" id="description" name="description" rows="3">{{.Repository.Description}}</textarea>
 							<span class="help">{{.i18n.Tr "repo.settings.description_length"}}: <span>512</span></span>
 						</div>
-						<div class="field {{if .Err_Website}}error{{end}}">
+						<!-- <div class="field {{if .Err_Website}}error{{end}}">
 							<label for="website">{{.i18n.Tr "repo.settings.site"}}</label>
 							<input id="website" name="website" type="url" value="{{.Repository.Website}}">
-						</div>
+						</div> -->
 
 						{{if not .Repository.IsFork}}
 							<div class="inline field">
-								<label>{{.i18n.Tr "repo.visibility"}}</label>
-								<div class="ui segment">
+								<!-- <label>{{.i18n.Tr "repo.visibility"}}</label> -->
+								<!-- <div class="ui segment"> -->
+								<div class="ui">
 									<div class="field">
 										<div class="ui checkbox" {{if .Repository.IsPrivate}}data-tooltip="{{.i18n.Tr "repo.license_warn"}}"{{end}}>
 											<input name="private" type="checkbox" {{if .Repository.IsPrivate}}checked{{end}}>
@@ -348,7 +349,7 @@
 				{{.i18n.Tr "repo.settings.transfer_notices_1" | Safe}} <br>
 				{{.i18n.Tr "repo.settings.transfer_notices_2" | Safe}}
 			</div>
-			<form class="ui form" action="{{.Link}}" method="POST">
+			<form class="ui form" action="{{.Link}}" method="POST" onSubmit="return PreventionDbClick();">
 				{{.CSRFTokenHTML}}
 				<input type="hidden" name="action" value="transfer">
 				<div class="field">
@@ -386,7 +387,7 @@
 				{{.i18n.Tr "repo.settings.delete_notices_fork_1" | Safe}}
 				{{end}}
 			</div>
-			<form class="ui form" action="{{.Link}}" method="POST">
+			<form class="ui form" action="{{.Link}}" method="POST" onSubmit="return PreventionDbClick();">
 				{{.CSRFTokenHTML}}
 				<input type="hidden" name="action" value="delete">
 				<div class="field">

@@ -5,6 +5,7 @@
 package repo
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 	"path"
@@ -12,6 +13,7 @@ import (
 	"strings"
 	"unicode"
 
+	"github.com/pkg/errors"
 	"github.com/unknwon/com"
 	log "unknwon.dev/clog/v2"
 
@@ -22,11 +24,14 @@ import (
 	"github.com/NII-DG/gogs/internal/db"
 	"github.com/NII-DG/gogs/internal/form"
 	"github.com/NII-DG/gogs/internal/tool"
+	"github.com/NII-DG/gogs/internal/utils/const_utils"
+	gen "github.com/NII-DG/gogs/internal/utils/generator"
 )
 
 const (
 	CREATE  = "repo/create"
 	MIGRATE = "repo/migrate"
+	LAUNCH  = "repo/launch"
 )
 
 func MustBeNotBare(c *context.Context) {
@@ -128,11 +133,11 @@ func CreatePost(c *context.Context, f form.CreateRepo) {
 		}
 
 	}
-	if projectname_has_char == false{
+	if projectname_has_char == false {
 		c.RenderWithErr(c.Tr("form.projectname_has_no_char"), CREATE, &f)
 		return
 	}
-	
+
 	repo, err := db.CreateRepository(c.User, ctxUser, db.CreateRepoOptions{
 		Name:               f.RepoName,
 		Description:        strings.ReplaceAll(f.Description, "\r\n", "\n"),
@@ -357,4 +362,116 @@ func Download(c *context.Context) {
 	}
 
 	c.ServeFile(archivePath, c.Repo.Repository.Name+"-"+refName+ext)
+}
+
+func LaunchMadmp(c *context.Context) {
+	if c.Repo.Repository.IsPrivate {
+		c.Title("launch binder")
+		c.Data["Dest"] = "madmp"
+		c.Success(LAUNCH)
+	} else {
+		url := fmt.Sprintf("%s://%s/%s/%s", c.Data["Scheme"], c.Data["Host"], c.Repo.Owner.Name, c.Repo.Repository.Name)
+		url = strings.NewReplacer("%", "%25", "#", "%23", " ", "%20", "?", "%3F", "/", "%2F").Replace(url)
+		c.RawRedirect("https://binder.cs.rcos.nii.ac.jp/v2/git/" + url + ".git/master?filepath=maDMP.ipynb")
+	}
+}
+
+func LaunchResearch(c *context.Context) {
+	if c.Repo.Repository.IsPrivate {
+		c.Title("launch binder")
+		c.Data["Dest"] = "research"
+		c.Success(LAUNCH)
+	} else {
+		url := fmt.Sprintf("%s://%s/%s/%s", c.Data["Scheme"], c.Data["Host"], c.Repo.Owner.Name, c.Repo.Repository.Name)
+		url = strings.NewReplacer("%", "%25", "#", "%23", " ", "%20", "?", "%3F", "/", "%2F").Replace(url)
+		c.RawRedirect("https://binder.cs.rcos.nii.ac.jp/v2/git/" + url + ".git/master?filepath=WORKFLOWS/base_FLOW.ipynb")
+	}
+}
+
+func LaunchExperiment(c *context.Context) {
+	if c.Repo.Repository.IsPrivate {
+		c.Title("launch binder")
+		c.Data["Dest"] = "experiment"
+		c.Success(LAUNCH)
+	} else {
+		url := fmt.Sprintf("%s://%s/%s/%s", c.Data["Scheme"], c.Data["Host"], c.Repo.Owner.Name, c.Repo.Repository.Name)
+		url = strings.NewReplacer("%", "%25", "#", "%23", " ", "%20", "?", "%3F", "/", "%2F").Replace(url)
+		c.RawRedirect("https://binder.cs.rcos.nii.ac.jp/v2/git/" + url + ".git/HEAD?filepath=WORKFLOWS/EX-WORKFLOWS/util/required_rebuild_container.ipynb")
+	}
+}
+
+// when a repository is private, show password form
+func LaunchPost(c *context.Context, f form.Pass) {
+	c.Title("launch binder")
+	dest := c.Params(":dest")
+
+	if c.HasError() {
+		c.RenderWithErr(c.Tr("rcos.private_pass_warn"), LAUNCH, &f)
+		return
+	}
+	loginSources, err := db.LoginSources.List(db.ListLoginSourceOpts{OnlyActivated: true})
+	if err != nil {
+		c.Error(err, "list activated login sources")
+		return
+	}
+	c.Data["LoginSources"] = loginSources
+
+	if c.HasError() {
+		c.RenderWithErr(c.Tr("form.username_password_incorrect"), HOME, &f)
+		return
+	}
+	// User Auth
+	_, err = db.Users.Authenticate(c.User.Name, f.Password, 0)
+	if err != nil {
+		switch errors.Cause(err).(type) {
+		case db.ErrUserNotExist:
+			c.FormErr("Password")
+			c.RenderWithErr(c.Tr("form.enterred_invalid_password"), LAUNCH, &f)
+
+		case db.ErrLoginSourceMismatch:
+			c.FormErr("LoginSource")
+			c.Redirect(c.GetRepo().GetRepoLink() + "/launch/" + dest)
+		default:
+			c.Error(err, "authenticate user")
+		}
+		return
+	}
+
+	// create new token for building jupyter container
+	randStr, err := gen.MakeRandomStrByAlphabetDigit(7)
+	if err != nil {
+		c.Error(err, "Failed to generate random string")
+	}
+	token_name := fmt.Sprintf("%s-%s", const_utils.Get_BUILD_TOKEN(), randStr)
+	build_token, err := db.AccessTokens.Create(c.User.ID, token_name, conf.DG.BuildAccessTokenExpireMinutes)
+
+	if err != nil {
+		if db.IsErrAccessTokenAlreadyExist(err) {
+			c.RenderWithErr(c.Tr("rocs.fial_preparing_for_build"), LAUNCH, &f)
+			return
+		} else {
+			c.Error(err, "new access token")
+			return
+		}
+	}
+
+	// create redirect URL for building jupyter container using BinderHub powered by RCOS
+	repoName := fmt.Sprintf("%s://%s:%s@%s/%s/%s.git", c.Data["Scheme"], c.User.Name, build_token.Sha1, c.Data["Host"], c.Repo.Owner.Name, c.Repo.Repository.Name)
+	repoName = strings.NewReplacer("%", "%25", "#", "%23", " ", "%20", "?", "%3F", "/", "%2F").Replace(repoName)
+
+	binderUrl := "https://binder.cs.rcos.nii.ac.jp/v2/git"
+	branch := "master"
+	if dest == "research" {
+		filepath := "WORKFLOWS/base_FLOW.ipynb"
+		redirectURL := fmt.Sprintf("%s/%s/%s?filepath=%s", binderUrl, repoName, branch, filepath)
+		c.RawRedirect(redirectURL)
+	} else if dest == "experiment" {
+		filepath := "WORKFLOWS/EX-WORKFLOWS/util/required_rebuild_container.ipynb"
+		redirectURL := fmt.Sprintf("%s/%s/%s?filepath=%s", binderUrl, repoName, branch, filepath)
+		c.RawRedirect(redirectURL)
+	} else {
+		filepath := "maDMP.ipynb"
+		redirectURL := fmt.Sprintf("%s/%s/%s?filepath=%s", binderUrl, repoName, branch, filepath)
+		c.RawRedirect(redirectURL)
+	}
 }

@@ -431,7 +431,7 @@ func NewIssuePost(c *context.Context, f form.NewIssue) {
 		Poster:      c.User,
 		MilestoneID: milestoneID,
 		AssigneeID:  assigneeID,
-		Content:  strings.ReplaceAll(f.Content, "\r\n", "\n"),
+		Content:     strings.ReplaceAll(f.Content, "\r\n", "\n"),
 	}
 	if err := db.NewIssue(c.Repo.Repository, issue, labelIDs, attachments); err != nil {
 		c.Error(err, "new issue")

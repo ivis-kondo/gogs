@@ -61,3 +61,12 @@ func IsParameterFolder(name string) bool {
 	}
 	return true
 }
+
+/*Access token name*/
+const (
+	BUILD_TOKEN = "building-token"
+)
+
+func Get_BUILD_TOKEN() string {
+	return BUILD_TOKEN
+}

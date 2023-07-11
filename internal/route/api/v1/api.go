@@ -17,6 +17,8 @@ import (
 	"github.com/NII-DG/gogs/internal/db"
 	"github.com/NII-DG/gogs/internal/form"
 	"github.com/NII-DG/gogs/internal/route/api/v1/admin"
+	"github.com/NII-DG/gogs/internal/route/api/v1/container"
+	"github.com/NII-DG/gogs/internal/route/api/v1/gin"
 	"github.com/NII-DG/gogs/internal/route/api/v1/metadata"
 	"github.com/NII-DG/gogs/internal/route/api/v1/misc"
 	"github.com/NII-DG/gogs/internal/route/api/v1/org"
@@ -176,6 +178,8 @@ func RegisterRoutes(m *macaron.Macaron) {
 		// Handle preflight OPTIONS request
 		m.Options("/*", func() {})
 
+		m.Get("/gin", gin.GetServerInfo)
+
 		// Miscellaneous
 		m.Post("/markdown", bind(api.MarkdownOption{}), misc.Markdown)
 		m.Post("/markdown/raw", misc.MarkdownRaw)
@@ -192,7 +196,7 @@ func RegisterRoutes(m *macaron.Macaron) {
 				m.Group("/tokens", func() {
 					m.Combo("").
 						Get(user.ListAccessTokens).
-						Post(bind(api.CreateAccessTokenOption{}), user.CreateAccessToken)
+						Post(bind(form.CreateAccessTokenOption{}), user.CreateAccessToken)
 				}, reqBasicAuth())
 			})
 		})
@@ -207,6 +211,7 @@ func RegisterRoutes(m *macaron.Macaron) {
 					m.Get("/:target", user.CheckFollowing)
 				})
 			})
+
 		}, reqToken())
 
 		m.Group("/user", func() {
@@ -235,6 +240,11 @@ func RegisterRoutes(m *macaron.Macaron) {
 			})
 
 			m.Get("/issues", repo.ListUserIssues)
+
+			m.Group("/token", func() {
+				m.Delete("/delete", user.DeleteAccessTokenSelf)
+				m.Post("/forlaunch", user.CreateAccessTokenForLaunch)
+			})
 		}, reqToken())
 
 		// Repositories
@@ -247,7 +257,7 @@ func RegisterRoutes(m *macaron.Macaron) {
 
 		m.Group("/repos", func() {
 			m.Get("/search", repo.Search)
-
+			m.Get("/search/user", repo.SearchByIDAndUserID)
 			m.Get("/:username/:reponame", repoAssignment(), repo.Get)
 			m.Get("/:username/:reponame/releases", repoAssignment(), repo.Releases)
 			m.Get("/suggest/:query", search.Suggest) // GIN specific code
@@ -426,6 +436,12 @@ func RegisterRoutes(m *macaron.Macaron) {
 				}, orgAssignment(false, true))
 			})
 		}, reqAdmin())
+
+		m.Group("/container", func() {
+			m.Post("", bind(container.ContainerOptions{}), container.AddJupyterContainer)
+			m.Patch("", container.UpdateJupyterContainer)
+			m.Delete("", container.DeleteJupyterContainer)
+		}, reqToken())
 
 		// When request route is no defined route, return 404
 		m.Any("/*", func(c *context.Context) {

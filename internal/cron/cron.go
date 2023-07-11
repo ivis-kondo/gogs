@@ -66,6 +66,18 @@ func NewContext() {
 			go db.DeleteOldRepositoryArchives()
 		}
 	}
+	// Cleanup Access Token Cron
+	if conf.Cron.AccessTokenCleanup.Enabled {
+		entry, err = c.AddFunc("Access Token cleanup", conf.Cron.AccessTokenCleanup.Schedule, db.DeleteOldAccessToken)
+		if err != nil {
+			log.Fatal("Cron.(access token cleanup): %v", err)
+		}
+		if conf.Cron.AccessTokenCleanup.RunAtStart {
+			entry.Prev = time.Now()
+			entry.ExecTimes++
+			go db.DeleteOldAccessToken()
+		}
+	}
 	c.Start()
 }
 
