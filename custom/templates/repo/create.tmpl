@@ -1,0 +1,93 @@
+{{template "base/head" .}}
+<div class="repository new repo">
+	<div class="ui middle very relaxed page grid">
+		<div class="column">
+			<form class="ui form" action="{{.Link}}" method="post" onSubmit="return PreventionDbClick();">
+				{{.CSRFTokenHTML}}
+				<h3 class="ui top attached header">
+					{{.i18n.Tr "new_repo"}}
+				</h3>
+				<div class="ui attached segment">
+					{{template "base/alert" .}}
+					<div class="inline required field {{if .Err_Owner}}error{{end}}">
+						<label>{{.i18n.Tr "repo.owner"}}</label>
+						<div class="ui selection owner dropdown">
+							<input type="hidden" id="user_id" name="user_id" value="{{.ContextUser.ID}}" required>
+							<span class="text">
+								<img class="ui mini image" src="{{.ContextUser.RelAvatarLink}}">
+								{{.ContextUser.ShortName 20}}
+							</span>
+							<i class="dropdown icon"></i>
+							<div class="menu">
+								<div class="item" data-value="{{.LoggedUser.ID}}">
+									<img class="ui mini image" src="{{.LoggedUser.RelAvatarLink}}">
+									{{.LoggedUser.ShortName 20}}
+								</div>
+								{{range .Orgs}}
+									<div class="item" data-value="{{.ID}}">
+										<img class="ui mini image" src="{{.RelAvatarLink}}">
+										{{.ShortName 20}}
+									</div>
+								{{end}}
+							</div>
+						</div>
+					</div>
+
+					<div class="inline required field {{if .Err_RepoName}}error{{end}}">
+						<label for="repo_name">{{.i18n.Tr "repo.repo_name"}}</label>
+						<input id="repo_name" name="repo_name" value="{{.repo_name}}" autofocus required>
+						<span class="help">{{.i18n.Tr "repo.repo_name_helper" | Safe}}</span>
+					</div>
+					<div class="inline field">
+						<!-- <label>{{.i18n.Tr "repo.visibility"}}</label> -->
+						<label></label>
+						<div class="ui checkbox">
+							{{if .IsForcedPrivate}}
+								<input name="private" type="checkbox" checked readonly>
+								<label>{{.i18n.Tr "repo.visiblity_helper_forced" | Safe}}</label>
+							{{else}}
+								<input name="private" type="checkbox" checked>
+								<label>{{.i18n.Tr "repo.visiblity_helper" | Safe}}</label>
+							{{end}}
+						</div>
+					</div>
+					<div class="inline field {{if .Err_Description}}error{{end}}">
+						<label for="description">{{.i18n.Tr "repo.repo_desc"}}</label>
+						<textarea maxlength="512" class="autosize" id="description" name="description" rows="3">{{.description}}</textarea>
+						<span class="help">{{.i18n.Tr "repo.repo_description_length"}}: <span>512</span></span>
+					</div>
+
+					<!-- RCOS Code -->
+					<div class="ui divider"></div>
+					<div class="inline field">
+						<label><h3>{{.i18n.Tr "research_project_title"}}</h3></label>
+					</div>
+
+					<div class="inline required field">
+						<label for="project_name">{{.i18n.Tr "project_name"}}</label>
+						<textarea maxlength="255" required class="autosize" id="project_name" name="project_name" rows="2">{{.project_name}}</textarea>
+						<span class="help">{{.i18n.Tr "available_length"}}: <span>255</span></span>
+					</div>
+					<div class="inline field">
+						<label for="project_description">{{.i18n.Tr "project_description"}}</label>
+						<textarea maxlength="255" class="autosize" id="project_description" name="project_description" rows="3">{{.project_description}}</textarea>
+						<span class="help">{{.i18n.Tr "available_length"}}: <span>255</span></span>
+					</div>
+					<!-- RCOS Code end-->
+
+					<div class="ui divider"></div>
+
+					<div class="inline field">
+						<label></label>
+						<button class="ui green button">
+							{{.i18n.Tr "repo.create_repo"}}
+						</button>
+						<a class="ui button" href="{{AppSubURL}}/">{{.i18n.Tr "cancel"}}</a>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+{{template "base/footer" .}}

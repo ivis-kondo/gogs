@@ -12,7 +12,7 @@ import (
 	"github.com/unknwon/com"
 	"gopkg.in/macaron.v1"
 
-	"github.com/ivis-yoshida/gogs/internal/db"
+	"github.com/NII-DG/gogs/internal/db"
 )
 
 // _______________________________________    _________.______________________ _______________.___.
@@ -23,15 +23,17 @@ import (
 //         \/        \/                   \/        \/                        \/       \/ \/
 
 type CreateRepo struct {
-	UserID      int64  `binding:"Required"`
-	RepoName    string `binding:"Required;AlphaDashDot;MaxSize(100)"`
-	Private     bool
-	Unlisted    bool
-	Description string `binding:"MaxSize(512)"`
-	AutoInit    bool
-	Gitignores  string
-	License     string
-	Readme      string
+	UserID             int64  `binding:"Required"`
+	RepoName           string `binding:"Required;AlphaDashDot;MaxSize(100)"`
+	Private            bool
+	Unlisted           bool
+	Description        string
+	AutoInit           bool
+	Gitignores         string
+	License            string
+	Readme             string
+	ProjectName        string
+	ProjectDescription string
 }
 
 func (f *CreateRepo) Validate(ctx *macaron.Context, errs binding.Errors) binding.Errors {
@@ -88,7 +90,7 @@ func (f MigrateRepo) ParseRemoteAddr(user *db.User) (string, error) {
 
 type RepoSetting struct {
 	RepoName      string `binding:"Required;AlphaDashDot;MaxSize(100)"`
-	Description   string `binding:"MaxSize(512)"`
+	Description   string
 	Website       string `binding:"Url;MaxSize(100)"`
 	Branch        string
 	Interval      int
@@ -423,4 +425,16 @@ func (f *DeleteRepoFile) Validate(ctx *macaron.Context, errs binding.Errors) bin
 
 func (f *DeleteRepoFile) IsNewBrnach() bool {
 	return f.CommitChoice == "commit-to-new-branch"
+}
+
+/*
+Research Project From
+**/
+type ResearchProtect struct {
+	ProjectName        string `binding:"Required"`
+	ProjectDescription string
+}
+
+func (f *ResearchProtect) Validate(ctx *macaron.Context, errs binding.Errors) binding.Errors {
+	return validate(errs, ctx.Data, f, ctx.Locale)
 }

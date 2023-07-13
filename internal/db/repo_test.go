@@ -1,11 +1,11 @@
 package db
 
 import (
+	_ "image/jpeg"
 	"testing"
 
+	"github.com/NII-DG/gogs/internal/markup"
 	"github.com/stretchr/testify/assert"
-
-	"github.com/ivis-yoshida/gogs/internal/markup"
 )
 
 func TestRepository_ComposeMetas(t *testing.T) {

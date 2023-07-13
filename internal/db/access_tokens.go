@@ -11,8 +11,9 @@ import (
 	"github.com/jinzhu/gorm"
 	gouuid "github.com/satori/go.uuid"
 
-	"github.com/ivis-yoshida/gogs/internal/cryptoutil"
-	"github.com/ivis-yoshida/gogs/internal/errutil"
+	"github.com/NII-DG/gogs/internal/cryptoutil"
+	"github.com/NII-DG/gogs/internal/errutil"
+	log "unknwon.dev/clog/v2"
 )
 
 // AccessTokensStore is the persistent interface for access tokens.
@@ -22,11 +23,13 @@ type AccessTokensStore interface {
 	// Create creates a new access token and persist to database.
 	// It returns ErrAccessTokenAlreadyExist when an access token
 	// with same name already exists for the user.
-	Create(userID int64, name string) (*AccessToken, error)
+	Create(userID int64, name string, expire_minutes int64) (*AccessToken, error)
 	// DeleteByID deletes the access token by given ID.
 	// 🚨 SECURITY: The "userID" is required to prevent attacker
 	// deletes arbitrary access token that belongs to another user.
 	DeleteByID(userID, id int64) error
+	// DeleteByToken deletes the access token by given Token(sha1).
+	DeleteByToken(userID int64, token string) error
 	// GetBySHA returns the access token with given SHA1.
 	// It returns ErrAccessTokenNotExist when not found.
 	GetBySHA(sha string) (*AccessToken, error)
@@ -41,10 +44,11 @@ var AccessTokens AccessTokensStore
 
 // AccessToken is a personal access token.
 type AccessToken struct {
-	ID     int64
-	UserID int64 `xorm:"uid INDEX" gorm:"COLUMN:uid;INDEX"`
-	Name   string
-	Sha1   string `xorm:"UNIQUE VARCHAR(40)" gorm:"TYPE:VARCHAR(40);UNIQUE"`
+	ID         int64
+	UserID     int64 `xorm:"uid INDEX" gorm:"COLUMN:uid;INDEX"`
+	Name       string
+	Sha1       string `xorm:"UNIQUE VARCHAR(40)" gorm:"TYPE:VARCHAR(40);UNIQUE"`
+	ExpireUnix int64
 
 	Created           time.Time `xorm:"-" gorm:"-" json:"-"`
 	CreatedUnix       int64
@@ -94,7 +98,7 @@ func (err ErrAccessTokenAlreadyExist) Error() string {
 	return fmt.Sprintf("access token already exists: %v", err.args)
 }
 
-func (db *accessTokens) Create(userID int64, name string) (*AccessToken, error) {
+func (db *accessTokens) Create(userID int64, name string, expire_minutes int64) (*AccessToken, error) {
 	err := db.Where("uid = ? AND name = ?", userID, name).First(new(AccessToken)).Error
 	if err == nil {
 		return nil, ErrAccessTokenAlreadyExist{args: errutil.Args{"userID": userID, "name": name}}
@@ -102,16 +106,36 @@ func (db *accessTokens) Create(userID int64, name string) (*AccessToken, error) 
 		return nil, err
 	}
 
+	// set expire time
+	var unixTime int64 = 0
+	if expire_minutes > 0 {
+		now := time.Now()
+		addedDateTime := now.Add(time.Minute * time.Duration(expire_minutes))
+		unixTime = addedDateTime.Unix()
+	}
+
 	token := &AccessToken{
-		UserID: userID,
-		Name:   name,
-		Sha1:   cryptoutil.SHA1(gouuid.NewV4().String()),
+		UserID:     userID,
+		Name:       name,
+		Sha1:       cryptoutil.SHA1(gouuid.NewV4().String()),
+		ExpireUnix: unixTime,
 	}
 	return token, db.DB.Create(token).Error
 }
 
 func (db *accessTokens) DeleteByID(userID, id int64) error {
 	return db.Where("id = ? AND uid = ?", id, userID).Delete(new(AccessToken)).Error
+}
+
+func (db *accessTokens) DeleteByToken(userID int64, token string) error {
+	// check exist token
+	err := db.Where("uid = ? AND sha1 = ?", userID, token).First(new(AccessToken)).Error
+	if err != nil {
+		return ErrAccessTokenAlreadyExist{args: errutil.Args{"userID": userID}}
+	}
+
+	// delete access token
+	return db.Where("sha1 = ? AND uid = ?", token, userID).Delete(new(AccessToken)).Error
 }
 
 var _ errutil.NotFound = (*ErrAccessTokenNotExist)(nil)
@@ -152,4 +176,20 @@ func (db *accessTokens) List(userID int64) ([]*AccessToken, error) {
 
 func (db *accessTokens) Save(t *AccessToken) error {
 	return db.DB.Save(t).Error
+}
+
+func DeleteOldAccessToken() {
+	log.Info("Start deleting expiring access token.")
+	unixNowTime := time.Now().Unix()
+	result, err := x.Where("expire_unix < ?", unixNowTime).And("expire_unix > ?", 0).Delete(new(AccessToken))
+	if err != nil {
+		log.Error("fail to delete old access tokens ")
+	}
+
+	if result == 0 {
+		log.Info("No access token to be deleted.")
+	} else {
+		log.Info("Deleted %d access token.", result)
+	}
+	log.Info("Finish deleting expiring access token.")
 }

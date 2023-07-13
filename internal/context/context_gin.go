@@ -4,9 +4,9 @@ import (
 	"strings"
 
 	"github.com/G-Node/libgin/libgin"
+	"github.com/NII-DG/gogs/internal/conf"
+	"github.com/NII-DG/gogs/internal/db"
 	"github.com/gogs/git-module"
-	"github.com/ivis-yoshida/gogs/internal/conf"
-	"github.com/ivis-yoshida/gogs/internal/db"
 	log "gopkg.in/clog.v1"
 )
 
@@ -94,19 +94,31 @@ func getRepoDOI(c *Context) string {
 	return doiBase + uuid[:6]
 }
 
-// hasDmpJson returns 'true' if a repository includes a file called
-// 'dmp.json' in its root.  No checks are made to determine if the file is
-// valid.  If any error occurs, for example due to an uninitialised repository
-// or missing repository root, it returns 'false' without error.
-func hasDmpJson(c *Context) bool {
-	commit, err := c.Repo.GitRepo.BranchCommit(c.Repo.Repository.DefaultBranch)
+// hasFileInRepo is RCOS specific code.
+// This returns 'true' if a repository includes a file with the name given as an argument.
+// Used by context.RepoAssignment.
+func hasFileInRepo(c AbstructContext, filePath string) bool {
+	commit, err := c.GetRepo().GetGitRepo().BranchCommit(c.GetRepo().GetDbRepo().GetDefaultBranch())
 	if err != nil {
 		log.Trace("Couldn't get commit: %v", err)
 		return false
 	}
-	_, err = commit.Blob("/dmp.json")
+	_, err = commit.Blob(filePath)
 
-	log.Trace("Found datacite? %t", err == nil)
+	return err == nil
+}
+
+// hasFileInRepo is RCOS specific code.
+// This probably returns 'true' if a repository includes a file or directory with the name given as an argument.
+// Used by context.RepoAssignment.
+func HasTreeInRepo(c AbstructContext, filePath string) bool {
+	commit, err := c.GetRepo().GetGitRepo().BranchCommit(c.GetRepo().GetDbRepo().GetDefaultBranch())
+	if err != nil {
+		log.Trace("Couldn't get commit: %v", err)
+		return false
+	}
+	_, err = commit.TreeEntry(filePath)
+
 	return err == nil
 }
 

@@ -8,9 +8,9 @@ import (
 	"strings"
 
 	"github.com/G-Node/libgin/libgin"
-	"github.com/ivis-yoshida/gogs/internal/conf"
-	"github.com/ivis-yoshida/gogs/internal/context"
-	"github.com/ivis-yoshida/gogs/internal/db"
+	"github.com/NII-DG/gogs/internal/conf"
+	"github.com/NII-DG/gogs/internal/context"
+	"github.com/NII-DG/gogs/internal/db"
 	log "gopkg.in/clog.v1"
 )
 
@@ -147,7 +147,11 @@ func ExploreData(c *context.Context) {
 	c.Data["PageIsExploreData"] = true
 
 	// for "Metadata" link on navbar
-	c.Data["UserRightErr"] = (c.User.Type >= db.UserFA)
+	if !c.IsLogged {
+		c.Data["IsUserFA"] = 0
+	} else {
+		c.Data["IsUserFA"] = (c.User.Type >= db.UserFA)
+	}
 
 	// send query data back even if the search fails or is aborted to fill in
 	// the form on refresh
@@ -193,7 +197,11 @@ func ExploreCommits(c *context.Context) {
 	c.Data["PageIsExploreCommits"] = true
 
 	// for "Metadata" link on navbar
-	c.Data["UserRightErr"] = (c.User.Type >= db.UserFA)
+	if !c.IsLogged {
+		c.Data["IsUserFA"] = 0
+	} else {
+		c.Data["IsUserFA"] = (c.User.Type >= db.UserFA)
+	}
 
 	// send query data back even if the search fails or is aborted to fill in
 	// the form on refresh

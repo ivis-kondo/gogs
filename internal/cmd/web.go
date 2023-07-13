@@ -29,23 +29,24 @@ import (
 	"gopkg.in/macaron.v1"
 	log "unknwon.dev/clog/v2"
 
-	"github.com/ivis-yoshida/gogs/internal/app"
-	"github.com/ivis-yoshida/gogs/internal/assets/public"
-	"github.com/ivis-yoshida/gogs/internal/assets/templates"
-	"github.com/ivis-yoshida/gogs/internal/conf"
-	"github.com/ivis-yoshida/gogs/internal/context"
-	"github.com/ivis-yoshida/gogs/internal/db"
-	"github.com/ivis-yoshida/gogs/internal/form"
-	"github.com/ivis-yoshida/gogs/internal/osutil"
-	"github.com/ivis-yoshida/gogs/internal/route"
-	"github.com/ivis-yoshida/gogs/internal/route/admin"
-	apiv1 "github.com/ivis-yoshida/gogs/internal/route/api/v1"
-	"github.com/ivis-yoshida/gogs/internal/route/dev"
-	"github.com/ivis-yoshida/gogs/internal/route/lfs"
-	"github.com/ivis-yoshida/gogs/internal/route/org"
-	"github.com/ivis-yoshida/gogs/internal/route/repo"
-	"github.com/ivis-yoshida/gogs/internal/route/user"
-	"github.com/ivis-yoshida/gogs/internal/template"
+	"github.com/NII-DG/gogs/internal/app"
+	"github.com/NII-DG/gogs/internal/assets/public"
+	"github.com/NII-DG/gogs/internal/assets/templates"
+	"github.com/NII-DG/gogs/internal/conf"
+	"github.com/NII-DG/gogs/internal/context"
+	"github.com/NII-DG/gogs/internal/db"
+	"github.com/NII-DG/gogs/internal/form"
+	"github.com/NII-DG/gogs/internal/healthcheck"
+	"github.com/NII-DG/gogs/internal/osutil"
+	"github.com/NII-DG/gogs/internal/route"
+	"github.com/NII-DG/gogs/internal/route/admin"
+	apiv1 "github.com/NII-DG/gogs/internal/route/api/v1"
+	"github.com/NII-DG/gogs/internal/route/dev"
+	"github.com/NII-DG/gogs/internal/route/lfs"
+	"github.com/NII-DG/gogs/internal/route/org"
+	"github.com/NII-DG/gogs/internal/route/repo"
+	"github.com/NII-DG/gogs/internal/route/user"
+	"github.com/NII-DG/gogs/internal/template"
 )
 
 var Web = cli.Command{
@@ -150,6 +151,10 @@ func newMacaron() *macaron.Macaron {
 				Desc: "Database connection",
 				Func: db.Ping,
 			},
+			{ // RCOS code
+				Desc: "File System connection",
+				Func: healthcheck.CheckFileSystem,
+			},
 		},
 	}))
 
@@ -164,6 +169,7 @@ func runWeb(c *cli.Context) error {
 
 	m := newMacaron()
 
+	//URL時の認証設定
 	reqSignIn := context.Toggle(&context.ToggleOptions{SignInRequired: true})
 	ignSignIn := context.Toggle(&context.ToggleOptions{SignInRequired: conf.Auth.RequireSigninView})
 	reqSignOut := context.Toggle(&context.ToggleOptions{SignOutRequired: true})
@@ -183,15 +189,18 @@ func runWeb(c *cli.Context) error {
 			m.Get("/repos", route.ExploreRepos)
 			m.Get("/users", route.ExploreUsers)
 			m.Get("/organizations", route.ExploreOrganizations)
-			m.Get("/_suggest/:keywords", route.ExploreSuggest) // GIN specific code
-			m.Get("/metadata", route.ExploreMetadata)          // RCOS specific code
+			m.Get("/_suggest/:keywords", route.ExploreSuggest)   // GIN specific code
+			m.Get("/metadata", reqSignIn, route.ExploreMetadata) // RCOS specific code
 			m.Group("/dmp", func() {
 				m.Get("/browsing/", route.DmpBrowsing)
 			})
 		}, ignSignIn)
 		m.Combo("/install", route.InstallInit).Get(route.Install).
 			Post(bindIgnErr(form.Install{}), route.InstallPost)
-		m.Get("/^:type(issues|pulls)$", reqSignIn, user.Issues)
+		// Disable routes to per-user pull request list by RCOS
+		// "/^:type(issues|pulls)$" to "/^:type(issues)$"
+		//m.Get("/^:type(issues|pulls)$", reqSignIn, user.Issues)
+		m.Get("/^:type(issues)$", reqSignIn, user.Issues)
 
 		// ***** START: User *****
 		m.Group("/user", func() {
@@ -345,22 +354,23 @@ func runWeb(c *cli.Context) error {
 		reqRepoAdmin := context.RequireRepoAdmin()
 		reqRepoWriter := context.RequireRepoWriter()
 
-		webhookRoutes := func() {
-			m.Group("", func() {
-				m.Get("", repo.Webhooks)
-				m.Post("/delete", repo.DeleteWebhook)
-				m.Get("/:type/new", repo.WebhooksNew)
-				m.Post("/gogs/new", bindIgnErr(form.NewWebhook{}), repo.WebhooksNewPost)
-				m.Post("/slack/new", bindIgnErr(form.NewSlackHook{}), repo.WebhooksSlackNewPost)
-				m.Post("/discord/new", bindIgnErr(form.NewDiscordHook{}), repo.WebhooksDiscordNewPost)
-				m.Post("/dingtalk/new", bindIgnErr(form.NewDingtalkHook{}), repo.WebhooksDingtalkNewPost)
-				m.Get("/:id", repo.WebhooksEdit)
-				m.Post("/gogs/:id", bindIgnErr(form.NewWebhook{}), repo.WebhooksEditPost)
-				m.Post("/slack/:id", bindIgnErr(form.NewSlackHook{}), repo.WebhooksSlackEditPost)
-				m.Post("/discord/:id", bindIgnErr(form.NewDiscordHook{}), repo.WebhooksDiscordEditPost)
-				m.Post("/dingtalk/:id", bindIgnErr(form.NewDingtalkHook{}), repo.WebhooksDingtalkEditPost)
-			}, repo.InjectOrgRepoContext())
-		}
+		// Disable route to hooks settings in settings by RCOS
+		// webhookRoutes := func() {
+		// 	m.Group("", func() {
+		// 		m.Get("", repo.Webhooks)
+		// 		m.Post("/delete", repo.DeleteWebhook)
+		// 		m.Get("/:type/new", repo.WebhooksNew)
+		// 		m.Post("/gogs/new", bindIgnErr(form.NewWebhook{}), repo.WebhooksNewPost)
+		// 		m.Post("/slack/new", bindIgnErr(form.NewSlackHook{}), repo.WebhooksSlackNewPost)
+		// 		m.Post("/discord/new", bindIgnErr(form.NewDiscordHook{}), repo.WebhooksDiscordNewPost)
+		// 		m.Post("/dingtalk/new", bindIgnErr(form.NewDingtalkHook{}), repo.WebhooksDingtalkNewPost)
+		// 		m.Get("/:id", repo.WebhooksEdit)
+		// 		m.Post("/gogs/:id", bindIgnErr(form.NewWebhook{}), repo.WebhooksEditPost)
+		// 		m.Post("/slack/:id", bindIgnErr(form.NewSlackHook{}), repo.WebhooksSlackEditPost)
+		// 		m.Post("/discord/:id", bindIgnErr(form.NewDiscordHook{}), repo.WebhooksDiscordEditPost)
+		// 		m.Post("/dingtalk/:id", bindIgnErr(form.NewDingtalkHook{}), repo.WebhooksDingtalkEditPost)
+		// 	}, repo.InjectOrgRepoContext())
+		// }
 
 		// ***** START: Organization *****
 		m.Group("/org", func() {
@@ -375,7 +385,10 @@ func runWeb(c *cli.Context) error {
 
 			m.Group("/:org", func() {
 				m.Get("/dashboard", user.Dashboard)
-				m.Get("/^:type(issues|pulls)$", user.Issues)
+				// Disable routes to org pull request list by RCOS
+				// "/^:type(issues|pulls)$" to "/^:type(issues)$"
+				//m.Get("/^:type(issues|pulls)$", user.Issues)
+				m.Get("/^:type(issues)$", user.Issues)
 				m.Get("/members", org.Members)
 				m.Get("/members/action/:action", org.MembersAction)
 
@@ -401,7 +414,8 @@ func runWeb(c *cli.Context) error {
 						Post(bindIgnErr(form.UpdateOrgSetting{}), org.SettingsPost)
 					m.Post("/avatar", binding.MultipartForm(form.Avatar{}), org.SettingsAvatar)
 					m.Post("/avatar/delete", org.SettingsDeleteAvatar)
-					m.Group("/hooks", webhookRoutes)
+					// Disable route to hooks settings in Org settings by RCOS
+					// m.Group("/hooks", webhookRoutes)
 					m.Route("/delete", "GET,POST", org.SettingsDelete)
 				})
 
@@ -414,13 +428,19 @@ func runWeb(c *cli.Context) error {
 		m.Group("/repo", func() {
 			m.Get("/create", repo.Create)
 			m.Post("/create", bindIgnErr(form.CreateRepo{}), repo.CreatePost)
-			m.Get("/migrate", repo.Migrate)
-			m.Post("/migrate", bindIgnErr(form.MigrateRepo{}), repo.MigratePost)
-			m.Combo("/fork/:repoid").Get(repo.Fork).
-				Post(bindIgnErr(form.CreateRepo{}), repo.ForkPost)
+			// Note : Disabling the repository migration function by RCOS
+			// m.Get("/migrate", repo.Migrate)
+			// m.Post("/migrate", bindIgnErr(form.MigrateRepo{}), repo.MigratePost)
+			// Note : Disable Fork function route by RCOS
+			// m.Combo("/fork/:repoid").Get(repo.Fork).
+			// 	Post(bindIgnErr(form.CreateRepo{}), repo.ForkPost)
 		}, reqSignIn)
 
 		m.Group("/:username/:reponame", func() {
+			// RCOS specific code.
+			// Generate machine actionable DMP based on DMP information
+			m.Post("/madmp", repo.GenerateMaDmp)
+
 			m.Group("/settings", func() {
 				m.Combo("").Get(repo.Settings).
 					Post(bindIgnErr(form.RepoSetting{}), repo.SettingsPost)
@@ -433,7 +453,8 @@ func runWeb(c *cli.Context) error {
 					m.Post("/delete", repo.DeleteCollaboration)
 				})
 				m.Group("/branches", func() {
-					m.Get("", repo.SettingsBranches)
+					//Disable route to branch settings in repository settings by RCOS
+					//m.Get("", repo.SettingsBranches)
 					m.Post("/default_branch", repo.UpdateDefaultBranch)
 					m.Combo("/*").Get(repo.SettingsProtectedBranch).
 						Post(bindIgnErr(form.ProtectBranch{}), repo.SettingsProtectedBranchPost)
@@ -443,21 +464,26 @@ func runWeb(c *cli.Context) error {
 						return
 					}
 				})
-
-				m.Group("/hooks", func() {
-					webhookRoutes()
-
-					m.Group("/:id", func() {
-						m.Post("/test", repo.TestWebhook)
-						m.Post("/redelivery", repo.RedeliveryWebhook)
-					})
-
-					m.Group("/git", func() {
-						m.Get("", repo.SettingsGitHooks)
-						m.Combo("/:name").Get(repo.SettingsGitHooksEdit).
-							Post(repo.SettingsGitHooksEditPost)
-					}, context.GitHookService())
+				m.Group("/project", func() {
+					m.Get("", repo.SettingsProtecte)
+					m.Post("", bindIgnErr(form.ResearchProtect{}), repo.SettingsProtectePost)
 				})
+
+				// Disable route to hooks settings in repository settings by RCOS
+				// m.Group("/hooks", func() {
+				// 	webhookRoutes()
+
+				// 	m.Group("/:id", func() {
+				// 		m.Post("/test", repo.TestWebhook)
+				// 		m.Post("/redelivery", repo.RedeliveryWebhook)
+				// 	})
+
+				// 	m.Group("/git", func() {
+				// 		m.Get("", repo.SettingsGitHooks)
+				// 		m.Combo("/:name").Get(repo.SettingsGitHooksEdit).
+				// 			Post(repo.SettingsGitHooksEditPost)
+				// 	}, context.GitHookService())
+				// })
 
 				m.Group("/keys", func() {
 					m.Combo("").Get(repo.SettingsDeployKeys).
@@ -469,8 +495,15 @@ func runWeb(c *cli.Context) error {
 				c.Data["PageIsSettings"] = true
 			})
 		}, reqSignIn, context.RepoAssignment(), reqRepoAdmin, context.RepoRef())
-
-		m.Post("/:username/:reponame/action/:action", reqSignIn, context.RepoAssignment(), repo.Action)
+		m.Group("/:username/:reponame", func() {
+			// launch binder
+			m.Get("/launch/madmp", repo.LaunchMadmp)
+			m.Get("/launch/research", repo.LaunchResearch)
+			m.Get("/launch/experiment", repo.LaunchExperiment)
+			m.Post("/launch/:dest", bindIgnErr(form.Pass{}), repo.LaunchPost)
+		}, reqSignIn, context.RepoAssignment(), reqRepoWriter, context.RepoRef())
+		// Disable root of watch and star function by RCOS
+		// m.Post("/:username/:reponame/action/:action", reqSignIn, context.RepoAssignment(), repo.Action)
 		m.Group("/:username/:reponame", func() {
 			m.Get("/issues", repo.RetrieveLabels, repo.Issues)
 			m.Get("/issues/:index", repo.ViewIssue)
@@ -542,14 +575,9 @@ func runWeb(c *cli.Context) error {
 			// for PR in same repository. After select branch on the page, the URL contains redundant head user name.
 			// e.g. /org1/test-repo/compare/master...org1:develop
 			// which should be /org1/test-repo/compare/master...develop
-			m.Combo("/compare/*", repo.MustAllowPulls).Get(repo.CompareAndPullRequest).
-				Post(bindIgnErr(form.NewIssue{}), repo.CompareAndPullRequestPost)
-
-			// GIN specific code
-			// FIXME : add  all schema PATH
-			if _, err := conf.Asset("conf/dmp/dmp_meti.json"); err != nil {
-				log.Fatal("%v", err)
-			}
+			// NOTE:Disable route to pull request screen by RCOS
+			// m.Combo("/compare/*", repo.MustAllowPulls).Get(repo.CompareAndPullRequest).
+			// 	Post(bindIgnErr(form.NewIssue{}), repo.CompareAndPullRequestPost)
 
 			m.Group("", func() {
 				m.Combo("/_edit/*").Get(repo.EditFile).
@@ -585,14 +613,17 @@ func runWeb(c *cli.Context) error {
 
 		m.Group("/:username/:reponame", func() {
 			m.Group("", func() {
-				m.Get("/releases", repo.MustBeNotBare, repo.Releases)
-				m.Get("/pulls", repo.RetrieveLabels, repo.Pulls)
+				// Disable route to repo release request confirmation screen by RCOS
+				// m.Get("/releases", repo.MustBeNotBare, repo.Releases)
+				// Disable route to pull request confirmation screen by RCOS
+				//m.Get("/pulls", repo.RetrieveLabels, repo.Pulls)
 				m.Get("/pulls/:index", repo.ViewPull)
 			}, context.RepoRef())
 
 			m.Group("/branches", func() {
-				m.Get("", repo.Branches)
-				m.Get("/all", repo.AllBranches)
+				//Disable route to branch list confirmation screen by RCOS
+				//m.Get("", repo.Branches)
+				//m.Get("/all", repo.AllBranches)
 				m.Post("/delete/*", reqSignIn, reqRepoWriter, repo.DeleteBranchPost)
 			}, repo.MustBeNotBare, func(c *context.Context) {
 				c.Data["PageIsViewFiles"] = true
@@ -621,16 +652,17 @@ func runWeb(c *cli.Context) error {
 				m.Get("/raw/*", repo.SingleDownload)
 				m.Get("/commits/*", repo.RefCommits)
 				m.Get("/commit/:sha([a-f0-9]{7,40})$", repo.Diff)
-				m.Get("/forks", repo.Forks)
+				// Disable Fork status display function route by RCOS
+				// m.Get("/forks", repo.Forks)
 			}, repo.MustBeNotBare, context.RepoRef())
 			m.Get("/commit/:sha([a-f0-9]{7,40})\\.:ext(patch|diff)", repo.MustBeNotBare, repo.RawDiff)
-
 			m.Get("/compare/:before([a-z0-9]{40})\\.\\.\\.:after([a-z0-9]{40})", repo.MustBeNotBare, context.RepoRef(), repo.CompareDiff)
 		}, ignSignIn, context.RepoAssignment())
 		m.Group("/:username/:reponame", func() {
 			m.Get("", context.ServeGoGet(), repo.Home)
-			m.Get("/stars", repo.Stars)
-			m.Get("/watchers", repo.Watchers)
+			// Disable root of watch and star function by RCOS
+			// m.Get("/stars", repo.Stars)
+			// m.Get("/watchers", repo.Watchers)
 		}, ignSignIn, context.RepoAssignment(), context.RepoRef())
 
 		// GIN specific code
@@ -641,6 +673,12 @@ func runWeb(c *cli.Context) error {
 			m.Get("/annex/objects/:hashdira/:hashdirb/:key/:keyfile", repo.AnnexGetKey)
 			m.Head("/annex/objects/:hashdira/:hashdirb/:key/:keyfile", repo.AnnexGetKey)
 		}, ignSignIn, context.RepoAssignment())
+
+		m.Group("/:username/:reponame", func() {
+			m.Group("/container", func() {
+				m.Get("", repo.ViewContainer)
+			})
+		}, ignSignIn, context.RepoAssignment(), reqRepoWriter)
 		// ***** END: Repository *****
 
 		// **********************

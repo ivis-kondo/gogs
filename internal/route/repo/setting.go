@@ -9,20 +9,21 @@ import (
 	"io/ioutil"
 	"strings"
 	"time"
+	"unicode"
 
 	"github.com/gogs/git-module"
 	"github.com/unknwon/com"
 	log "unknwon.dev/clog/v2"
 
+	"github.com/NII-DG/gogs/internal/conf"
+	"github.com/NII-DG/gogs/internal/context"
+	"github.com/NII-DG/gogs/internal/db"
+	"github.com/NII-DG/gogs/internal/db/errors"
+	"github.com/NII-DG/gogs/internal/email"
+	"github.com/NII-DG/gogs/internal/form"
+	"github.com/NII-DG/gogs/internal/osutil"
+	"github.com/NII-DG/gogs/internal/tool"
 	petname "github.com/dustinkirkland/golang-petname"
-	"github.com/ivis-yoshida/gogs/internal/conf"
-	"github.com/ivis-yoshida/gogs/internal/context"
-	"github.com/ivis-yoshida/gogs/internal/db"
-	"github.com/ivis-yoshida/gogs/internal/db/errors"
-	"github.com/ivis-yoshida/gogs/internal/email"
-	"github.com/ivis-yoshida/gogs/internal/form"
-	"github.com/ivis-yoshida/gogs/internal/osutil"
-	"github.com/ivis-yoshida/gogs/internal/tool"
 )
 
 const (
@@ -34,19 +35,18 @@ const (
 	SETTINGS_GITHOOKS         = "repo/settings/githooks"
 	SETTINGS_GITHOOK_EDIT     = "repo/settings/githook_edit"
 	SETTINGS_DEPLOY_KEYS      = "repo/settings/deploy_keys"
+	SETTINGS_PROJECT          = "repo/settings/project"
 )
 
 func Settings(c *context.Context) {
 	c.Title("repo.settings")
 	c.PageIs("SettingsOptions")
-	c.RequireAutosize()
 	c.Success(SETTINGS_OPTIONS)
 }
 
 func SettingsPost(c *context.Context, f form.RepoSetting) {
 	c.Title("repo.settings")
 	c.PageIs("SettingsOptions")
-	c.RequireAutosize()
 
 	repo := c.Repo.Repository
 
@@ -82,7 +82,7 @@ func SettingsPost(c *context.Context, f form.RepoSetting) {
 		repo.Name = newRepoName
 		repo.LowerName = strings.ToLower(newRepoName)
 
-		repo.Description = f.Description
+		repo.Description = strings.ReplaceAll(f.Description, "\r\n", "\n")
 		repo.Website = f.Website
 
 		// Visibility of forked repository is forced sync with base repository.
@@ -725,4 +725,48 @@ func DeleteDeployKey(c *context.Context) {
 	c.JSONSuccess(map[string]interface{}{
 		"redirect": c.Repo.RepoLink + "/settings/keys",
 	})
+}
+
+/*
+RCOS Code
+**/
+
+func SettingsProtecte(c *context.Context) {
+	c.Data["Title"] = c.Tr("repo.settings")
+	c.Data["PageIsSettingsProject"] = true
+	c.Data["project_name"] = c.Repo.Repository.ProtectName
+	c.Data["project_description"] = c.Repo.Repository.ProjectDescription
+
+	c.Success(SETTINGS_PROJECT)
+
+}
+
+func SettingsProtectePost(c *context.Context, f form.ResearchProtect) {
+	c.Data["Title"] = c.Tr("repo.settings")
+	c.Data["PageIsSettingsProject"] = true
+
+	repo := c.Repo.Repository
+
+	// velidate Research Project Name
+	projectname_has_char := false
+	for _, char := range f.ProjectName {
+		if unicode.IsLetter(char) || unicode.Is(unicode.Hiragana, char) || unicode.Is(unicode.Katakana, char) || unicode.Is(unicode.Han, char) {
+			projectname_has_char = true
+		}
+
+	}
+	if projectname_has_char == false {
+		c.RenderWithErr(c.Tr("form.projectname_has_no_char"), SETTINGS_PROJECT, &f)
+		return
+	}
+
+	repo.ProtectName = strings.ReplaceAll(f.ProjectName, "\r\n", "\n")
+	repo.ProjectDescription = strings.ReplaceAll(f.ProjectDescription, "\r\n", "\n")
+
+	if err := db.UpdateRepository(repo, false); err != nil {
+		c.Error(err, "update repository")
+		return
+	}
+	c.Flash.Success(c.Tr("repo.settings.update_project_success"))
+	c.Redirect(repo.Link() + "/settings/project")
 }

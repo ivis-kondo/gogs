@@ -20,10 +20,10 @@ import (
 	"gopkg.in/macaron.v1"
 	log "unknwon.dev/clog/v2"
 
-	"github.com/ivis-yoshida/gogs/internal/conf"
-	"github.com/ivis-yoshida/gogs/internal/db"
-	"github.com/ivis-yoshida/gogs/internal/lazyregexp"
-	"github.com/ivis-yoshida/gogs/internal/tool"
+	"github.com/NII-DG/gogs/internal/conf"
+	"github.com/NII-DG/gogs/internal/db"
+	"github.com/NII-DG/gogs/internal/lazyregexp"
+	"github.com/NII-DG/gogs/internal/tool"
 )
 
 type HTTPContext struct {
@@ -128,9 +128,9 @@ func HTTPContexter() macaron.Handler {
 			return
 		}
 
-		// If username and password combination failed, try again using username as a token.
+		// If username and password combination failed, try again using password as a token.
 		if authUser == nil {
-			token, err := db.AccessTokens.GetBySHA(authUsername)
+			token, err := db.AccessTokens.GetBySHA(authPassword)
 			if err != nil {
 				if db.IsErrAccessTokenNotExist(err) {
 					askCredentials(c, http.StatusUnauthorized, "")
@@ -140,10 +140,6 @@ func HTTPContexter() macaron.Handler {
 				}
 				return
 			}
-			if err = db.AccessTokens.Save(token); err != nil {
-				log.Error("Failed to update access token: %v", err)
-			}
-
 			authUser, err = db.Users.GetByID(token.UserID)
 			if err != nil {
 				// Once we found token, we're supposed to find its related user,
@@ -151,6 +147,14 @@ func HTTPContexter() macaron.Handler {
 				c.Status(http.StatusInternalServerError)
 				log.Error("Failed to get user [id: %d]: %v", token.UserID, err)
 				return
+			}
+			if authUsername != authUser.Name {
+				c.Status(http.StatusUnauthorized)
+				askCredentials(c, http.StatusUnauthorized, "")
+				return
+			}
+			if err = db.AccessTokens.Save(token); err != nil {
+				log.Error("Failed to update access token: %v", err)
 			}
 		} else if authUser.IsEnabledTwoFactor() {
 			askCredentials(c, http.StatusUnauthorized, `User with two-factor authentication enabled cannot perform HTTP/HTTPS operations via plain username and password

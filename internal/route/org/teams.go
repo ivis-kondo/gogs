@@ -7,13 +7,14 @@ package org
 import (
 	"net/http"
 	"path"
+	"strings"
 
 	"github.com/unknwon/com"
 	log "unknwon.dev/clog/v2"
 
-	"github.com/ivis-yoshida/gogs/internal/context"
-	"github.com/ivis-yoshida/gogs/internal/db"
-	"github.com/ivis-yoshida/gogs/internal/form"
+	"github.com/NII-DG/gogs/internal/context"
+	"github.com/NII-DG/gogs/internal/db"
+	"github.com/NII-DG/gogs/internal/form"
 )
 
 const (
@@ -101,7 +102,13 @@ func TeamsAction(c *context.Context) {
 
 	switch page {
 	case "team":
-		c.Redirect(c.Org.OrgLink + "/teams/" + c.Org.Team.LowerName)
+		// avoid 404 error
+		if c.UserID() == uid && c.Params(":action") == "remove" {
+			c.Redirect("/" + c.Org.Organization.Name)
+		} else {
+			c.Redirect(c.Org.OrgLink + "/teams/" + c.Org.Team.LowerName)
+		}
+
 	default:
 		c.Redirect(c.Org.OrgLink + "/teams")
 	}
@@ -157,7 +164,7 @@ func NewTeamPost(c *context.Context, f form.CreateTeam) {
 	t := &db.Team{
 		OrgID:       c.Org.Organization.ID,
 		Name:        f.TeamName,
-		Description: f.Description,
+		Description: strings.ReplaceAll(f.TeamDescription, "\r\n", "\n"),
 		Authorize:   db.ParseAccessMode(f.Permission),
 	}
 	c.Data["Team"] = t
@@ -244,7 +251,7 @@ func EditTeamPost(c *context.Context, f form.CreateTeam) {
 			t.Authorize = auth
 		}
 	}
-	t.Description = f.Description
+	t.Description = strings.ReplaceAll(f.TeamDescription, "\r\n", "\n")
 	if err := db.UpdateTeam(t, isAuthChanged); err != nil {
 		c.Data["Err_TeamName"] = true
 		switch {

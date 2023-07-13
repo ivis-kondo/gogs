@@ -15,13 +15,13 @@ import (
 	"github.com/unknwon/paginater"
 	log "unknwon.dev/clog/v2"
 
-	"github.com/ivis-yoshida/gogs/internal/conf"
-	"github.com/ivis-yoshida/gogs/internal/context"
-	"github.com/ivis-yoshida/gogs/internal/db"
-	"github.com/ivis-yoshida/gogs/internal/db/errors"
-	"github.com/ivis-yoshida/gogs/internal/form"
-	"github.com/ivis-yoshida/gogs/internal/markup"
-	"github.com/ivis-yoshida/gogs/internal/tool"
+	"github.com/NII-DG/gogs/internal/conf"
+	"github.com/NII-DG/gogs/internal/context"
+	"github.com/NII-DG/gogs/internal/db"
+	"github.com/NII-DG/gogs/internal/db/errors"
+	"github.com/NII-DG/gogs/internal/form"
+	"github.com/NII-DG/gogs/internal/markup"
+	"github.com/NII-DG/gogs/internal/tool"
 )
 
 const (
@@ -431,7 +431,7 @@ func NewIssuePost(c *context.Context, f form.NewIssue) {
 		Poster:      c.User,
 		MilestoneID: milestoneID,
 		AssigneeID:  assigneeID,
-		Content:     f.Content,
+		Content:     strings.ReplaceAll(f.Content, "\r\n", "\n"),
 	}
 	if err := db.NewIssue(c.Repo.Repository, issue, labelIDs, attachments); err != nil {
 		c.Error(err, "new issue")
@@ -906,8 +906,8 @@ func NewComment(c *context.Context, f form.CreateComment) {
 	if len(f.Content) == 0 && len(attachments) == 0 {
 		return
 	}
-
-	comment, err = db.CreateIssueComment(c.User, c.Repo.Repository, issue, f.Content, attachments)
+	content := strings.ReplaceAll(f.Content, "\r\n", "\n")
+	comment, err = db.CreateIssueComment(c.User, c.Repo.Repository, issue, content, attachments)
 	if err != nil {
 		c.Error(err, "create issue comment")
 		return
@@ -1140,7 +1140,7 @@ func NewMilestonePost(c *context.Context, f form.CreateMilestone) {
 	if err = db.NewMilestone(&db.Milestone{
 		RepoID:   c.Repo.Repository.ID,
 		Name:     f.Title,
-		Content:  f.Content,
+		Content:  strings.ReplaceAll(f.Content, "\r\n", "\n"),
 		Deadline: deadline,
 	}); err != nil {
 		c.Error(err, "new milestone")
@@ -1199,7 +1199,7 @@ func EditMilestonePost(c *context.Context, f form.CreateMilestone) {
 		return
 	}
 	m.Name = f.Title
-	m.Content = f.Content
+	m.Content = strings.ReplaceAll(f.Content, "\r\n", "\n")
 	m.Deadline = deadline
 	if err = db.UpdateMilestone(m); err != nil {
 		c.Error(err, "update milestone")

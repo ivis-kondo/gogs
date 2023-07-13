@@ -3,7 +3,7 @@
 	{{template "repo/header" .}}
 	<div class="ui container">
 		{{template "base/alert" .}}
-		<form class="ui edit form" method="post">
+		<form class="ui edit form" method="post" onSubmit="return PreventionDbClick();">
 			{{.CSRFTokenHTML}}
 			<input type="hidden" name="last_commit" value="{{.last_commit}}">
 			<div class="ui secondary menu">
@@ -20,8 +20,8 @@
 									<input id="file-name" value="{{$v}}" placeholder="{{$.i18n.Tr "repo.editor.name_your_file"}}" data-ec-url-prefix="{{$.EditorconfigURLPrefix}}" required autofocus readonly>
 								{{else}}
 									<input id="file-name" value="{{$v}}" placeholder="{{$.i18n.Tr "repo.editor.name_your_file"}}" data-ec-url-prefix="{{$.EditorconfigURLPrefix}}" required autofocus>
+									<span class="octicon octicon-info poping up" data-content="{{$.i18n.Tr "repo.editor.filename_help"}}" data-position="bottom center" data-variation="tiny inverted"></span>
 								{{end}}
-								<span class="octicon octicon-info poping up" data-content="{{$.i18n.Tr "repo.editor.filename_help"}}" data-position="bottom center" data-variation="tiny inverted"></span>
 							{{else}}
 								<span class="section"><a href="{{EscapePound $.BranchLink}}/{{index $.TreePaths $i | EscapePound}}">{{$v}}</a></span>
 							{{end}}

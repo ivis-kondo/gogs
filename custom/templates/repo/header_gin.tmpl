@@ -1,31 +1,47 @@
 {{if not $.IsBareRepo}}
-	{{if or $.DOI $.IsRepositoryAdmin}} {{/* Show DOI buttons or badge */}}
-					{{if $.IsRepositoryAdmin}}
-						{{if $.IsDOIReady}} {{/* Ready to (re)register: Show button */}}
-							<a class="ui basic button" href="/{{.Repository.Owner.Name}}/{{.Repository.Name}}/doi"><i class="octicon octicon-squirrel"></i> Request {{if $.DOI}}New{{end}} DOI</a>
-						{{else if not $.DOI}} {{/*Link to registration instructions*/}}
-							<a class="ui basic button" data-tooltip="Your repository does not fulfill all requirements for a DOI yet. Click to get instructions." data-position="bottom center" href="/G-Node/Info/wiki/DOI"><i class="octicon octicon-squirrel"></i> How to publish</a>
-							{{if $.HasDmpJson}}
-								<a class="ui basic button" href="{{$.RepoLink}}/_edit/{{EscapePound $.BranchName}}/dmp.json" data-position="bottom center"><i class="octicon octicon-file"></i>Edit DMP JSON</a>
-							{{else}}
-								<select class="ui basic button" name="addDmp" onChange="location.href=value;">
-									<option value="" selected>Add DMP</option>
-
-									{{ range $v := $.SchemaList }}
-										<option value="{{$.RepoLink}}/_add/{{EscapePound $.BranchName}}/dmp.json/?schema={{$v}}">{{ $v }}</option>
+	{{if or $.DOI $.IsRepositoryWriter}} {{/* Show DOI buttons or badge */}}
+					{{if $.IsRepositoryWriter}}
+						{{/* {{if $.IsDOIReady}}  Ready to (re)register: Show button
+							<a class="ui basic button" href="/{{.Repository.Owner.Name}}/{{.Repository.Name}}/doi"><i class="octicon octicon-squirrel"></i> Request {{if $.DOI}}New{{end}} DOI</a> */}}
+						{{/* {{else if not $.DOI}} Link to registration instructions*/}}
+							<!--a class="ui basic button" data-tooltip="Your repository does not fulfill all requirements for a DOI yet. Click to get instructions." data-position="bottom center" href="/G-Node/Info/wiki/DOI"><i class="octicon octicon-squirrel"></i> How to publish</!--a -->
+						<div style="display:flex;">
+							{{if $.IsRcosButton}}
+								{{if $.HasDmpJson }}
+									{{ if $.HasMaDmp }}
+										<a class="ui basic button" href="{{$.RepoLink}}/src/{{EscapePound $.BranchName}}/maDMP.ipynb" data-position="bottom center"><i class="octicon octicon-file"></i>View maDMP</a>
+									{{ else }}
+										{{if $.IsRepositoryAdmin}}
+										<a class="ui basic button" href="{{$.RepoLink}}/_edit/{{EscapePound $.BranchName}}/dmp.json" data-position="bottom center"><i class="octicon octicon-file"></i>Edit DMP JSON</a>
+										<form method="post" name="generate_maDMP" action="{{$.RepoLink}}/madmp" onSubmit="return PreventionDbClick();">
+											{{.CSRFTokenHTML}}
+											<button class="ui basic button" data-position="bottom center"><i class="octicon octicon-file"></i>Generate maDMP</button>
+										</form>
+										{{end}}
 									{{ end }}
-
-								</select>
+								{{else}}
+									{{if $.SchemaList}}
+									{{if $.IsRepositoryAdmin}}
+										<select class="ui basic button" name="addDmp" onChange="location.href=value;">
+											<option value="" selected disabled>Add DMP</option>
+											{{ range $v := $.SchemaList }}
+												<option value="{{$.RepoLink}}/_add/{{EscapePound $.BranchName}}/dmp.json/?schema={{$v}}">{{ $v }}</option>
+											{{ end }}
+										</select>
+									{{end}}
+									{{end}}
+								{{end}}
 							{{end}}
-						{{end}} {{/* End registration button */}}
+						</div>
+						{{/* {{end}}  End registration button */}}
 					{{end}} {{/* Admin section */}}
 					{{if $.DOI}} {{/* Registered repo: Show DOI badge */}}
-						<div class="ui labeled button" tabindex="0">
+						<!-- <div class="ui labeled button" tabindex="0">
 							<a href="https://doi.org/{{$.DOI}}">
 								<div class="gin doi">DOI</div>
 								<div class="gin doinr">{{$.DOI}}</div>
 							</a>
-						</div>
+						</div> -->
 					{{end}} {{/* End DOI badge */}}
 					{{/* Close original header divs and create second row below for original buttons */}}
 					</div>

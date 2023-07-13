@@ -19,21 +19,20 @@ import (
 	"time"
 	"unicode/utf8"
 
+	"github.com/gogs/git-module"
+	api "github.com/gogs/go-gogs-client"
 	"github.com/nfnt/resize"
 	"github.com/unknwon/com"
 	"golang.org/x/crypto/pbkdf2"
 	log "unknwon.dev/clog/v2"
 	"xorm.io/xorm"
 
-	"github.com/gogs/git-module"
-	api "github.com/gogs/go-gogs-client"
-
-	"github.com/ivis-yoshida/gogs/internal/avatar"
-	"github.com/ivis-yoshida/gogs/internal/conf"
-	"github.com/ivis-yoshida/gogs/internal/db/errors"
-	"github.com/ivis-yoshida/gogs/internal/errutil"
-	"github.com/ivis-yoshida/gogs/internal/strutil"
-	"github.com/ivis-yoshida/gogs/internal/tool"
+	"github.com/NII-DG/gogs/internal/avatar"
+	"github.com/NII-DG/gogs/internal/conf"
+	"github.com/NII-DG/gogs/internal/db/errors"
+	"github.com/NII-DG/gogs/internal/errutil"
+	"github.com/NII-DG/gogs/internal/strutil"
+	"github.com/NII-DG/gogs/internal/tool"
 )
 
 // USER_AVATAR_URL_PREFIX is used to identify a URL is to access user avatar.
@@ -66,6 +65,15 @@ type User struct {
 	Website     string
 	Rands       string `xorm:"VARCHAR(10)" gorm:"TYPE:VARCHAR(10)"`
 	Salt        string `xorm:"VARCHAR(10)" gorm:"TYPE:VARCHAR(10)"`
+
+	AffiliationId int64
+
+	Telephone            string
+	FirstName            string `xorm:"NOT NULL" gorm:"NOT NULL"`
+	LastName             string `xorm:"NOT NULL" gorm:"NOT NULL"`
+	AliasName            string
+	ERadResearcherNumber string
+	PersonalURL          string
 
 	Created     time.Time `xorm:"-" gorm:"-" json:"-"`
 	CreatedUnix int64
@@ -742,9 +750,8 @@ func updateUser(e Engine, u *User) error {
 	}
 
 	u.LowerName = strings.ToLower(u.Name)
-	u.Location = tool.TruncateString(u.Location, 255)
 	u.Website = tool.TruncateString(u.Website, 255)
-	u.Description = tool.TruncateString(u.Description, 255)
+	//u.Description = tool.TruncateString(u.Description, 255)
 
 	_, err := e.ID(u.ID).AllCols().Update(u)
 	return err
@@ -832,6 +839,7 @@ func deleteUser(e *xorm.Session, u *User) error {
 		&Action{UserID: u.ID},
 		&IssueUser{UID: u.ID},
 		&EmailAddress{UID: u.ID},
+		&JupyterContainer{UserID: u.ID},
 	); err != nil {
 		return fmt.Errorf("deleteBeans: %v", err)
 	}
@@ -1073,6 +1081,7 @@ type SearchUserOptions struct {
 	OrderBy  string
 	Page     int
 	PageSize int // Can be smaller than or equal to setting.UI.ExplorePagingNum
+	UserID   int64
 }
 
 // SearchUserByName takes keyword and part of user name to search,

@@ -10,8 +10,8 @@ import (
 
 	"xorm.io/xorm"
 
-	"github.com/ivis-yoshida/gogs/internal/db/errors"
-	"github.com/ivis-yoshida/gogs/internal/errutil"
+	"github.com/NII-DG/gogs/internal/db/errors"
+	"github.com/NII-DG/gogs/internal/errutil"
 )
 
 const OWNER_TEAM = "Owners"
@@ -336,9 +336,11 @@ func UpdateTeam(t *Team, authChanged bool) (err error) {
 		return errors.New("empty team name")
 	}
 
+	/*
 	if len(t.Description) > 255 {
 		t.Description = t.Description[:255]
 	}
+	*/
 
 	sess := x.NewSession()
 	defer sess.Close()

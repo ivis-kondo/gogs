@@ -9,11 +9,11 @@ import (
 
 	log "unknwon.dev/clog/v2"
 
-	"github.com/ivis-yoshida/gogs/internal/conf"
-	"github.com/ivis-yoshida/gogs/internal/context"
-	"github.com/ivis-yoshida/gogs/internal/db"
-	"github.com/ivis-yoshida/gogs/internal/form"
-	"github.com/ivis-yoshida/gogs/internal/route/user"
+	"github.com/NII-DG/gogs/internal/conf"
+	"github.com/NII-DG/gogs/internal/context"
+	"github.com/NII-DG/gogs/internal/db"
+	"github.com/NII-DG/gogs/internal/form"
+	"github.com/NII-DG/gogs/internal/route/user"
 )
 
 const (
@@ -71,7 +71,7 @@ func SettingsPost(c *context.Context, f form.UpdateOrgSetting) {
 	}
 
 	org.FullName = f.FullName
-	org.Description = f.Description
+	org.Description = strings.ReplaceAll(f.OrgDescription, "\r\n", "\n")
 	org.Website = f.Website
 	org.Location = f.Location
 	if err := db.UpdateUser(org); err != nil {

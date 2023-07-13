@@ -1,4 +1,4 @@
-module github.com/ivis-yoshida/gogs
+module github.com/NII-DG/gogs
 
 go 1.16
 
@@ -23,6 +23,7 @@ require (
 	github.com/gogs/go-gogs-client v0.0.0-20210131175652-1d7215cd8d85
 	github.com/gogs/go-libravatar v0.0.0-20191106065024-33a75213d0a0
 	github.com/gogs/minwinsvc v0.0.0-20170301035411-95be6356811a
+	github.com/golang/mock v1.6.0 // indirect
 	github.com/google/go-github v17.0.0+incompatible
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/idubinskiy/schematyper v0.0.0-20190118213059-f71b40dac30d // indirect
@@ -30,7 +31,7 @@ require (
 	github.com/jaytaylor/html2text v0.0.0-20200412013138-3577fbdbcff7
 	github.com/jinzhu/gorm v1.9.16
 	github.com/json-iterator/go v1.1.11
-	github.com/kevinburke/go-bindata v3.22.0+incompatible // indirect
+	github.com/kevinburke/go-bindata v3.24.0+incompatible // indirect
 	github.com/microcosm-cc/bluemonday v1.0.15
 	github.com/msteinert/pam v0.0.0-20201130170657-e61372126161
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646

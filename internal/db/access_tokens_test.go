@@ -11,7 +11,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/ivis-yoshida/gogs/internal/errutil"
+	"github.com/NII-DG/gogs/internal/errutil"
 )
 
 func TestAccessToken_BeforeCreate(t *testing.T) {
@@ -66,7 +66,7 @@ func Test_accessTokens(t *testing.T) {
 
 func test_accessTokens_Create(t *testing.T, db *accessTokens) {
 	// Create first access token with name "Test"
-	token, err := db.Create(1, "Test")
+	token, err := db.Create(1, "Test", 0)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -83,14 +83,14 @@ func test_accessTokens_Create(t *testing.T, db *accessTokens) {
 	assert.Equal(t, gorm.NowFunc().Format(time.RFC3339), token.Created.UTC().Format(time.RFC3339))
 
 	// Try create second access token with same name should fail
-	_, err = db.Create(token.UserID, token.Name)
+	_, err = db.Create(token.UserID, token.Name, 0)
 	expErr := ErrAccessTokenAlreadyExist{args: errutil.Args{"userID": token.UserID, "name": token.Name}}
 	assert.Equal(t, expErr, err)
 }
 
 func test_accessTokens_DeleteByID(t *testing.T, db *accessTokens) {
 	// Create an access token with name "Test"
-	token, err := db.Create(1, "Test")
+	token, err := db.Create(1, "Test", 0)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -125,7 +125,7 @@ func test_accessTokens_DeleteByID(t *testing.T, db *accessTokens) {
 
 func test_accessTokens_GetBySHA(t *testing.T, db *accessTokens) {
 	// Create an access token with name "Test"
-	token, err := db.Create(1, "Test")
+	token, err := db.Create(1, "Test", 0)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -144,17 +144,17 @@ func test_accessTokens_GetBySHA(t *testing.T, db *accessTokens) {
 
 func test_accessTokens_List(t *testing.T, db *accessTokens) {
 	// Create two access tokens for user 1
-	_, err := db.Create(1, "user1_1")
+	_, err := db.Create(1, "user1_1", 0)
 	if err != nil {
 		t.Fatal(err)
 	}
-	_, err = db.Create(1, "user1_2")
+	_, err = db.Create(1, "user1_2", 0)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	// Create one access token for user 2
-	_, err = db.Create(2, "user2_1")
+	_, err = db.Create(2, "user2_1", 0)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -175,7 +175,7 @@ func test_accessTokens_List(t *testing.T, db *accessTokens) {
 
 func test_accessTokens_Save(t *testing.T, db *accessTokens) {
 	// Create an access token with name "Test"
-	token, err := db.Create(1, "Test")
+	token, err := db.Create(1, "Test", 0)
 	if err != nil {
 		t.Fatal(err)
 	}

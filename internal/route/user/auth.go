@@ -13,12 +13,14 @@ import (
 	"github.com/pkg/errors"
 	log "unknwon.dev/clog/v2"
 
-	"github.com/ivis-yoshida/gogs/internal/conf"
-	"github.com/ivis-yoshida/gogs/internal/context"
-	"github.com/ivis-yoshida/gogs/internal/db"
-	"github.com/ivis-yoshida/gogs/internal/email"
-	"github.com/ivis-yoshida/gogs/internal/form"
-	"github.com/ivis-yoshida/gogs/internal/tool"
+	"github.com/NII-DG/gogs/internal/conf"
+	"github.com/NII-DG/gogs/internal/context"
+	"github.com/NII-DG/gogs/internal/db"
+	"github.com/NII-DG/gogs/internal/email"
+	"github.com/NII-DG/gogs/internal/form"
+	"github.com/NII-DG/gogs/internal/tool"
+	"github.com/NII-DG/gogs/internal/utils"
+	"github.com/NII-DG/gogs/internal/utils/regex"
 )
 
 const (
@@ -294,6 +296,11 @@ func SignUp(c *context.Context) {
 	c.Title("sign_up")
 
 	c.Data["EnableCaptcha"] = conf.Auth.EnableRegistrationCaptcha
+	list, err := db.GetAffiliationList()
+	if err != nil {
+		log.Error("Failed to get affiliation: %v", err)
+	}
+	c.Data["AffiliationList"] = list
 
 	if conf.Auth.DisableRegistration {
 		c.Data["DisableRegistration"] = true
@@ -308,6 +315,11 @@ func SignUpPost(c *context.Context, cpt *captcha.Captcha, f form.Register) {
 	c.Title("sign_up")
 
 	c.Data["EnableCaptcha"] = conf.Auth.EnableRegistrationCaptcha
+	list, err := db.GetAffiliationList()
+	if err != nil {
+		log.Error("Failed to get affiliation: %v", err)
+	}
+	c.Data["AffiliationList"] = list
 
 	if conf.Auth.DisableRegistration {
 		c.Status(403)
@@ -330,14 +342,58 @@ func SignUpPost(c *context.Context, cpt *captcha.Captcha, f form.Register) {
 		c.RenderWithErr(c.Tr("form.password_not_match"), SIGNUP, &f)
 		return
 	}
+	// check telephone format
+	if len(f.Telephone) > 0 && !regex.CheckTelephoneFormat(f.Telephone) {
+		c.FormErr("Telephone")
+		c.RenderWithErr(c.Tr("form.enterred_invalid_telephone"), SIGNUP, &f)
+		return
+	}
+	// check ORDIC URL
+	orcid_prefix := "https://orcid.org/"
+	if strings.HasPrefix(f.PersonalURL, orcid_prefix) {
+		value := f.PersonalURL[len(orcid_prefix):]
+		if !regex.CheckORCIDFormat(value) {
+			c.FormErr("PersonalUrl")
+			c.RenderWithErr(c.Tr("form.enterred_invalid_orcid_url"), SIGNUP, &f)
+			return
+		}
+	}
+	// check e-Rad Rearcher Number
+	if len(f.ERadResearcherNumber) > 0 && !regex.CheckERadRearcherNumberFormat(f.ERadResearcherNumber) {
+		c.FormErr("ERad")
+		c.RenderWithErr(c.Tr("form.enterred_invalid_erad"), SIGNUP, &f)
+		return
+	}
+
+	// Check if spaces are included.
+	if utils.ContainsSpace(f.FirstName) || utils.ContainsSpace(f.LastName) {
+		c.FormErr("Name")
+		c.RenderWithErr(c.Tr("form.must_not_only_space"), SIGNUP, &f)
+		return
+	}
+
+	// generate User.FullName
+	fullName := ""
+	if !regex.CheckAlphabet(f.FirstName) || !regex.CheckAlphabet(f.LastName) {
+		// japanese user name
+		fullName = fmt.Sprintf("%s %s", f.LastName, f.FirstName)
+	} else {
+		fullName = fmt.Sprintf("%s %s", f.FirstName, f.LastName)
+	}
 
 	u := &db.User{
-		Name:     f.UserName,
-		Email:    f.Email,
-		Passwd:   f.Password,
-		FullName: f.FullName,
-		Location: f.Affiliation,
-		IsActive: !conf.Auth.RequireEmailConfirmation,
+		Name:                 f.UserName,
+		Email:                f.Email,
+		Telephone:            f.Telephone,
+		Passwd:               f.Password,
+		FullName:             fullName,
+		FirstName:            f.FirstName,
+		AliasName:            f.AliasName,
+		LastName:             f.LastName,
+		ERadResearcherNumber: f.ERadResearcherNumber,
+		PersonalURL:          f.PersonalURL,
+		AffiliationId:        f.AffiliationId,
+		IsActive:             !conf.Auth.RequireEmailConfirmation,
 	}
 	if err := db.CreateUser(u); err != nil {
 		switch {

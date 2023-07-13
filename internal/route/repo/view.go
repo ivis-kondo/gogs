@@ -8,7 +8,6 @@ import (
 	"bytes"
 	"fmt"
 	gotemplate "html/template"
-	"io/ioutil"
 	"path"
 	"strings"
 	"time"
@@ -19,14 +18,14 @@ import (
 	"github.com/unknwon/paginater"
 	log "unknwon.dev/clog/v2"
 
-	"github.com/ivis-yoshida/gogs/internal/conf"
-	"github.com/ivis-yoshida/gogs/internal/context"
-	"github.com/ivis-yoshida/gogs/internal/db"
-	"github.com/ivis-yoshida/gogs/internal/gitutil"
-	"github.com/ivis-yoshida/gogs/internal/markup"
-	"github.com/ivis-yoshida/gogs/internal/template"
-	"github.com/ivis-yoshida/gogs/internal/template/highlight"
-	"github.com/ivis-yoshida/gogs/internal/tool"
+	"github.com/NII-DG/gogs/internal/conf"
+	"github.com/NII-DG/gogs/internal/context"
+	"github.com/NII-DG/gogs/internal/db"
+	"github.com/NII-DG/gogs/internal/gitutil"
+	"github.com/NII-DG/gogs/internal/markup"
+	"github.com/NII-DG/gogs/internal/template"
+	"github.com/NII-DG/gogs/internal/template/highlight"
+	"github.com/NII-DG/gogs/internal/tool"
 )
 
 const (
@@ -50,11 +49,24 @@ func renderDirectory(c *context.Context, treeLink string) {
 	}
 	entries.Sort()
 
-	c.Data["Files"], err = entries.CommitsInfo(c.Repo.Commit, git.CommitsInfoOptions{
+	//  GIN-fork specific
+	// .gitattributes", ".repository_id", ".dataladを非表示にする
+	entry_list, err := entries.CommitsInfo(c.Repo.Commit, git.CommitsInfoOptions{
 		Path:           c.Repo.TreePath,
 		MaxConcurrency: conf.Repository.CommitsFetchConcurrency,
 		Timeout:        5 * time.Minute,
 	})
+
+	var not_show_files [3]string = [3]string{".gitattributes", ".repository_id", ".datalad"}
+	for _, file := range not_show_files {
+		for index, entry := range entry_list {
+			if entry.Entry.Name() == file {
+				entry_list = append(entry_list[:index], entry_list[index+1:]...)
+			}
+		}
+	}
+	c.Data["Files"] = entry_list
+
 	if err != nil {
 		c.Error(err, "get commits info")
 		return
@@ -63,7 +75,20 @@ func renderDirectory(c *context.Context, treeLink string) {
 	if c.Data["HasDmpJson"].(bool) {
 		readDmpJson(c)
 	} else {
-		bidingDmpSchemaList(c, "conf/dmp")
+		if c.Repo.BranchName == c.Repo.Repository.DefaultBranch {
+			schemaUrl := getTemplateUrl() + "dmp/orgs"
+
+			var d dmpUtil
+			err := d.BidingDmpSchemaList(c, schemaUrl)
+			if err != nil && !c.IsInternalError() {
+				log.Warn("%v", err)
+				c.Flash.Warning(c.Tr("rcos.server.connect.failure"), true)
+			} else if err != nil && c.IsInternalError() {
+				log.Error(err.Error())
+				c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
+				return
+			}
+		}
 	}
 
 	var readmeFile *git.Blob
@@ -132,38 +157,6 @@ func renderDirectory(c *context.Context, treeLink string) {
 		c.Data["CanAddFile"] = true
 		c.Data["CanUploadFile"] = conf.Repository.Upload.Enabled
 	}
-}
-
-// bidingDmpSchemaList is RCOS specific code.
-// This function bind DMP template file.
-func bidingDmpSchemaList(c *context.Context, dirPath string) {
-	files, err := ioutil.ReadDir(dirPath)
-	if err != nil {
-		panic(err)
-	}
-
-	var schemaList []string
-	for _, file := range files {
-		// ignore directory
-		if file.IsDir() {
-			continue
-		}
-		schemaList = append(schemaList, file.Name())
-	}
-
-	c.Data["SchemaList"] = schemaList
-}
-
-// fetchDmpSchema is RCOS specific code.
-// This function fetch&bind JSON Schema of DMP for validation.
-func fetchDmpSchema(c *context.Context, filePath string) {
-	scheme, err := ioutil.ReadFile(filePath)
-	if err != nil {
-		panic(err)
-	}
-
-	c.Data["IsDmpJson"] = true
-	c.Data["Schema"] = string(scheme)
 }
 
 func renderFile(c *context.Context, entry *git.TreeEntry, treeLink, rawLink string) {
@@ -356,6 +349,11 @@ func Home(c *context.Context) {
 	if err != nil {
 		c.NotFoundOrError(gitutil.NewError(err), "get tree entry")
 		return
+	}
+
+	// Only show button in repository header when view main branch
+	if c.Repo.BranchName == c.Repo.Repository.DefaultBranch {
+		c.Data["IsRcosButton"] = true
 	}
 
 	if entry.IsTree() {

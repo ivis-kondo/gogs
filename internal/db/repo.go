@@ -30,15 +30,15 @@ import (
 	"github.com/gogs/git-module"
 	api "github.com/gogs/go-gogs-client"
 
-	"github.com/ivis-yoshida/gogs/internal/avatar"
-	"github.com/ivis-yoshida/gogs/internal/conf"
-	"github.com/ivis-yoshida/gogs/internal/db/errors"
-	"github.com/ivis-yoshida/gogs/internal/errutil"
-	"github.com/ivis-yoshida/gogs/internal/markup"
-	"github.com/ivis-yoshida/gogs/internal/osutil"
-	"github.com/ivis-yoshida/gogs/internal/process"
-	"github.com/ivis-yoshida/gogs/internal/semverutil"
-	"github.com/ivis-yoshida/gogs/internal/sync"
+	"github.com/NII-DG/gogs/internal/avatar"
+	"github.com/NII-DG/gogs/internal/conf"
+	"github.com/NII-DG/gogs/internal/db/errors"
+	"github.com/NII-DG/gogs/internal/errutil"
+	"github.com/NII-DG/gogs/internal/markup"
+	"github.com/NII-DG/gogs/internal/osutil"
+	"github.com/NII-DG/gogs/internal/process"
+	"github.com/NII-DG/gogs/internal/semverutil"
+	"github.com/NII-DG/gogs/internal/sync"
 )
 
 // REPO_AVATAR_URL_PREFIX is used to identify a URL is to access repository avatar.
@@ -146,6 +146,12 @@ func NewRepoContext() {
 	RemoveAllWithNotice("Clean up repository temporary data", filepath.Join(conf.Server.AppDataPath, "tmp"))
 }
 
+type AbstructDbRepository interface {
+	GetDefaultBranch() string
+	FullName() string
+	UpdateRepoFile(doer *User, opts UpdateRepoFileOptions) (err error)
+}
+
 // Repository contains information of a repository.
 type Repository struct {
 	ID              int64
@@ -208,6 +214,15 @@ type Repository struct {
 	UpdatedUnix int64
 
 	Downloaded uint64 `xorm:"NOT NULL DEFAULT 0" gorm:"NOT NULL;DEFAULT:0"`
+
+	// below code is RCOS code
+	ProtectName        string
+	ProjectDescription string
+}
+
+// GetDefaultBranch is RCOS specific code.
+func (repo *Repository) GetDefaultBranch() string {
+	return repo.DefaultBranch
 }
 
 func (repo *Repository) BeforeInsert() {
@@ -928,15 +943,17 @@ func initRepoCommit(tmpPath string, sig *git.Signature) (err error) {
 }
 
 type CreateRepoOptions struct {
-	Name        string
-	Description string
-	Gitignores  string
-	License     string
-	Readme      string
-	IsPrivate   bool
-	IsUnlisted  bool
-	IsMirror    bool
-	AutoInit    bool
+	Name               string
+	Description        string
+	Gitignores         string
+	License            string
+	Readme             string
+	IsPrivate          bool
+	IsUnlisted         bool
+	IsMirror           bool
+	AutoInit           bool
+	ProjectName        string
+	ProjectDescription string
 }
 
 func getRepoInitFile(tp, name string) ([]byte, error) {
@@ -950,7 +967,9 @@ func getRepoInitFile(tp, name string) ([]byte, error) {
 	return conf.Asset(relPath)
 }
 
-func prepareRepoCommit(repo *Repository, tmpDir, repoPath string, opts CreateRepoOptions) error {
+// prepareRepoCommit adds the files to the repository if the GIN user
+// has initialized the repository with the selected files and templates on browser.
+func prepareRepoCommit(repo *Repository, doer *User, tmpDir, repoPath string, opts CreateRepoOptions) error {
 	// Clone to temprory path and do the init commit.
 	_, stderr, err := process.Exec(
 		fmt.Sprintf("initRepository(git clone): %s", repoPath), "git", "clone", repoPath, tmpDir)
@@ -968,6 +987,7 @@ func prepareRepoCommit(repo *Repository, tmpDir, repoPath string, opts CreateRep
 	match := map[string]string{
 		"Name":           repo.Name,
 		"Description":    repo.Description,
+		"Doer":           doer.Name,
 		"CloneURL.SSH":   cloneLink.SSH,
 		"CloneURL.HTTPS": cloneLink.HTTPS,
 	}
@@ -1009,6 +1029,21 @@ func prepareRepoCommit(repo *Repository, tmpDir, repoPath string, opts CreateRep
 		}
 	}
 
+	// RCOS specific code
+	// .repository_id
+	data_repoid, err := getRepoInitFile(".repository_id", ".repository_id")
+	if err != nil {
+		return fmt.Errorf("getRepoInitFile[%s]: %v", ".repository_id", err)
+	}
+	s_repo_id := strconv.FormatInt(repo.ID, 10)
+	match_repoid := map[string]string{
+		"RepoID": s_repo_id,
+	}
+	if err = ioutil.WriteFile(filepath.Join(tmpDir, ".repository_id"),
+		[]byte(com.Expand(string(data_repoid), match_repoid)), 0644); err != nil {
+		return fmt.Errorf("write RepoID: %v", err)
+	}
+
 	return nil
 }
 
@@ -1035,7 +1070,7 @@ func initRepository(e Engine, repoPath string, doer *User, repo *Repository, opt
 		}
 		defer RemoveAllWithNotice("Delete repository for auto-initialization", tmpDir)
 
-		if err = prepareRepoCommit(repo, tmpDir, repoPath, opts); err != nil {
+		if err = prepareRepoCommit(repo, doer, tmpDir, repoPath, opts); err != nil {
 			return fmt.Errorf("prepareRepoCommit: %v", err)
 		}
 
@@ -1140,16 +1175,18 @@ func CreateRepository(doer, owner *User, opts CreateRepoOptions) (_ *Repository,
 	}
 
 	repo := &Repository{
-		OwnerID:      owner.ID,
-		Owner:        owner,
-		Name:         opts.Name,
-		LowerName:    strings.ToLower(opts.Name),
-		Description:  opts.Description,
-		IsPrivate:    opts.IsPrivate,
-		IsUnlisted:   opts.IsUnlisted,
-		EnableWiki:   true,
-		EnableIssues: true,
-		EnablePulls:  true,
+		OwnerID:            owner.ID,
+		Owner:              owner,
+		Name:               opts.Name,
+		LowerName:          strings.ToLower(opts.Name),
+		Description:        opts.Description,
+		IsPrivate:          opts.IsPrivate,
+		IsUnlisted:         opts.IsUnlisted,
+		EnableWiki:         true,
+		EnableIssues:       true,
+		EnablePulls:        true,
+		ProtectName:        opts.ProjectName,
+		ProjectDescription: opts.ProjectDescription,
 	}
 
 	sess := x.NewSession()
@@ -1452,12 +1489,14 @@ func GetNonMirrorRepositories() ([]*Repository, error) {
 func updateRepository(e Engine, repo *Repository, visibilityChanged bool) (err error) {
 	repo.LowerName = strings.ToLower(repo.Name)
 
-	if len(repo.Description) > 512 {
-		repo.Description = repo.Description[:512]
-	}
-	if len(repo.Website) > 255 {
-		repo.Website = repo.Website[:255]
-	}
+	/*
+		if len(repo.Description) > 512 {
+			repo.Description = repo.Description[:512]
+		}
+		if len(repo.Website) > 255 {
+			repo.Website = repo.Website[:255]
+		}
+	*/
 
 	if _, err = e.ID(repo.ID).AllCols().Update(repo); err != nil {
 		return fmt.Errorf("update: %v", err)
@@ -1577,6 +1616,7 @@ func DeleteRepository(ownerID, repoID int64) error {
 		&Webhook{RepoID: repoID},
 		&HookTask{RepoID: repoID},
 		&LFSObject{RepoID: repoID},
+		&JupyterContainer{RepoID: repoID},
 	); err != nil {
 		return fmt.Errorf("deleteBeans: %v", err)
 	}
@@ -1756,6 +1796,7 @@ func GetRepositoryCount(u *User) (int64, error) {
 }
 
 type SearchRepoOptions struct {
+	ID       int64 // GIN-fork specific
 	Keyword  string
 	OwnerID  int64
 	UserID   int64 // When set results will contain all public/private repositories user has access to
@@ -1790,6 +1831,10 @@ func SearchRepositoryByName(opts *SearchRepoOptions) (repos []*Repository, count
 	}
 	if opts.OwnerID > 0 {
 		sess.And("repo.owner_id = ?", opts.OwnerID)
+	}
+	//GIN-fork specific
+	if opts.ID > 0 {
+		sess.And("repo.id = ?", opts.ID)
 	}
 
 	// We need all fields (repo.*) in final list but only ID (repo.id) is good enough for counting.
@@ -2472,10 +2517,10 @@ func ForkRepository(doer, owner *User, baseRepo *Repository, name, desc string) 
 	}
 
 	if !baseRepo.IsOwnedBy(owner.ID) {
-		baseRepo.Downloaded = baseRepo.Downloaded + 1
+		baseRepo.NumForks = baseRepo.NumForks + 1
 		UpdateRepository(baseRepo, true)
 	}
-	log.Info(baseRepo.Name + " is forked by " + owner.Name + " (total: " + strconv.FormatUint(baseRepo.Downloaded, 10) + " downloaded)")
+	log.Info(fmt.Sprintf("%s is forked by %s (total: %d forked)", baseRepo.Name, owner.Name, baseRepo.NumForks))
 	return repo, nil
 }
 

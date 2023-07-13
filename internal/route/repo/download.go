@@ -11,10 +11,10 @@ import (
 
 	"github.com/gogs/git-module"
 
-	"github.com/ivis-yoshida/gogs/internal/conf"
-	"github.com/ivis-yoshida/gogs/internal/context"
-	"github.com/ivis-yoshida/gogs/internal/gitutil"
-	"github.com/ivis-yoshida/gogs/internal/tool"
+	"github.com/NII-DG/gogs/internal/conf"
+	"github.com/NII-DG/gogs/internal/context"
+	"github.com/NII-DG/gogs/internal/gitutil"
+	"github.com/NII-DG/gogs/internal/tool"
 )
 
 func serveData(c *context.Context, name string, data []byte) error {
@@ -48,12 +48,11 @@ func ServeBlob(c *context.Context, blob *git.Blob) error {
 	if err != nil {
 		return err
 	}
-
 	return serveData(c, path.Base(c.Repo.TreePath), p)
 }
 
 func SingleDownload(c *context.Context) {
-	blob, err := c.Repo.Commit.Blob(c.Repo.TreePath)
+	blob, err := getBlobByPath(c.Repo)
 	if err != nil {
 		c.NotFoundOrError(gitutil.NewError(err), "get blob")
 		return
@@ -63,4 +62,15 @@ func SingleDownload(c *context.Context) {
 		c.Error(err, "serve blob")
 		return
 	}
+}
+
+func getBlobByPath(repo *context.Repository) (*git.Blob, error) {
+	entry, err := repo.Commit.TreeEntry(repo.TreePath)
+	if err != nil {
+		return nil, err
+	}
+	if !entry.IsTree() {
+		return entry.Blob(), nil
+	}
+	return nil, git.ErrNotBlob
 }

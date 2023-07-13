@@ -13,15 +13,18 @@ import (
 
 	api "github.com/gogs/go-gogs-client"
 
-	"github.com/ivis-yoshida/gogs/internal/context"
-	"github.com/ivis-yoshida/gogs/internal/db"
-	"github.com/ivis-yoshida/gogs/internal/form"
-	"github.com/ivis-yoshida/gogs/internal/route/api/v1/admin"
-	"github.com/ivis-yoshida/gogs/internal/route/api/v1/misc"
-	"github.com/ivis-yoshida/gogs/internal/route/api/v1/org"
-	"github.com/ivis-yoshida/gogs/internal/route/api/v1/repo"
-	"github.com/ivis-yoshida/gogs/internal/route/api/v1/search"
-	"github.com/ivis-yoshida/gogs/internal/route/api/v1/user"
+	"github.com/NII-DG/gogs/internal/context"
+	"github.com/NII-DG/gogs/internal/db"
+	"github.com/NII-DG/gogs/internal/form"
+	"github.com/NII-DG/gogs/internal/route/api/v1/admin"
+	"github.com/NII-DG/gogs/internal/route/api/v1/container"
+	"github.com/NII-DG/gogs/internal/route/api/v1/gin"
+	"github.com/NII-DG/gogs/internal/route/api/v1/metadata"
+	"github.com/NII-DG/gogs/internal/route/api/v1/misc"
+	"github.com/NII-DG/gogs/internal/route/api/v1/org"
+	"github.com/NII-DG/gogs/internal/route/api/v1/repo"
+	"github.com/NII-DG/gogs/internal/route/api/v1/search"
+	"github.com/NII-DG/gogs/internal/route/api/v1/user"
 )
 
 // repoAssignment extracts information from URL parameters to retrieve the repository,
@@ -175,6 +178,8 @@ func RegisterRoutes(m *macaron.Macaron) {
 		// Handle preflight OPTIONS request
 		m.Options("/*", func() {})
 
+		m.Get("/gin", gin.GetServerInfo)
+
 		// Miscellaneous
 		m.Post("/markdown", bind(api.MarkdownOption{}), misc.Markdown)
 		m.Post("/markdown/raw", misc.MarkdownRaw)
@@ -191,7 +196,7 @@ func RegisterRoutes(m *macaron.Macaron) {
 				m.Group("/tokens", func() {
 					m.Combo("").
 						Get(user.ListAccessTokens).
-						Post(bind(api.CreateAccessTokenOption{}), user.CreateAccessToken)
+						Post(bind(form.CreateAccessTokenOption{}), user.CreateAccessToken)
 				}, reqBasicAuth())
 			})
 		})
@@ -206,6 +211,7 @@ func RegisterRoutes(m *macaron.Macaron) {
 					m.Get("/:target", user.CheckFollowing)
 				})
 			})
+
 		}, reqToken())
 
 		m.Group("/user", func() {
@@ -234,6 +240,11 @@ func RegisterRoutes(m *macaron.Macaron) {
 			})
 
 			m.Get("/issues", repo.ListUserIssues)
+
+			m.Group("/token", func() {
+				m.Delete("/delete", user.DeleteAccessTokenSelf)
+				m.Post("/forlaunch", user.CreateAccessTokenForLaunch)
+			})
 		}, reqToken())
 
 		// Repositories
@@ -246,7 +257,7 @@ func RegisterRoutes(m *macaron.Macaron) {
 
 		m.Group("/repos", func() {
 			m.Get("/search", repo.Search)
-
+			m.Get("/search/user", repo.SearchByIDAndUserID)
 			m.Get("/:username/:reponame", repoAssignment(), repo.Get)
 			m.Get("/:username/:reponame/releases", repoAssignment(), repo.Releases)
 			m.Get("/suggest/:query", search.Suggest) // GIN specific code
@@ -255,6 +266,13 @@ func RegisterRoutes(m *macaron.Macaron) {
 		m.Group("/repos", func() {
 			m.Post("/migrate", bind(form.MigrateRepo{}), repo.Migrate)
 			m.Delete("/:username/:reponame", repoAssignment(), repo.Delete)
+
+			// RCOS Code
+			m.Group("/:repoid", func() {
+				m.Group("/:branch", func() {
+					m.Get("/metadata", metadata.GetAllMetadataByRepoIDAndBranch)
+				})
+			})
 
 			m.Group("/:username/:reponame", func() {
 				m.Group("/hooks", func() {
@@ -419,8 +437,17 @@ func RegisterRoutes(m *macaron.Macaron) {
 			})
 		}, reqAdmin())
 
+		m.Group("/container", func() {
+			m.Post("", bind(container.ContainerOptions{}), container.AddJupyterContainer)
+			m.Patch("", container.UpdateJupyterContainer)
+			m.Delete("", container.DeleteJupyterContainer)
+		}, reqToken())
+
+		// When request route is no defined route, return 404
 		m.Any("/*", func(c *context.Context) {
-			c.NotFound()
+			c.JSON(http.StatusNotFound, map[string]interface{}{
+				"message": "Not Found : invalid URL",
+			})
 		})
 	}, context.APIContexter())
 }

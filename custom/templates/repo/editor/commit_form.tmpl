@@ -3,13 +3,17 @@
 	<div class="commit-form">
 		<h3>{{.i18n.Tr "repo.editor.commit_changes"}}</h3>
 		<div class="field">
-			<input name="commit_summary" placeholder="{{if .PageIsDelete}}{{.i18n.Tr "repo.editor.delete" .TreePath}}{{else if .PageIsUpload}}{{.i18n.Tr "repo.editor.upload_files_to_dir" .TreePath}}{{else if .IsNewFile}}{{.i18n.Tr "repo.editor.add_tmpl" .TreePath}}{{else}}{{.i18n.Tr "repo.editor.update" .TreePath}}{{end}}" value="{{.commit_summary}}" autofocus>
+			<input name="commit_summary" value="{{if .PageIsDelete}}{{.i18n.Tr "repo.editor.delete" .TreePath}}{{else if .PageIsUpload}}{{.i18n.Tr "repo.editor.upload_files_to_dir"}}{{else if and .IsNewFile .IsDmpJson}}{{.i18n.Tr "repo.editor.add_dmp"}}{{else if .IsNewFile}}{{.i18n.Tr "repo.editor.add_tmpl"}}{{else}}{{.i18n.Tr "repo.editor.update" .TreePath}}{{end}}" autofocus>
 		</div>
 		<div class="field">
-			<!-- textarea name="commit_message" placeholder="{{.i18n.Tr "repo.editor.commit_message_desc"}}" rows="5">{{.commit_message}}</!-->
-            <textarea id="commit_message" placeholder="実施理由" rows="5">{{.commit_message}}</textarea>
+			<textarea maxlength="100" class="autosize" id="commit_message" name="commit_message" placeholder="{{.i18n.Tr "repo.editor.commit_message_desc"}}" rows="5">{{.commit_message}}</textarea>
+			<span class="help">{{.i18n.Tr "available_length"}}: <span>100</span></span>
 		</div>
-		<div class="quick-pull-choice js-quick-pull-choice">
+		<!--Extracted the input needed to commit to the default branch from the comment out.  -->
+		<input type="hidden" name="commit_choice" value="direct">
+		<!--Disable setting new branches when committing. By RCOS -->
+		<!-- However, since we may support it in the future, we will only comment it out. -->
+		<!-- <div class="quick-pull-choice js-quick-pull-choice">
 			<div class="field">
 		 		<div class="ui radio checkbox">
 					<input type="radio" class="js-quick-pull-choice-option" name="commit_choice" value="direct" {{if eq .commit_choice "direct"}}checked{{end}}>
@@ -29,6 +33,7 @@
 					</label>
 				</div>
 			</div>
+
 			<div class="quick-pull-branch-name {{if not (eq .commit_choice "commit-to-new-branch")}}hide{{end}}">
 				<div class="new-branch-name-input field {{if .Err_NewBranchName}}error{{end}}">
 					<i class="octicon octicon-git-branch" height="16" width="10"></i>
@@ -36,11 +41,10 @@
 					<span class="text-muted js-quick-pull-normalization-info"></span>
 				</div>
 			</div>
-		</div>
+		</div> -->
 	</div>
-	<button type="submit" id="commit" class="ui green button" disabled>
+	<button type="submit" id="commit" class="ui green button">
 		{{.i18n.Tr "repo.editor.commit_changes"}}
 	</button>
-	<a class="ui button red" href="{{EscapePound $.BranchLink}}/{{EscapePound .TreePath}}">{{.i18n.Tr "repo.editor.cancel"}}</a>
+	<a class="ui button red" href="{{EscapePound $.BranchLink}}{{if not .IsNewFile}}/{{EscapePound .TreePath}}{{end}}">{{.i18n.Tr "repo.editor.cancel"}}</a>
 </div>
-<script src="{{AppSubURL}}/js/rcos_custom/commit.js?v={{BuildCommit}}"></script>

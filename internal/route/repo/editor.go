@@ -14,16 +14,16 @@ import (
 
 	log "unknwon.dev/clog/v2"
 
-	"github.com/ivis-yoshida/gogs/internal/conf"
-	"github.com/ivis-yoshida/gogs/internal/context"
-	"github.com/ivis-yoshida/gogs/internal/db"
-	"github.com/ivis-yoshida/gogs/internal/db/errors"
-	"github.com/ivis-yoshida/gogs/internal/form"
-	"github.com/ivis-yoshida/gogs/internal/gitutil"
-	"github.com/ivis-yoshida/gogs/internal/markup"
-	"github.com/ivis-yoshida/gogs/internal/pathutil"
-	"github.com/ivis-yoshida/gogs/internal/template"
-	"github.com/ivis-yoshida/gogs/internal/tool"
+	"github.com/NII-DG/gogs/internal/conf"
+	"github.com/NII-DG/gogs/internal/context"
+	"github.com/NII-DG/gogs/internal/db"
+	"github.com/NII-DG/gogs/internal/db/errors"
+	"github.com/NII-DG/gogs/internal/form"
+	"github.com/NII-DG/gogs/internal/gitutil"
+	"github.com/NII-DG/gogs/internal/markup"
+	"github.com/NII-DG/gogs/internal/pathutil"
+	"github.com/NII-DG/gogs/internal/template"
+	"github.com/NII-DG/gogs/internal/tool"
 )
 
 const (
@@ -77,12 +77,20 @@ func editFile(c *context.Context, isNewFile bool) {
 		}
 
 		if blob.Name() == "dmp.json" {
+			// DMPであればJSONスキーマの情報も取得する
 			dmpSchema := &struct{ Schema string }{}
 			if err := json.Unmarshal(buf, &dmpSchema); err != nil {
 				log.Error("DMP data can't be unmarshalled: %v", err)
 				c.Data["HasDmpJson"] = false
 			} else {
-				fetchDmpSchema(c, filepath.Join(conf.WorkDir(), "conf/dmp/json_schema/schema_dmp_"+dmpSchema.Schema+".json"))
+				schemaUrl := getTemplateUrl()
+
+				var d dmpUtil
+
+				err = d.FetchDmpSchema(c, schemaUrl+"dmp/json_schema/schema_dmp_"+dmpSchema.Schema)
+				if err != nil {
+					log.Error("failed fetching DMP template: %v", err)
+				}
 			}
 		}
 
@@ -107,10 +115,8 @@ func editFile(c *context.Context, isNewFile bool) {
 		} else {
 			c.Data["FileContent"] = content
 		}
-		c.Data["commit_summary"] = "実施事項: " + blob.Name() + "を編集"
 	} else {
 		treeNames = append(treeNames, "") // Append empty string to allow user name the new file.
-		c.Data["commit_summary"] = "実施事項: ファイルを新規作成"
 	}
 
 	c.Data["ParentTreePath"] = path.Dir(c.Repo.TreePath)
@@ -352,11 +358,9 @@ func DeleteFile(c *context.Context) {
 		c.NotFound()
 		return
 	}
-	blob := entry.Blob()
 
 	c.Data["BranchLink"] = c.Repo.RepoLink + "/src/" + c.Repo.BranchName
 	c.Data["TreePath"] = c.Repo.TreePath
-	c.Data["commit_summary"] = "実施事項: " + blob.Name() + "を削除"
 	c.Data["commit_message"] = ""
 	c.Data["commit_choice"] = "direct"
 	c.Data["new_branch_name"] = ""
@@ -444,7 +448,6 @@ func UploadFile(c *context.Context) {
 	c.Data["TreeNames"] = treeNames
 	c.Data["TreePaths"] = treePaths
 	c.Data["BranchLink"] = c.Repo.RepoLink + "/src/" + c.Repo.BranchName
-	c.Data["commit_summary"] = "実施事項: ファイルをアップロード"
 	c.Data["commit_message"] = ""
 	c.Data["commit_choice"] = "direct"
 	c.Data["new_branch_name"] = ""
@@ -515,7 +518,7 @@ func UploadFilePost(c *context.Context, f form.UploadRepoFile) {
 
 	message := strings.TrimSpace(f.CommitSummary)
 	if len(message) == 0 {
-		message = c.Tr("repo.editor.upload_files_to_dir", f.TreePath)
+		message = c.Tr("repo.editor.upload_files_to_dir")
 	}
 
 	f.CommitMessage = strings.TrimSpace(f.CommitMessage)
@@ -605,41 +608,172 @@ func RemoveUploadFileFromServer(c *context.Context, f form.RemoveUploadFile) {
 	c.Status(http.StatusNoContent)
 }
 
-// CreateDmp is GIN specific code
-func CreateDmp(c *context.Context) {
-	schema := c.QueryEscape("schema")
-	dcname := path.Join("conf/dmp", schema)
+func CreateDmp(c context.AbstructContext) {
+	var f repoUtil
+	var d dmpUtil
+	createDmp(c, f, d)
+}
 
-	treeNames, treePaths := getParentTreeFields(c.Repo.TreePath)
+// CreateDmp is RCOS specific code
+func createDmp(c context.AbstructContext, f AbstructRepoUtil, d AbstructDmpUtil) {
+	schema := c.QueryEscape("schema")
+	schemaUrl := getTemplateUrl() + "dmp/"
+	treeNames, treePaths := getParentTreeFields(c.GetRepo().GetTreePath())
 
 	c.PageIs("Edit")
 	c.RequireHighlightJS()
 	c.RequireSimpleMDE()
 
-	// data binding for "Add DMP" pulldown
-	bidingDmpSchemaList(c, "conf/dmp")
+	// data binding for "Add DMP" pulldown at DMP editing page
+	// (The pulldown on the repository top page is binded in repo.renderDirectory.)
+	err := d.BidingDmpSchemaList(c, schemaUrl+"orgs")
+	if err != nil && !c.IsInternalError() {
+		log.Warn("%v", err)
+		c.Redirect(c.GetRepo().GetRepoLink())
+		return
+	} else if err != nil && c.IsInternalError() {
+		log.Error(err.Error())
+		c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
+		return
+	}
 
-	fetchDmpSchema(c, filepath.Join(conf.WorkDir(), "conf/dmp/json_schema/schema_"+schema))
+	err = d.FetchDmpSchema(c, schemaUrl+"json_schema/schema_dmp_"+schema)
+	if err != nil && !c.IsInternalError() {
+		log.Warn("%v", err)
+		c.Redirect(c.GetRepo().GetRepoLink())
+		return
+	} else if err != nil && c.IsInternalError() {
+		log.Error(err.Error())
+		c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
+		return
+	}
 
-	c.Data["IsYAML"] = false
-	c.Data["IsJSON"] = true
-	c.Data["IsDmpJson"] = true
-	// safe to ignore error since we check for the asset at startup
-	data, _ := conf.Asset(dcname)
-	c.Data["FileContent"] = string(data)
-	c.Data["ParentTreePath"] = path.Dir(c.Repo.TreePath)
-	c.Data["TreeNames"] = treeNames
-	c.Data["TreePaths"] = treePaths
-	c.Data["BranchLink"] = c.Repo.RepoLink + "/src/" + c.Repo.BranchName
-	c.Data["commit_summary"] = "実施事項: dmp.jsonを新規作成"
-	c.Data["commit_message"] = ""
-	c.Data["commit_choice"] = "direct"
-	c.Data["new_branch_name"] = ""
-	c.Data["last_commit"] = c.Repo.Commit.ID
-	c.Data["MarkdownFileExts"] = strings.Join(conf.Markdown.FileExtensions, ",")
-	c.Data["LineWrapExtensions"] = strings.Join(conf.Repository.Editor.LineWrapExtensions, ",")
-	c.Data["PreviewableFileModes"] = strings.Join(conf.Repository.Editor.PreviewableFileModes, ",")
-	c.Data["EditorconfigURLPrefix"] = fmt.Sprintf("%s/api/v1/repos/%s/editorconfig/", conf.Server.Subpath, c.Repo.Repository.FullName())
+	srcBasic, err := f.FetchContentsOnGithub(c, schemaUrl+"basic")
+	if err != nil && !c.IsInternalError() {
+		log.Warn("%v", err)
+		c.Redirect(c.GetRepo().GetRepoLink())
+		return
+	} else if err != nil && c.IsInternalError() {
+		log.Error(err.Error())
+		c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
+		return
+	}
+	decodedBasicSchema, err := f.DecodeBlobContent(srcBasic)
+	if err != nil {
+		log.Error(err.Error())
+		c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
+		return
+	}
+
+	srcOrg, err := f.FetchContentsOnGithub(c, schemaUrl+"orgs/"+schema)
+	if err != nil && !c.IsInternalError() {
+		log.Warn("%v", err)
+		c.Redirect(c.GetRepo().GetRepoLink())
+		return
+	} else if err != nil && c.IsInternalError() {
+		log.Error(err.Error())
+		c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
+		return
+	}
+	decodedOrgSchema, err := f.DecodeBlobContent(srcOrg)
+	if err != nil {
+		log.Error(err.Error())
+		c.Error(fmt.Errorf(c.Tr("rcos.server.error")), "")
+		return
+	}
+
+	combinedDmp := decodedBasicSchema + "\n" + decodedOrgSchema
+
+	c.CallData()["IsYAML"] = false
+	c.CallData()["IsJSON"] = true
+	c.CallData()["IsDmpJson"] = true
+	c.CallData()["IsNewFile"] = true
+	c.CallData()["IsRcosButton"] = true
+
+	c.CallData()["FileContent"] = combinedDmp
+	c.CallData()["ParentTreePath"] = path.Dir(c.GetRepo().GetTreePath())
+	c.CallData()["TreeNames"] = treeNames
+	c.CallData()["TreePaths"] = treePaths
+	c.CallData()["BranchLink"] = c.GetRepo().GetRepoLink() + "/src/" + c.GetRepo().GetBranchName()
+	c.CallData()["commit_message"] = ""
+	c.CallData()["commit_choice"] = "direct"
+	c.CallData()["new_branch_name"] = ""
+	c.CallData()["last_commit"] = c.GetRepo().GetCommitId()
+	c.CallData()["MarkdownFileExts"] = strings.Join(conf.Markdown.FileExtensions, ",")
+	c.CallData()["LineWrapExtensions"] = strings.Join(conf.Repository.Editor.LineWrapExtensions, ",")
+	c.CallData()["PreviewableFileModes"] = strings.Join(conf.Repository.Editor.PreviewableFileModes, ",")
+	c.CallData()["EditorconfigURLPrefix"] = fmt.Sprintf("%s/api/v1/repos/%s/editorconfig/", conf.Server.Subpath, c.GetRepo().GetDbRepo().FullName())
 
 	c.Success(tmplEditorEdit)
+}
+
+type AbstructDmpUtil interface {
+	FetchDmpSchema(c context.AbstructContext, blobPath string) error
+	BidingDmpSchemaList(c context.AbstructContext, treePath string) error
+}
+
+// dmpUtil is an alias for utility functions related to the manipulation of DMP information.
+// For effective unit test execution, the above DmpUtil interface must be satisfied.
+type dmpUtil func()
+
+func (d dmpUtil) FetchDmpSchema(c context.AbstructContext, blobPath string) error {
+	var f repoUtil
+	return d.fetchDmpSchema(c, f, blobPath)
+}
+
+func (d dmpUtil) BidingDmpSchemaList(c context.AbstructContext, treePath string) error {
+	var f repoUtil
+	return d.bidingDmpSchemaList(c, f, treePath)
+}
+
+// fetchDmpSchema is RCOS specific code.
+// This function fetch&bind JSON Schema of DMP for validation.
+func (d dmpUtil) fetchDmpSchema(c context.AbstructContext, f AbstructRepoUtil, blobPath string) error {
+	var decodedScheme string
+	src, err := f.FetchContentsOnGithub(c, blobPath)
+	if err != nil {
+		return err
+	}
+	decodedScheme, err = f.DecodeBlobContent(src)
+	if err != nil {
+		c.CallData()["IsInternalError"] = true
+		return err
+	}
+	c.CallData()["IsDmpJson"] = true
+	c.CallData()["Schema"] = decodedScheme
+	return nil
+}
+
+// bidingDmpSchemaList is RCOS specific code.
+// This function binds DMP organization list.
+func (d dmpUtil) bidingDmpSchemaList(c context.AbstructContext, f AbstructRepoUtil, treePath string) error {
+	contents, err := f.FetchContentsOnGithub(c, treePath)
+	if err != nil {
+		return err
+	}
+
+	var orgsInfo interface{}
+	err = json.Unmarshal(contents, &orgsInfo)
+	if err != nil {
+		c.CallData()["IsInternalError"] = true
+		return err
+	}
+
+	// create organization list
+	orgs := orgsInfo.([]interface{})
+	var schemaList []string
+	for i := range orgs {
+		org := orgs[i].(map[string]interface{})["name"]
+		schemaList = append(schemaList, org.(string))
+	}
+
+	c.CallData()["SchemaList"] = schemaList
+	return nil
+}
+
+// getTemplateUrl is RCOS specific code.
+// This is a helper function that returns a base URL
+// for retrieving DMP templates, etc. from GitHub.
+func getTemplateUrl() string {
+	return "https://api.github.com/repos/NII-DG/maDMP-template/contents/"
 }

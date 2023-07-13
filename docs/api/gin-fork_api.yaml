@@ -1,0 +1,471 @@
+openapi: 3.0.3
+
+info:
+  version: 1.0.0
+  title: Gin-Fork API
+  description: |
+    - This Docement be described Definition of Gin-Fork specific API.
+    - Gin-Fork is forked from Gin of [G-Node/gogs](https://github.com/G-Node/gogs)
+    - If you see Definition of Gin original API, Plese reference [gogs/docs-api](https://github.com/gogs/docs-api)
+
+servers:
+- url: https://localhost:8080/api/v1
+
+tags:
+  - name: "Repositoty"
+    description: To Operate Repositoty information
+# エンドポイント
+paths:
+  /repos/{repo_id}/{branch_name}/metadata:
+    get:
+      description:
+        Getting every metadata that relate to specified repository
+      tags:
+        - Repositoty
+      parameters:
+        - name: repo_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Repositoty ID
+        - name: branch_name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Branch Name
+        - name: token
+          in: query
+          required: true
+          schema:
+            type: string
+          description: API Token(API Token is obtained from [another API](https://github.com/gogs/docs-api/tree/master/Users#create-a-access-token))
+      responses:
+        200:
+          description: |
+            - Success of the meta data acquisition.
+            - Note: property dmps has 3 type object(CAO, METI, AMED)
+            - Plese reference schema DmpCAO, DmpMeti, DmpAmed described below on this docement
+
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/AllMetadata'
+        400:
+          description: Invalid URL-Path, Parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/GeneralError'
+        404:
+          description: Not found content to extract metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/GeneralError'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/GeneralError'
+
+components:
+  schemas:
+    GeneralError:
+      type: object
+      properties:
+        message:
+          type: string
+    AllMetadata:
+      type: object
+      properties:
+        research_project:
+          type: object
+          properties:
+            name:
+              type: string
+            description:
+              type: string
+
+        funder_orgs:
+          type: array
+          items:
+            $ref: '#components/schemas/FunderOrg'
+        research_orgs:
+          type: array
+          items:
+            $ref: '#components/schemas/ResearchOrg'
+        licenses:
+          type: array
+          items:
+            $ref: '#components/schemas/License'
+        data_downloads:
+          type: array
+          items:
+            $ref: '#components/schemas/DataDownload'
+        repository_objs:
+          type: array
+          items:
+            $ref: '#components/schemas/RepositoryObj'
+        hosting_institutions:
+          type: array
+          items:
+            $ref: '#components/schemas/HostingInstitution'
+        persons:
+          type: array
+          items:
+            $ref: '#components/schemas/Person'
+        files:
+          type: array
+          items:
+            $ref: '#components/schemas/File'
+        datasets:
+          type: array
+          items:
+            $ref: '#components/schemas/Dataset'
+        gin_monitorings:
+          type: array
+          items:
+            $ref: '#components/schemas/GinMonitoring'
+        dmps:
+          type: array
+          items:
+            $ref: '#components/schemas/Dmp'
+
+    FunderOrg:
+     type: object
+     properties:
+      type:
+        type: string
+      "@id":
+       type: string
+      name:
+       type: string
+      alias:
+       type: string
+      description:
+       type: string
+    ResearchOrg:
+      type: object
+      properties:
+        "@id":
+          type: string
+        name:
+          type: string
+        alias:
+          type: string
+        description:
+          type: string
+    License:
+      type: object
+      properties:
+        "@id":
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+    DataDownload:
+      type: object
+      properties:
+        "@id":
+          type: string
+        description:
+          type: string
+        sha256:
+          type: string
+        uploadDate:
+          type: string
+    RepositoryObj:
+      type: object
+      properties:
+        "@id":
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+    HostingInstitution:
+      type: object
+      properties:
+        "@id":
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        address:
+          type: string
+    Person:
+      type: object
+      properties:
+        "@id":
+          type: string
+        url:
+          type: string
+        name:
+          type: string
+        alias:
+          type: string
+        affiliation:
+          type: string
+        email:
+          type: string
+        telephone:
+          type: string
+        eradResearcherNumber:
+          type: string
+    File:
+      type: object
+      properties:
+        "@id":
+          type: string
+        name:
+          type: string
+        contentSize:
+          type: string
+        encodingFormat:
+          type: string
+        sha256:
+          type: string
+        url:
+          type: string
+        sdDatePublished:
+          type: string
+        experimentPackageFlag:
+          type: boolean
+    Dataset:
+      type: object
+      properties:
+        "@id":
+          type: string
+        name:
+          type: string
+        url:
+          type: string
+    GinMonitoring:
+      type: object
+      properties:
+        contentSize:
+          type: string
+        workflowIdentifier:
+          type: string
+        datasetStructure:
+          type: string
+        experimentPackageList:
+          type: array
+          items:
+            $ref: '#components/schemas/String'
+        parameterExperimentList:
+          type: array
+          items:
+            $ref: '#components/schemas/String'
+    DmpFile:
+      type: object
+      properties:
+        "@id":
+          type: string
+        name:
+          type: string
+        contentSize:
+          type: string
+        encodingFormat:
+          type: string
+        sha256:
+          type: string
+        url:
+          type: string
+        sdDatePublished:
+          type: string
+    DmpCAO:
+      type: object
+      properties:
+        type:
+          type: string
+        repository:
+          type: string
+        distribution:
+          type: string
+        keyword:
+          type: string
+        eradProjectId:
+          type: string
+        hasPart:
+          type: array
+          items:
+            $ref: '#components/schemas/DmpDataCAO'
+    DmpDataCAO:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        creator:
+          type: array
+          items:
+            $ref: '#components/schemas/String'
+        keyword:
+          type: string
+        accessRights:
+          type: string
+        availabilityStarts:
+          type: string
+        isAccessibleForFree:
+          type: string
+        license:
+          type: string
+        usageInfo:
+          type: string
+        repository:
+          type: string
+        distribution:
+          type: string
+        contentSize:
+          type: string
+        hostingInstitution:
+          type: string
+        dataManager:
+          type: string
+        related_data:
+          type: array
+          items:
+            $ref: '#components/schemas/DmpFile'
+    DmpMeti:
+      type: object
+      properties:
+        type:
+          type: string
+        creator:
+          type: array
+          items:
+            $ref: '#components/schemas/String'
+        repository:
+          type: string
+        distribution:
+          type: string
+        hasPart:
+          type: array
+          items:
+            $ref: '#components/schemas/DmpDataMeti'
+    DmpDataMeti:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        hostingInstitution:
+          type: string
+        wayOfManage:
+          type: string
+        accessRights:
+          type: string
+        reasonForConcealment:
+          type: string
+        availabilityStarts:
+          type: string
+        creator:
+          type: array
+          items:
+            $ref: '#components/schemas/String'
+        measurementTechnique:
+          type: string
+        isAccessibleForFree:
+          type: string
+        license:
+          type: string
+        usageInfo:
+          type: string
+        repository:
+          type: string
+        contentSize:
+          type: string
+        distribution:
+          type: string
+        contactPoint:
+          type: object
+          properties:
+            name:
+              type : string
+            email:
+              type: string
+            telephone:
+              type: string
+        related_data:
+          type: array
+          items:
+            $ref: '#components/schemas/DmpFile'
+    DmpAmed:
+      type: object
+      properties:
+        type:
+          type: string
+        funding:
+          type: string
+        chiefResearcher:
+          type: string
+        creator:
+          type: array
+          items:
+            $ref: '#components/schemas/String'
+        hostingInstitution:
+          type: string
+        dataManager:
+          type: string
+        repository:
+          type: string
+        distribution:
+          type: string
+        hasPart:
+          type: array
+          items:
+            $ref: '#components/schemas/DmpDataAmed'
+    DmpDataAmed:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        keyword:
+          type: string
+        accessRights:
+          type: string
+        availabilityStarts:
+          type: string
+        reasonForConcealment:
+          type: string
+        repository:
+          type: string
+        distribution:
+          type: string
+        contentSize:
+          type: string
+        gotInformedConsent:
+          type: string
+        informedConsentFormat:
+          type: string
+        identifier:
+          type: array
+          items:
+            $ref: '#components/schemas/ClinicalResearchRegistration'
+        related_data:
+          type: array
+          items:
+            $ref: '#components/schemas/DmpFile'
+    ClinicalResearchRegistration:
+      type: object
+      properties:
+        "@id":
+          type: string
+        name:
+          type: string
+        value:
+          type: string
+    String:
+     type: string
+    Dmp:
+      type: object

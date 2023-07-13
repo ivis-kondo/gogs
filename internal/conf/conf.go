@@ -22,9 +22,9 @@ import (
 	"gopkg.in/ini.v1"
 	log "unknwon.dev/clog/v2"
 
-	"github.com/ivis-yoshida/gogs/internal/assets/conf"
-	"github.com/ivis-yoshida/gogs/internal/osutil"
-	"github.com/ivis-yoshida/gogs/internal/semverutil"
+	"github.com/NII-DG/gogs/internal/assets/conf"
+	"github.com/NII-DG/gogs/internal/osutil"
+	"github.com/NII-DG/gogs/internal/semverutil"
 )
 
 func init() {
@@ -231,16 +231,19 @@ func Init(customConf string) error {
 		Email.FromEmail = parsed.Address
 	}
 
+	// **************************
+	// ----- DG settings -----
+	// **************************
+	if err = File.Section("dg").MapTo(&DG); err != nil {
+		return errors.Wrap(err, "mapping [github] section")
+	}
+
 	// ***********************************
 	// ----- Authentication settings -----
 	// ***********************************
 
 	if err = File.Section("auth").MapTo(&Auth); err != nil {
 		return errors.Wrap(err, "mapping [auth] section")
-	}
-	// LEGACY [0.13]: In case there are values with old section name.
-	if err = File.Section("service").MapTo(&Auth); err != nil {
-		return errors.Wrap(err, "mapping [service] section")
 	}
 
 	// *************************

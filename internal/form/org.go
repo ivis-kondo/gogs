@@ -20,7 +20,7 @@ func (f *CreateOrg) Validate(ctx *macaron.Context, errs binding.Errors) binding.
 type UpdateOrgSetting struct {
 	Name            string `binding:"Required;AlphaDashDot;MaxSize(35)" locale:"org.org_name_holder"`
 	FullName        string `binding:"MaxSize(100)"`
-	Description     string `binding:"MaxSize(255)"`
+	OrgDescription     string 
 	Website         string `binding:"Url;MaxSize(100)"`
 	Location        string `binding:"MaxSize(50)"`
 	MaxRepoCreation int
@@ -32,7 +32,7 @@ func (f *UpdateOrgSetting) Validate(ctx *macaron.Context, errs binding.Errors) b
 
 type CreateTeam struct {
 	TeamName    string `binding:"Required;AlphaDashDot;MaxSize(30)"`
-	Description string `binding:"MaxSize(255)"`
+	TeamDescription string
 	Permission  string
 }
 

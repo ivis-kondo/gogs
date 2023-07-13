@@ -11,7 +11,7 @@ import (
 
 	"github.com/gogs/git-module"
 
-	"github.com/ivis-yoshida/gogs/internal/lazyregexp"
+	"github.com/NII-DG/gogs/internal/lazyregexp"
 )
 
 var scpSyntax = lazyregexp.New(`^([a-zA-Z0-9_]+@)?([a-zA-Z0-9._-]+):(.*)$`)
@@ -29,7 +29,7 @@ func InferSubmoduleURL(baseURL string, mod *git.Submodule) string {
 	raw = strings.TrimSuffix(raw, ".git")
 
 	if strings.HasPrefix(raw, "../") {
-		return fmt.Sprintf("%s%s/commit/%s", baseURL, raw, mod.Commit)
+		return fmt.Sprintf("%s%s", baseURL, raw)
 	}
 
 	parsed, err := url.Parse(raw)
@@ -55,5 +55,5 @@ func InferSubmoduleURL(baseURL string, mod *git.Submodule) string {
 		return raw
 	}
 
-	return fmt.Sprintf("%s/commit/%s", raw, mod.Commit)
+	return fmt.Sprintf("%s", raw)
 }

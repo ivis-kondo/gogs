@@ -63,12 +63,20 @@ func (f *Install) Validate(ctx *macaron.Context, errs binding.Errors) binding.Er
 //         \/                         \/
 
 type Register struct {
-	UserName    string `binding:"Required;AlphaDashDot;MaxSize(35)"`
-	Email       string `binding:"Required;Email;MaxSize(254)"`
-	Password    string `binding:"Required;MaxSize(255)"`
-	Retype      string
-	FullName    string
-	Affiliation string
+	/*
+		ユーザ登録用フォーム構造体
+	*/
+	UserName             string `binding:"Required;AlphaDashDot;MaxSize(35)"` //アカウント名（必須）
+	Email                string `binding:"Required;Email;MaxSize(254)"`       //メールアドレス（必須）
+	Telephone            string //電話番号（任意）
+	Password             string `binding:"Required;AlphaDash;MaxSize(255)"` //パスワード（必須）
+	Retype               string //パスワードの再入力（必須）
+	FirstName            string `binding:"Required;MaxSize(100)"` // 氏名(名)
+	LastName             string `binding:"Required;MaxSize(100)"` // 氏名(姓)
+	AliasName            string `binding:"MaxSize(255)"`          //氏名（別名）
+	ERadResearcherNumber string //研究者e-Rad番号（任意）
+	PersonalURL          string `binding:"Url"`      //個人URL（任意）
+	AffiliationId        int64  `binding:"Required"` //所属組織ID（必須）
 }
 
 func (f *Register) Validate(ctx *macaron.Context, errs binding.Errors) binding.Errors {
@@ -94,11 +102,15 @@ func (f *SignIn) Validate(ctx *macaron.Context, errs binding.Errors) binding.Err
 //         \/         \/                                   \/        \/        \/
 
 type UpdateProfile struct {
-	Name     string `binding:"Required;AlphaDashDot;MaxSize(35)"`
-	FullName string `binding:"MaxSize(100)"`
-	Email    string `binding:"Required;Email;MaxSize(254)"`
-	Website  string `binding:"Url;MaxSize(100)"`
-	Location string `binding:"MaxSize(50)"`
+	Name                 string `binding:"Required;AlphaDashDot;MaxSize(35)"` // ユーザー名（必須）
+	FirstName            string `binding:"Required;MaxSize(100)"`             // 氏名(名)
+	LastName             string `binding:"Required;MaxSize(100)"`             // 氏名(姓)
+	AliasName            string `binding:"MaxSize(255)"`                      //氏名（別名）
+	Email                string `binding:"Required;Email;MaxSize(254)"`       //メールアドレス（必須）
+	Telephone            string //電話番号（任意）
+	ERadResearcherNumber string //研究者e-Rad番号（任意）
+	PersonalURL          string `binding:"Url"`      //個人URL（任意）
+	AffiliationId        int64  `binding:"Required"` //所属組織ID（必須）
 }
 
 func (f *UpdateProfile) Validate(ctx *macaron.Context, errs binding.Errors) binding.Errors {
@@ -131,7 +143,7 @@ func (f *AddEmail) Validate(ctx *macaron.Context, errs binding.Errors) binding.E
 
 type ChangePassword struct {
 	OldPassword string `binding:"Required;MinSize(1);MaxSize(255)"`
-	Password    string `binding:"Required;MaxSize(255)"`
+	Password    string `binding:"Required;AlphaDash;MaxSize(255)"`
 	Retype      string
 }
 
@@ -153,5 +165,13 @@ type NewAccessToken struct {
 }
 
 func (f *NewAccessToken) Validate(ctx *macaron.Context, errs binding.Errors) binding.Errors {
+	return validate(errs, ctx.Data, f, ctx.Locale)
+}
+
+type Pass struct {
+	Password string `binding:"Required;AlphaDash;MaxSize(255)"`
+}
+
+func (f *Pass) Validate(ctx *macaron.Context, errs binding.Errors) binding.Errors {
 	return validate(errs, ctx.Data, f, ctx.Locale)
 }

@@ -18,13 +18,40 @@ import (
 	"gopkg.in/macaron.v1"
 	log "unknwon.dev/clog/v2"
 
-	"github.com/ivis-yoshida/gogs/internal/auth"
-	"github.com/ivis-yoshida/gogs/internal/conf"
-	"github.com/ivis-yoshida/gogs/internal/db"
-	"github.com/ivis-yoshida/gogs/internal/errutil"
-	"github.com/ivis-yoshida/gogs/internal/form"
-	"github.com/ivis-yoshida/gogs/internal/template"
+	"github.com/NII-DG/gogs/internal/auth"
+	"github.com/NII-DG/gogs/internal/conf"
+	"github.com/NII-DG/gogs/internal/db"
+	"github.com/NII-DG/gogs/internal/errutil"
+	"github.com/NII-DG/gogs/internal/form"
+	"github.com/NII-DG/gogs/internal/template"
 )
+
+type AbstructContext interface {
+	// RCOS specific method
+	GetRepo() AbstructCtxRepository
+	GetFlash() *session.Flash
+	GetUser() *db.User
+	CallData() map[string]interface{}
+
+	// macaron.Context method
+	Query(name string) string
+	QueryEscape(name string) string
+	QueryInt(name string) int
+	Tr(string, ...interface{}) string
+
+	// context.Context method
+	PageIs(name string)
+	RequireHighlightJS()
+	RequireSimpleMDE()
+	Redirect(location string, status ...int)
+	UserID() int64
+	Success(name string)
+	Error(err error, msg string)
+	NotFoundOrError(err error, msg string)
+	NotFound()
+	NotFoundWithErrMsg(errMsg string)
+	IsInternalError() bool
+}
 
 // Context represents context of a request.
 type Context struct {
@@ -42,6 +69,30 @@ type Context struct {
 
 	Repo *Repository
 	Org  *Organization
+}
+
+// GetRepo is RCOS specific code.
+// This gets the "Repo" field (Repository struct).
+func (c *Context) GetRepo() AbstructCtxRepository {
+	return c.Repo
+}
+
+// GetFlash is RCOS specific code.
+// This gets the "Flash" field.
+func (c *Context) GetFlash() *session.Flash {
+	return c.Flash
+}
+
+// GetUser is RCOS specific code.
+// This gets the "User" field.
+func (c *Context) GetUser() *db.User {
+	return c.User
+}
+
+// CallData is RCOS specific code.
+// This calls the "Data" field in *macaron.Context
+func (c *Context) CallData() map[string]interface{} {
+	return c.Data
 }
 
 // RawTitle sets the "Title" field in template data.
@@ -126,6 +177,14 @@ func (c *Context) HasValue(name string) bool {
 	return ok
 }
 
+func (c *Context) IsInternalError() bool {
+	is, ok := c.Data["IsInternalError"]
+	if !ok {
+		return false
+	}
+	return is.(bool)
+}
+
 // HTML responses template with given status.
 func (c *Context) HTML(status int, name string) {
 	log.Trace("Template: %s", name)
@@ -200,6 +259,17 @@ func (c *Context) NotFoundOrError(err error, msg string) {
 		return
 	}
 	c.Error(err, msg)
+}
+
+//  NotFoundWithErrMsg responses with 404 page and your message
+// if without errMsg, dwfault message is
+// errMsg = "your message" | ""
+func (c *Context) NotFoundWithErrMsg(errMsg string) {
+	c.Title("status.page_not_found")
+	if len(errMsg) > 0 {
+		c.Data["ErrorMsg"] = errMsg
+	}
+	c.HTML(http.StatusNotFound, fmt.Sprintf("status/%d", http.StatusNotFound))
 }
 
 // NotFoundOrErrorf is same as NotFoundOrError but with formatted message.

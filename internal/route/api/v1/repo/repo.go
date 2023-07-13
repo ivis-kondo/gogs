@@ -12,15 +12,16 @@ import (
 	"github.com/pkg/errors"
 	log "unknwon.dev/clog/v2"
 
-	"github.com/ivis-yoshida/gogs/internal/conf"
-	"github.com/ivis-yoshida/gogs/internal/context"
-	"github.com/ivis-yoshida/gogs/internal/db"
-	"github.com/ivis-yoshida/gogs/internal/form"
-	"github.com/ivis-yoshida/gogs/internal/route/api/v1/convert"
+	"github.com/NII-DG/gogs/internal/conf"
+	"github.com/NII-DG/gogs/internal/context"
+	"github.com/NII-DG/gogs/internal/db"
+	"github.com/NII-DG/gogs/internal/form"
+	"github.com/NII-DG/gogs/internal/route/api/v1/convert"
 )
 
 func Search(c *context.APIContext) {
 	opts := &db.SearchRepoOptions{
+		ID:       c.QueryInt64("id"),
 		Keyword:  path.Base(c.Query("q")),
 		OwnerID:  c.QueryInt64("uid"),
 		PageSize: convert.ToCorrectPageSize(c.QueryInt("limit")),
@@ -77,6 +78,86 @@ func Search(c *context.APIContext) {
 			rep := repos[i].APIFormat(nil)
 			rep.Owner.Email = ""
 			results = append(results, rep)
+		}
+	}
+
+	c.SetLinkHeader(int(count), opts.PageSize)
+	c.JSONSuccess(map[string]interface{}{
+		"ok":   true,
+		"data": results,
+	})
+}
+
+type RestrictedRepository struct {
+	ID       int64  `json:"id"`
+	Name     string `json:"name"`
+	FullName string `json:"full_name"`
+	Private  bool   `json:"private"`
+	HTMLURL  string `json:"html_url"`
+	SSHURL   string `json:"ssh_url"`
+}
+
+func SearchByIDAndUserID(c *context.APIContext) {
+	opts := &db.SearchRepoOptions{
+		ID:     c.QueryInt64("id"),
+		UserID: c.QueryInt64("uid"),
+	}
+	if c.User == nil {
+		c.JSON(http.StatusForbidden, map[string]interface{}{
+			"ok": false,
+		})
+		return
+	}
+	if c.User.ID != opts.UserID {
+		u, err := db.GetUserByID(opts.UserID)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"ok":    false,
+				"error": err.Error(),
+			})
+			return
+		}
+		if !(u.IsOrganization() && u.IsOwnedBy(c.User.ID)) {
+			c.JSON(http.StatusForbidden, map[string]interface{}{
+				"ok":    false,
+				"error": err.Error(),
+			})
+			return
+		}
+	}
+
+	repos, count, err := db.SearchRepositoryByName(opts)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, map[string]interface{}{
+			"ok":    false,
+			"error": err.Error(),
+		})
+		return
+	}
+
+	if err = db.RepositoryList(repos).LoadAttributes(); err != nil {
+		c.JSON(http.StatusInternalServerError, map[string]interface{}{
+			"ok":    false,
+			"error": err.Error(),
+		})
+		return
+	}
+
+	// GIN specific code
+	// 'for' has been modfied to accomodate search in commits as well (?)
+	results := make([]*RestrictedRepository, 0, len(repos))
+	for i := range repos {
+		if !repos[i].IsUnlisted {
+			rep := repos[i].APIFormat(nil)
+			rep.Owner.Email = ""
+			results = append(results, &RestrictedRepository{
+				ID:       rep.ID,
+				Name:     rep.Name,
+				FullName: rep.FullName,
+				Private:  rep.Private,
+				HTMLURL:  rep.HTMLURL,
+				SSHURL:   rep.SSHURL,
+			})
 		}
 	}
 
